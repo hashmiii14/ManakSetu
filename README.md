@@ -232,12 +232,4 @@ In accordance with responsible engineering practices and hackathon evaluation cr
 
 ---
 
-## Acknowledgments & Credits
-
-- **BIS-Standard-RE:** Standards recommendation engine reference implementation, hybrid scoring logic, and baseline dataset by [`ujjwal-7531/BIS-Standard-RE`](https://github.com/ujjwal-7531/BIS-Standard-RE).
-- **Bureau of Indian Standards (BIS):** For publicly published standard abstracts, titles, and Gazette QCO notifications.
-- **Smart India Hackathon 2026:** Organized by the Ministry of Education's Innovation Cell & AICTE.
-
----
-
 **Developed with ❤️ by Team SnippetSquad | Jamia Hamdard, New Delhi**
