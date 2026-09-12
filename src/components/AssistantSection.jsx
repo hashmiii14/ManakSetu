@@ -133,8 +133,12 @@ export default function AssistantSection({ onSelectStandard }) {
                       className="inline-flex items-center gap-1.5 bg-white px-2.5 py-1 rounded-lg border border-neutral-300 text-xs font-medium text-neutral-800"
                     >
                       <BookOpen className="w-3 h-3 text-emerald-600" />
-                      <span className="font-mono font-bold text-emerald-800">{std.is_number}</span>
-                      <span className="text-neutral-500 line-clamp-1 max-w-[200px]">{std.title}</span>
+                      <span className="font-mono font-bold text-emerald-800">
+                        {typeof std === 'object' ? std.is_number : std}
+                      </span>
+                      {typeof std === 'object' && std.title && (
+                        <span className="text-neutral-500 line-clamp-1 max-w-[200px]">{std.title}</span>
+                      )}
                     </div>
                   ))}
                 </div>

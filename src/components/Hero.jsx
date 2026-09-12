@@ -181,7 +181,7 @@ export default function Hero({ onOpenStandard, onAskQuestion }) {
                   Mandatory Testing
                 </span>
                 <p className="text-xs font-bold text-neutral-900 mt-1 line-clamp-2">
-                  {activeStandard.keyTests[0]}
+                  {activeStandard.keyTests?.[0] || "Quality & Safety Benchmark Testing"}
                 </p>
               </div>
 
@@ -199,7 +199,7 @@ export default function Hero({ onOpenStandard, onAskQuestion }) {
                   Testing Lab
                 </span>
                 <p className="text-xs font-bold text-neutral-900 mt-1 line-clamp-1">
-                  {activeStandard.labsAvailable[0]?.name || "BIS Central Laboratory"}
+                  {activeStandard.labsAvailable?.[0]?.name || "BIS Central Laboratory"}
                 </p>
               </div>
             </div>

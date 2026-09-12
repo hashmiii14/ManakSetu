@@ -1,7 +1,7 @@
 import React from 'react';
 import { ExternalLink } from 'lucide-react';
 
-export default function Footer() {
+export default function Footer({ onOpenReport }) {
   const scrollTo = (id) => {
     const element = document.getElementById(id);
     if (element) {
@@ -51,20 +51,27 @@ export default function Footer() {
                 </button>
               </li>
               <li>
+                <button onClick={() => scrollTo('cost-estimator')} className="hover:text-emerald-700">
+                  Cost Estimator
+                </button>
+              </li>
+              <li>
                 <button onClick={() => scrollTo('standards')} className="hover:text-emerald-700">
                   Explore Standards
                 </button>
               </li>
               <li>
-                <button onClick={() => scrollTo('how-it-works')} className="hover:text-emerald-700">
-                  How It Works
+                <button onClick={() => scrollTo('consumer-check')} className="hover:text-emerald-700">
+                  Verify Hallmark & ISI
                 </button>
               </li>
-              <li>
-                <button onClick={() => scrollTo('faq')} className="hover:text-emerald-700">
-                  FAQ
-                </button>
-              </li>
+              {onOpenReport && (
+                <li>
+                  <button onClick={onOpenReport} className="text-red-600 hover:text-red-700 font-semibold">
+                    Report a Violation
+                  </button>
+                </li>
+              )}
             </ul>
           </div>
 
