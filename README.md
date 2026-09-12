@@ -61,8 +61,8 @@ graph TD
 
     UI --> APIService
     APIService --> Router
-    Router -->|GET/POST /api/search| Retriever
-    Router -->|GET /api/standards/{code}| Retriever
+    Router -->|GET /api/search| Retriever
+    Router -->|GET /api/standards/:code| Retriever
     Router -->|POST /api/calculate| CalcService
     Router -->|POST /api/verify| VerifyService
     Router -->|POST /api/chatbot| ChatService
