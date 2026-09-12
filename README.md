@@ -1,4 +1,4 @@
-# 🇮🇳 ManakSetu (मानक सेतु)
+# ManakSetu
 ### AI-Powered BIS Standards Recommendation, Compliance & Consumer Vigilance Copilot
 
 **Smart India Hackathon (SIH 2026)** | **Problem Statement ID:** `26107`  
@@ -9,7 +9,7 @@
 
 ---
 
-## 📌 Executive Summary
+## Executive Summary
 
 India has published over 21,000+ Indian Standards (IS Codes) through the **Bureau of Indian Standards (BIS)** to ensure product quality, consumer safety, and industrial standardization. However, over **70% of MSMEs, start-ups, and artisans** face significant friction:
 - *Which specific Indian Standard applies to my product?*
@@ -26,7 +26,7 @@ India has published over 21,000+ Indian Standards (IS Codes) through the **Burea
 
 ---
 
-## 🏗️ System Architecture
+## System Architecture
 
 ```mermaid
 graph TD
@@ -78,7 +78,7 @@ graph TD
 
 ---
 
-## 🚀 Key Features & Modules
+## Key Features & Modules
 
 | Module | Purpose | Under the Hood |
 | :--- | :--- | :--- |
@@ -91,7 +91,7 @@ graph TD
 
 ---
 
-## 🛠️ Local Development & Setup Guide
+## Local Development & Setup Guide
 
 ### Prerequisites
 - **Node.js**: v18 or higher (`node -v`)
@@ -188,7 +188,7 @@ cd ManakSetu
 
 ---
 
-## 🧪 SIH Demo & Jury Walkthrough Guide
+## SIH Demo & Jury Walkthrough Guide
 
 Use these test queries during presentations and evaluation demos:
 
@@ -223,7 +223,7 @@ Use these test queries during presentations and evaluation demos:
 
 ---
 
-## ⚖️ Truthful Disclosures & Technical Limitations
+## Truthful Disclosures & Technical Limitations
 
 In accordance with responsible engineering practices and hackathon evaluation criteria:
 1. **Dataset Scope:** This prototype is indexed over a curated canonical collection of 570+ Indian Standards (including all consumer safety QCO standards and the SP 21 engineering standards library). It does *not* claim live direct database connection to proprietary internal BIS government databases.
@@ -232,7 +232,7 @@ In accordance with responsible engineering practices and hackathon evaluation cr
 
 ---
 
-## 👏 Acknowledgments & Credits
+## Acknowledgments & Credits
 
 - **BIS-Standard-RE:** Standards recommendation engine reference implementation, hybrid scoring logic, and baseline dataset by [`ujjwal-7531/BIS-Standard-RE`](https://github.com/ujjwal-7531/BIS-Standard-RE).
 - **Bureau of Indian Standards (BIS):** For publicly published standard abstracts, titles, and Gazette QCO notifications.
