@@ -1,23 +1,50 @@
 import React, { useState, useMemo } from 'react';
 import { 
   X, AlertTriangle, CheckCircle2, FlaskConical, Building, 
-  Calculator, ExternalLink, ShieldCheck, FileText, TrendingDown 
+  Calculator, ExternalLink, ShieldCheck, FileText, TrendingDown, Info 
 } from 'lucide-react';
-import { calculateLicenseFee } from '../services/aiEngine';
 
 export default function StandardDetailModal({ standard, onClose }) {
   const [enterpriseType, setEnterpriseType] = useState('micro');
 
   const feeCalculation = useMemo(() => {
-    if (!standard) return null;
-    return calculateLicenseFee(standard, enterpriseType);
+    if (!standard || !standard.feeStructure) return null;
+    const baseMarking = standard.feeStructure.baseMarkingFee || 65000;
+    let concession = 0;
+    if (enterpriseType === 'micro') {
+      concession = standard.feeStructure.microConcessionPercent ?? 50;
+    } else if (enterpriseType === 'small') {
+      concession = standard.feeStructure.smallConcessionPercent ?? 20;
+    } else {
+      concession = 0;
+    }
+
+    const effectiveMarking = baseMarking * (1 - concession / 100);
+    const appFee = standard.feeStructure.applicationFee ?? 1000;
+    const inspFee = (standard.feeStructure.auditFeePerManDay ?? 7000) * 2;
+    const total = appFee + inspFee + effectiveMarking;
+    const savings = baseMarking - effectiveMarking;
+
+    return {
+      baseMarking,
+      concessionPercent: concession,
+      effectiveMarking,
+      applicationFee: appFee,
+      inspectionFee: inspFee,
+      totalEstimatedCost: total,
+      totalSavings: savings
+    };
   }, [standard, enterpriseType]);
 
   if (!standard) return null;
 
+  const keyTests = standard.keyTests || [];
+  const labs = standard.labsAvailable || [];
+  const docs = standard.documentationRequired || [];
+
   return (
     <div className="fixed inset-0 z-50 bg-neutral-900/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
-      <div className="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] flex flex-col shadow-modal border border-neutral-200 animate-in zoom-in-95 text-left">
+      <div className="bg-white rounded-2xl max-w-3xl w-full max-h-[90vh] flex flex-col shadow-modal border border-neutral-200 animate-in zoom-in-95 text-left">
         
         {/* Modal Header */}
         <div className="p-5 sm:p-6 border-b border-neutral-200 flex items-start justify-between gap-4 sticky top-0 bg-white rounded-t-2xl z-10">
@@ -26,13 +53,17 @@ export default function StandardDetailModal({ standard, onClose }) {
               <span className="text-xs font-bold text-emerald-800 bg-emerald-50 px-2.5 py-0.5 rounded border border-emerald-200 font-mono">
                 {standard.isCode}
               </span>
-              <span className="text-xs font-medium text-neutral-500 bg-neutral-100 px-2 py-0.5 rounded">
-                {standard.scheme}
+              <span className="text-xs font-medium text-neutral-600 bg-neutral-100 px-2 py-0.5 rounded">
+                {standard.category || 'General Standard'}
               </span>
-              {standard.mandatoryQCO && (
+              {standard.mandatoryQCO ? (
                 <span className="text-[11px] font-bold text-amber-800 bg-amber-50 px-2 py-0.5 rounded border border-amber-200 flex items-center gap-1">
                   <AlertTriangle className="w-3 h-3 text-amber-600" />
                   Mandatory QCO
+                </span>
+              ) : (
+                <span className="text-[11px] font-medium text-neutral-500 bg-neutral-100 px-2 py-0.5 rounded">
+                  Voluntary Standard
                 </span>
               )}
             </div>
@@ -53,53 +84,88 @@ export default function StandardDetailModal({ standard, onClose }) {
         {/* Modal Scrollable Body */}
         <div className="p-5 sm:p-6 space-y-6 overflow-y-auto">
           
-          {/* 1. Overview */}
+          {/* 1. Overview & Scope */}
           <section className="space-y-2">
             <h3 className="text-xs font-bold text-neutral-400 uppercase tracking-wider">
               Overview & Scope
             </h3>
             <p className="text-xs sm:text-sm text-neutral-700 leading-relaxed">
-              {standard.description}
+              {standard.description || standard.scope || "Information not available in the current prototype dataset."}
             </p>
 
-            {standard.mandatoryQCO && standard.qcoNotification && (
+            {standard.scope && standard.scope !== standard.description && (
+              <div className="p-3 bg-neutral-50 rounded-xl border border-neutral-200 text-xs text-neutral-700">
+                <span className="font-semibold text-neutral-900">Technical Scope: </span>
+                <span>{standard.scope}</span>
+              </div>
+            )}
+
+            {standard.mandatoryQCO && (
               <div className="p-3 bg-amber-50/70 border border-amber-200/80 rounded-xl text-xs text-amber-900 flex items-start gap-2 mt-2">
                 <ShieldCheck className="w-4 h-4 text-amber-700 shrink-0 mt-0.5" />
                 <div>
                   <span className="font-bold">Statutory Quality Control Order: </span>
-                  <span>{standard.qcoNotification}. Manufacturing, storing, or selling without an operative ISI mark is prohibited under Section 29 of the BIS Act 2016.</span>
+                  <span>{standard.qcoNotification || 'Mandatory Quality Control Order'}. Manufacturing, storing, or selling without an operative ISI mark is prohibited under Section 29 of the BIS Act, 2016.</span>
                 </div>
               </div>
             )}
           </section>
 
-          {/* 2. Key Testing Benchmarks */}
+          {/* 2. Compliance Guidance */}
+          <section className="space-y-2.5">
+            <div className="flex items-center justify-between">
+              <h3 className="text-xs font-bold text-neutral-400 uppercase tracking-wider flex items-center gap-1.5">
+                <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
+                Compliance Guidance
+              </h3>
+              <span className="text-[11px] text-neutral-400 font-mono">
+                Source: {standard.source || "BIS Catalogue"}
+              </span>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+              <div className="bg-neutral-50 p-3 rounded-xl border border-neutral-200">
+                <span className="text-[10px] text-neutral-400 uppercase font-bold block">Applicable Standard</span>
+                <p className="font-bold text-neutral-900 mt-0.5">{standard.isCode}</p>
+              </div>
+              <div className="bg-neutral-50 p-3 rounded-xl border border-neutral-200">
+                <span className="text-[10px] text-neutral-400 uppercase font-bold block">Conformity Scheme</span>
+                <p className="font-bold text-emerald-700 mt-0.5">Scheme-I (ISI Certification Mark)</p>
+              </div>
+            </div>
+          </section>
+
+          {/* 3. Key Testing Benchmarks */}
           <section className="space-y-2.5">
             <h3 className="text-xs font-bold text-neutral-400 uppercase tracking-wider flex items-center gap-1.5">
               <FlaskConical className="w-3.5 h-3.5 text-emerald-600" />
               Key Testing Parameters
             </h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-neutral-700">
-              {standard.keyTests.map((t, idx) => (
-                <div key={idx} className="flex items-start gap-2 bg-neutral-50 p-2.5 rounded-lg border border-neutral-100">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0 mt-0.5" />
-                  <span>{t}</span>
-                </div>
-              ))}
-            </div>
+            {keyTests.length > 0 ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-neutral-700">
+                {keyTests.map((t, idx) => (
+                  <div key={idx} className="flex items-start gap-2 bg-neutral-50 p-2.5 rounded-lg border border-neutral-100">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0 mt-0.5" />
+                    <span>{t}</span>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="text-xs text-neutral-500 italic">Information not available in the current prototype dataset.</p>
+            )}
           </section>
 
-          {/* 3. Fee Structure & MSME Calculator */}
+          {/* 4. Cost Estimator & MSME Concessions */}
           {feeCalculation && (
             <section className="space-y-3 bg-neutral-50 p-4 rounded-xl border border-neutral-200">
               <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
                 <div>
                   <h3 className="text-xs font-bold text-neutral-900 uppercase tracking-wider flex items-center gap-1.5">
                     <Calculator className="w-3.5 h-3.5 text-emerald-700" />
-                    Statutory Fees & MSME Concessions
+                    Estimated Cost & MSME Concessions
                   </h3>
                   <p className="text-[11px] text-neutral-500">
-                    Select enterprise type to preview applicable government concessions:
+                    Select enterprise scale to see applicable statutory concessions:
                   </p>
                 </div>
 
@@ -134,49 +200,66 @@ export default function StandardDetailModal({ standard, onClose }) {
                   <p className="text-sm font-bold text-neutral-900 mt-0.5">₹{feeCalculation.inspectionFee.toLocaleString()}</p>
                 </div>
                 <div className="bg-white p-2.5 rounded-lg border border-neutral-200">
-                  <span className="text-[10px] text-neutral-400 font-bold block">Annual Marking Fee</span>
+                  <span className="text-[10px] text-neutral-400 font-bold block">Effective Marking Fee</span>
                   <p className="text-sm font-bold text-emerald-700 mt-0.5">₹{feeCalculation.effectiveMarkingFee.toLocaleString()}</p>
                 </div>
                 <div className="bg-emerald-50 p-2.5 rounded-lg border border-emerald-200">
                   <span className="text-[10px] text-emerald-800 font-bold block flex items-center gap-1">
-                    <TrendingDown className="w-3 h-3" /> Concession
+                    <TrendingDown className="w-3 h-3" /> Total Savings
                   </span>
                   <p className="text-sm font-bold text-emerald-700 mt-0.5">₹{feeCalculation.totalSavings.toLocaleString()}</p>
                 </div>
               </div>
+
+              <div className="pt-2 border-t border-neutral-200/80 flex items-center justify-between text-xs">
+                <span className="text-neutral-600 font-medium">Estimated First-Year Total:</span>
+                <span className="text-sm font-extrabold text-neutral-900">₹{feeCalculation.totalEstimatedCost.toLocaleString()}</span>
+              </div>
+
+              <p className="text-[10px] text-neutral-400 italic pt-1">
+                Fee estimates are for prototype guidance and should be verified against the latest official BIS fee schedule.
+              </p>
             </section>
           )}
 
-          {/* 4. Recognized Laboratories */}
+          {/* 5. Recognized Laboratories */}
           <section className="space-y-2">
             <h3 className="text-xs font-bold text-neutral-400 uppercase tracking-wider flex items-center gap-1.5">
               <Building className="w-3.5 h-3.5 text-neutral-500" />
               BIS Recognized Testing Laboratories
             </h3>
-            <div className="space-y-1.5 text-xs text-neutral-700">
-              {standard.labsAvailable.map((lab, idx) => (
-                <div key={idx} className="p-2.5 rounded-lg bg-neutral-50 border border-neutral-100 flex items-center justify-between">
-                  <span className="font-semibold text-neutral-900">{lab.name}</span>
-                  <span className="text-neutral-500">{lab.city}, {lab.state}</span>
-                </div>
-              ))}
-            </div>
+            {labs.length > 0 ? (
+              <div className="space-y-1.5 text-xs text-neutral-700">
+                {labs.map((lab, idx) => (
+                  <div key={idx} className="p-2.5 rounded-lg bg-neutral-50 border border-neutral-100 flex items-center justify-between">
+                    <span className="font-semibold text-neutral-900">{lab.name}</span>
+                    <span className="text-neutral-500">{lab.city}, {lab.state}</span>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="text-xs text-neutral-500 italic">Information not available in the current prototype dataset.</p>
+            )}
           </section>
 
-          {/* 5. Required Documents */}
+          {/* 6. Required Documentation */}
           <section className="space-y-2">
             <h3 className="text-xs font-bold text-neutral-400 uppercase tracking-wider flex items-center gap-1.5">
               <FileText className="w-3.5 h-3.5 text-neutral-500" />
               Required Documentation
             </h3>
-            <ul className="space-y-1 text-xs text-neutral-600">
-              {standard.documentationRequired.map((doc, idx) => (
-                <li key={idx} className="flex items-start gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-neutral-400 mt-1.5 shrink-0"></span>
-                  <span>{doc}</span>
-                </li>
-              ))}
-            </ul>
+            {docs.length > 0 ? (
+              <ul className="space-y-1 text-xs text-neutral-600">
+                {docs.map((doc, idx) => (
+                  <li key={idx} className="flex items-start gap-2">
+                    <span className="w-1.5 h-1.5 rounded-full bg-neutral-400 mt-1.5 shrink-0"></span>
+                    <span>{doc}</span>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="text-xs text-neutral-500 italic">Information not available in the current prototype dataset.</p>
+            )}
           </section>
 
         </div>

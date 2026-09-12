@@ -1,29 +1,45 @@
 import React, { useState } from 'react';
 import { 
   ShieldCheck, Award, CheckCircle2, XCircle, AlertTriangle, 
-  HelpCircle, Sparkles, Check, Copy 
+  HelpCircle, Sparkles, Check, Copy, AlertCircle, Flag, Loader2 
 } from 'lucide-react';
-import { verifyHUID, verifyCMLLicense } from '../services/aiEngine';
+import { verifyIdentifier } from '../services/api';
 
-export default function ConsumerVerifier() {
+export default function ConsumerVerifier({ onOpenReport }) {
   const [activeTab, setActiveTab] = useState('gold'); // 'gold' | 'isi'
   
   // HUID State
   const [huidCode, setHuidCode] = useState('AK79B2');
   const [huidResult, setHuidResult] = useState(null);
+  const [huidLoading, setHuidLoading] = useState(false);
 
   // ISI Mark CML State
   const [cmlCode, setCmlCode] = useState('8400192');
   const [cmlResult, setCmlResult] = useState(null);
+  const [cmlLoading, setCmlLoading] = useState(false);
 
-  const handleCheckHUID = () => {
-    const res = verifyHUID(huidCode);
-    setHuidResult(res);
+  const handleCheckHUID = async () => {
+    setHuidLoading(true);
+    try {
+      const res = await verifyIdentifier(huidCode, 'huid');
+      setHuidResult(res);
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setHuidLoading(false);
+    }
   };
 
-  const handleCheckCML = () => {
-    const res = verifyCMLLicense(cmlCode);
-    setCmlResult(res);
+  const handleCheckCML = async () => {
+    setCmlLoading(true);
+    try {
+      const res = await verifyIdentifier(cmlCode, 'cml');
+      setCmlResult(res);
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setCmlLoading(false);
+    }
   };
 
   return (
@@ -34,13 +50,13 @@ export default function ConsumerVerifier() {
         <div className="text-center max-w-xl mx-auto mb-8 space-y-2">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-semibold">
             <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
-            <span>Consumer Protection Tool</span>
+            <span>Prototype Consumer Verification Tool</span>
           </div>
           <h2 className="text-2xl sm:text-3xl font-bold text-neutral-900 tracking-tight">
             Verify Gold Hallmarking & Genuine ISI Marks
           </h2>
           <p className="text-xs sm:text-sm text-neutral-600">
-            Check if your gold jewellery or purchased product has authentic BIS certification marks.
+            Check 6-character Gold HUIDs or 7-digit ISI CML license numbers against our prototype verification provider.
           </p>
         </div>
 
@@ -70,14 +86,28 @@ export default function ConsumerVerifier() {
 
         {/* TAB 1: GOLD HUID CHECKER */}
         {activeTab === 'gold' && (
-          <div className="bg-white p-6 rounded-2xl border border-neutral-200 shadow-xs space-y-5 animate-in fade-in">
-            <div>
-              <h3 className="text-base font-bold text-neutral-900">
-                Gold Hallmark Unique Identification (HUID) Verifier
-              </h3>
-              <p className="text-xs text-neutral-600 mt-1">
-                Every genuine gold jewellery item has a laser-engraved 6-character code (e.g. <code>AK79B2</code>).
-              </p>
+          <div className="bg-white p-6 sm:p-8 rounded-2xl border border-neutral-200 shadow-xs space-y-5 animate-in fade-in">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <div>
+                <h3 className="text-base font-bold text-neutral-900">
+                  Gold Hallmark Unique Identification (HUID) Verifier
+                </h3>
+                <p className="text-xs text-neutral-600 mt-0.5">
+                  Every authentic hallmarked gold article contains a laser-inscribed 6-character alphanumeric code.
+                </p>
+              </div>
+              <div className="flex items-center gap-1.5 text-xs text-neutral-500">
+                <span>Demo codes:</span>
+                {['AK79B2', 'MH41C9', 'KA88X1'].map((c) => (
+                  <button
+                    key={c}
+                    onClick={() => { setHuidCode(c); }}
+                    className="font-mono font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded hover:bg-emerald-100 border border-emerald-200"
+                  >
+                    {c}
+                  </button>
+                ))}
+              </div>
             </div>
 
             <div className="flex flex-col sm:flex-row gap-2.5">
@@ -88,138 +118,194 @@ export default function ConsumerVerifier() {
                 onChange={(e) => setHuidCode(e.target.value.toUpperCase())}
                 placeholder="Enter 6-digit code (e.g. AK79B2)"
                 className="flex-1 px-4 py-3 text-base font-mono font-bold tracking-widest text-center uppercase bg-neutral-50 border border-neutral-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-600"
+                onKeyDown={(e) => e.key === 'Enter' && handleCheckHUID()}
               />
               <button
                 onClick={handleCheckHUID}
-                className="px-6 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-bold transition-colors shrink-0"
+                disabled={huidLoading}
+                className="px-6 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-bold transition-colors shrink-0 disabled:opacity-50 flex items-center justify-center gap-2"
               >
-                Verify Gold Hallmark
+                {huidLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : null}
+                <span>Verify Hallmark</span>
               </button>
             </div>
 
             {/* Verification Result Display */}
             {huidResult && (
-              <div className={`p-4 rounded-xl border animate-in fade-in ${
-                huidResult.valid 
-                  ? 'bg-emerald-50 border-emerald-300 text-emerald-950' 
-                  : 'bg-red-50 border-red-300 text-red-950'
+              <div className={`p-4 sm:p-5 rounded-xl border animate-in fade-in space-y-3 ${
+                huidResult.is_valid 
+                  ? 'bg-emerald-50/80 border-emerald-300 text-emerald-950' 
+                  : 'bg-red-50/80 border-red-300 text-red-950'
               }`}>
-                {huidResult.valid ? (
-                  <div className="space-y-2 text-xs">
-                    <div className="flex items-center gap-2 font-black text-emerald-900 text-sm">
-                      <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                      Authentic BIS Gold Hallmarking Confirmed
-                    </div>
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-2 border-t border-emerald-200/60">
-                      <div>
-                        <span className="text-[10px] text-emerald-800 uppercase font-bold block">HUID Code</span>
-                        <p className="font-mono font-black text-xs">{huidResult.huid}</p>
-                      </div>
-                      <div>
-                        <span className="text-[10px] text-emerald-800 uppercase font-bold block">Certified Purity</span>
-                        <p className="font-bold text-xs">{huidResult.purity}</p>
-                      </div>
-                      <div>
-                        <span className="text-[10px] text-emerald-800 uppercase font-bold block">Assaying Centre</span>
-                        <p className="font-medium text-xs truncate">{huidResult.assayingCentre}</p>
-                      </div>
-                    </div>
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <div className="flex items-center gap-2 font-bold text-sm">
+                    {huidResult.is_valid ? (
+                      <>
+                        <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                        <span>Status: {huidResult.status}</span>
+                      </>
+                    ) : (
+                      <>
+                        <XCircle className="w-4 h-4 text-red-600" />
+                        <span>Status: {huidResult.status}</span>
+                      </>
+                    )}
                   </div>
-                ) : (
-                  <div className="flex items-start gap-2 text-xs text-red-800">
-                    <XCircle className="w-4 h-4 text-red-600 shrink-0 mt-0.5" />
-                    <span>{huidResult.message}</span>
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-white/70 border border-neutral-300">
+                    Prototype Verification Provider
+                  </span>
+                </div>
+
+                {huidResult.is_valid && huidResult.details && (
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-2 border-t border-emerald-200/80 text-xs">
+                    <div>
+                      <span className="text-[10px] text-emerald-800 uppercase font-bold block">HUID Code</span>
+                      <p className="font-mono font-bold text-xs mt-0.5">{huidResult.details.huid}</p>
+                    </div>
+                    <div>
+                      <span className="text-[10px] text-emerald-800 uppercase font-bold block">Certified Purity</span>
+                      <p className="font-bold text-xs mt-0.5">{huidResult.details.purity}</p>
+                    </div>
+                    <div>
+                      <span className="text-[10px] text-emerald-800 uppercase font-bold block">Assaying Centre</span>
+                      <p className="font-medium text-xs mt-0.5 line-clamp-1">{huidResult.details.assaying_centre}</p>
+                    </div>
                   </div>
                 )}
+
+                {!huidResult.is_valid && (
+                  <div className="text-xs space-y-2">
+                    <p>{huidResult.details?.message || "HUID not found in prototype verification registry."}</p>
+                    {onOpenReport && (
+                      <button
+                        onClick={() => onOpenReport(huidCode, "Fake or Unverified HUID")}
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-red-600 text-white rounded-lg font-semibold hover:bg-red-700 transition-colors shadow-xs"
+                      >
+                        <Flag className="w-3.5 h-3.5" />
+                        <span>Report Suspicious Hallmark</span>
+                      </button>
+                    )}
+                  </div>
+                )}
+
+                {/* Mandatory Prototype Disclaimer */}
+                <p className="text-[10px] text-neutral-500 italic pt-1 border-t border-neutral-200/60">
+                  {huidResult.disclaimer}
+                </p>
               </div>
             )}
-
-            {/* Guide to 3 Marks */}
-            <div className="p-3.5 bg-neutral-50 rounded-xl border border-neutral-200 text-xs text-neutral-600">
-              <span className="font-bold text-neutral-900 block mb-1.5">
-                🔍 Three mandatory marks on genuine gold jewellery:
-              </span>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-center text-[11px] font-medium">
-                <div className="bg-white p-2 rounded-lg border border-neutral-200">1. BIS Triangle Mark</div>
-                <div className="bg-white p-2 rounded-lg border border-neutral-200">2. Purity (e.g. 22K916)</div>
-                <div className="bg-white p-2 rounded-lg border border-neutral-200">3. 6-Digit Alphanumeric HUID</div>
-              </div>
-            </div>
           </div>
         )}
 
-        {/* TAB 2: ISI MARK CML CHECKER */}
+        {/* TAB 2: ISI CML LICENSE CHECKER */}
         {activeTab === 'isi' && (
-          <div className="bg-white p-6 rounded-2xl border border-neutral-200 shadow-xs space-y-5 animate-in fade-in">
-            <div>
-              <h3 className="text-base font-bold text-neutral-900">
-                ISI Mark CML License Number Validator
-              </h3>
-              <p className="text-xs text-neutral-600 mt-1">
-                A genuine ISI mark must always display a 7-digit CML number printed below the logo (e.g. <code>CM/L-8400192</code>).
-              </p>
+          <div className="bg-white p-6 sm:p-8 rounded-2xl border border-neutral-200 shadow-xs space-y-5 animate-in fade-in">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <div>
+                <h3 className="text-base font-bold text-neutral-900">
+                  ISI Mark License (CM/L Number) Verifier
+                </h3>
+                <p className="text-xs text-neutral-600 mt-0.5">
+                  Manufacturers authorized to use the ISI mark print a 7-digit CML number directly under the logo.
+                </p>
+              </div>
+              <div className="flex items-center gap-1.5 text-xs text-neutral-500">
+                <span>Demo licenses:</span>
+                {['8400192', '9200341', '7100456'].map((c) => (
+                  <button
+                    key={c}
+                    onClick={() => { setCmlCode(c); }}
+                    className="font-mono font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded hover:bg-emerald-100 border border-emerald-200"
+                  >
+                    {c}
+                  </button>
+                ))}
+              </div>
             </div>
 
             <div className="flex flex-col sm:flex-row gap-2.5">
-              <div className="relative flex-1">
-                <span className="absolute left-3.5 top-3 text-sm font-mono font-bold text-neutral-400">CM/L-</span>
-                <input
-                  type="text"
-                  maxLength={7}
-                  value={cmlCode}
-                  onChange={(e) => setCmlCode(e.target.value)}
-                  placeholder="8400192"
-                  className="w-full pl-18 pr-4 py-3 text-base font-mono font-bold tracking-wider bg-neutral-50 border border-neutral-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-600"
-                />
-              </div>
+              <input
+                type="text"
+                value={cmlCode}
+                onChange={(e) => setCmlCode(e.target.value)}
+                placeholder="Enter 7-digit CML number (e.g. 8400192)"
+                className="flex-1 px-4 py-3 text-base font-mono font-bold tracking-widest text-center bg-neutral-50 border border-neutral-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-600"
+                onKeyDown={(e) => e.key === 'Enter' && handleCheckCML()}
+              />
               <button
                 onClick={handleCheckCML}
-                className="px-6 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-bold transition-colors shrink-0"
+                disabled={cmlLoading}
+                className="px-6 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-bold transition-colors shrink-0 disabled:opacity-50 flex items-center justify-center gap-2"
               >
-                Validate License
+                {cmlLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : null}
+                <span>Verify License</span>
               </button>
             </div>
 
-            {/* CML Result Card */}
+            {/* Verification Result Display */}
             {cmlResult && (
-              <div className={`p-4 rounded-xl border animate-in fade-in ${
-                cmlResult.valid 
-                  ? 'bg-emerald-50 border-emerald-300 text-emerald-950' 
-                  : 'bg-red-50 border-red-300 text-red-950'
+              <div className={`p-4 sm:p-5 rounded-xl border animate-in fade-in space-y-3 ${
+                cmlResult.is_valid 
+                  ? 'bg-emerald-50/80 border-emerald-300 text-emerald-950' 
+                  : 'bg-red-50/80 border-red-300 text-red-950'
               }`}>
-                {cmlResult.valid ? (
-                  <div className="space-y-1.5 text-xs">
-                    <div className="flex items-center gap-2 font-black text-emerald-900 text-sm">
-                      <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                      Statutory License Operative & Genuine
-                    </div>
-                    <div className="pt-2 border-t border-emerald-200/60 grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px]">
-                      <div>
-                        <span className="text-neutral-500 font-bold block">License Number:</span>
-                        <p className="font-mono font-bold text-neutral-900">{cmlResult.cmlNumber}</p>
-                      </div>
-                      <div>
-                        <span className="text-neutral-500 font-bold block">Status:</span>
-                        <p className="font-bold text-emerald-700">{cmlResult.status}</p>
-                      </div>
-                      <div className="col-span-full">
-                        <span className="text-neutral-500 font-bold block">Monitoring & Quality Status:</span>
-                        <p className="text-neutral-700">{cmlResult.monitoringStatus}</p>
-                      </div>
-                    </div>
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <div className="flex items-center gap-2 font-bold text-sm">
+                    {cmlResult.is_valid ? (
+                      <>
+                        <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                        <span>Status: {cmlResult.status}</span>
+                      </>
+                    ) : (
+                      <>
+                        <XCircle className="w-4 h-4 text-red-600" />
+                        <span>Status: {cmlResult.status}</span>
+                      </>
+                    )}
                   </div>
-                ) : (
-                  <div className="flex items-start gap-2 text-xs text-red-800">
-                    <XCircle className="w-4 h-4 text-red-600 shrink-0 mt-0.5" />
-                    <span>{cmlResult.message}</span>
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-white/70 border border-neutral-300">
+                    Prototype Verification Provider
+                  </span>
+                </div>
+
+                {cmlResult.is_valid && cmlResult.details && (
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-2 border-t border-emerald-200/80 text-xs">
+                    <div>
+                      <span className="text-[10px] text-emerald-800 uppercase font-bold block">CML Number</span>
+                      <p className="font-mono font-bold text-xs mt-0.5">{cmlResult.details.cml_number}</p>
+                    </div>
+                    <div>
+                      <span className="text-[10px] text-emerald-800 uppercase font-bold block">Licensee Firm</span>
+                      <p className="font-bold text-xs mt-0.5">{cmlResult.details.licensee}</p>
+                    </div>
+                    <div>
+                      <span className="text-[10px] text-emerald-800 uppercase font-bold block">Valid Upto</span>
+                      <p className="font-medium text-xs mt-0.5">{cmlResult.details.valid_upto}</p>
+                    </div>
                   </div>
                 )}
+
+                {!cmlResult.is_valid && (
+                  <div className="text-xs space-y-2">
+                    <p>{cmlResult.details?.message || "License number not found in prototype verification registry."}</p>
+                    {onOpenReport && (
+                      <button
+                        onClick={() => onOpenReport(cmlCode, "Suspected Counterfeit ISI Mark")}
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-red-600 text-white rounded-lg font-semibold hover:bg-red-700 transition-colors shadow-xs"
+                      >
+                        <Flag className="w-3.5 h-3.5" />
+                        <span>Report Fake ISI Mark</span>
+                      </button>
+                    )}
+                  </div>
+                )}
+
+                {/* Mandatory Prototype Disclaimer */}
+                <p className="text-[10px] text-neutral-500 italic pt-1 border-t border-neutral-200/60">
+                  {cmlResult.disclaimer}
+                </p>
               </div>
             )}
-
-            <div className="p-3 bg-amber-50 rounded-xl border border-amber-200 text-xs text-amber-900 leading-snug">
-              <strong>Counterfeit Warning:</strong> If an appliance or water bottle displays the ISI logo without the 7-digit CML number, it is counterfeit and illegal to sell under Section 29 of the BIS Act 2016.
-            </div>
           </div>
         )}
 

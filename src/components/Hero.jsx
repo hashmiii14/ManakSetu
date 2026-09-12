@@ -1,43 +1,72 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { 
   Search, ArrowRight, CheckCircle2, AlertTriangle, ShieldCheck, 
-  Sparkles, ExternalLink, Calculator, FlaskConical, ChevronRight 
+  Sparkles, ExternalLink, Calculator, FlaskConical, ChevronRight, Loader2 
 } from 'lucide-react';
-import { BIS_STANDARDS } from '../data/bisStandards';
-import { searchStandards } from '../services/aiEngine';
+import { searchStandards } from '../services/api';
 
 export default function Hero({ onOpenStandard, onAskQuestion }) {
   const [searchQuery, setSearchQuery] = useState('');
-  const [activeStandard, setActiveStandard] = useState(BIS_STANDARDS[0]); // Defaults to Electric Geyser
+  const [activeStandard, setActiveStandard] = useState(null);
+  const [isSearching, setIsSearching] = useState(false);
   const [hasInteracted, setHasInteracted] = useState(false);
+  const debounceTimerRef = useRef(null);
 
   const quickChips = [
-    { label: "Electric Geyser", query: "geyser" },
+    { label: "Immersion Geyser", query: "immersion geyser" },
     { label: "Toys", query: "toys" },
     { label: "Packaged Water", query: "packaged water" },
     { label: "Helmets", query: "helmet" },
-    { label: "Plugs & Sockets", query: "plug" },
-    { label: "Cement", query: "cement" }
+    { label: "Cement", query: "cement" },
+    { label: "Steel Products", query: "steel" },
+    { label: "Pressure Cooker", query: "pressure cooker" }
   ];
+
+  // Initial load: fetch default standard
+  useEffect(() => {
+    let isMounted = true;
+    searchStandards("electric geyser", 1).then((results) => {
+      if (isMounted && results && results.length > 0) {
+        setActiveStandard(results[0]);
+      }
+    });
+    return () => { isMounted = false; };
+  }, []);
+
+  const executeSearch = async (query) => {
+    if (!query || !query.trim()) return;
+    setIsSearching(true);
+    try {
+      const results = await searchStandards(query, 5);
+      if (results && results.length > 0) {
+        setActiveStandard(results[0]);
+      }
+    } catch (err) {
+      console.error("Search failed:", err);
+    } finally {
+      setIsSearching(false);
+    }
+  };
 
   const handleChipClick = (query) => {
     setSearchQuery(query);
     setHasInteracted(true);
-    const results = searchStandards(query);
-    if (results.length > 0) {
-      setActiveStandard(results[0]);
-    }
+    executeSearch(query);
   };
 
   const handleSearchChange = (e) => {
     const val = e.target.value;
     setSearchQuery(val);
-    if (val.trim()) {
-      setHasInteracted(true);
-      const results = searchStandards(val);
-      if (results.length > 0) {
-        setActiveStandard(results[0]);
-      }
+    setHasInteracted(true);
+
+    if (debounceTimerRef.current) {
+      clearTimeout(debounceTimerRef.current);
+    }
+
+    if (val.trim().length >= 2) {
+      debounceTimerRef.current = setTimeout(() => {
+        executeSearch(val);
+      }, 300);
     }
   };
 
@@ -65,12 +94,16 @@ export default function Hero({ onOpenStandard, onAskQuestion }) {
         <div className="bg-neutral-50 rounded-2xl p-4 sm:p-5 border border-neutral-300 shadow-sm max-w-3xl mx-auto mb-6">
           <div className="flex flex-col sm:flex-row gap-2">
             <div className="relative flex-1">
-              <Search className="absolute left-3.5 top-3.5 w-4 h-4 text-neutral-400" />
+              {isSearching ? (
+                <Loader2 className="absolute left-3.5 top-3.5 w-4 h-4 text-emerald-600 animate-spin" />
+              ) : (
+                <Search className="absolute left-3.5 top-3.5 w-4 h-4 text-neutral-400" />
+              )}
               <input
                 type="text"
                 value={searchQuery}
                 onChange={handleSearchChange}
-                placeholder="Type any product (e.g. Electric geyser, packaged water, toys, plug)..."
+                placeholder="Type any product (e.g. immersion geyser, toys, packaged water, helmet, cement)..."
                 className="w-full pl-10 pr-4 py-3 text-sm bg-white border border-neutral-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-600 focus:border-emerald-600 transition-all font-medium text-neutral-900"
               />
             </div>
@@ -112,15 +145,22 @@ export default function Hero({ onOpenStandard, onAskQuestion }) {
                 <span className="text-xs font-bold text-emerald-800 bg-emerald-50 px-2.5 py-1 rounded border border-emerald-200 font-mono">
                   {activeStandard.isCode}
                 </span>
-                <span className="text-xs font-semibold text-neutral-600 bg-neutral-100 px-2.5 py-1 rounded">
-                  {activeStandard.scheme}
-                </span>
+                {activeStandard.category && (
+                  <span className="text-xs font-semibold text-neutral-600 bg-neutral-100 px-2.5 py-1 rounded">
+                    {activeStandard.category}
+                  </span>
+                )}
+                {activeStandard.relevanceScore && (
+                  <span className="text-[11px] font-bold text-emerald-700 bg-emerald-100/70 px-2 py-0.5 rounded border border-emerald-200 font-mono">
+                    {Math.round(activeStandard.relevanceScore * 100)}% Match
+                  </span>
+                )}
               </div>
               
               {activeStandard.mandatoryQCO && (
                 <span className="text-xs font-bold text-amber-800 bg-amber-50 px-2.5 py-1 rounded border border-amber-200 flex items-center gap-1">
                   <AlertTriangle className="w-3.5 h-3.5 text-amber-600" />
-                  Mandatory Quality Control Order (QCO)
+                  Mandatory QCO
                 </span>
               )}
             </div>

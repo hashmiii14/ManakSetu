@@ -2,10 +2,12 @@ import React, { useState } from 'react';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import CoreActions from './components/CoreActions';
+import ExploreStandards from './components/ExploreStandards';
+import CostEstimatorSection from './components/CostEstimatorSection';
 import AssistantSection from './components/AssistantSection';
 import ConsumerVerifier from './components/ConsumerVerifier';
-import ExploreStandards from './components/ExploreStandards';
 import StandardDetailModal from './components/StandardDetailModal';
+import ReportModal from './components/ReportModal';
 import HowItWorks from './components/HowItWorks';
 import TrustSection from './components/TrustSection';
 import FAQSection from './components/FAQSection';
@@ -15,13 +17,35 @@ import { BIS_STANDARDS } from './data/bisStandards';
 
 export default function App() {
   const [selectedStandard, setSelectedStandard] = useState(null);
+  const [reportState, setReportState] = useState({
+    isOpen: false,
+    identifier: '',
+    category: ''
+  });
 
   const handleOpenStandard = (std) => {
     setSelectedStandard(std || BIS_STANDARDS[0]);
   };
 
+  const handleOpenReport = (identifier = '', category = '') => {
+    setReportState({
+      isOpen: true,
+      identifier: identifier || '',
+      category: category || 'Suspected Counterfeit ISI Mark'
+    });
+  };
+
+  const handleCloseReport = () => {
+    setReportState(prev => ({ ...prev, isOpen: false }));
+  };
+
   const handleScrollToHero = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleScrollToCostEstimator = () => {
+    const el = document.getElementById('cost-estimator');
+    if (el) el.scrollIntoView({ behavior: 'smooth' });
   };
 
   const handleScrollToAssistant = () => {
@@ -50,9 +74,12 @@ export default function App() {
   return (
     <div className="min-h-screen flex flex-col bg-white text-neutral-900 font-sans selection:bg-emerald-600 selection:text-white antialiased">
       {/* 1. Navbar */}
-      <Navbar onGetStarted={handleScrollToHero} />
+      <Navbar 
+        onGetStarted={handleScrollToHero} 
+        onOpenReport={() => handleOpenReport()} 
+      />
 
-      {/* 2. Hero with Instant Search & Live Result (Immediate clarity on first screen) */}
+      {/* 2. Hero with Instant Search & Live Result */}
       <Hero 
         onOpenStandard={handleOpenStandard} 
         onAskQuestion={handleScrollToAssistant} 
@@ -61,36 +88,45 @@ export default function App() {
       {/* 3. Core Actions ("What would you like to do?") */}
       <CoreActions
         onFindStandard={handleScrollToHero}
+        onCalculateCost={handleScrollToCostEstimator}
         onAskQuestion={handleScrollToAssistant}
         onVerifyConsumer={handleScrollToConsumer}
         onBrowseAll={handleScrollToStandards}
+        onOpenReport={() => handleOpenReport()}
       />
 
-      {/* 4. Dedicated AI Regulatory Assistant with 1-Click Questions */}
-      <AssistantSection />
-
-      {/* 5. Consumer Verification Tool (Gold HUID & ISI CML Checker) */}
-      <ConsumerVerifier />
-
-      {/* 6. Complete Standards Directory & Search */}
+      {/* 4. Complete Standards Directory & Search */}
       <ExploreStandards 
         onSelectStandard={handleOpenStandard} 
       />
 
-      {/* 7. How It Works (4 Clear Linear Steps) */}
+      {/* 5. Statutory Cost Estimator & MSME Concessions */}
+      <CostEstimatorSection />
+
+      {/* 6. Dedicated AI Regulatory Assistant (ManaKBot) */}
+      <AssistantSection 
+        onSelectStandard={handleOpenStandard} 
+      />
+
+      {/* 7. Consumer Verification Tool (Gold HUID & ISI CML Checker) */}
+      <ConsumerVerifier 
+        onOpenReport={handleOpenReport} 
+      />
+
+      {/* 8. How It Works (4 Clear Linear Steps) */}
       <HowItWorks />
 
-      {/* 8. Trust & Statutory Transparency */}
+      {/* 9. Trust & Statutory Transparency */}
       <TrustSection />
 
-      {/* 9. Useful FAQs */}
+      {/* 10. Useful FAQs */}
       <FAQSection />
 
-      {/* 10. Final Call to Action */}
+      {/* 11. Final Call to Action */}
       <FinalCTA onGetStarted={handleScrollToHero} />
 
-      {/* 11. Footer */}
-      <Footer />
+      {/* 12. Footer */}
+      <Footer onOpenReport={() => handleOpenReport()} />
 
       {/* Standard Full Detail Modal */}
       {selectedStandard && (
@@ -99,6 +135,14 @@ export default function App() {
           onClose={() => setSelectedStandard(null)}
         />
       )}
+
+      {/* Violation Report Modal */}
+      <ReportModal
+        isOpen={reportState.isOpen}
+        initialIdentifier={reportState.identifier}
+        initialCategory={reportState.category}
+        onClose={handleCloseReport}
+      />
     </div>
   );
 }

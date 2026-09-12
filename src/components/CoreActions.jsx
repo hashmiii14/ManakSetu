@@ -1,48 +1,50 @@
 import React from 'react';
-import { Search, MessageSquare, ShieldCheck, BookOpen, ArrowRight } from 'lucide-react';
+import { Search, MessageSquare, ShieldCheck, BookOpen, Calculator, ArrowRight, Flag } from 'lucide-react';
 
 export default function CoreActions({ 
   onFindStandard, 
+  onCalculateCost,
   onAskQuestion, 
   onVerifyConsumer, 
-  onBrowseAll 
+  onBrowseAll,
+  onOpenReport
 }) {
   const actions = [
     {
       num: "01",
       icon: Search,
       title: "Find a Product Standard",
-      description: "Search your product (e.g. Geyser, Water, Toys, Helmet) to instantly see its official IS code and mandatory government rules.",
+      description: "Search any manufactured product (e.g. Immersion Geyser, Toys, Helmet) to retrieve its official IS code and mandatory rules.",
       buttonText: "Check Product Now",
       onClick: onFindStandard,
-      tag: "Most Popular"
+      tag: "Hybrid Search"
     },
     {
       num: "02",
+      icon: Calculator,
+      title: "Estimate Certification Costs",
+      description: "Calculate application, inspection, and marking fees with statutory 50% Micro and 20% Small enterprise concessions.",
+      buttonText: "Calculate Fee",
+      onClick: onCalculateCost || onFindStandard,
+      tag: "MSME Savings"
+    },
+    {
+      num: "03",
       icon: MessageSquare,
-      title: "Ask Compliance Question",
-      description: "Ask about certification costs, required documents, lab testing benchmarks, or licensing steps in plain language.",
-      buttonText: "Ask ManaKSetu",
+      title: "Ask Compliance Assistant",
+      description: "Ask questions on testing parameters, required documentation, and certification roadmaps grounded in BIS standards.",
+      buttonText: "Ask ManaKBot",
       onClick: onAskQuestion,
       tag: "AI Assistant"
     },
     {
-      num: "03",
+      num: "04",
       icon: ShieldCheck,
-      title: "Verify Gold Hallmark or ISI Mark",
-      description: "Check a 6-digit Gold HUID code or 7-digit ISI CML number to verify if a product or jewel is authentic.",
+      title: "Verify Hallmark or ISI Mark",
+      description: "Check a 6-digit Gold HUID or 7-digit ISI CML license number against our prototype verification registry.",
       buttonText: "Verify Authenticity",
       onClick: onVerifyConsumer,
       tag: "Consumer Tool"
-    },
-    {
-      num: "04",
-      icon: BookOpen,
-      title: "Browse Standards Directory",
-      description: "Explore the directory of 21,000+ Indian Standards categorized by electronics, food, construction, and automotive.",
-      buttonText: "Browse Directory",
-      onClick: onBrowseAll,
-      tag: "Full Catalog"
     }
   ];
 
@@ -51,16 +53,28 @@ export default function CoreActions({
       <div className="max-w-5xl mx-auto px-4 sm:px-6">
         
         {/* Section Heading */}
-        <div className="text-left mb-8 max-w-xl">
-          <span className="text-xs font-bold text-emerald-700 uppercase tracking-wider block mb-1">
-            Simple & Direct
-          </span>
-          <h2 className="text-2xl sm:text-3xl font-bold text-neutral-900 tracking-tight">
-            What would you like to do?
-          </h2>
-          <p className="text-xs sm:text-sm text-neutral-600 mt-1">
-            Pick one of the 4 clear actions below to get started immediately:
-          </p>
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
+          <div className="max-w-xl">
+            <span className="text-xs font-bold text-emerald-700 uppercase tracking-wider block mb-1">
+              Simple & Direct
+            </span>
+            <h2 className="text-2xl sm:text-3xl font-bold text-neutral-900 tracking-tight">
+              What would you like to do?
+            </h2>
+            <p className="text-xs sm:text-sm text-neutral-600 mt-1">
+              Pick one of the core actions below to get started immediately:
+            </p>
+          </div>
+
+          {onOpenReport && (
+            <button
+              onClick={onOpenReport}
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white hover:bg-red-50 text-red-700 border border-red-200 text-xs font-bold transition-all shadow-2xs self-start sm:self-auto shrink-0"
+            >
+              <Flag className="w-3.5 h-3.5" />
+              <span>Report Non-compliant Mark</span>
+            </button>
+          )}
         </div>
 
         {/* 4 Clean Action Cards */}

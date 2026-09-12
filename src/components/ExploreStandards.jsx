@@ -1,11 +1,13 @@
-import React, { useState, useMemo } from 'react';
-import { Search, AlertTriangle, ArrowRight, CheckCircle2, Filter } from 'lucide-react';
-import { BIS_STANDARDS } from '../data/bisStandards';
-import { searchStandards } from '../services/aiEngine';
+import React, { useState, useEffect, useRef } from 'react';
+import { Search, AlertTriangle, ArrowRight, CheckCircle2, Filter, Loader2 } from 'lucide-react';
+import { searchStandards } from '../services/api';
 
 export default function ExploreStandards({ onSelectStandard }) {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('ALL');
+  const [standardsList, setStandardsList] = useState([]);
+  const [isSearching, setIsSearching] = useState(false);
+  const debounceRef = useRef(null);
 
   const categories = [
     { id: 'ALL', label: 'All Standards' },
@@ -17,15 +19,39 @@ export default function ExploreStandards({ onSelectStandard }) {
     { id: 'Automotive', label: 'Automotive & Helmets' }
   ];
 
-  const filteredStandards = useMemo(() => {
-    let list = searchStandards(searchTerm);
-    if (selectedCategory !== 'ALL') {
-      list = list.filter(item => 
-        item.category.toLowerCase().includes(selectedCategory.toLowerCase())
-      );
+  const fetchStandards = async (query = '') => {
+    setIsSearching(true);
+    try {
+      const results = await searchStandards(query, 12);
+      setStandardsList(results || []);
+    } catch (err) {
+      console.error("Explore standards fetch error:", err);
+    } finally {
+      setIsSearching(false);
     }
-    return list;
-  }, [searchTerm, selectedCategory]);
+  };
+
+  useEffect(() => {
+    fetchStandards('');
+  }, []);
+
+  const handleSearchChange = (e) => {
+    const val = e.target.value;
+    setSearchTerm(val);
+
+    if (debounceRef.current) {
+      clearTimeout(debounceRef.current);
+    }
+
+    debounceRef.current = setTimeout(() => {
+      fetchStandards(val);
+    }, 300);
+  };
+
+  const filteredStandards = standardsList.filter(item => {
+    if (selectedCategory === 'ALL') return true;
+    return item.category && item.category.toLowerCase().includes(selectedCategory.toLowerCase());
+  });
 
   return (
     <section id="standards" className="py-16 bg-neutral-50/60 border-b border-neutral-200">
@@ -40,24 +66,31 @@ export default function ExploreStandards({ onSelectStandard }) {
             Explore Indian Standards
           </h2>
           <p className="text-xs sm:text-sm text-neutral-600 mt-2 leading-relaxed">
-            Search canonical Indian Standards (IS Codes), identify mandatory Quality Control Orders, and view certification guidelines.
+            Search canonical Indian Standards (IS Codes), identify mandatory Quality Control Orders, and view statutory certification guidelines.
           </p>
         </div>
 
         {/* Search Bar & Filter Controls */}
         <div className="bg-white rounded-2xl p-4 sm:p-5 border border-neutral-200 shadow-xs mb-8 space-y-4">
           <div className="relative">
-            <Search className="absolute left-3.5 top-3.5 w-4 h-4 text-neutral-400" />
+            {isSearching ? (
+              <Loader2 className="absolute left-3.5 top-3.5 w-4 h-4 text-emerald-600 animate-spin" />
+            ) : (
+              <Search className="absolute left-3.5 top-3.5 w-4 h-4 text-neutral-400" />
+            )}
             <input
               type="text"
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              placeholder="Search standards, products, or keywords (e.g. geyser, water, toys, helmet)..."
+              onChange={handleSearchChange}
+              placeholder="Search standards, products, or keywords (e.g. immersion geyser, water, toys, helmet, cement)..."
               className="w-full pl-10 pr-4 py-2.5 text-sm bg-neutral-50 border border-neutral-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-600 focus:bg-white transition-all text-neutral-900"
             />
             {searchTerm && (
               <button
-                onClick={() => setSearchTerm('')}
+                onClick={() => {
+                  setSearchTerm('');
+                  fetchStandards('');
+                }}
                 className="absolute right-3 top-2.5 text-xs font-bold text-neutral-400 hover:text-neutral-700"
               >
                 Clear
@@ -102,14 +135,21 @@ export default function ExploreStandards({ onSelectStandard }) {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {filteredStandards.map((std) => (
                 <div
-                  key={std.id}
+                  key={std.id || std.isCode}
                   className="bg-white p-5 rounded-xl border border-neutral-200 hover:border-emerald-300 shadow-xs hover:shadow-sm transition-all flex flex-col justify-between"
                 >
                   <div className="space-y-2.5">
                     <div className="flex flex-wrap items-center justify-between gap-2">
-                      <span className="text-xs font-bold text-emerald-800 bg-emerald-50 px-2.5 py-1 rounded border border-emerald-200">
-                        {std.isCode}
-                      </span>
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs font-bold text-emerald-800 bg-emerald-50 px-2.5 py-1 rounded border border-emerald-200 font-mono">
+                          {std.isCode}
+                        </span>
+                        {std.relevanceScore && searchTerm && (
+                          <span className="text-[10px] font-bold text-emerald-700 bg-emerald-100/60 px-2 py-0.5 rounded border border-emerald-200 font-mono">
+                            {Math.round(std.relevanceScore * 100)}% Match
+                          </span>
+                        )}
+                      </div>
                       {std.mandatoryQCO ? (
                         <span className="text-[11px] font-bold text-amber-800 bg-amber-50 px-2 py-0.5 rounded border border-amber-200 flex items-center gap-1">
                           <AlertTriangle className="w-3 h-3 text-amber-600" />
@@ -127,7 +167,7 @@ export default function ExploreStandards({ onSelectStandard }) {
                     </h3>
 
                     <p className="text-xs text-neutral-600 leading-relaxed line-clamp-2">
-                      {std.description}
+                      {std.description || std.scope}
                     </p>
                   </div>
 

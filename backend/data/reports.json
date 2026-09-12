@@ -1,0 +1,11 @@
+[
+  {
+    "id": "REP-20260913-CEBF58",
+    "identifier": "CM/L-8400192",
+    "category": "Suspected Counterfeit ISI Mark",
+    "description": "Geyser sold in local market without valid manufacturer details.",
+    "contact": "tester@example.com",
+    "status": "SUBMITTED_FOR_SCRUTINY",
+    "created_at": "2026-09-13T02:36:06.943195"
+  }
+]
