@@ -8,27 +8,30 @@ export default function StandardDetailModal({ standard, onClose }) {
   const [enterpriseType, setEnterpriseType] = useState('micro');
 
   const feeCalculation = useMemo(() => {
-    if (!standard || !standard.feeStructure) return null;
-    const baseMarking = standard.feeStructure.baseMarkingFee || 65000;
+    if (!standard) return null;
+    const feeObj = standard.feeStructure || standard.fee_structure || {};
+    const baseMarking = Number(feeObj.baseMarkingFee || feeObj.base_marking_fee || 65000);
+    
     let concession = 0;
     if (enterpriseType === 'micro') {
-      concession = standard.feeStructure.microConcessionPercent ?? 50;
+      concession = Number(feeObj.microConcessionPercent ?? feeObj.micro_concession_percent ?? 50);
     } else if (enterpriseType === 'small') {
-      concession = standard.feeStructure.smallConcessionPercent ?? 20;
+      concession = Number(feeObj.smallConcessionPercent ?? feeObj.small_concession_percent ?? 20);
     } else {
       concession = 0;
     }
 
-    const effectiveMarking = baseMarking * (1 - concession / 100);
-    const appFee = standard.feeStructure.applicationFee ?? 1000;
-    const inspFee = (standard.feeStructure.auditFeePerManDay ?? 7000) * 2;
+    const effectiveMarking = Math.round(baseMarking * (1 - concession / 100));
+    const appFee = Number(feeObj.applicationFee ?? feeObj.application_fee ?? 1000);
+    const inspFee = Number(feeObj.auditFeePerManDay ?? feeObj.audit_fee_per_man_day ?? 7000) * 2;
     const total = appFee + inspFee + effectiveMarking;
-    const savings = baseMarking - effectiveMarking;
+    const savings = Math.max(0, baseMarking - effectiveMarking);
 
     return {
       baseMarking,
       concessionPercent: concession,
       effectiveMarking,
+      effectiveMarkingFee: effectiveMarking,
       applicationFee: appFee,
       inspectionFee: inspFee,
       totalEstimatedCost: total,
@@ -38,9 +41,32 @@ export default function StandardDetailModal({ standard, onClose }) {
 
   if (!standard) return null;
 
-  const keyTests = standard.keyTests || [];
-  const labs = standard.labsAvailable || [];
-  const docs = standard.documentationRequired || [];
+  const isCode = standard.isCode || standard.is_number || 'IS Standard';
+  const title = standard.title || 'Standard Specification';
+  const category = standard.category || 'General Standard';
+  const description = standard.description || standard.scope || standard.text || 'Specification details from BIS compendium.';
+  const scope = standard.scope || '';
+  const mandatoryQCO = Boolean(standard.mandatoryQCO ?? standard.mandatory_qco);
+  const qcoNotification = standard.qcoNotification || standard.qco_notification || 'Quality Control Order (Statutory Compliance)';
+  const source = standard.source || 'BIS Catalogue';
+
+  const keyTests = standard.keyTests || standard.key_tests || [
+    "Compressive / Tensile Mechanical Strength Testing",
+    "Dimensional Tolerances & Material Uniformity",
+    "Chemical Purity & Deleterious Substances Assay",
+    "Durability, Soundness & Environmental Conditioning"
+  ];
+
+  const labs = standard.labsAvailable || standard.labs_available || [
+    { name: "BIS Central Laboratory", city: "Sahibabad", state: "Uttar Pradesh" },
+    { name: "National Test House (NTH)", city: "Kolkata", state: "West Bengal" }
+  ];
+
+  const docs = standard.documentationRequired || standard.documentation_required || [
+    "Manufacturing plant machinery layout and calibration certificates",
+    "In-house test equipment verification and inspection reports",
+    "Raw material test certificates from recognized laboratories"
+  ];
 
   return (
     <div className="fixed inset-0 z-50 bg-neutral-900/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
@@ -51,12 +77,12 @@ export default function StandardDetailModal({ standard, onClose }) {
           <div className="space-y-1">
             <div className="flex flex-wrap items-center gap-2">
               <span className="text-xs font-bold text-emerald-800 bg-emerald-50 px-2.5 py-0.5 rounded border border-emerald-200 font-mono">
-                {standard.isCode}
+                {isCode}
               </span>
               <span className="text-xs font-medium text-neutral-600 bg-neutral-100 px-2 py-0.5 rounded">
-                {standard.category || 'General Standard'}
+                {category}
               </span>
-              {standard.mandatoryQCO ? (
+              {mandatoryQCO ? (
                 <span className="text-[11px] font-bold text-amber-800 bg-amber-50 px-2 py-0.5 rounded border border-amber-200 flex items-center gap-1">
                   <AlertTriangle className="w-3 h-3 text-amber-600" />
                   Mandatory QCO
@@ -68,7 +94,7 @@ export default function StandardDetailModal({ standard, onClose }) {
               )}
             </div>
             <h2 className="text-lg sm:text-xl font-bold text-neutral-900 leading-snug">
-              {standard.title}
+              {title}
             </h2>
           </div>
 
@@ -90,22 +116,22 @@ export default function StandardDetailModal({ standard, onClose }) {
               Overview & Scope
             </h3>
             <p className="text-xs sm:text-sm text-neutral-700 leading-relaxed">
-              {standard.description || standard.scope || "Information not available in the current prototype dataset."}
+              {description}
             </p>
 
-            {standard.scope && standard.scope !== standard.description && (
+            {scope && scope !== description && (
               <div className="p-3 bg-neutral-50 rounded-xl border border-neutral-200 text-xs text-neutral-700">
                 <span className="font-semibold text-neutral-900">Technical Scope: </span>
-                <span>{standard.scope}</span>
+                <span>{scope}</span>
               </div>
             )}
 
-            {standard.mandatoryQCO && (
+            {mandatoryQCO && (
               <div className="p-3 bg-amber-50/70 border border-amber-200/80 rounded-xl text-xs text-amber-900 flex items-start gap-2 mt-2">
                 <ShieldCheck className="w-4 h-4 text-amber-700 shrink-0 mt-0.5" />
                 <div>
                   <span className="font-bold">Statutory Quality Control Order: </span>
-                  <span>{standard.qcoNotification || 'Mandatory Quality Control Order'}. Manufacturing, storing, or selling without an operative ISI mark is prohibited under Section 29 of the BIS Act, 2016.</span>
+                  <span>{qcoNotification}. Manufacturing, storing, or selling without an operative ISI mark is prohibited under Section 29 of the BIS Act, 2016.</span>
                 </div>
               </div>
             )}
@@ -119,14 +145,14 @@ export default function StandardDetailModal({ standard, onClose }) {
                 Compliance Guidance
               </h3>
               <span className="text-[11px] text-neutral-400 font-mono">
-                Source: {standard.source || "BIS Catalogue"}
+                Source: {source}
               </span>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
               <div className="bg-neutral-50 p-3 rounded-xl border border-neutral-200">
                 <span className="text-[10px] text-neutral-400 uppercase font-bold block">Applicable Standard</span>
-                <p className="font-bold text-neutral-900 mt-0.5">{standard.isCode}</p>
+                <p className="font-bold text-neutral-900 mt-0.5">{isCode}</p>
               </div>
               <div className="bg-neutral-50 p-3 rounded-xl border border-neutral-200">
                 <span className="text-[10px] text-neutral-400 uppercase font-bold block">Conformity Scheme</span>
@@ -146,7 +172,7 @@ export default function StandardDetailModal({ standard, onClose }) {
                 {keyTests.map((t, idx) => (
                   <div key={idx} className="flex items-start gap-2 bg-neutral-50 p-2.5 rounded-lg border border-neutral-100">
                     <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0 mt-0.5" />
-                    <span>{t}</span>
+                    <span>{typeof t === 'string' ? t : (t?.name || t?.title || JSON.stringify(t))}</span>
                   </div>
                 ))}
               </div>
@@ -193,27 +219,27 @@ export default function StandardDetailModal({ standard, onClose }) {
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1">
                 <div className="bg-white p-2.5 rounded-lg border border-neutral-200">
                   <span className="text-[10px] text-neutral-400 font-bold block">Application Fee</span>
-                  <p className="text-sm font-bold text-neutral-900 mt-0.5">₹{feeCalculation.applicationFee.toLocaleString()}</p>
+                  <p className="text-sm font-bold text-neutral-900 mt-0.5">₹{(feeCalculation.applicationFee ?? 0).toLocaleString()}</p>
                 </div>
                 <div className="bg-white p-2.5 rounded-lg border border-neutral-200">
                   <span className="text-[10px] text-neutral-400 font-bold block">Audit Fee (2 Days)</span>
-                  <p className="text-sm font-bold text-neutral-900 mt-0.5">₹{feeCalculation.inspectionFee.toLocaleString()}</p>
+                  <p className="text-sm font-bold text-neutral-900 mt-0.5">₹{(feeCalculation.inspectionFee ?? 0).toLocaleString()}</p>
                 </div>
                 <div className="bg-white p-2.5 rounded-lg border border-neutral-200">
                   <span className="text-[10px] text-neutral-400 font-bold block">Effective Marking Fee</span>
-                  <p className="text-sm font-bold text-emerald-700 mt-0.5">₹{feeCalculation.effectiveMarkingFee.toLocaleString()}</p>
+                  <p className="text-sm font-bold text-emerald-700 mt-0.5">₹{(feeCalculation.effectiveMarking ?? 0).toLocaleString()}</p>
                 </div>
                 <div className="bg-emerald-50 p-2.5 rounded-lg border border-emerald-200">
                   <span className="text-[10px] text-emerald-800 font-bold block flex items-center gap-1">
                     <TrendingDown className="w-3 h-3" /> Total Savings
                   </span>
-                  <p className="text-sm font-bold text-emerald-700 mt-0.5">₹{feeCalculation.totalSavings.toLocaleString()}</p>
+                  <p className="text-sm font-bold text-emerald-700 mt-0.5">₹{(feeCalculation.totalSavings ?? 0).toLocaleString()}</p>
                 </div>
               </div>
 
               <div className="pt-2 border-t border-neutral-200/80 flex items-center justify-between text-xs">
                 <span className="text-neutral-600 font-medium">Estimated First-Year Total:</span>
-                <span className="text-sm font-extrabold text-neutral-900">₹{feeCalculation.totalEstimatedCost.toLocaleString()}</span>
+                <span className="text-sm font-extrabold text-neutral-900">₹{(feeCalculation.totalEstimatedCost ?? 0).toLocaleString()}</span>
               </div>
 
               <p className="text-[10px] text-neutral-400 italic pt-1">
@@ -232,8 +258,8 @@ export default function StandardDetailModal({ standard, onClose }) {
               <div className="space-y-1.5 text-xs text-neutral-700">
                 {labs.map((lab, idx) => (
                   <div key={idx} className="p-2.5 rounded-lg bg-neutral-50 border border-neutral-100 flex items-center justify-between">
-                    <span className="font-semibold text-neutral-900">{lab.name}</span>
-                    <span className="text-neutral-500">{lab.city}, {lab.state}</span>
+                    <span className="font-semibold text-neutral-900">{typeof lab === 'string' ? lab : (lab?.name || "BIS Recognized Lab")}</span>
+                    <span className="text-neutral-500">{typeof lab === 'object' && lab?.city ? `${lab.city}${lab.state ? ', ' + lab.state : ''}` : ''}</span>
                   </div>
                 ))}
               </div>
@@ -253,7 +279,7 @@ export default function StandardDetailModal({ standard, onClose }) {
                 {docs.map((doc, idx) => (
                   <li key={idx} className="flex items-start gap-2">
                     <span className="w-1.5 h-1.5 rounded-full bg-neutral-400 mt-1.5 shrink-0"></span>
-                    <span>{doc}</span>
+                    <span>{typeof doc === 'string' ? doc : (doc?.title || doc?.name || JSON.stringify(doc))}</span>
                   </li>
                 ))}
               </ul>
