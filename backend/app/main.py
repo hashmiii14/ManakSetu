@@ -31,6 +31,9 @@ app = FastAPI(
     title="ManaKSetu BIS Standards Engine API",
     version="1.0.0",
     description="SIH-ready API powering the ManaKSetu platform with hybrid retrieval from BIS standards compendium.",
+    docs_url="/api/docs",
+    redoc_url="/api/redoc",
+    openapi_url="/api/openapi.json",
     lifespan=lifespan
 )
 
@@ -52,12 +55,26 @@ app.include_router(reports.router)
 app.include_router(calculator.router)
 
 
+from fastapi.responses import RedirectResponse
+
+@app.get("/", tags=["Health"])
+@app.get("/api", tags=["Health"])
 @app.get("/api/health", tags=["Health"])
 def health_check():
     retriever = get_retriever()
     return {
         "status": "healthy",
-        "service": "ManaKSetu BIS Engine API",
+        "service": "ManaKSetu BIS Standards Recommendation Engine API",
         "version": "1.0.0",
-        "standards_indexed": len(retriever.documents) if retriever else 0
+        "standards_indexed": len(retriever.documents) if retriever else 0,
+        "docs": "/api/docs",
+        "endpoints": {
+            "search": "/api/search?q=immersion+geyser",
+            "standards": "/api/standards",
+            "calculate": "/api/calculate",
+            "verify": "/api/verify",
+            "chatbot": "/api/chatbot",
+            "report": "/api/report"
+        }
     }
+
