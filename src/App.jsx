@@ -3,6 +3,7 @@ import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import CoreActions from './components/CoreActions';
 import AssistantSection from './components/AssistantSection';
+import ConsumerVerifier from './components/ConsumerVerifier';
 import ExploreStandards from './components/ExploreStandards';
 import StandardDetailModal from './components/StandardDetailModal';
 import HowItWorks from './components/HowItWorks';
@@ -15,7 +16,15 @@ import { BIS_STANDARDS } from './data/bisStandards';
 export default function App() {
   const [selectedStandard, setSelectedStandard] = useState(null);
 
-  const handleGetStarted = () => {
+  const handleOpenStandard = (std) => {
+    setSelectedStandard(std || BIS_STANDARDS[0]);
+  };
+
+  const handleScrollToHero = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleScrollToAssistant = () => {
     const el = document.getElementById('assistant');
     if (el) {
       el.scrollIntoView({ behavior: 'smooth' });
@@ -24,75 +33,66 @@ export default function App() {
     }
   };
 
-  const handleHowItWorks = () => {
-    const el = document.getElementById('how-it-works');
+  const handleScrollToConsumer = () => {
+    const el = document.getElementById('consumer-check');
     if (el) {
       el.scrollIntoView({ behavior: 'smooth' });
     }
   };
 
-  const handleFindStandard = () => {
+  const handleScrollToStandards = () => {
     const el = document.getElementById('standards');
     if (el) {
       el.scrollIntoView({ behavior: 'smooth' });
     }
   };
 
-  const handleUnderstandRequirements = () => {
-    // Open the featured standard (Electric Geysers IS 2082)
-    setSelectedStandard(BIS_STANDARDS[0]);
-  };
-
-  const handleGetGuidance = () => {
-    // Open another popular standard (Packaged Water IS 14543)
-    setSelectedStandard(BIS_STANDARDS[1]);
-  };
-
   return (
     <div className="min-h-screen flex flex-col bg-white text-neutral-900 font-sans selection:bg-emerald-600 selection:text-white antialiased">
-      {/* 1. Clean Navbar */}
-      <Navbar onGetStarted={handleGetStarted} />
+      {/* 1. Navbar */}
+      <Navbar onGetStarted={handleScrollToHero} />
 
-      {/* 2. Hero Section */}
+      {/* 2. Hero with Instant Search & Live Result (Immediate clarity on first screen) */}
       <Hero 
-        onGetStarted={handleGetStarted} 
-        onHowItWorks={handleHowItWorks} 
+        onOpenStandard={handleOpenStandard} 
+        onAskQuestion={handleScrollToAssistant} 
       />
 
-      {/* 3. Core Actions ("What can you do?") */}
+      {/* 3. Core Actions ("What would you like to do?") */}
       <CoreActions
-        onAskQuestion={handleGetStarted}
-        onFindStandard={handleFindStandard}
-        onUnderstandRequirements={handleUnderstandRequirements}
-        onGetGuidance={handleGetGuidance}
+        onFindStandard={handleScrollToHero}
+        onAskQuestion={handleScrollToAssistant}
+        onVerifyConsumer={handleScrollToConsumer}
+        onBrowseAll={handleScrollToStandards}
       />
 
-      {/* 4. Dedicated Assistant Section */}
-      <AssistantSection 
-        onSelectStandard={(std) => setSelectedStandard(std)} 
-      />
+      {/* 4. Dedicated AI Regulatory Assistant with 1-Click Questions */}
+      <AssistantSection />
 
-      {/* 5. Explore Standards Section */}
+      {/* 5. Consumer Verification Tool (Gold HUID & ISI CML Checker) */}
+      <ConsumerVerifier />
+
+      {/* 6. Complete Standards Directory & Search */}
       <ExploreStandards 
-        onSelectStandard={(std) => setSelectedStandard(std)} 
+        onSelectStandard={handleOpenStandard} 
       />
 
-      {/* 6. How It Works */}
+      {/* 7. How It Works (4 Clear Linear Steps) */}
       <HowItWorks />
 
-      {/* 7. Trust & Transparency */}
+      {/* 8. Trust & Statutory Transparency */}
       <TrustSection />
 
-      {/* 8. FAQ Section */}
+      {/* 9. Useful FAQs */}
       <FAQSection />
 
-      {/* 9. Final Call to Action */}
-      <FinalCTA onGetStarted={handleGetStarted} />
+      {/* 10. Final Call to Action */}
+      <FinalCTA onGetStarted={handleScrollToHero} />
 
-      {/* 10. Clean Footer */}
+      {/* 11. Footer */}
       <Footer />
 
-      {/* Standard Detail Modal */}
+      {/* Standard Full Detail Modal */}
       {selectedStandard && (
         <StandardDetailModal
           standard={selectedStandard}

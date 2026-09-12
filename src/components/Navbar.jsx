@@ -33,30 +33,30 @@ export default function Navbar({ onGetStarted }) {
         </div>
 
         {/* Desktop Navigation Links */}
-        <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-neutral-600">
+        <nav className="hidden md:flex items-center gap-7 text-xs font-semibold text-neutral-600">
           <button 
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
             className="hover:text-emerald-700 transition-colors"
           >
-            Home
-          </button>
-          <button 
-            onClick={() => scrollTo('actions')}
-            className="hover:text-emerald-700 transition-colors"
-          >
-            What You Can Do
+            Product Finder
           </button>
           <button 
             onClick={() => scrollTo('assistant')}
             className="hover:text-emerald-700 transition-colors"
           >
-            Assistant
+            Ask Assistant
+          </button>
+          <button 
+            onClick={() => scrollTo('consumer-check')}
+            className="hover:text-emerald-700 transition-colors"
+          >
+            Verify Hallmark & ISI
           </button>
           <button 
             onClick={() => scrollTo('standards')}
             className="hover:text-emerald-700 transition-colors"
           >
-            Explore Standards
+            Standards Directory
           </button>
           <button 
             onClick={() => scrollTo('how-it-works')}
@@ -75,10 +75,10 @@ export default function Navbar({ onGetStarted }) {
         {/* Right CTA Button */}
         <div className="hidden md:flex items-center gap-3">
           <button
-            onClick={onGetStarted}
-            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium transition-colors shadow-xs"
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition-colors shadow-xs"
           >
-            <span>Get Started</span>
+            <span>Check Product</span>
             <ArrowRight className="w-3.5 h-3.5" />
           </button>
         </div>
@@ -97,22 +97,31 @@ export default function Navbar({ onGetStarted }) {
       {mobileMenuOpen && (
         <div className="md:hidden border-b border-neutral-200 bg-white px-4 pt-2 pb-6 space-y-3 shadow-lg">
           <button 
-            onClick={() => scrollTo('actions')}
+            onClick={() => {
+              setMobileMenuOpen(false);
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
             className="block w-full text-left py-2 text-sm font-medium text-neutral-700"
           >
-            What You Can Do
+            Product Finder
           </button>
           <button 
             onClick={() => scrollTo('assistant')}
             className="block w-full text-left py-2 text-sm font-medium text-neutral-700"
           >
-            ManaKSetu Assistant
+            Ask Assistant
+          </button>
+          <button 
+            onClick={() => scrollTo('consumer-check')}
+            className="block w-full text-left py-2 text-sm font-medium text-neutral-700"
+          >
+            Verify Hallmark & ISI
           </button>
           <button 
             onClick={() => scrollTo('standards')}
             className="block w-full text-left py-2 text-sm font-medium text-neutral-700"
           >
-            Explore Standards
+            Standards Directory
           </button>
           <button 
             onClick={() => scrollTo('how-it-works')}
@@ -130,11 +139,11 @@ export default function Navbar({ onGetStarted }) {
             <button
               onClick={() => {
                 setMobileMenuOpen(false);
-                onGetStarted();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
               }}
-              className="w-full py-2.5 rounded-lg bg-emerald-600 text-white text-sm font-medium text-center"
+              className="w-full py-2.5 rounded-lg bg-emerald-600 text-white text-sm font-bold text-center"
             >
-              Get Started
+              Check My Product
             </button>
           </div>
         </div>
