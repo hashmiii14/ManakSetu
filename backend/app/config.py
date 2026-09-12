@@ -18,7 +18,7 @@ CORS_ORIGINS = os.getenv("CORS_ORIGINS", "*").split(",")
 DATA_DIR = BASE_DIR / "data"
 PROCESSED_DATA_PATH = DATA_DIR / "processed_data.json"
 EMBEDDINGS_CACHE_PATH = DATA_DIR / "embeddings.npy"
-REPORTS_FILE_PATH = DATA_DIR / "reports.json"
+REPORTS_FILE_PATH = Path("/tmp/reports.json") if os.getenv("VERCEL") else (DATA_DIR / "reports.json")
 
 # AI / LLM Config
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "")
