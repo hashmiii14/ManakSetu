@@ -8,7 +8,6 @@ import Footer from './components/Footer';
 
 export default function App() {
   const [currentPersona, setCurrentPersona] = useState('industry'); // 'industry' | 'consumer'
-  const [lang, setLang] = useState('en'); // 'en' | 'hi'
   const [isVoiceModalOpen, setIsVoiceModalOpen] = useState(false);
   const [pitchTriggerQuery, setPitchTriggerQuery] = useState('');
 
@@ -18,20 +17,17 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-slate-50 selection:bg-blue-500 selection:text-white">
-      {/* Top Navbar */}
+    <div className="min-h-screen flex flex-col bg-slate-50 selection:bg-blue-600 selection:text-white">
+      {/* Top Navigation */}
       <Navbar
         currentPersona={currentPersona}
         setCurrentPersona={setCurrentPersona}
-        lang={lang}
-        setLang={setLang}
         onOpenVoiceModal={() => setIsVoiceModalOpen(true)}
       />
 
-      {/* Jury Quick-Demo Banner */}
+      {/* Jury Quick Demonstration Shortcuts */}
       <QuickPitchBanner
         onSelectDemo={handleSelectDemo}
-        lang={lang}
       />
 
       {/* Main Content Area */}
@@ -39,25 +35,21 @@ export default function App() {
         {currentPersona === 'industry' ? (
           <IndustryPortal 
             key={pitchTriggerQuery} 
-            lang={lang} 
             initialQuery={pitchTriggerQuery} 
           />
         ) : (
-          <ConsumerPortal 
-            lang={lang} 
-          />
+          <ConsumerPortal />
         )}
       </main>
 
-      {/* Bilingual Voice Assistant Hands-Free Modal */}
+      {/* Hands-Free Voice Assistant Modal */}
       <VoiceAssistantModal
         isOpen={isVoiceModalOpen}
         onClose={() => setIsVoiceModalOpen(false)}
-        defaultLang={lang}
       />
 
-      {/* Official Credits Footer */}
-      <Footer lang={lang} />
+      {/* Official Footer */}
+      <Footer />
     </div>
   );
 }

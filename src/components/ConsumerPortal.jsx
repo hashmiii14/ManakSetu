@@ -6,7 +6,7 @@ import {
 import { verifyHUID, verifyCMLLicense } from '../services/aiEngine';
 import confetti from 'canvas-confetti';
 
-export default function ConsumerPortal({ lang }) {
+export default function ConsumerPortal() {
   // HUID verification state
   const [huidInput, setHuidInput] = useState('AK79B2');
   const [huidResult, setHuidResult] = useState(null);
@@ -17,7 +17,7 @@ export default function ConsumerPortal({ lang }) {
 
   // Grievance generator state
   const [merchantName, setMerchantName] = useState('');
-  const [productCategory, setProductCategory] = useState('Helmet (Non-ISI)');
+  const [productCategory, setProductCategory] = useState('Rider Helmet (Non-ISI)');
   const [grievanceCity, setGrievanceCity] = useState('');
   const [copiedDraft, setCopiedDraft] = useState(false);
 
@@ -40,19 +40,19 @@ export default function ConsumerPortal({ lang }) {
   const grievanceText = `To: The Director (Grievance Cell), Bureau of Indian Standards / BIS Care Portal
 Subject: Statutory Complaint against sale of Substandard/Non-Certified product under Section 29 of BIS Act 2016
 
-Respected Sir/Madam,
-I wish to bring to your urgent notice a severe compliance violation regarding the sale of uncertified/fake marked goods in our locality.
+Respected Authority,
+I wish to bring to your urgent statutory attention a serious compliance violation regarding the sale of uncertified and potentially counterfeit goods in our locality.
 
-Details of Grievance:
+Grievance Particulars:
 - Product Type: ${productCategory}
 - Merchant / Retailer: ${merchantName || '[Retailer / Shop Name]'}
 - Location / City: ${grievanceCity || '[Market Address & City]'}
-- Nature of Violation: Retailer is selling products without mandatory statutory ISI certification mark or displaying fake/counterfeit CML markings, in direct contravention of the Quality Control Order.
-- Consumer Risk: Life and electrical/mechanical safety hazard.
+- Nature of Violation: Retailer is actively marketing products without mandatory statutory ISI certification mark or displaying counterfeit CML license credentials, in direct contravention of the applicable Quality Control Order.
+- Consumer Safety Risk: Immediate electrical, mechanical, or health hazard.
 
-I request BIS enforcement officers to conduct surveillance inspection and take penal action as per statutory norms.
+I request designated BIS enforcement officers to initiate a statutory surveillance inspection and enforce penal action as prescribed under Section 29 of the Bureau of Indian Standards Act, 2016.
 
-Complainant: Vigilant Indian Consumer (via ManakSetu Portal)`;
+Complainant: Consumer Vigilance (via ManakSetu Statutory Portal)`;
 
   const handleCopyDraft = () => {
     navigator.clipboard.writeText(grievanceText);
@@ -61,21 +61,19 @@ Complainant: Vigilant Indian Consumer (via ManakSetu Portal)`;
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 max-w-6xl mx-auto">
       {/* Consumer Hero Banner */}
-      <div className="bg-gradient-to-r from-emerald-900 via-teal-900 to-slate-900 text-white rounded-2xl p-6 shadow-sm">
+      <div className="bg-gradient-to-r from-emerald-950 via-teal-950 to-slate-900 text-white rounded-2xl p-6 shadow-sm border border-emerald-900">
         <div className="max-w-3xl">
           <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-bold mb-3 border border-emerald-400/30">
             <ShieldCheck className="w-4 h-4 text-emerald-400" />
-            {lang === 'hi' ? 'उपभोक्ता सुरक्षा व सत्यता जांच' : 'Citizen Vigilance & Authenticity Verifier'}
+            Citizen Vigilance & Statutory Authenticity Verifier
           </span>
-          <h2 className="text-2xl font-black tracking-tight">
-            {lang === 'hi' ? 'सोने की शुद्धता और असली ISI मार्क की तुरंत जांच करें' : 'Verify Gold Hallmarking (HUID) & Genuine ISI Mark'}
+          <h2 className="text-xl sm:text-2xl font-black tracking-tight">
+            Verify Gold Hallmarking (6-Digit HUID) & Genuine ISI Mark Licenses
           </h2>
           <p className="text-xs sm:text-sm text-slate-300 mt-1 leading-relaxed">
-            {lang === 'hi'
-              ? 'नकली उत्पादों और मिलावटी सोने से बचें। भारत सरकार के बीआईएस मानकों के अनुसार 6-अंकों का HUID और 7-अंकों का CML लाइसेंस तुरंत सत्यापित करें।'
-              : 'Protect yourself against duplicate goods and uncertified gold. Instant statutory verification backed by Bureau of Indian Standards standards.'}
+            Protect yourself against duplicate goods and uncertified gold artefacts. Perform instant statutory verification backed by Bureau of Indian Standards benchmarks.
           </p>
         </div>
       </div>
@@ -95,10 +93,10 @@ Complainant: Vigilant Indian Consumer (via ManakSetu Portal)`;
             </div>
 
             <h3 className="text-lg font-black text-slate-900">
-              {lang === 'hi' ? 'सोने का HUID कोड जांचें' : 'Verify 6-Digit Gold HUID'}
+              Verify 6-Digit Gold HUID
             </h3>
             <p className="text-xs text-slate-600 mt-1 leading-relaxed">
-              Every authentic hallmarked jewellery piece carries a laser-engraved 6-character code (e.g. <code>AK79B2</code>).
+              Every authentic hallmarked jewellery piece carries a laser-engraved 6-character alphanumeric code (e.g. <code>AK79B2</code>).
             </p>
 
             {/* Input Form */}
@@ -130,11 +128,11 @@ Complainant: Vigilant Indian Consumer (via ManakSetu Portal)`;
                   <div className="space-y-2 text-xs">
                     <div className="flex items-center gap-2 font-black text-emerald-800 text-sm">
                       <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                      Authentic BIS Hallmarking Found
+                      Authentic BIS Hallmarking Confirmed
                     </div>
                     <div className="grid grid-cols-2 gap-2 pt-2 border-t border-emerald-200/60">
                       <div>
-                        <span className="text-[10px] text-emerald-700 uppercase font-bold">HUID Tag</span>
+                        <span className="text-[10px] text-emerald-700 uppercase font-bold">HUID Number</span>
                         <p className="font-mono font-black text-xs">{huidResult.huid}</p>
                       </div>
                       <div>
@@ -142,7 +140,7 @@ Complainant: Vigilant Indian Consumer (via ManakSetu Portal)`;
                         <p className="font-bold text-xs">{huidResult.purity}</p>
                       </div>
                       <div className="col-span-2">
-                        <span className="text-[10px] text-emerald-700 uppercase font-bold">Assaying Centre (AHC)</span>
+                        <span className="text-[10px] text-emerald-700 uppercase font-bold">Assaying & Hallmarking Centre</span>
                         <p className="font-medium text-xs">{huidResult.assayingCentre}</p>
                       </div>
                     </div>
@@ -158,8 +156,8 @@ Complainant: Vigilant Indian Consumer (via ManakSetu Portal)`;
           </div>
 
           {/* Educational Visual Aid */}
-          <div className="mt-5 p-3 rounded-xl bg-amber-50/50 border border-amber-200/60 text-[11px] text-amber-950">
-            <span className="font-bold block mb-1">🔍 Look for 3 Official Marks on Gold:</span>
+          <div className="mt-5 p-3 rounded-xl bg-amber-50/60 border border-amber-200/80 text-[11px] text-amber-950">
+            <span className="font-bold block mb-1">🔍 3 Statutory Marks on Authentic Gold:</span>
             <div className="grid grid-cols-3 gap-1.5 text-center mt-2 font-medium">
               <div className="bg-white p-2 rounded-lg border border-amber-200">1. BIS Triangle Logo</div>
               <div className="bg-white p-2 rounded-lg border border-amber-200">2. Purity (e.g. 22K916)</div>
@@ -180,10 +178,10 @@ Complainant: Vigilant Indian Consumer (via ManakSetu Portal)`;
             </div>
 
             <h3 className="text-lg font-black text-slate-900">
-              {lang === 'hi' ? 'असली ISI मार्क लाइसेंस (CML) जांचें' : 'Validate ISI Mark (CML License)'}
+              Validate ISI Mark License (CML Number)
             </h3>
             <p className="text-xs text-slate-600 mt-1 leading-relaxed">
-              A genuine ISI mark <strong>must always have a 7-digit CML number</strong> printed below the logo (e.g. <code>CM/L-8400192</code>).
+              Every genuine ISI mark <strong>must display a 7-digit CML number</strong> embossed or printed below the logo (e.g. <code>CM/L-8400192</code>).
             </p>
 
             {/* Input Form */}
@@ -201,9 +199,9 @@ Complainant: Vigilant Indian Consumer (via ManakSetu Portal)`;
               </div>
               <button
                 onClick={handleVerifyCML}
-                className="bg-bis-navy hover:bg-blue-900 text-white text-xs font-bold px-5 py-2.5 rounded-xl shadow-xs transition-all shrink-0"
+                className="bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold px-5 py-2.5 rounded-xl shadow-xs transition-all shrink-0"
               >
-                Check CML
+                Verify CML
               </button>
             </div>
 
@@ -218,7 +216,7 @@ Complainant: Vigilant Indian Consumer (via ManakSetu Portal)`;
                   <div className="space-y-1.5 text-xs">
                     <div className="flex items-center gap-2 font-black text-blue-900 text-sm">
                       <CheckCircle2 className="w-4 h-4 text-blue-600" />
-                      License Operative & Genuine
+                      Statutory License Operative & Genuine
                     </div>
                     <div className="pt-2 border-t border-blue-200/60 grid grid-cols-2 gap-2 text-[11px]">
                       <div>
@@ -246,31 +244,31 @@ Complainant: Vigilant Indian Consumer (via ManakSetu Portal)`;
           </div>
 
           {/* Warning Flag */}
-          <div className="mt-5 p-3 rounded-xl bg-red-50/60 border border-red-200/80 text-[11px] text-red-900">
+          <div className="mt-5 p-3 rounded-xl bg-red-50/70 border border-red-200/80 text-[11px] text-red-900">
             <span className="font-bold flex items-center gap-1.5 text-red-800">
               <AlertOctagon className="w-3.5 h-3.5 text-red-600" />
-              Counterfeit Warning:
+              Counterfeit Indicator:
             </span>
             <p className="mt-1 leading-snug">
-              If an ISI logo is printed on an appliance or water bottle <strong>without</strong> the 7-digit CML number, it is 100% counterfeit!
+              If an ISI logo is affixed to an electrical appliance, helmet, or packaged drinking water <strong>without</strong> the 7-digit CML number, it is completely counterfeit and illegal.
             </p>
           </div>
         </div>
 
       </div>
 
-      {/* Section 3: Smart Consumer Grievance / Complaint Drafter */}
+      {/* Section 3: Formal Legal Grievance Drafter */}
       <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200">
         <div className="max-w-2xl mb-4">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-50 text-red-800 text-xs font-bold mb-2 border border-red-200">
             <FileWarning className="w-3.5 h-3.5 text-red-600" />
-            {lang === 'hi' ? 'शिकायत पत्र ड्राफ्टर' : 'Instant Grievance Drafter for BIS Care App'}
+            Statutory Grievance Drafter for BIS Care Portal
           </div>
           <h3 className="text-lg font-black text-slate-900">
-            {lang === 'hi' ? 'नकली/सबस्टैंडर्ड उत्पाद के विरुद्ध आधिकारिक शिकायत ड्राफ्ट करें' : 'Lodge a Formal Consumer Grievance Against Substandard Goods'}
+            Lodge a Formal Statutory Complaint Against Substandard Goods
           </h3>
           <p className="text-xs text-slate-600 mt-0.5 leading-relaxed">
-            Auto-generate a legally structured complaint formatted according to Section 29 of the Bureau of Indian Standards Act 2016.
+            Auto-generate a legally structured complaint formatted according to Section 29 of the Bureau of Indian Standards Act, 2016.
           </p>
         </div>
 
@@ -285,21 +283,21 @@ Complainant: Vigilant Indian Consumer (via ManakSetu Portal)`;
                 onChange={(e) => setProductCategory(e.target.value)}
                 className="w-full text-xs px-3 py-2 rounded-xl border border-slate-300 bg-slate-50 focus:outline-none focus:ring-2 focus:ring-blue-500 font-medium"
               >
-                <option value="Helmet (Non-ISI)">Two-Wheeler Helmet (Non-ISI / Roadside fake)</option>
-                <option value="Packaged Drinking Water">Packaged Water (Without CML / Seal)</option>
-                <option value="Electric Geyser">Electric Geyser (Without ISI Mark)</option>
-                <option value="Fake Gold Jewellery">Gold Jewellery (No HUID Laser Mark)</option>
-                <option value="Uncertified Toys">Plastic Toys with sharp choking hazards</option>
+                <option value="Rider Helmet (Non-ISI)">Two-Wheeler Helmet (Non-ISI / Roadside Counterfeit)</option>
+                <option value="Packaged Drinking Water">Packaged Drinking Water (Missing CML / Broken Seal)</option>
+                <option value="Electric Storage Geyser">Electric Storage Geyser (Missing Mandatory ISI Mark)</option>
+                <option value="Uncertified Gold Jewellery">Gold Jewellery (Missing 6-Digit HUID Laser Inscription)</option>
+                <option value="Uncertified Children Toys">Plastic Toys with Choking Hazard / Toxic Paint</option>
               </select>
             </div>
 
             <div>
-              <label className="text-xs font-bold text-slate-700 block mb-1">Retailer / Shop Name</label>
+              <label className="text-xs font-bold text-slate-700 block mb-1">Retailer / Vendor Name</label>
               <input
                 type="text"
                 value={merchantName}
                 onChange={(e) => setMerchantName(e.target.value)}
-                placeholder="e.g. Star Electronics, Main Market"
+                placeholder="e.g. Apex Electricals, Main Market"
                 className="w-full text-xs px-3 py-2 rounded-xl border border-slate-300 bg-slate-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
@@ -310,17 +308,17 @@ Complainant: Vigilant Indian Consumer (via ManakSetu Portal)`;
                 type="text"
                 value={grievanceCity}
                 onChange={(e) => setGrievanceCity(e.target.value)}
-                placeholder="e.g. Okhla Phase 2, New Delhi"
+                placeholder="e.g. Lajpat Nagar Market, New Delhi"
                 className="w-full text-xs px-3 py-2 rounded-xl border border-slate-300 bg-slate-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
 
             <div className="p-3 bg-blue-50/70 rounded-xl border border-blue-200 text-xs text-blue-900 leading-snug">
-              <span className="font-bold">Where to submit:</span>
+              <span className="font-bold">Official Statutory Filing Channels:</span>
               <ul className="mt-1 list-disc list-inside text-[11px] text-blue-800 space-y-0.5">
-                <li>BIS Care Mobile App (Android / iOS)</li>
-                <li>National Consumer Helpline: <strong>1915</strong></li>
-                <li>Email: <code>complaints@bis.gov.in</code></li>
+                <li>BIS Care Mobile Application (Android / iOS)</li>
+                <li>National Consumer Helpline Toll-Free: <strong>1915</strong></li>
+                <li>Statutory Email: <code>complaints@bis.gov.in</code></li>
               </ul>
             </div>
           </div>
@@ -328,7 +326,7 @@ Complainant: Vigilant Indian Consumer (via ManakSetu Portal)`;
           {/* Output Preview (7 cols) */}
           <div className="lg:col-span-7 bg-slate-900 text-slate-200 rounded-xl p-4 flex flex-col justify-between font-mono text-xs shadow-inner">
             <div className="flex items-center justify-between pb-2 border-b border-slate-800 text-[11px] text-slate-400">
-              <span className="font-sans font-bold">Formal Legal Grievance Template</span>
+              <span className="font-sans font-bold">Formal Statutory Grievance Template</span>
               <button
                 onClick={handleCopyDraft}
                 className="flex items-center gap-1 bg-blue-600 hover:bg-blue-700 text-white px-2.5 py-1 rounded text-[11px] font-sans font-bold transition-all"
@@ -343,7 +341,7 @@ Complainant: Vigilant Indian Consumer (via ManakSetu Portal)`;
             </div>
 
             <div className="pt-2 border-t border-slate-800 text-[10px] text-slate-500 font-sans">
-              Statutory backing: Section 29, Bureau of Indian Standards Act 2016 (Fine up to ₹5,00,000 and 2 years imprisonment).
+              Statutory Basis: Section 29, Bureau of Indian Standards Act 2016 (Penal fine up to ₹5,00,000 and 2 years imprisonment).
             </div>
           </div>
 
