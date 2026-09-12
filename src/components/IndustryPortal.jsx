@@ -1,8 +1,9 @@
 import React, { useState, useMemo } from 'react';
 import { 
   Search, AlertTriangle, CheckCircle2, ChevronRight, Calculator, 
-  FlaskConical, FileText, Building, Sparkles, Send, ArrowUpRight,
-  TrendingDown, ShieldCheck, HelpCircle, Layers
+  FlaskConical, Building, Sparkles, Send, ArrowUpRight,
+  TrendingDown, ShieldCheck, HelpCircle, Layers, FileText, Check,
+  Info, Compass, UserCheck
 } from 'lucide-react';
 import { searchStandards, calculateLicenseFee, askManakSetuAI } from '../services/aiEngine';
 import confetti from 'canvas-confetti';
@@ -11,18 +12,15 @@ export default function IndustryPortal({ lang, initialQuery = "" }) {
   const [searchQuery, setSearchQuery] = useState(initialQuery);
   const [selectedStandardId, setSelectedStandardId] = useState("IS-2082");
   const [enterpriseType, setEnterpriseType] = useState("micro");
+  const [activeTab, setActiveTab] = useState("roadmap"); // 'roadmap' | 'calculator' | 'testing' | 'ai'
   const [aiQuestion, setAiQuestion] = useState("");
   const [aiAnswer, setAiAnswer] = useState(null);
   const [aiLoading, setAiLoading] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState("ALL");
+  const [showUseCaseModal, setShowUseCaseModal] = useState(false);
 
   const standards = useMemo(() => {
-    let list = searchStandards(searchQuery);
-    if (selectedCategory !== "ALL") {
-      list = list.filter(s => s.category.toLowerCase().includes(selectedCategory.toLowerCase()));
-    }
-    return list;
-  }, [searchQuery, selectedCategory]);
+    return searchStandards(searchQuery);
+  }, [searchQuery]);
 
   const activeStandard = useMemo(() => {
     return standards.find(s => s.id === selectedStandardId) || standards[0] || null;
@@ -55,366 +53,425 @@ export default function IndustryPortal({ lang, initialQuery = "" }) {
     });
   };
 
-  const categories = [
-    { id: "ALL", label: lang === 'hi' ? "सभी उत्पाद" : "All Products" },
-    { id: "Electrical", label: lang === 'hi' ? "इलेक्ट्रिकल उपकरण" : "Electrical & Appliances" },
-    { id: "Food", label: lang === 'hi' ? "खाद्य व पेय" : "Food & Drinking Water" },
-    { id: "Children", label: lang === 'hi' ? "खिलौने (Toys)" : "Children & Toys" },
-    { id: "Construction", label: lang === 'hi' ? "निर्माण सामग्री" : "Construction & Steel" }
-  ];
-
   return (
-    <div className="space-y-6">
-      {/* Hero Search & Filter Section */}
-      <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200">
-        <div className="max-w-3xl">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 text-blue-800 text-xs font-bold mb-3 border border-blue-200">
-            <Layers className="w-3.5 h-3.5 text-blue-600" />
-            {lang === 'hi' ? 'उद्योग व निर्माता अनुपालन' : 'MSME & Industry Standards Navigator'}
+    <div className="space-y-6 max-w-6xl mx-auto">
+
+      {/* CLEAR USE-CASE ONBOARDING BANNER (Removes confusion & defines exact purpose) */}
+      <div className="bg-gradient-to-r from-blue-900 via-indigo-900 to-slate-900 text-white rounded-2xl p-5 sm:p-6 shadow-md border border-blue-800">
+        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+          <div className="space-y-1.5 max-w-2xl">
+            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-amber-400/20 text-amber-300 text-xs font-bold border border-amber-400/30">
+              <Compass className="w-3.5 h-3.5" />
+              <span>Real-World Purpose & Use Case</span>
+            </div>
+            <h2 className="text-xl sm:text-2xl font-black tracking-tight text-white">
+              Yeh Portal Kahan Aur Kaise Use Hota Hai?
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+              Jab koi naya business ya factory shuru karta hai, use pata nahi hota ki <strong>Government of India (BIS)</strong> ke 21,000+ rules me se uske product par kaun sa standard lagta hai aur kitna kharcha aayega. 
+              <strong> ManakSetu sirf 3 steps me pura compliance process clear kar deta hai.</strong>
+            </p>
           </div>
-          <h2 className="text-2xl font-black text-slate-900 tracking-tight">
-            {lang === 'hi' ? 'अपने उत्पाद का भारतीय मानक (IS Code) खोजें' : 'Discover Applicable Indian Standards (IS Codes) for Your Product'}
-          </h2>
-          <p className="text-sm text-slate-600 mt-1 leading-relaxed">
-            {lang === 'hi' 
-              ? 'उत्पाद का नाम, उपकरण या कीवर्ड दर्ज करें। प्रणाली स्वतः लागू मानक, QCO अनिवार्य स्थिति, व सरकारी शुल्क गणना करेगी।'
-              : 'Enter product name, appliance, or keyword. The system auto-identifies statutory standards, Quality Control Orders, and subsidies.'}
-          </p>
+
+          <button
+            onClick={() => setShowUseCaseModal(true)}
+            className="shrink-0 flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white px-4 py-2.5 rounded-xl text-xs font-bold border border-white/20 transition-all"
+          >
+            <Info className="w-4 h-4 text-amber-400" />
+            <span>Ek Real Example Dekhein (Case Study)</span>
+          </button>
         </div>
 
-        {/* Search Input */}
-        <div className="mt-5 relative">
-          <Search className="absolute left-4 top-3.5 w-5 h-5 text-slate-400" />
+        {/* 3 Clear Steps Workflow */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-5 pt-4 border-t border-white/10 text-xs">
+          <div className="flex items-center gap-2.5 bg-white/5 p-2.5 rounded-xl">
+            <span className="w-6 h-6 rounded-full bg-blue-500 text-white font-bold flex items-center justify-center shrink-0 text-[11px]">1</span>
+            <div>
+              <p className="font-bold text-white">Product Search Karein</p>
+              <p className="text-[11px] text-slate-400">Apne product ka naam likhein</p>
+            </div>
+          </div>
+          <div className="flex items-center gap-2.5 bg-white/5 p-2.5 rounded-xl">
+            <span className="w-6 h-6 rounded-full bg-amber-500 text-slate-950 font-bold flex items-center justify-center shrink-0 text-[11px]">2</span>
+            <div>
+              <p className="font-bold text-white">Standard & Rules Jaanein</p>
+              <p className="text-[11px] text-slate-400">IS Code & Mandatory status dekhein</p>
+            </div>
+          </div>
+          <div className="flex items-center gap-2.5 bg-white/5 p-2.5 rounded-xl">
+            <span className="w-6 h-6 rounded-full bg-emerald-500 text-white font-bold flex items-center justify-center shrink-0 text-[11px]">3</span>
+            <div>
+              <p className="font-bold text-white">Roadmap & Subsidy Paayein</p>
+              <p className="text-[11px] text-slate-400">50% MSME chhoot & labs list dekhein</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* STEP 1: CLEAN SEARCH BAR */}
+      <div className="bg-white rounded-2xl p-5 shadow-xs border border-slate-200">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 mb-3">
+          <label className="text-xs font-black text-slate-800 uppercase tracking-wider flex items-center gap-1.5">
+            <Search className="w-4 h-4 text-blue-600" />
+            Step 1: Apne Product Ka Naam Likhein ya Chuney:
+          </label>
+          <span className="text-[11px] text-slate-500">
+            {standards.length} Indian Standards Available
+          </span>
+        </div>
+
+        <div className="relative">
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder={lang === 'hi' ? 'उदा: Electric geyser, water bottle, plastic toys, plug, cement...' : 'e.g. Electric geyser, packaged water, toys, 3-pin plug, cement...'}
-            className="w-full pl-12 pr-4 py-3 text-sm bg-slate-50 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-bis-accent focus:bg-white transition-all shadow-inner font-medium"
+            placeholder="Search: e.g. Geyser, Water bottle, Toys, Helmet, Plug, Cement..."
+            className="w-full pl-4 pr-10 py-3 text-sm bg-slate-50 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-600 focus:bg-white transition-all font-medium"
           />
           {searchQuery && (
             <button
               onClick={() => setSearchQuery('')}
-              className="absolute right-3.5 top-3 text-slate-400 hover:text-slate-600 text-xs font-bold bg-slate-200 px-2 py-1 rounded"
+              className="absolute right-3 top-3 text-xs font-bold text-slate-400 hover:text-slate-600"
             >
               Clear
             </button>
           )}
         </div>
 
-        {/* Category Pills */}
-        <div className="flex flex-wrap gap-2 mt-4 pt-3 border-t border-slate-100">
-          {categories.map((cat) => (
+        {/* Quick Product Chips */}
+        <div className="flex flex-wrap items-center gap-1.5 mt-3 pt-3 border-t border-slate-100 text-xs">
+          <span className="text-slate-400 font-bold text-[11px] mr-1">Quick Select:</span>
+          {[
+            { label: "Electric Geyser", query: "geyser" },
+            { label: "Infant Toys", query: "toys" },
+            { label: "Packaged Water", query: "packaged water" },
+            { label: "Helmets", query: "helmet" },
+            { label: "Plugs & Sockets", query: "plug" },
+            { label: "Gold Jewellery", query: "gold" }
+          ].map((chip, idx) => (
             <button
-              key={cat.id}
-              onClick={() => setSelectedCategory(cat.id)}
-              className={`text-xs font-semibold px-3 py-1.5 rounded-lg transition-all ${
-                selectedCategory === cat.id
-                  ? 'bg-bis-navy text-white shadow-xs'
-                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+              key={idx}
+              onClick={() => setSearchQuery(chip.query)}
+              className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition-all border ${
+                searchQuery.toLowerCase() === chip.query
+                  ? 'bg-blue-600 text-white border-blue-600'
+                  : 'bg-slate-100 text-slate-700 hover:bg-slate-200 border-slate-200'
               }`}
             >
-              {cat.label}
+              {chip.label}
             </button>
           ))}
         </div>
       </div>
 
-      {/* Main Grid: Standards List on Left, Active Detail on Right */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        
-        {/* Left Column: Matched Standards Cards (4 cols) */}
-        <div className="lg:col-span-4 space-y-3">
-          <div className="flex items-center justify-between text-xs font-bold text-slate-500 uppercase tracking-wider px-1">
-            <span>{lang === 'hi' ? 'पहचाने गए मानक' : 'Identified Standards'} ({standards.length})</span>
-            <span>{lang === 'hi' ? 'चुनें' : 'Select to View'}</span>
-          </div>
+      {/* STEP 2: CLEAN PRODUCT STANDARDS DISPLAY (Horizontal Carousel / Cards) */}
+      <div className="space-y-2">
+        <h3 className="text-xs font-black text-slate-500 uppercase tracking-wider px-1">
+          Step 2: Applicable Indian Standard Select Karein:
+        </h3>
 
-          <div className="space-y-2.5 max-h-[720px] overflow-y-auto pr-1">
-            {standards.length === 0 ? (
-              <div className="bg-white rounded-xl p-6 text-center border border-slate-200">
-                <p className="text-sm font-semibold text-slate-700">No matching standard found in offline cache.</p>
-                <p className="text-xs text-slate-500 mt-1">Try keywords like 'geyser', 'toys', 'water', 'plug', 'cement'.</p>
-              </div>
-            ) : (
-              standards.map((std) => {
-                const isSelected = activeStandard && activeStandard.id === std.id;
-                return (
-                  <div
-                    key={std.id}
-                    onClick={() => {
-                      setSelectedStandardId(std.id);
-                      setAiAnswer(null);
-                    }}
-                    className={`p-4 rounded-xl border cursor-pointer transition-all ${
-                      isSelected
-                        ? 'bg-blue-50/70 border-blue-500 shadow-md ring-1 ring-blue-500/20'
-                        : 'bg-white border-slate-200 hover:border-slate-300 hover:shadow-sm'
-                    }`}
-                  >
-                    <div className="flex items-start justify-between gap-2">
-                      <div>
-                        <span className="text-xs font-extrabold text-blue-700 bg-blue-100/80 px-2 py-0.5 rounded">
-                          {std.isCode}
-                        </span>
-                        <h4 className="text-sm font-bold text-slate-900 mt-1.5 leading-snug line-clamp-2">
-                          {std.title}
-                        </h4>
-                      </div>
-                      <ChevronRight className={`w-4 h-4 shrink-0 transition-transform ${isSelected ? 'text-blue-600 translate-x-1' : 'text-slate-400'}`} />
-                    </div>
-
-                    <div className="mt-3 flex flex-wrap items-center gap-1.5 text-[11px]">
-                      {std.mandatoryQCO ? (
-                        <span className="flex items-center gap-1 bg-red-50 text-red-700 font-bold px-2 py-0.5 rounded border border-red-200">
-                          <AlertTriangle className="w-3 h-3" /> Mandatory QCO
-                        </span>
-                      ) : (
-                        <span className="bg-slate-100 text-slate-700 font-medium px-2 py-0.5 rounded">
-                          Voluntary
-                        </span>
-                      )}
-                      <span className="bg-slate-100 text-slate-600 font-semibold px-2 py-0.5 rounded">
-                        {std.schemeCode === "SCHEME_1" ? "ISI Mark" : std.schemeCode}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+          {standards.map((std) => {
+            const isSelected = activeStandard && activeStandard.id === std.id;
+            return (
+              <div
+                key={std.id}
+                onClick={() => setSelectedStandardId(std.id)}
+                className={`p-4 rounded-xl border cursor-pointer transition-all flex flex-col justify-between ${
+                  isSelected
+                    ? 'bg-blue-50/90 border-blue-600 shadow-md ring-2 ring-blue-600/20'
+                    : 'bg-white border-slate-200 hover:border-slate-300 hover:shadow-sm'
+                }`}
+              >
+                <div>
+                  <div className="flex items-center justify-between gap-1 mb-1.5">
+                    <span className="text-xs font-extrabold text-blue-700 bg-blue-100 px-2 py-0.5 rounded">
+                      {std.isCode}
+                    </span>
+                    {std.mandatoryQCO && (
+                      <span className="text-[10px] font-black text-red-700 bg-red-100 px-1.5 py-0.5 rounded flex items-center gap-0.5">
+                        <AlertTriangle className="w-3 h-3 text-red-600" /> Mandatory
                       </span>
-                    </div>
+                    )}
                   </div>
-                );
-              })
-            )}
-          </div>
+                  <h4 className="text-xs sm:text-sm font-bold text-slate-900 leading-snug line-clamp-2">
+                    {std.title}
+                  </h4>
+                </div>
+
+                <div className="mt-3 pt-2 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-500 font-medium">
+                  <span>{std.category}</span>
+                  <span className={`font-bold ${isSelected ? 'text-blue-700' : 'text-slate-400'}`}>
+                    {isSelected ? '✓ Selected' : 'Click to View'}
+                  </span>
+                </div>
+              </div>
+            );
+          })}
         </div>
+      </div>
 
-        {/* Right Column: Deep-Dive Standard Intelligence & Roadmap (8 cols) */}
-        {activeStandard && (
-          <div className="lg:col-span-8 space-y-6">
-            
-            {/* Standard Header Banner */}
-            <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 relative overflow-hidden">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/5 rounded-full blur-2xl pointer-events-none"></div>
-
-              <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
-                <span className="text-sm font-black text-white bg-bis-navy px-3 py-1 rounded-lg tracking-wide shadow-xs">
+      {/* STEP 3: DE-CLUTTERED TABBED INTELLIGENCE PANEL */}
+      {activeStandard && (
+        <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+          
+          {/* Header of Active Standard */}
+          <div className="p-5 sm:p-6 bg-slate-50/80 border-b border-slate-200">
+            <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
+              <div className="flex items-center gap-2">
+                <span className="text-sm font-black bg-blue-900 text-white px-3 py-1 rounded-lg">
                   {activeStandard.isCode}
                 </span>
-                <div className="flex items-center gap-2">
-                  <span className="text-xs font-bold bg-amber-100 text-amber-900 px-2.5 py-1 rounded-md border border-amber-200">
-                    {activeStandard.scheme}
-                  </span>
-                  {activeStandard.mandatoryQCO && (
-                    <span className="flex items-center gap-1 text-xs font-black bg-red-100 text-red-800 px-2.5 py-1 rounded-md border border-red-300 animate-pulse">
-                      <AlertTriangle className="w-3.5 h-3.5 text-red-600" />
-                      MANDATORY QCO ORDER
-                    </span>
-                  )}
-                </div>
+                <span className="text-xs font-bold bg-amber-100 text-amber-900 px-2.5 py-1 rounded-md border border-amber-200">
+                  {activeStandard.scheme}
+                </span>
               </div>
-
-              <h3 className="text-xl font-black text-slate-900 leading-snug">
-                {activeStandard.title}
-              </h3>
-              <p className="text-xs text-slate-600 mt-2 leading-relaxed">
-                {activeStandard.description}
-              </p>
-
-              {activeStandard.qcoNotification && (
-                <div className="mt-4 p-3 bg-red-50/60 rounded-xl border border-red-200/80 flex items-start gap-2.5 text-xs text-red-900">
-                  <ShieldCheck className="w-4 h-4 text-red-600 shrink-0 mt-0.5" />
-                  <div>
-                    <span className="font-bold">Statutory Enforcement: </span>
-                    <span>{activeStandard.qcoNotification}. It is a punishable offense under Section 29 of the BIS Act 2016 to manufacture, store, or sell without standard mark.</span>
-                  </div>
-                </div>
+              {activeStandard.mandatoryQCO && (
+                <span className="text-xs font-black bg-red-100 text-red-800 px-3 py-1 rounded-lg border border-red-300 flex items-center gap-1.5">
+                  <AlertTriangle className="w-4 h-4 text-red-600" />
+                  Statutory Mandatory Quality Control Order in Force
+                </span>
               )}
             </div>
 
-            {/* 5-Stage Interactive Licensing Roadmap */}
-            <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200">
-              <div className="flex items-center justify-between mb-4">
-                <h4 className="text-base font-black text-slate-900 flex items-center gap-2">
-                  <span className="w-6 h-6 rounded-md bg-bis-navy text-white text-xs flex items-center justify-center font-bold">5</span>
-                  {lang === 'hi' ? 'लाइसेंसिंग का 5-चरणीय रोडमैप' : '5-Stage BIS Licensing & Compliance Roadmap'}
-                </h4>
+            <h3 className="text-lg sm:text-xl font-black text-slate-900 leading-snug mt-1">
+              {activeStandard.title}
+            </h3>
+            <p className="text-xs text-slate-600 mt-1.5 leading-relaxed max-w-4xl">
+              {activeStandard.description}
+            </p>
+          </div>
+
+          {/* DE-CLUTTER TABS: Only show one section at a time so it's clean and focused */}
+          <div className="flex border-b border-slate-200 bg-white px-4 sm:px-6 overflow-x-auto">
+            {[
+              { id: "roadmap", label: "1. Licensing Roadmap (5 Steps)", icon: Compass },
+              { id: "calculator", label: "2. Fees & MSME Concession", icon: Calculator },
+              { id: "testing", label: "3. Lab Testing & Parameters", icon: FlaskConical },
+              { id: "ai", label: "4. Ask AI Consultant", icon: Sparkles }
+            ].map((tab) => {
+              const Icon = tab.icon;
+              const isActive = activeTab === tab.id;
+              return (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  className={`flex items-center gap-2 py-3 px-3 sm:px-4 text-xs sm:text-sm font-bold border-b-2 whitespace-nowrap transition-all ${
+                    isActive
+                      ? 'border-blue-600 text-blue-700'
+                      : 'border-transparent text-slate-500 hover:text-slate-800'
+                  }`}
+                >
+                  <Icon className={`w-4 h-4 ${isActive ? 'text-blue-600' : 'text-slate-400'}`} />
+                  <span>{tab.label}</span>
+                </button>
+              );
+            })}
+          </div>
+
+          {/* TAB 1: ROADMAP */}
+          {activeTab === "roadmap" && (
+            <div className="p-5 sm:p-6 space-y-4 animate-in fade-in">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h4 className="text-base font-black text-slate-900">
+                    5-Stage BIS Certification Roadmap
+                  </h4>
+                  <p className="text-xs text-slate-500">
+                    Application se lekar CML License prapt karne tak ka step-by-step process.
+                  </p>
+                </div>
                 <a
                   href="https://www.manakonline.in"
                   target="_blank"
                   rel="noreferrer"
-                  className="text-xs font-bold text-bis-accent hover:underline flex items-center gap-1"
+                  className="text-xs font-bold text-blue-600 hover:underline flex items-center gap-1"
                 >
-                  Official Manakonline Portal <ArrowUpRight className="w-3.5 h-3.5" />
+                  Manakonline Portal <ArrowUpRight className="w-3.5 h-3.5" />
                 </a>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-5 gap-2.5">
+              <div className="grid grid-cols-1 sm:grid-cols-5 gap-3 pt-2">
                 {[
-                  { step: "01", title: "Online Filing", desc: "Submit Form-V on Manakonline with factory deed & machinery list." },
+                  { step: "01", title: "Online Application", desc: "Submit Form-V on Manakonline with factory deed & machinery list." },
                   { step: "02", title: "In-House Lab", desc: "Install testing tools & appoint qualified QC engineer as per IS standard." },
                   { step: "03", title: "Factory Audit", desc: "BIS officer visits factory, inspects process & draws counter-samples." },
                   { step: "04", title: "Lab Testing", desc: "Sample tested in BIS recognized independent laboratory." },
-                  { step: "05", title: "CML Grant", desc: "License issued. Affix ISI mark with 7-digit CML number." }
+                  { step: "05", title: "CML Grant", desc: "License issued. Affix ISI mark with 7-digit CML number on product." }
                 ].map((s, idx) => (
-                  <div key={idx} className="bg-slate-50 p-3 rounded-xl border border-slate-200 hover:bg-blue-50/50 hover:border-blue-300 transition-all">
-                    <span className="text-[10px] font-black text-blue-600 bg-blue-100 px-1.5 py-0.5 rounded">
-                      STEP {s.step}
+                  <div key={idx} className="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                    <span className="text-[10px] font-black text-blue-700 bg-blue-100 px-2 py-0.5 rounded">
+                      STAGE {s.step}
                     </span>
                     <h5 className="text-xs font-bold text-slate-900 mt-2">{s.title}</h5>
                     <p className="text-[11px] text-slate-600 mt-1 leading-tight">{s.desc}</p>
                   </div>
                 ))}
               </div>
+
+              <div className="mt-4 p-4 rounded-xl bg-amber-50 border border-amber-200 text-xs text-amber-900 leading-relaxed">
+                <strong>Documentation Required:</strong> Manufacturing Plant Machinery list, Calibrated Test Equipment, In-house Testing Facility proof, Process Flowchart, and Factory Premises verification.
+              </div>
             </div>
+          )}
 
-            {/* Dynamic MSME Concession Fee Calculator */}
-            {feeCalculation && (
-              <div className="bg-gradient-to-br from-slate-900 to-slate-800 text-white rounded-2xl p-6 shadow-md">
-                <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
-                  <div>
-                    <span className="text-[10px] font-bold tracking-wider text-amber-400 uppercase bg-amber-950/60 px-2 py-0.5 rounded border border-amber-500/30">
-                      MSME Concession Engine
-                    </span>
-                    <h4 className="text-lg font-black mt-1 flex items-center gap-2">
-                      <Calculator className="w-5 h-5 text-bis-gold" />
-                      {lang === 'hi' ? 'लाइसेंस शुल्क व MSME सरकारी छूट कैलकुलेटर' : 'BIS Licensing Fee & Subsidy Estimator'}
-                    </h4>
-                  </div>
+          {/* TAB 2: CALCULATOR */}
+          {activeTab === "calculator" && feeCalculation && (
+            <div className="p-5 sm:p-6 space-y-4 animate-in fade-in">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                <div>
+                  <h4 className="text-base font-black text-slate-900 flex items-center gap-2">
+                    <Calculator className="w-5 h-5 text-amber-600" />
+                    Government Fee & MSME Concession Estimator
+                  </h4>
+                  <p className="text-xs text-slate-500">
+                    Apni enterprise category choose karein aur dekhein kitni chhoot (subsidy) milti hai:
+                  </p>
+                </div>
 
-                  {/* Enterprise Type Selector */}
-                  <div className="flex items-center gap-1.5 bg-slate-800/90 p-1 rounded-xl border border-slate-700">
-                    {[
-                      { id: "micro", label: "Micro (50% Off)" },
-                      { id: "small", label: "Small (20% Off)" },
-                      { id: "women_startup", label: "Women/Startup (50%)" },
-                      { id: "medium_large", label: "Medium/Large" }
-                    ].map((t) => (
-                      <button
-                        key={t.id}
-                        onClick={() => setEnterpriseType(t.id)}
-                        className={`text-xs font-bold px-2.5 py-1 rounded-lg transition-all ${
-                          enterpriseType === t.id
-                            ? 'bg-bis-gold text-slate-950 shadow-xs'
-                            : 'text-slate-400 hover:text-white'
-                        }`}
-                      >
-                        {t.label}
-                      </button>
+                {/* Toggle Enterprise */}
+                <div className="flex flex-wrap items-center gap-1.5 bg-slate-100 p-1 rounded-xl border border-slate-200">
+                  {[
+                    { id: "micro", label: "Micro (50% Off)" },
+                    { id: "small", label: "Small (20% Off)" },
+                    { id: "women_startup", label: "Women/Startup (50%)" },
+                    { id: "medium_large", label: "Medium/Large" }
+                  ].map((t) => (
+                    <button
+                      key={t.id}
+                      onClick={() => setEnterpriseType(t.id)}
+                      className={`text-xs font-bold px-3 py-1.5 rounded-lg transition-all ${
+                        enterpriseType === t.id
+                          ? 'bg-blue-900 text-white shadow-xs'
+                          : 'text-slate-600 hover:text-slate-900'
+                      }`}
+                    >
+                      {t.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Fee Cards Grid */}
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
+                <div className="p-4 rounded-xl bg-slate-50 border border-slate-200">
+                  <span className="text-xs text-slate-500 font-bold block">Application Fee</span>
+                  <p className="text-lg font-black text-slate-900 mt-1">₹{feeCalculation.applicationFee.toLocaleString()}</p>
+                  <span className="text-[10px] text-slate-400">Fixed statutory</span>
+                </div>
+
+                <div className="p-4 rounded-xl bg-slate-50 border border-slate-200">
+                  <span className="text-xs text-slate-500 font-bold block">Factory Audit (2 Days)</span>
+                  <p className="text-lg font-black text-slate-900 mt-1">₹{feeCalculation.inspectionFee.toLocaleString()}</p>
+                  <span className="text-[10px] text-slate-400">₹7,000 / man-day</span>
+                </div>
+
+                <div className="p-4 rounded-xl bg-slate-50 border border-slate-200">
+                  <span className="text-xs text-slate-500 font-bold block">Effective Marking Fee</span>
+                  <p className="text-lg font-black text-blue-700 mt-1">₹{feeCalculation.effectiveMarkingFee.toLocaleString()}</p>
+                  <span className="text-[10px] text-emerald-600 font-bold">
+                    {feeCalculation.concessionPercent > 0 ? `${feeCalculation.concessionPercent}% Subsidy Applied` : 'Standard Rate'}
+                  </span>
+                </div>
+
+                <div className="p-4 rounded-xl bg-emerald-50 border border-emerald-300">
+                  <span className="text-xs text-emerald-800 font-bold flex items-center gap-1">
+                    <TrendingDown className="w-3.5 h-3.5" /> Total MSME Savings
+                  </span>
+                  <p className="text-xl font-black text-emerald-700 mt-1">₹{feeCalculation.totalSavings.toLocaleString()}</p>
+                  <span className="text-[10px] text-emerald-800 font-semibold">Under 'Make In India'</span>
+                </div>
+              </div>
+
+              <div className="p-4 rounded-xl bg-slate-900 text-white flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs">
+                <span>
+                  Total First-Year Estimated Compliance Cost: <strong className="text-amber-400 text-sm">₹{feeCalculation.totalEstimatedCost.toLocaleString()}</strong>
+                </span>
+                <button
+                  onClick={triggerCelebration}
+                  className="bg-amber-500 hover:bg-amber-600 text-slate-950 font-black px-3.5 py-1.5 rounded-lg transition-all"
+                >
+                  Verify Subsidy Eligibility ✨
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* TAB 3: TESTING PARAMETERS & LABS */}
+          {activeTab === "testing" && (
+            <div className="p-5 sm:p-6 space-y-4 animate-in fade-in">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                
+                {/* Key Tests */}
+                <div className="space-y-3">
+                  <h4 className="text-sm font-black text-slate-900 flex items-center gap-2">
+                    <FlaskConical className="w-4 h-4 text-blue-600" />
+                    Mandatory Testing Benchmarks
+                  </h4>
+                  <ul className="space-y-2">
+                    {activeStandard.keyTests.map((t, idx) => (
+                      <li key={idx} className="flex items-start gap-2.5 text-xs text-slate-700 bg-slate-50 p-2.5 rounded-xl border border-slate-200/80">
+                        <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                        <span>{t}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                {/* Labs */}
+                <div className="space-y-3">
+                  <h4 className="text-sm font-black text-slate-900 flex items-center gap-2">
+                    <Building className="w-4 h-4 text-purple-600" />
+                    BIS & NABL Accredited Testing Laboratories
+                  </h4>
+                  <div className="space-y-2">
+                    {activeStandard.labsAvailable.map((lab, idx) => (
+                      <div key={idx} className="p-3 rounded-xl bg-slate-50 border border-slate-200/80 text-xs">
+                        <p className="font-bold text-slate-900">{lab.name}</p>
+                        <p className="text-[11px] text-slate-500 mt-0.5">{lab.city}, {lab.state}</p>
+                      </div>
                     ))}
                   </div>
                 </div>
 
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                  <div className="bg-slate-800/80 p-3 rounded-xl border border-slate-700">
-                    <span className="text-[11px] text-slate-400">Application Fee</span>
-                    <p className="text-base font-bold text-white mt-0.5">₹{feeCalculation.applicationFee.toLocaleString()}</p>
-                    <span className="text-[10px] text-slate-500">Fixed statutory</span>
-                  </div>
-
-                  <div className="bg-slate-800/80 p-3 rounded-xl border border-slate-700">
-                    <span className="text-[11px] text-slate-400">Factory Audit (2 Days)</span>
-                    <p className="text-base font-bold text-white mt-0.5">₹{feeCalculation.inspectionFee.toLocaleString()}</p>
-                    <span className="text-[10px] text-slate-500">₹7,000 / man-day</span>
-                  </div>
-
-                  <div className="bg-slate-800/80 p-3 rounded-xl border border-slate-700">
-                    <span className="text-[11px] text-slate-400">Effective Marking Fee</span>
-                    <p className="text-base font-bold text-amber-400 mt-0.5">₹{feeCalculation.effectiveMarkingFee.toLocaleString()}</p>
-                    <span className="text-[10px] text-emerald-400 font-semibold">
-                      {feeCalculation.concessionPercent > 0 ? `${feeCalculation.concessionPercent}% Subsidy Applied` : 'Standard Rate'}
-                    </span>
-                  </div>
-
-                  <div className="bg-emerald-950/40 p-3 rounded-xl border border-emerald-500/40">
-                    <span className="text-[11px] text-emerald-300 font-bold flex items-center gap-1">
-                      <TrendingDown className="w-3.5 h-3.5" /> Total MSME Savings
-                    </span>
-                    <p className="text-lg font-black text-emerald-400 mt-0.5">₹{feeCalculation.totalSavings.toLocaleString()}</p>
-                    <span className="text-[10px] text-emerald-300">Under 'Make In India'</span>
-                  </div>
-                </div>
-
-                <div className="mt-4 pt-3 border-t border-slate-700/80 flex items-center justify-between text-xs">
-                  <span className="text-slate-400">
-                    Total Estimated First-Year Cost: <strong className="text-white text-sm">₹{feeCalculation.totalEstimatedCost.toLocaleString()}</strong> (Excluding external lab tests)
-                  </span>
-                  <button 
-                    onClick={triggerCelebration}
-                    className="text-xs font-bold text-amber-400 hover:text-amber-300 flex items-center gap-1 underline underline-offset-4"
-                  >
-                    Verify Subsidy Eligibility ✨
-                  </button>
-                </div>
               </div>
-            )}
-
-            {/* Lab Testing Parameters & Recognized Testing Houses */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              
-              {/* Mandatory Test Parameters */}
-              <div className="bg-white rounded-2xl p-5 shadow-sm border border-slate-200">
-                <h4 className="text-sm font-bold text-slate-900 flex items-center gap-2 mb-3">
-                  <FlaskConical className="w-4 h-4 text-blue-600" />
-                  Mandatory Testing Benchmarks
-                </h4>
-                <ul className="space-y-2">
-                  {activeStandard.keyTests.map((t, idx) => (
-                    <li key={idx} className="flex items-start gap-2 text-xs text-slate-700">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0 mt-0.5" />
-                      <span>{t}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              {/* BIS Recognized Testing Labs */}
-              <div className="bg-white rounded-2xl p-5 shadow-sm border border-slate-200">
-                <h4 className="text-sm font-bold text-slate-900 flex items-center gap-2 mb-3">
-                  <Building className="w-4 h-4 text-purple-600" />
-                  Mapped BIS / NABL Test Laboratories
-                </h4>
-                <div className="space-y-2">
-                  {activeStandard.labsAvailable.map((lab, idx) => (
-                    <div key={idx} className="p-2.5 rounded-xl bg-slate-50 border border-slate-200/80 text-xs">
-                      <p className="font-bold text-slate-900">{lab.name}</p>
-                      <p className="text-[11px] text-slate-500">{lab.city}, {lab.state}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
             </div>
+          )}
 
-            {/* Quick AI Consultant Card */}
-            <div className="bg-blue-50/60 rounded-2xl p-5 border border-blue-200">
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-xs font-black text-blue-900 flex items-center gap-1.5">
+          {/* TAB 4: AI CONSULTANT */}
+          {activeTab === "ai" && (
+            <div className="p-5 sm:p-6 space-y-4 animate-in fade-in">
+              <div>
+                <h4 className="text-sm font-black text-slate-900 flex items-center gap-2">
                   <Sparkles className="w-4 h-4 text-blue-600" />
-                  Ask ManakSetu AI about {activeStandard.isCode}
-                </span>
-                <span className="text-[10px] font-bold text-blue-700 bg-blue-100 px-2 py-0.5 rounded">
-                  Dual English / Hindi
-                </span>
+                  Ask ManakSetu AI Consultant
+                </h4>
+                <p className="text-xs text-slate-500">
+                  {activeStandard.isCode} ke baare me koi bhi technical ya statutory sawaal Hindi ya English me poochein:
+                </p>
               </div>
 
-              <div className="flex gap-2 mt-3">
+              <div className="flex gap-2">
                 <input
                   type="text"
                   value={aiQuestion}
                   onChange={(e) => setAiQuestion(e.target.value)}
-                  placeholder={`e.g. What in-house equipment is required for ${activeStandard.isCode}?`}
-                  className="flex-1 text-xs px-3.5 py-2.5 rounded-xl border border-blue-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder={`e.g. What testing equipment is needed for ${activeStandard.isCode}?`}
+                  className="flex-1 text-xs px-3.5 py-2.5 rounded-xl border border-slate-300 bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-600"
                   onKeyDown={(e) => e.key === 'Enter' && handleAskAI()}
                 />
                 <button
                   onClick={() => handleAskAI()}
                   disabled={aiLoading}
-                  className="bg-bis-navy text-white text-xs font-bold px-4 py-2.5 rounded-xl hover:bg-blue-900 disabled:opacity-50 flex items-center gap-1.5 shadow-sm"
+                  className="bg-blue-900 hover:bg-blue-950 text-white text-xs font-bold px-4 py-2.5 rounded-xl transition-all disabled:opacity-50 flex items-center gap-1.5"
                 >
                   {aiLoading ? <span className="animate-spin">⏳</span> : <Send className="w-3.5 h-3.5" />}
-                  <span>Ask</span>
+                  <span>Ask AI</span>
                 </button>
               </div>
 
-              {/* Sample Quick Questions */}
-              <div className="flex flex-wrap gap-1.5 mt-2.5">
+              {/* Quick Presets */}
+              <div className="flex flex-wrap gap-1.5">
                 {[
                   "Is factory audit mandatory before license?",
                   "What is the penalty for selling without ISI mark?",
@@ -426,31 +483,90 @@ export default function IndustryPortal({ lang, initialQuery = "" }) {
                       setAiQuestion(preset);
                       handleAskAI(preset);
                     }}
-                    className="text-[11px] bg-white hover:bg-blue-100/80 text-blue-900 px-2.5 py-1 rounded-lg border border-blue-200/80 transition-all font-medium"
+                    className="text-[11px] bg-slate-100 hover:bg-slate-200 text-slate-800 px-2.5 py-1 rounded-lg border border-slate-200 font-medium transition-all"
                   >
                     {preset}
                   </button>
                 ))}
               </div>
 
-              {/* AI Answer Output */}
               {aiAnswer && (
-                <div className="mt-4 p-4 rounded-xl bg-white border border-blue-200 shadow-sm animate-in fade-in">
-                  <div className="flex items-center justify-between text-[11px] text-blue-800 font-bold border-b border-slate-100 pb-1.5 mb-2">
-                    <span>💡 {aiAnswer.source}</span>
-                    <button onClick={() => setAiAnswer(null)} className="text-slate-400 hover:text-slate-600">Close</button>
+                <div className="p-4 rounded-xl bg-blue-50/70 border border-blue-200 text-xs text-slate-800 whitespace-pre-line leading-relaxed">
+                  <div className="font-bold text-blue-900 pb-1 mb-2 border-b border-blue-200">
+                    💡 {aiAnswer.source}
                   </div>
-                  <div className="text-xs text-slate-800 whitespace-pre-line leading-relaxed font-normal">
-                    {aiAnswer.text}
-                  </div>
+                  {aiAnswer.text}
                 </div>
               )}
             </div>
+          )}
 
+        </div>
+      )}
+
+      {/* REAL-WORLD CASE STUDY MODAL (Explains Exactly Where & How It Is Used) */}
+      {showUseCaseModal && (
+        <div className="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl max-w-xl w-full p-6 shadow-2xl border border-slate-100 animate-in zoom-in-95 max-h-[85vh] overflow-y-auto">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-100 mb-4">
+              <h3 className="text-base font-black text-slate-900 flex items-center gap-2">
+                <UserCheck className="w-5 h-5 text-blue-600" />
+                Real-World Use Case & Story
+              </h3>
+              <button 
+                onClick={() => setShowUseCaseModal(false)}
+                className="text-slate-400 hover:text-slate-600 text-lg font-bold"
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className="space-y-4 text-xs text-slate-700 leading-relaxed">
+              <div className="p-3 bg-blue-50 rounded-xl border border-blue-200">
+                <p className="font-bold text-blue-950 text-sm mb-1">
+                  📖 Story: Ramesh (MSME Entrepreneur from Okhla, Delhi)
+                </p>
+                <p>
+                  Ramesh ne nayi electric water heater (geyser) factory shuru ki. Pehle use pata hi nahi tha ki geyser bechne ke liye government ka <strong>Mandatory Quality Control Order</strong> lagu hai. Agar wo bina ISI mark ke bechta, to use 2 saal ki jail aur ₹5,00,000 ka fine lag sakta tha!
+                </p>
+              </div>
+
+              <div className="space-y-2">
+                <p className="font-bold text-slate-900 text-sm">Yeh Portal Ramesh ki kaise madad karta hai?</p>
+                <ol className="list-decimal list-inside space-y-2 text-slate-600">
+                  <li>
+                    <strong className="text-slate-900">Step 1 (Discovery):</strong> Ramesh portal par <em>"Electric Geyser"</em> type karta hai. ManakSetu turant batata hai: <code>IS 2082:2018</code> lagu hoga.
+                  </li>
+                  <li>
+                    <strong className="text-slate-900">Step 2 (Alert):</strong> Portal red badge me alert deta hai ki geyser par <strong>Mandatory QCO Order</strong> hai, bina license production shuru na karein.
+                  </li>
+                  <li>
+                    <strong className="text-slate-900">Step 3 (Subsidy):</strong> Fee calculator me Ramesh 'Micro' select karta hai aur use pata chalta hai ki use <strong>₹42,000 (50%) ki government chhoot</strong> milegi!
+                  </li>
+                  <li>
+                    <strong className="text-slate-900">Step 4 (Roadmap):</strong> Portal use Sahibabad (NCR) ki BIS Central Lab ka address aur factory me zaroori high-voltage test machines ki list de deta hai.
+                  </li>
+                </ol>
+              </div>
+
+              <div className="p-3 bg-emerald-50 rounded-xl border border-emerald-200 text-emerald-900">
+                <p className="font-bold">🎯 Result for the Country:</p>
+                <p className="mt-0.5">
+                  Ramesh ko kisi agent ya rishwat ki zaroorat nahi padi. Usne seedha BIS license apply kiya, aur aam janta tak surakshit, certified geysers pahunche.
+                </p>
+              </div>
+            </div>
+
+            <button
+              onClick={() => setShowUseCaseModal(false)}
+              className="mt-5 w-full bg-blue-900 hover:bg-blue-950 text-white font-bold py-2.5 rounded-xl text-xs transition-all"
+            >
+              Samajh Gaya, Wapas Portal Dekhein
+            </button>
           </div>
-        )}
+        </div>
+      )}
 
-      </div>
     </div>
   );
 }
