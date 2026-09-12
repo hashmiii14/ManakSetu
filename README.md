@@ -1,4 +1,4 @@
-﻿# 🇮🇳 ManakSetu (मानक सेतु)
+﻿# ManakSetu
 ### AI-Powered Intelligent Assistant for Indian Standards & BIS Services
 **Smart India Hackathon (SIH 2026)** | **Problem Statement ID:** `26107`  
 **Ministry:** Ministry of Consumer Affairs, Food & Public Distribution  
