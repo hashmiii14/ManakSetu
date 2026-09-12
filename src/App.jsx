@@ -2,21 +2,25 @@ import React, { useState } from 'react';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import CoreActions from './components/CoreActions';
+import ManakBot from './components/ManakBot';
+import ProductDiscovery from './components/ProductDiscovery';
+import ComplianceChecker from './components/ComplianceChecker';
 import ExploreStandards from './components/ExploreStandards';
 import CostEstimatorSection from './components/CostEstimatorSection';
-import AssistantSection from './components/AssistantSection';
 import ConsumerVerifier from './components/ConsumerVerifier';
-import StandardDetailModal from './components/StandardDetailModal';
-import ReportModal from './components/ReportModal';
 import HowItWorks from './components/HowItWorks';
+import AboutSection from './components/AboutSection';
 import TrustSection from './components/TrustSection';
 import FAQSection from './components/FAQSection';
 import FinalCTA from './components/FinalCTA';
 import Footer from './components/Footer';
+import StandardDetailModal from './components/StandardDetailModal';
+import ReportModal from './components/ReportModal';
 import { BIS_STANDARDS } from './data/bisStandards';
 
 export default function App() {
   const [selectedStandard, setSelectedStandard] = useState(null);
+  const [activeComplianceProduct, setActiveComplianceProduct] = useState('');
   const [reportState, setReportState] = useState({
     isOpen: false,
     identifier: '',
@@ -39,93 +43,108 @@ export default function App() {
     setReportState(prev => ({ ...prev, isOpen: false }));
   };
 
-  const handleScrollToHero = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
-  const handleScrollToCostEstimator = () => {
-    const el = document.getElementById('cost-estimator');
-    if (el) el.scrollIntoView({ behavior: 'smooth' });
-  };
-
-  const handleScrollToAssistant = () => {
-    const el = document.getElementById('assistant');
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth' });
-      const input = document.getElementById('assistant-input');
-      if (input) input.focus();
-    }
-  };
-
-  const handleScrollToConsumer = () => {
-    const el = document.getElementById('consumer-check');
+  const handleScrollToSection = (id) => {
+    const el = document.getElementById(id);
     if (el) {
       el.scrollIntoView({ behavior: 'smooth' });
     }
   };
 
-  const handleScrollToStandards = () => {
-    const el = document.getElementById('standards');
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth' });
+  const handleAskBot = (promptQuery = '') => {
+    handleScrollToSection('assistant');
+    if (promptQuery) {
+      setTimeout(() => {
+        const textarea = document.querySelector('#assistant textarea');
+        if (textarea) {
+          textarea.value = promptQuery;
+          textarea.dispatchEvent(new Event('input', { bubbles: true }));
+          textarea.focus();
+        }
+      }, 400);
     }
+  };
+
+  const handleCheckCompliance = (productOrCode = '') => {
+    if (productOrCode) {
+      setActiveComplianceProduct(productOrCode);
+    }
+    handleScrollToSection('compliance');
   };
 
   return (
     <div className="min-h-screen flex flex-col bg-white text-neutral-900 font-sans selection:bg-emerald-600 selection:text-white antialiased">
       {/* 1. Navbar */}
       <Navbar 
-        onGetStarted={handleScrollToHero} 
+        onAskBot={() => handleScrollToSection('assistant')}
         onOpenReport={() => handleOpenReport()} 
       />
 
       {/* 2. Hero with Instant Search & Live Result */}
       <Hero 
         onOpenStandard={handleOpenStandard} 
-        onAskQuestion={handleScrollToAssistant} 
+        onAskQuestion={handleAskBot} 
+        onExploreStandards={() => handleScrollToSection('standards')}
       />
 
-      {/* 3. Core Actions ("What would you like to do?") */}
+      {/* 3. Core Tools Section (4 Distinct Actions) */}
       <CoreActions
-        onFindStandard={handleScrollToHero}
-        onCalculateCost={handleScrollToCostEstimator}
-        onAskQuestion={handleScrollToAssistant}
-        onVerifyConsumer={handleScrollToConsumer}
-        onBrowseAll={handleScrollToStandards}
-        onOpenReport={() => handleOpenReport()}
+        onAskBot={() => handleScrollToSection('assistant')}
+        onFindStandards={() => handleScrollToSection('discovery')}
+        onComplianceCheck={() => handleScrollToSection('compliance')}
+        onUnderstandStandard={() => handleScrollToSection('standards')}
       />
 
-      {/* 4. Complete Standards Directory & Search */}
+      {/* 4. Dedicated AI Regulatory Assistant (ManakBot) */}
+      <ManakBot
+        onOpenStandard={handleOpenStandard}
+        onCheckCompliance={handleCheckCompliance}
+      />
+
+      {/* 5. Product → Standard Discovery Workflow */}
+      <ProductDiscovery
+        onOpenStandard={handleOpenStandard}
+        onCheckCompliance={handleCheckCompliance}
+        onAskBot={handleAskBot}
+      />
+
+      {/* 6. Interactive 7-Stage Compliance Roadmap */}
+      <ComplianceChecker
+        initialProduct={activeComplianceProduct}
+        onOpenStandard={handleOpenStandard}
+        onAskBot={handleAskBot}
+      />
+
+      {/* 7. Complete Standards Directory & Search (572+ IS Standards) */}
       <ExploreStandards 
         onSelectStandard={handleOpenStandard} 
+        onAskBot={handleAskBot}
+        onCheckCompliance={handleCheckCompliance}
       />
 
-      {/* 5. Statutory Cost Estimator & MSME Concessions */}
+      {/* 8. Statutory Cost Estimator & MSME Concessions */}
       <CostEstimatorSection />
 
-      {/* 6. Dedicated AI Regulatory Assistant (ManaKBot) */}
-      <AssistantSection 
-        onSelectStandard={handleOpenStandard} 
-      />
-
-      {/* 7. Consumer Verification Tool (Gold HUID & ISI CML Checker) */}
+      {/* 9. Consumer Verification Tool (Gold HUID & ISI CML Checker) */}
       <ConsumerVerifier 
         onOpenReport={handleOpenReport} 
       />
 
-      {/* 8. How It Works (4 Clear Linear Steps) */}
+      {/* 10. How It Works (4 Clear Linear Steps) */}
       <HowItWorks />
 
-      {/* 9. Trust & Statutory Transparency */}
+      {/* 11. About ManakSetu (Bridging Industry & Standards) */}
+      <AboutSection />
+
+      {/* 12. Trust & Statutory Transparency */}
       <TrustSection />
 
-      {/* 10. Useful FAQs */}
+      {/* 13. Useful FAQs */}
       <FAQSection />
 
-      {/* 11. Final Call to Action */}
-      <FinalCTA onGetStarted={handleScrollToHero} />
+      {/* 14. Final Call to Action */}
+      <FinalCTA onGetStarted={() => window.scrollTo({ top: 0, behavior: 'smooth' })} />
 
-      {/* 12. Footer */}
+      {/* 15. Footer */}
       <Footer onOpenReport={() => handleOpenReport()} />
 
       {/* Standard Full Detail Modal */}
@@ -133,6 +152,8 @@ export default function App() {
         <StandardDetailModal
           standard={selectedStandard}
           onClose={() => setSelectedStandard(null)}
+          onAskBot={handleAskBot}
+          onCheckCompliance={handleCheckCompliance}
         />
       )}
 

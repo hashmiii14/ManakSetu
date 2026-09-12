@@ -44,7 +44,12 @@ STOPWORDS = {
 }
 
 QUERY_EXPANSIONS: Dict[str, str] = {
-    # Electrical appliances
+    # Electrical appliances & wiring
+    "switch": "switches for domestic and similar fixed electrical installations 250v is 3854 is 1293",
+    "electrical switch": "switches for domestic and similar fixed electrical installations is 3854",
+    "switches": "switches for domestic and similar fixed electrical installations is 3854",
+    "kettle": "safety of household and similar electrical appliances electric kettles liquid heaters is 302 is 2082",
+    "electric kettle": "safety of household and similar electrical appliances electric kettles liquid heaters is 302",
     "immersion": "electric immersion water heaters geyser heating element is 368",
     "geyser": "stationary storage water heaters electric immersion water heaters is 2082 is 368",
     "water heater": "stationary storage water heaters electric immersion is 2082 is 368",
@@ -52,6 +57,9 @@ QUERY_EXPANSIONS: Dict[str, str] = {
     "plug": "plugs and socket outlets 250v 16a electrical wiring is 1293",
     "socket": "plugs and socket outlets 250v 16a electrical appliances is 1293",
     "electrical appliance": "safety household electrical appliances immersion water heater plugs is 302 is 368 is 2082",
+    "is 302": "safety of household and similar electrical appliances general requirements is 302",
+    "is 3854": "switches for domestic and similar fixed electrical installations is 3854",
+    "is 1293": "plugs and socket outlets of nominal ratings up to and including 250 volts is 1293",
     
     # Toys and children's goods
     "toy": "safety of toys mechanical physical properties baby doll plastic plush is 9873",

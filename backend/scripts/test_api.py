@@ -71,4 +71,25 @@ print("Bot Source:", bot_res["source"])
 print("Bot Answer preview:\n", bot_res["answer"][:200], "...")
 assert r_bot.status_code == 200
 
+print("\n--- 8. Testing Chat Alias Endpoint (/api/chat) ---")
+r_chat = client.post("/api/chat", json={"message": "What is IS 302?"})
+print("Chat Alias Status:", r_chat.status_code)
+assert r_chat.status_code == 200
+
+print("\n--- 9. Testing Compliance Check Endpoint (/api/compliance/check) ---")
+r_comp = client.post("/api/compliance/check", json={
+    "product_name": "Electric Kettle",
+    "category": "Electrical Appliance",
+    "description": "1.5 litre household electric kettle",
+    "intended_use": "Domestic boiling"
+})
+print("Compliance Check Status:", r_comp.status_code)
+comp_data = r_comp.json()
+print("Primary Standard:", comp_data["primary_standard"]["is_number"] if comp_data["primary_standard"] else "None")
+print("Scheme:", comp_data["conformance_scheme"])
+print("Total Roadmap Stages:", len(comp_data["phases"]))
+assert r_comp.status_code == 200
+assert len(comp_data["phases"]) == 7
+
 print("\n>>> ALL BACKEND API TESTS PASSED PERFECTLY! <<<")
+

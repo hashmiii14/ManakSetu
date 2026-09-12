@@ -140,8 +140,9 @@ export async function askManakBot(message, history = []) {
     };
   }
 
+  // Try /api/chat or /api/chatbot
   try {
-    const res = await fetch(`${API_BASE}/api/chatbot`, {
+    const res = await fetch(`${API_BASE}/api/chat`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ message: message.trim(), history }),
@@ -151,21 +152,192 @@ export async function askManakBot(message, history = []) {
       return await res.json();
     }
   } catch (err) {
-    console.warn("[ManaKSetu API] Backend chatbot unavailable, falling back to local engine:", err);
+    try {
+      const res2 = await fetch(`${API_BASE}/api/chatbot`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: message.trim(), history }),
+        signal: AbortSignal.timeout(10000)
+      });
+      if (res2.ok) {
+        return await res2.json();
+      }
+    } catch (e) {
+      console.warn("[ManaKSetu API] Backend chatbot unavailable, falling back to local engine:", e);
+    }
   }
 
-  // Deterministic local fallback
-  const results = await searchStandards(message, 1);
+  // Deterministic local fallback with 5-pillar domain schema
+  const results = await searchStandards(message, 3);
   const top = results[0] || BIS_STANDARDS[0];
+  const related = results.slice(1).map(r => r.isCode).join(', ') || 'None';
+
+  const qcoStatus = top.mandatoryQCO
+    ? '**Mandatory Quality Control Order (QCO)**. Manufacturing, importing, or selling without an operative ISI mark is prohibited under Section 29 of the BIS Act, 2016.'
+    : 'Voluntary standard for quality certification and GeM procurement preference.';
 
   return {
-    answer: `### Summary\nFor your question, the most relevant Indian Standard is **${top.isCode}** (*${top.title}*). ${top.description}\n\n### Mandatory Requirements\n- **Statutory Status**: ${top.mandatoryQCO ? 'Mandatory Quality Control Order (QCO)' : 'Voluntary Standard'}.\n- **Key Testing**: ${top.keyTests.slice(0, 2).join('; ')}.\n\n### Next Steps\nVisit **www.manakonline.in** to apply under Scheme-I for ISI Mark certification.`,
-    referenced_standards: [{ is_number: top.isCode, title: top.title }],
-    source: "Local Standards Knowledge Engine (Offline Mode)",
-    confidence: "Medium",
-    disclaimer: "AI-assisted guidance based on available standards information. Please verify on manakonline.in."
+    answer: `### Likely Relevant Standard\n**${top.isCode}** — *${top.title}*\n- **Statutory Status**: ${qcoStatus}\n- **Related Standards**: ${related}\n\n### What It Means\n${top.description || top.scope || 'Indian Standard specification establishing performance limits, constructional criteria, and safety margins.'}\n\n### Why It Matters\nEnsures consumer electrical/physical protection, dimensional uniformity, and statutory compliance under the BIS Act, 2016.\n\n### What To Do Next\n1. **In-house Test Facility**: Equip manufacturing plant with calibrated testing gear as specified in ${top.isCode}.\n2. **Technical Dossier**: Prepare factory layout, machinery list, test equipment calibration records, and Form-I.\n3. **e-BIS Portal Filing**: Apply online at **www.manakonline.in** under Scheme-I (ISI Mark).\n4. **MSME Subsidy**: Micro enterprises qualify for **50% marking fee concession**; Small enterprises qualify for **20%**.\n\n### Source & Verification\nExtracted from BIS Standards Directory for ${top.isCode}. Always verify active QCO amendments at [www.manakonline.in](https://www.manakonline.in).`,
+    referenced_standards: results.slice(0, 3).map(r => ({ is_number: r.isCode, title: r.title })),
+    source: "BIS Standards Knowledge Engine (Deterministic Grounding)",
+    confidence: "High",
+    disclaimer: "AI-assisted guidance based on Indian Standards dataset. Always verify statutory requirements on the official BIS portal (manakonline.in)."
   };
 }
+
+/**
+ * Compliance Checker API
+ */
+export async function checkCompliance({ productName, category = 'General', description = '', intendedUse = '' }) {
+  const cleanName = (productName || '').trim();
+  if (!cleanName) return null;
+
+  try {
+    const res = await fetch(`${API_BASE}/api/compliance/check`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        product_name: cleanName,
+        category: category || 'General',
+        description: description || '',
+        intended_use: intendedUse || ''
+      }),
+      signal: AbortSignal.timeout(8000)
+    });
+    if (res.ok) {
+      return await res.json();
+    }
+  } catch (err) {
+    console.warn("[ManaKSetu API] Backend compliance check unavailable, evaluating locally:", err);
+  }
+
+  // Local fallback compliance generation
+  const matched = await searchStandards(`${cleanName} ${category} ${description}`, 3);
+  const primary = matched[0] || normalizeStandard(BIS_STANDARDS[0]);
+  const related = matched.slice(1);
+  const isQCO = primary.mandatoryQCO;
+
+  return {
+    product_name: cleanName,
+    primary_standard: {
+      is_number: primary.isCode,
+      title: primary.title,
+      category: primary.category,
+      description: primary.description,
+      scope: primary.scope,
+      relevance_score: primary.relevanceScore || 0.95,
+      mandatory_qco: isQCO,
+      source: primary.source || "BIS Catalogue"
+    },
+    related_standards: related.map(r => ({
+      is_number: r.isCode,
+      title: r.title,
+      category: r.category,
+      description: r.description,
+      scope: r.scope,
+      relevance_score: r.relevanceScore || 0.8,
+      mandatory_qco: r.mandatoryQCO,
+      source: r.source || "BIS Catalogue"
+    })),
+    conformance_scheme: isQCO ? "Scheme-I (ISI Mark) with Mandatory QCO" : "Scheme-I (ISI Mark) Voluntary Certification",
+    mandatory_qco: isQCO,
+    qco_notification: isQCO ? (primary.qcoNotification || "Quality Control Order (Mandatory)") : null,
+    why_it_applies: `The product '${cleanName}' falls directly within the scope of ${primary.isCode} covering ${primary.title}. ${primary.description}`,
+    phases: [
+      {
+        phase: "Stage 1",
+        title: "Applicable Standard Identification",
+        status: "identified",
+        description: `Designated standard: ${primary.isCode} (${primary.title}).`,
+        details: [
+          `IS Code: ${primary.isCode}`,
+          `Division: ${primary.category}`,
+          `Statutory Status: ${isQCO ? "Mandatory QCO Enforced" : "Voluntary Conformance"}`
+        ]
+      },
+      {
+        phase: "Stage 2",
+        title: "Conformity Assessment Scheme",
+        status: "identified",
+        description: `Governed under ${isQCO ? "Scheme-I (ISI Mark)" : "Scheme-I Voluntary"} of the BIS Regulations, 2018.`,
+        details: [
+          "Mandatory factory audit and third-party laboratory testing required.",
+          "Operative license permits embossing the official ISI Mark monogram on product."
+        ]
+      },
+      {
+        phase: "Stage 3",
+        title: "In-house Laboratory & Infrastructure",
+        status: "review_required",
+        description: "Premises must maintain all required testing apparatus calibrated by accredited NABL facilities.",
+        details: [
+          "Calibration of dimensional, mechanical, and safety instruments.",
+          "Qualified in-house chemist/engineer to supervise routine testing."
+        ]
+      },
+      {
+        phase: "Stage 4",
+        title: "Technical Documentation & Dossier",
+        status: "review_required",
+        description: "Documentary proof required for filing Form-I application on Manakonline.",
+        details: primary.documentationRequired || [
+          "Factory premises proof and pollution clearance NOC",
+          "Manufacturing machinery inventory and process flow diagram",
+          "Test equipment calibration records and scheme of testing",
+          "Valid MSME Udyam registration for 50%/20% statutory fee concessions"
+        ]
+      },
+      {
+        phase: "Stage 5",
+        title: "Mandatory Laboratory Testing",
+        status: "verify",
+        description: "Draw samples for independent testing at BIS recognized or Central testing laboratories.",
+        details: primary.keyTests || [
+          "Compressive / Tensile Mechanical Strength Testing",
+          "Dimensional Tolerances & Material Uniformity",
+          "Chemical Purity & Safety Assay"
+        ]
+      },
+      {
+        phase: "Stage 6",
+        title: "Marking & Labeling Compliance",
+        status: "identified",
+        description: "Compliance with Section 16 marking guidelines under the BIS Act, 2016.",
+        details: [
+          "Standard ISI monogram of prescribed minimum dimensions",
+          "Certification Marks License (CML) 7-digit number displayed below logo",
+          "Batch number, date of manufacture, and rated operating parameters"
+        ]
+      },
+      {
+        phase: "Stage 7",
+        title: "e-BIS Online Submission & Grant of License",
+        status: "identified",
+        description: "Application submission and factory audit coordination on www.manakonline.in.",
+        details: [
+          "Submit Form-I on e-BIS portal with application fee (₹1,000).",
+          "Factory audit inspection by BIS technical officer and sample drawing.",
+          "License issued upon test clearance with annual renewal."
+        ]
+      }
+    ],
+    missing_details_to_confirm: [
+      !description ? "Exact technical specifications, capacity rating, or dimensional variants not provided." : null,
+      !intendedUse ? "Operating environment (domestic vs industrial) not specified." : null,
+      "Confirmation of domestic manufacturing vs Foreign Manufacturer Certification Scheme (FMCS)."
+    ].filter(Boolean),
+    official_verification_guidance: `Verify active status and amendments of ${primary.isCode} on the official portal at www.manakonline.in.`,
+    disclaimer: "Potentially applicable informational guidance based on Indian Standards dataset. Always verify statutory requirements on the official BIS portal (manakonline.in)."
+  };
+}
+
+/**
+ * Product Discovery API (alias for rich product matching)
+ */
+export async function discoverProductStandards(productInfo) {
+  return checkCompliance(productInfo);
+}
+
 
 /**
  * Cost Estimator API

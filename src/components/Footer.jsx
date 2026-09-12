@@ -1,5 +1,6 @@
 import React from 'react';
-import { ExternalLink } from 'lucide-react';
+import { ExternalLink, ShieldCheck } from 'lucide-react';
+import Logo from './Logo';
 
 export default function Footer({ onOpenReport }) {
   const scrollTo = (id) => {
@@ -10,22 +11,18 @@ export default function Footer({ onOpenReport }) {
   };
 
   return (
-    <footer className="bg-white border-t border-neutral-200 text-neutral-600 text-xs py-12">
+    <footer className="bg-white border-t border-neutral-200 text-neutral-600 text-xs py-12 text-left">
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8 text-left">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
           
           {/* Brand Col */}
-          <div className="md:col-span-2 space-y-2.5">
-            <div className="flex items-center gap-2">
-              <div className="w-6 h-6 rounded-md bg-emerald-600 flex items-center justify-center text-white font-bold text-xs">
-                MS
-              </div>
-              <span className="text-base font-bold text-neutral-900 tracking-tight">
-                ManaKSetu
-              </span>
-            </div>
-            <p className="text-neutral-500 max-w-sm leading-relaxed">
-              AI Assistant for Indian Standards & BIS Services. Developed for Smart India Hackathon (Problem Statement ID: 26107), Jamia Hamdard.
+          <div className="md:col-span-2 space-y-3">
+            <Logo size="default" />
+            <p className="text-neutral-500 max-w-sm leading-relaxed text-xs">
+              AI-powered assistant for discovering, understanding, and navigating Indian Standards and BIS compliance requirements. Designed for MSMEs, startups, manufacturers, and Indian consumers.
+            </p>
+            <p className="text-[11px] text-neutral-400">
+              Developed for Smart India Hackathon (SIH) • Problem Statement ID: 26107
             </p>
           </div>
 
@@ -34,35 +31,45 @@ export default function Footer({ onOpenReport }) {
             <h4 className="font-bold text-neutral-900 uppercase tracking-wider text-[11px] mb-3">
               Navigation
             </h4>
-            <ul className="space-y-2">
+            <ul className="space-y-2 text-xs">
               <li>
                 <button onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="hover:text-emerald-700">
                   Home
                 </button>
               </li>
               <li>
-                <button onClick={() => scrollTo('actions')} className="hover:text-emerald-700">
-                  What You Can Do
+                <button onClick={() => scrollTo('standards')} className="hover:text-emerald-700">
+                  Standards Directory
                 </button>
               </li>
               <li>
-                <button onClick={() => scrollTo('assistant')} className="hover:text-emerald-700">
-                  ManaKSetu Assistant
+                <button onClick={() => scrollTo('discovery')} className="hover:text-emerald-700">
+                  Product Finder
+                </button>
+              </li>
+              <li>
+                <button onClick={() => scrollTo('compliance')} className="hover:text-emerald-700">
+                  Compliance Check
+                </button>
+              </li>
+              <li>
+                <button onClick={() => scrollTo('assistant')} className="hover:text-emerald-700 font-semibold text-emerald-800">
+                  ManakBot Assistant
                 </button>
               </li>
               <li>
                 <button onClick={() => scrollTo('cost-estimator')} className="hover:text-emerald-700">
-                  Cost Estimator
-                </button>
-              </li>
-              <li>
-                <button onClick={() => scrollTo('standards')} className="hover:text-emerald-700">
-                  Explore Standards
+                  Cost Estimator (MSME 50% Off)
                 </button>
               </li>
               <li>
                 <button onClick={() => scrollTo('consumer-check')} className="hover:text-emerald-700">
-                  Verify Hallmark & ISI
+                  Verify HUID / ISI CML
+                </button>
+              </li>
+              <li>
+                <button onClick={() => scrollTo('about')} className="hover:text-emerald-700">
+                  About ManakSetu
                 </button>
               </li>
               {onOpenReport && (
@@ -78,31 +85,51 @@ export default function Footer({ onOpenReport }) {
           {/* Statutory Links */}
           <div>
             <h4 className="font-bold text-neutral-900 uppercase tracking-wider text-[11px] mb-3">
-              Statutory Resources
+              Official BIS Portals
             </h4>
-            <ul className="space-y-2">
+            <ul className="space-y-2 text-xs">
               <li>
-                <a href="https://www.manakonline.in" target="_blank" rel="noreferrer" className="hover:text-emerald-700 flex items-center gap-1">
-                  <span>Manakonline Portal</span>
-                  <ExternalLink className="w-3 h-3" />
+                <a
+                  href="https://www.manakonline.in"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="hover:text-emerald-700 inline-flex items-center gap-1"
+                >
+                  <span>e-BIS Portal (manakonline.in)</span>
+                  <ExternalLink className="w-3 h-3 text-neutral-400" />
                 </a>
               </li>
               <li>
-                <a href="https://www.bis.gov.in" target="_blank" rel="noreferrer" className="hover:text-emerald-700 flex items-center gap-1">
-                  <span>Bureau of Indian Standards</span>
-                  <ExternalLink className="w-3 h-3" />
+                <a
+                  href="https://www.bis.gov.in"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="hover:text-emerald-700 inline-flex items-center gap-1"
+                >
+                  <span>BIS National Portal (bis.gov.in)</span>
+                  <ExternalLink className="w-3 h-3 text-neutral-400" />
                 </a>
               </li>
               <li>
-                <a href="https://consumerhelpline.gov.in" target="_blank" rel="noreferrer" className="hover:text-emerald-700 flex items-center gap-1">
-                  <span>National Consumer Helpline</span>
-                  <ExternalLink className="w-3 h-3" />
+                <a
+                  href="https://standardsbis.bsbedge.com"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="hover:text-emerald-700 inline-flex items-center gap-1"
+                >
+                  <span>Know Your Standard (KYS)</span>
+                  <ExternalLink className="w-3 h-3 text-neutral-400" />
                 </a>
               </li>
               <li>
-                <a href="https://www.services.bis.gov.in/php/BIS_2.0/bisconnect/knowyourstandards" target="_blank" rel="noreferrer" className="hover:text-emerald-700 flex items-center gap-1">
-                  <span>Know Your Standards</span>
-                  <ExternalLink className="w-3 h-3" />
+                <a
+                  href="https://www.services.bis.gov.in"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="hover:text-emerald-700 inline-flex items-center gap-1"
+                >
+                  <span>Online Conformity Services</span>
+                  <ExternalLink className="w-3 h-3 text-neutral-400" />
                 </a>
               </li>
             </ul>
@@ -110,13 +137,18 @@ export default function Footer({ onOpenReport }) {
 
         </div>
 
-        {/* Bottom Bar */}
-        <div className="pt-6 border-t border-neutral-200 flex flex-col sm:flex-row items-center justify-between gap-2 text-neutral-400 text-[11px]">
-          <p>© {new Date().getFullYear()} ManaKSetu • Smart India Hackathon Prototype. Team SnippetSquad.</p>
-          <div className="flex items-center gap-4 text-neutral-500">
-            <span>Statutory compliance referenced from BIS Act, 2016</span>
+        {/* Persistent Statutory Disclaimer */}
+        <div className="pt-6 border-t border-neutral-100 flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-neutral-500">
+          <p className="italic text-center sm:text-left max-w-3xl">
+            <strong>Statutory Disclaimer:</strong> ManakSetu provides AI-assisted informational guidance based on available Indian Standards. Verify applicable requirements and current standards with official BIS sources (manakonline.in) before making compliance, certification, or regulatory decisions.
+          </p>
+          <div className="flex items-center gap-3 shrink-0">
+            <span>© {new Date().getFullYear()} ManakSetu</span>
+            <span>•</span>
+            <span className="font-semibold text-emerald-700">SIH Ready</span>
           </div>
         </div>
+
       </div>
     </footer>
   );

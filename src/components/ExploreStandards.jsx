@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Search, AlertTriangle, ArrowRight, CheckCircle2, Filter, Loader2 } from 'lucide-react';
 import { searchStandards } from '../services/api';
 
-export default function ExploreStandards({ onSelectStandard }) {
+export default function ExploreStandards({ onSelectStandard, onAskBot, onCheckCompliance }) {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('ALL');
   const [standardsList, setStandardsList] = useState([]);
@@ -171,17 +171,35 @@ export default function ExploreStandards({ onSelectStandard }) {
                     </p>
                   </div>
 
-                  <div className="mt-5 pt-3 border-t border-neutral-100 flex items-center justify-between text-xs">
+                  <div className="mt-5 pt-3 border-t border-neutral-100 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 text-xs">
                     <span className="text-neutral-500 font-medium">
                       {std.category}
                     </span>
-                    <button
-                      onClick={() => onSelectStandard(std)}
-                      className="inline-flex items-center gap-1 font-semibold text-emerald-700 hover:text-emerald-800 transition-colors"
-                    >
-                      <span>View Details</span>
-                      <ArrowRight className="w-3.5 h-3.5" />
-                    </button>
+                    <div className="flex items-center gap-1.5 shrink-0">
+                      <button
+                        onClick={() => onAskBot && onAskBot(`Explain the compliance requirements and testing rules for ${std.isCode} (${std.title})`)}
+                        className="px-2.5 py-1 rounded-lg bg-neutral-100 hover:bg-neutral-200 text-neutral-700 font-semibold transition-colors text-[11px]"
+                        title="Ask ManakBot about this standard"
+                      >
+                        Ask Bot
+                      </button>
+
+                      <button
+                        onClick={() => onCheckCompliance && onCheckCompliance(std.isCode)}
+                        className="px-2.5 py-1 rounded-lg bg-neutral-100 hover:bg-emerald-50 hover:text-emerald-900 border border-neutral-200 text-neutral-700 font-semibold transition-colors text-[11px]"
+                        title="Run compliance check for this standard"
+                      >
+                        Check Compliance
+                      </button>
+
+                      <button
+                        onClick={() => onSelectStandard(std)}
+                        className="inline-flex items-center gap-1 px-3 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-bold transition-colors text-[11px] shadow-2xs"
+                      >
+                        <span>View Details</span>
+                        <ArrowRight className="w-3 h-3" />
+                      </button>
+                    </div>
                   </div>
                 </div>
               ))}
@@ -193,3 +211,4 @@ export default function ExploreStandards({ onSelectStandard }) {
     </section>
   );
 }
+

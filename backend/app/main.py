@@ -10,7 +10,8 @@ from .routes import (
     chatbot,
     verification,
     reports,
-    calculator
+    calculator,
+    compliance
 )
 
 
@@ -53,6 +54,7 @@ app.include_router(chatbot.router)
 app.include_router(verification.router)
 app.include_router(reports.router)
 app.include_router(calculator.router)
+app.include_router(compliance.router)
 
 
 from fastapi.responses import RedirectResponse
@@ -74,6 +76,9 @@ def health_check():
             "calculate": "/api/calculate",
             "verify": "/api/verify",
             "chatbot": "/api/chatbot",
+            "chat": "/api/chat",
+            "compliance_check": "/api/compliance/check",
+            "discovery": "/api/discovery",
             "report": "/api/report"
         }
     }

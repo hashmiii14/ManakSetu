@@ -1,118 +1,103 @@
 import React from 'react';
-import { Search, MessageSquare, ShieldCheck, BookOpen, Calculator, ArrowRight, Flag } from 'lucide-react';
+import { Sparkles, Compass, ShieldCheck, BookOpen, ArrowRight } from 'lucide-react';
 
 export default function CoreActions({ 
-  onFindStandard, 
-  onCalculateCost,
-  onAskQuestion, 
-  onVerifyConsumer, 
-  onBrowseAll,
-  onOpenReport
+  onAskBot, 
+  onFindStandards, 
+  onComplianceCheck, 
+  onUnderstandStandard 
 }) {
-  const actions = [
+  const tools = [
     {
       num: "01",
-      icon: Search,
-      title: "Find a Product Standard",
-      description: "Search any manufactured product (e.g. Immersion Geyser, Toys, Helmet) to retrieve its official IS code and mandatory rules.",
-      buttonText: "Check Product Now",
-      onClick: onFindStandard,
-      tag: "Hybrid Search"
+      icon: Sparkles,
+      title: "Ask ManakBot",
+      description: "Chat with the dedicated regulatory AI assistant. Get grounded answers on IS codes, testing benchmarks, and filing rules.",
+      buttonText: "Launch ManakBot",
+      onClick: onAskBot,
+      tag: "Conversational AI"
     },
     {
       num: "02",
-      icon: Calculator,
-      title: "Estimate Certification Costs",
-      description: "Calculate application, inspection, and marking fees with statutory 50% Micro and 20% Small enterprise concessions.",
-      buttonText: "Calculate Fee",
-      onClick: onCalculateCost || onFindStandard,
-      tag: "MSME Savings"
+      icon: Compass,
+      title: "Find Standards",
+      description: "Intelligent product-to-standard discovery. Enter product name, category, and use to identify applicable IS codes and mandatory QCOs.",
+      buttonText: "Discover Standards",
+      onClick: onFindStandards,
+      tag: "Product Discovery"
     },
     {
       num: "03",
-      icon: MessageSquare,
-      title: "Ask Compliance Assistant",
-      description: "Ask questions on testing parameters, required documentation, and certification roadmaps grounded in BIS standards.",
-      buttonText: "Ask ManaKBot",
-      onClick: onAskQuestion,
-      tag: "AI Assistant"
+      icon: ShieldCheck,
+      title: "Compliance Check",
+      description: "Interactive 7-stage roadmap: standard identification, scheme mapping, in-house laboratory setup, documents, and testing.",
+      buttonText: "Check Compliance",
+      onClick: onComplianceCheck,
+      tag: "Statutory Roadmap"
     },
     {
       num: "04",
-      icon: ShieldCheck,
-      title: "Verify Hallmark or ISI Mark",
-      description: "Check a 6-digit Gold HUID or 7-digit ISI CML license number against our prototype verification registry.",
-      buttonText: "Verify Authenticity",
-      onClick: onVerifyConsumer,
-      tag: "Consumer Tool"
+      icon: BookOpen,
+      title: "Understand a Standard",
+      description: "Search 572+ Indian Standards, view technical scopes, testing laboratories, documentation checklists, and 50% MSME fee savings.",
+      buttonText: "Browse Standards",
+      onClick: onUnderstandStandard,
+      tag: "Directory & Explorer"
     }
   ];
 
   return (
-    <section id="actions" className="py-14 bg-neutral-50/60 border-b border-neutral-200 text-left">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6">
+    <section id="actions" className="py-14 md:py-16 bg-white border-b border-neutral-200 text-left">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6">
         
         {/* Section Heading */}
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
           <div className="max-w-xl">
             <span className="text-xs font-bold text-emerald-700 uppercase tracking-wider block mb-1">
-              Simple & Direct
+              Core Capabilities
             </span>
-            <h2 className="text-2xl sm:text-3xl font-bold text-neutral-900 tracking-tight">
-              What would you like to do?
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-neutral-900 tracking-tight">
+              Four Core Tools to Simplify Compliance
             </h2>
-            <p className="text-xs sm:text-sm text-neutral-600 mt-1">
-              Pick one of the core actions below to get started immediately:
-            </p>
           </div>
-
-          {onOpenReport && (
-            <button
-              onClick={onOpenReport}
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white hover:bg-red-50 text-red-700 border border-red-200 text-xs font-bold transition-all shadow-2xs self-start sm:self-auto shrink-0"
-            >
-              <Flag className="w-3.5 h-3.5" />
-              <span>Report Non-compliant Mark</span>
-            </button>
-          )}
+          <p className="text-xs sm:text-sm text-neutral-500 max-w-sm">
+            Everything an MSME, manufacturer, or consumer needs to navigate the Bureau of Indian Standards ecosystem.
+          </p>
         </div>
 
-        {/* 4 Clean Action Cards */}
+        {/* 4 Cards Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {actions.map((act, idx) => {
-            const Icon = act.icon;
+          {tools.map((t, idx) => {
+            const IconComp = t.icon;
             return (
               <div
                 key={idx}
-                className="p-5 rounded-2xl bg-white border border-neutral-200 hover:border-emerald-500 shadow-xs hover:shadow-sm transition-all flex flex-col justify-between group"
+                onClick={t.onClick}
+                className="group p-5 rounded-2xl bg-neutral-50 hover:bg-emerald-50/30 border border-neutral-200 hover:border-emerald-500 transition-all cursor-pointer flex flex-col justify-between space-y-4 shadow-2xs hover:shadow-xs"
               >
-                <div>
-                  <div className="flex items-center justify-between mb-3">
-                    <div className="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center font-bold">
-                      <Icon className="w-4 h-4" />
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div className="w-10 h-10 rounded-xl bg-white border border-neutral-200 group-hover:border-emerald-300 text-emerald-700 flex items-center justify-center shadow-2xs transition-colors">
+                      <IconComp className="w-5 h-5" />
                     </div>
-                    <span className="text-[10px] font-bold text-neutral-400 font-mono">
-                      {act.tag}
+                    <span className="text-[10px] font-bold text-neutral-600 uppercase tracking-wider bg-white px-2 py-0.5 rounded border border-neutral-200">
+                      {t.tag}
                     </span>
                   </div>
 
-                  <h3 className="text-base font-bold text-neutral-900 group-hover:text-emerald-700 transition-colors">
-                    {act.title}
-                  </h3>
-
-                  <p className="text-xs text-neutral-600 mt-2 leading-relaxed">
-                    {act.description}
-                  </p>
+                  <div>
+                    <h3 className="text-sm sm:text-base font-bold text-neutral-900 group-hover:text-emerald-950 transition-colors">
+                      {t.title}
+                    </h3>
+                    <p className="text-xs text-neutral-600 mt-1 leading-relaxed">
+                      {t.description}
+                    </p>
+                  </div>
                 </div>
 
-                <div className="mt-5 pt-3 border-t border-neutral-100">
-                  <button
-                    onClick={act.onClick}
-                    className="w-full py-2 px-3 rounded-lg bg-neutral-50 hover:bg-emerald-600 text-neutral-800 hover:text-white text-xs font-bold transition-all flex items-center justify-center gap-1.5"
-                  >
-                    <span>{act.buttonText}</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
-                  </button>
+                <div className="pt-2 border-t border-neutral-200/60 flex items-center justify-between text-xs font-bold text-emerald-700 group-hover:text-emerald-800">
+                  <span>{t.buttonText}</span>
+                  <ArrowRight className="w-3.5 h-3.5 transform group-hover:translate-x-1 transition-transform" />
                 </div>
               </div>
             );

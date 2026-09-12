@@ -104,3 +104,33 @@ class CostEstimateResponse(BaseModel):
     total_estimated_cost: float
     total_savings: float
     disclaimer: str
+
+
+class ComplianceCheckRequest(BaseModel):
+    product_name: str = Field(..., min_length=1, description="Product name or standard code")
+    category: Optional[str] = Field("General", description="Product category")
+    description: Optional[str] = Field("", description="Product description")
+    intended_use: Optional[str] = Field("", description="Intended market or application")
+
+
+class CompliancePhase(BaseModel):
+    phase: str
+    title: str
+    status: str  # "identified", "review_required", "verify", "not_provided"
+    description: str
+    details: List[str] = []
+
+
+class ComplianceCheckResponse(BaseModel):
+    product_name: str
+    primary_standard: Optional[StandardItem] = None
+    related_standards: List[StandardItem] = []
+    conformance_scheme: str
+    mandatory_qco: bool
+    qco_notification: Optional[str] = None
+    why_it_applies: str
+    phases: List[CompliancePhase] = []
+    missing_details_to_confirm: List[str] = []
+    official_verification_guidance: str
+    disclaimer: str
+

@@ -4,7 +4,7 @@ import {
   Calculator, ExternalLink, ShieldCheck, FileText, TrendingDown, Info 
 } from 'lucide-react';
 
-export default function StandardDetailModal({ standard, onClose }) {
+export default function StandardDetailModal({ standard, onClose, onAskBot, onCheckCompliance }) {
   const [enterpriseType, setEnterpriseType] = useState('micro');
 
   const feeCalculation = useMemo(() => {
@@ -291,14 +291,39 @@ export default function StandardDetailModal({ standard, onClose }) {
         </div>
 
         {/* Modal Footer */}
-        <div className="p-4 sm:p-5 border-t border-neutral-200 bg-neutral-50 rounded-b-2xl flex flex-col sm:flex-row items-center justify-between gap-3">
-          <p className="text-xs text-neutral-500 text-center sm:text-left">
-            Apply online on the official e-governance portal:
-          </p>
-          <div className="flex items-center gap-2 w-full sm:w-auto">
+        <div className="p-4 sm:p-5 border-t border-neutral-200 bg-neutral-50 rounded-b-2xl flex flex-col md:flex-row items-center justify-between gap-3">
+          <div className="flex flex-wrap items-center gap-2 w-full md:w-auto">
+            {onAskBot && (
+              <button
+                onClick={() => {
+                  onClose();
+                  onAskBot(`Explain the compliance requirements, testing parameters, and factory setup for ${isCode} (${title})`);
+                }}
+                className="px-3.5 py-2 text-xs font-bold text-emerald-800 bg-emerald-50 border border-emerald-200 rounded-xl hover:bg-emerald-100 transition-colors inline-flex items-center gap-1.5 shadow-2xs"
+              >
+                <Sparkles className="w-3.5 h-3.5 text-emerald-600" />
+                <span>Ask ManakBot About This Standard</span>
+              </button>
+            )}
+
+            {onCheckCompliance && (
+              <button
+                onClick={() => {
+                  onClose();
+                  onCheckCompliance(isCode);
+                }}
+                className="px-3.5 py-2 text-xs font-bold text-neutral-800 bg-white border border-neutral-300 rounded-xl hover:border-emerald-500 hover:text-emerald-900 transition-colors inline-flex items-center gap-1.5 shadow-2xs"
+              >
+                <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
+                <span>Run Compliance Check</span>
+              </button>
+            )}
+          </div>
+
+          <div className="flex items-center gap-2 w-full md:w-auto justify-end">
             <button
               onClick={onClose}
-              className="w-1/2 sm:w-auto px-4 py-2 text-xs font-semibold text-neutral-700 bg-white border border-neutral-300 rounded-lg hover:bg-neutral-50 transition-colors"
+              className="px-4 py-2 text-xs font-semibold text-neutral-700 bg-white border border-neutral-300 rounded-xl hover:bg-neutral-50 transition-colors"
             >
               Close
             </button>
@@ -306,9 +331,9 @@ export default function StandardDetailModal({ standard, onClose }) {
               href="https://www.manakonline.in"
               target="_blank"
               rel="noreferrer"
-              className="w-1/2 sm:w-auto inline-flex items-center justify-center gap-1.5 px-4 py-2 text-xs font-semibold text-white bg-emerald-600 rounded-lg hover:bg-emerald-700 transition-colors"
+              className="inline-flex items-center justify-center gap-1.5 px-4 py-2 text-xs font-semibold text-white bg-emerald-600 rounded-xl hover:bg-emerald-700 transition-colors shadow-2xs"
             >
-              <span>Manakonline Portal</span>
+              <span>e-BIS Portal</span>
               <ExternalLink className="w-3.5 h-3.5" />
             </a>
           </div>
