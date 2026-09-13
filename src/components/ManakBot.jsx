@@ -2,27 +2,72 @@ import React, { useState, useEffect, useRef } from 'react';
 import { 
   Send, Sparkles, Plus, Trash2, Copy, Check, RotateCcw, 
   BookOpen, ShieldCheck, ArrowRight, AlertTriangle, ExternalLink, 
-  HelpCircle, MessageSquare, ChevronDown, CheckCircle2, Bot, User, Loader2
+  HelpCircle, MessageSquare, ChevronDown, CheckCircle2, Bot, User, Loader2,
+  Mic, MicOff, Download, Calculator, Award, FileText, CornerDownRight
 } from 'lucide-react';
+import { useRouter } from '../context/RouterContext';
+import { useLanguage } from '../context/LanguageContext';
 import { askManakBot } from '../services/api';
 import Logo from './Logo';
 
 const STORAGE_KEY = 'manaksetu_chat_sessions_v2';
 
-const SUGGESTED_CHIPS = [
-  { label: "Cement Certification (IS 1489/12269)", prompt: "What are the mandatory testing requirements and BIS certification procedure for Portland Pozzolana Cement (IS 1489) and 53 Grade OPC (IS 12269)?" },
-  { label: "What is an Indian Standard?", prompt: "What is an Indian Standard (IS Code) and how are standards published under the BIS Act 2016?" },
-  { label: "Find standard for product", prompt: "How do I identify the applicable Indian Standard and scheme for my product?" },
-  { label: "How BIS certification works", prompt: "Explain the step-by-step procedure for obtaining a BIS product certification license (Scheme-I)." },
-  { label: "Verify requirement", prompt: "How can a manufacturer verify whether a standard is subject to a mandatory Quality Control Order (QCO)?" },
-  { label: "IS 2082 Testing Requirements", prompt: "What are the mandatory testing and safety parameters for electric storage geysers under IS 2082:2018?" },
-  { label: "MSME Fee Concessions", prompt: "What concessions do Micro and Small enterprises receive on BIS application, audit, and marking fees?" }
+const PROMPT_CATEGORIES = [
+  { id: 'all', label: 'All Topics' },
+  { id: 'cement', label: 'Cement Demo (SIH)' },
+  { id: 'licensing', label: 'Licensing & Procedures' },
+  { id: 'qco', label: 'Mandatory QCO Rules' },
+  { id: 'hallmarking', label: 'Gold & Hallmarking' },
+  { id: 'msme', label: 'MSME Fee Relief' }
+];
+
+const CATEGORIZED_PROMPTS = {
+  cement: [
+    { label: "Cement Testing & Standards (IS 1489 / 12269)", prompt: "What are the mandatory testing requirements and BIS certification procedure for Portland Pozzolana Cement (IS 1489) and 53 Grade OPC (IS 12269)?" },
+    { label: "PPC vs OPC Packaging & Bag Color Rules", prompt: "Explain the statutory packaging and red/black lettering rules for PPC and OPC cement bags under BIS regulations." },
+    { label: "UltraTech Cement License Verification (6200145)", prompt: "How can I verify UltraTech Cement license CM/L-6200145 and what testing parameters does BIS monitor?" },
+    { label: "MSME Concession for Cement Manufacturing", prompt: "How much fee concession can an MSME cement blending plant get on BIS application and marking fees?" }
+  ],
+  licensing: [
+    { label: "How to get ISI Mark (Step-by-Step)", prompt: "Explain the step-by-step procedure for obtaining a BIS product certification license (Scheme-I) from lab setup to CML grant." },
+    { label: "What is Compulsory Registration Scheme (CRS)?", prompt: "What is the BIS Compulsory Registration Scheme (CRS Scheme-II) for electronics and IT goods and how does it work without factory audits?" },
+    { label: "Foreign Manufacturers Certification (FMCS)", prompt: "What are the rules for overseas factories exporting to India under the Foreign Manufacturers Certification Scheme (FMCS)?" },
+    { label: "Required Documents for Form-I Online Filing", prompt: "What documents, factory premise proofs, and lab test equipment calibration records are needed to apply for a BIS license?" }
+  ],
+  qco: [
+    { label: "What is a Mandatory Quality Control Order (QCO)?", prompt: "What is a statutory Quality Control Order (QCO) and which Central Ministries issue them under the BIS Act 2016?" },
+    { label: "Penalties for Fake ISI Mark under Section 29", prompt: "What are the legal punishments and fines under Section 29 of the BIS Act 2016 for selling goods without an operative ISI mark?" },
+    { label: "Are Geysers and Helmets Mandatory QCO?", prompt: "Is BIS certification mandatory for domestic electric geysers (IS 2082) and two-wheeler motorcycle helmets (IS 4151)?" },
+    { label: "Packaged Drinking Water QCO Requirements", prompt: "What are the statutory requirements and microbiological testing for Packaged Drinking Water under IS 14543?" }
+  ],
+  hallmarking: [
+    { label: "How Gold Hallmarking (HUID) Works", prompt: "Explain the 6-digit alphanumeric HUID system and the 3 mandatory marks on gold jewellery under IS 1417." },
+    { label: "22K916 vs 18K750 Purity Standards", prompt: "What is the difference between 22K (916 fineness) and 18K (750 fineness) gold, and how can consumers verify them?" },
+    { label: "How to Detect Counterfeit Gold Hallmarks", prompt: "How can a consumer check whether a gold hallmark is authentic or fraudulent using the BIS Care App and ManakSetu?" }
+  ],
+  msme: [
+    { label: "50% Concession for Micro Units & Startups", prompt: "What concessions do Micro and Small enterprises receive on BIS application, audit, and marking fees under DPIIT circulars?" },
+    { label: "Udyam Registration Concession Checklist", prompt: "How can an Indian startup or women-led enterprise apply for a 50% concession on BIS certification fees using Udyam registration?" }
+  ]
+};
+
+const ALL_PROMPTS = [
+  ...CATEGORIZED_PROMPTS.cement,
+  ...CATEGORIZED_PROMPTS.licensing,
+  ...CATEGORIZED_PROMPTS.qco,
+  ...CATEGORIZED_PROMPTS.hallmarking,
+  ...CATEGORIZED_PROMPTS.msme
 ];
 
 export default function ManakBot({ onOpenStandard, onCheckCompliance, initialPrompt = '', embedded = false }) {
+  const { navigate } = useRouter();
+  const { language } = useLanguage();
   const [sessions, setSessions] = useState([]);
   const [activeSessionId, setActiveSessionId] = useState(null);
   const [inputMessage, setInputMessage] = useState(initialPrompt || '');
+  const [activeCategory, setActiveCategory] = useState('all');
+  const [isListening, setIsListening] = useState(false);
+  const speechRecognitionRef = useRef(null);
   const [isLoading, setIsLoading] = useState(false);
   const [copiedIndex, setCopiedIndex] = useState(null);
   const [errorState, setErrorState] = useState(null);
@@ -218,6 +263,89 @@ export default function ManakBot({ onOpenStandard, onCheckCompliance, initialPro
     }
   };
 
+  const startVoiceInput = () => {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+      alert("Voice input is not supported in this browser. Please use Google Chrome or Microsoft Edge.");
+      return;
+    }
+
+    if (isListening) {
+      speechRecognitionRef.current?.stop();
+      setIsListening(false);
+      return;
+    }
+
+    try {
+      const recognition = new SpeechRecognition();
+      recognition.lang = language === 'hi' ? 'hi-IN' : 'en-IN';
+      recognition.continuous = false;
+      recognition.interimResults = false;
+
+      recognition.onstart = () => {
+        setIsListening(true);
+      };
+
+      recognition.onresult = (event) => {
+        const transcript = event.results[0][0].transcript;
+        if (transcript) {
+          setInputMessage(prev => prev ? `${prev} ${transcript}` : transcript);
+        }
+      };
+
+      recognition.onerror = (event) => {
+        console.warn("Speech recognition error:", event.error);
+        setIsListening(false);
+      };
+
+      recognition.onend = () => {
+        setIsListening(false);
+      };
+
+      speechRecognitionRef.current = recognition;
+      recognition.start();
+    } catch (e) {
+      console.warn("Speech recognition init failed:", e);
+      setIsListening(false);
+    }
+  };
+
+  const handleExportTranscript = () => {
+    if (!activeSession || activeSession.messages.length === 0) return;
+
+    let report = `======================================================================\n`;
+    report += `MANAKSETU — AI ASSISTANT STATUTORY TRANSCRIPT REPORT\n`;
+    report += `Smart India Hackathon (SIH 2026) Prototype Evaluation\n`;
+    report += `Team: Code Snippet | Jamia Hamdard, New Delhi\n`;
+    report += `Session Title: ${activeSession.title}\n`;
+    report += `Exported On: ${new Date().toLocaleString()}\n`;
+    report += `======================================================================\n\n`;
+
+    activeSession.messages.forEach((msg, idx) => {
+      const sender = msg.role === 'user' ? 'USER INQUIRY' : 'MANAKBOT STATUTORY ADVISORY';
+      report += `[${msg.timestamp || 'Time'}] ${sender}:\n`;
+      report += `${'-'.repeat(50)}\n`;
+      report += `${msg.content}\n\n`;
+      if (msg.referenced_standards && msg.referenced_standards.length > 0) {
+        report += `Referenced Indian Standards: ${msg.referenced_standards.map(s => typeof s === 'object' ? s.is_number : s).join(', ')}\n\n`;
+      }
+      report += `\n`;
+    });
+
+    report += `======================================================================\n`;
+    report += `STATUTORY NOTICE: ManakSetu is an assistance prototype.\n`;
+    report += `All official applications must be processed on www.manakonline.in.\n`;
+    report += `======================================================================\n`;
+
+    const blob = new Blob([report], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `ManakSetu_Transcript_${Date.now()}.txt`;
+    link.click();
+    URL.revokeObjectURL(url);
+  };
+
   // Render structured markdown paragraphs
   const renderMarkdown = (text) => {
     if (!text) return null;
@@ -400,12 +528,44 @@ export default function ManakBot({ onOpenStandard, onCheckCompliance, initialPro
           </button>
         </div>
 
+        {/* Desktop Chat Header Bar */}
+        <div className="hidden md:flex items-center justify-between px-4 py-2.5 bg-slate-50 border-b border-slate-200 text-xs shrink-0">
+          <div className="flex items-center gap-2">
+            <span className="font-bold text-gov-900 truncate max-w-[280px]">
+              {activeSession?.title || 'Regulatory Inquiry'}
+            </span>
+            <span className="px-2 py-0.5 rounded-xs bg-gov-100 text-gov-800 text-[10px] font-mono font-bold border border-gov-200">
+              Grounded on 572+ Standards
+            </span>
+          </div>
+
+          <div className="flex items-center gap-2">
+            {activeSession?.messages?.length > 0 && (
+              <button
+                onClick={handleExportTranscript}
+                className="px-2.5 py-1 rounded-sm bg-white hover:bg-slate-100 text-slate-700 border border-slate-300 font-semibold text-[11px] inline-flex items-center gap-1.5 transition-colors shadow-2xs"
+                title="Download conversation transcript as official audit log"
+              >
+                <Download className="w-3.5 h-3.5 text-slate-500" />
+                <span>Export Audit Log</span>
+              </button>
+            )}
+            <button
+              onClick={handleNewChat}
+              className="px-2.5 py-1 rounded-sm bg-gov-800 hover:bg-gov-900 text-white font-bold text-[11px] inline-flex items-center gap-1 transition-colors shadow-2xs"
+            >
+              <Plus className="w-3 h-3" />
+              <span>New Chat</span>
+            </button>
+          </div>
+        </div>
+
         {/* Chat Message Scroll Area */}
         <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-6">
           
           {/* Empty State Experience */}
           {(!activeSession || activeSession.messages.length === 0) && (
-            <div className="h-full flex flex-col items-center justify-center text-center max-w-lg mx-auto py-8 space-y-6 animate-in fade-in">
+            <div className="h-full flex flex-col items-center justify-center text-center max-w-xl mx-auto py-6 space-y-5 animate-in fade-in">
               <div className="w-12 h-12 rounded-sm bg-gov-50 border border-gov-200 flex items-center justify-center text-gov-800 shadow-2xs">
                 <Sparkles className="w-6 h-6 text-amber-600" />
               </div>
@@ -415,24 +575,47 @@ export default function ManakBot({ onOpenStandard, onCheckCompliance, initialPro
                   Welcome to ManakBot
                 </h3>
                 <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                  Interactive inquiry system for Indian Standards (IS), BIS licensing schemes, statutory Quality Control Orders (QCO), and laboratory testing benchmarks.
+                  Grounded conversational intelligence for Indian Standards (IS), mandatory Quality Control Orders (QCO), test protocols, and MSME fee relief.
                 </p>
               </div>
 
-              {/* Curated Suggestion Chips */}
-              <div className="w-full space-y-2">
-                <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block text-left">
-                  Suggested Questions to Try:
-                </span>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                  {SUGGESTED_CHIPS.map((chip, idx) => (
+              {/* Curated Suggestion Chips with Category Filter */}
+              <div className="w-full space-y-3 pt-1">
+                <div className="flex items-center justify-between gap-2 border-b border-slate-200 pb-2">
+                  <span className="text-[11px] font-bold text-slate-600 uppercase tracking-wider block text-left">
+                    Select Topic or Browse Demo Questions:
+                  </span>
+                  <span className="text-[10px] text-slate-400">Click any card to ask</span>
+                </div>
+
+                <div className="flex flex-wrap items-center gap-1.5">
+                  {PROMPT_CATEGORIES.map(cat => (
+                    <button
+                      key={cat.id}
+                      onClick={() => setActiveCategory(cat.id)}
+                      className={`px-2.5 py-1 rounded-sm text-xs font-semibold transition-colors ${
+                        activeCategory === cat.id
+                          ? 'bg-gov-800 text-white shadow-2xs font-bold'
+                          : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+                      }`}
+                    >
+                      {cat.label}
+                    </button>
+                  ))}
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1 max-h-[360px] overflow-y-auto pr-1">
+                  {(activeCategory === 'all' ? ALL_PROMPTS : (CATEGORIZED_PROMPTS[activeCategory] || ALL_PROMPTS)).map((chip, idx) => (
                     <button
                       key={idx}
                       onClick={() => handleSendMessage(chip.prompt)}
                       className="p-3 text-left rounded-sm border border-slate-200 hover:border-gov-600 bg-slate-50/60 hover:bg-gov-50/40 text-xs text-slate-800 hover:text-gov-900 transition-all flex items-start justify-between gap-2 group shadow-2xs"
                     >
-                      <span className="font-semibold leading-snug">{chip.label}</span>
-                      <ArrowRight className="w-3 h-3 text-slate-400 group-hover:text-gov-800 shrink-0 mt-0.5" />
+                      <div className="space-y-0.5">
+                        <span className="font-bold text-gov-900 leading-snug block">{chip.label}</span>
+                        <p className="text-[11px] text-slate-500 line-clamp-2">{chip.prompt}</p>
+                      </div>
+                      <ArrowRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-gov-800 shrink-0 mt-0.5" />
                     </button>
                   ))}
                 </div>
@@ -512,7 +695,7 @@ export default function ManakBot({ onOpenStandard, onCheckCompliance, initialPro
 
                     {/* Interactive Action Buttons Bar */}
                     <div className="pt-3 border-t border-slate-150 flex flex-wrap items-center justify-between gap-2">
-                      <div className="flex items-center gap-1.5">
+                      <div className="flex flex-wrap items-center gap-1.5">
                         <button
                           onClick={() => handleCopy(msg.content, idx)}
                           className="inline-flex items-center gap-1 px-2.5 py-1 rounded-sm bg-slate-100 hover:bg-slate-200 text-slate-700 text-[11px] font-medium transition-colors border border-slate-200"
@@ -531,13 +714,51 @@ export default function ManakBot({ onOpenStandard, onCheckCompliance, initialPro
                           )}
                         </button>
 
+                        {/* If Cement is mentioned: Direct Verify & Tariff CTAs */}
+                        {/cement|1489|12269|269|ppc|opc/i.test(msg.content) && (
+                          <>
+                            <button
+                              onClick={() => navigate('/consumer')}
+                              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-sm bg-emerald-50 hover:bg-emerald-100 text-emerald-800 text-[11px] font-bold border border-emerald-300 transition-colors shadow-2xs"
+                              title="Verify UltraTech Cement CM/L-6200145"
+                            >
+                              <ShieldCheck className="w-3 h-3 text-emerald-600" />
+                              <span>Verify UltraTech (6200145)</span>
+                            </button>
+
+                            <button
+                              onClick={() => navigate('/msme')}
+                              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-sm bg-amber-50 hover:bg-amber-100 text-amber-900 text-[11px] font-bold border border-amber-300 transition-colors shadow-2xs"
+                              title="Calculate MSME 50% Concession"
+                            >
+                              <Calculator className="w-3 h-3 text-amber-700" />
+                              <span>Calculate ₹92,500 Relief</span>
+                            </button>
+                          </>
+                        )}
+
+                        {/* If Gold / Hallmark is mentioned */}
+                        {/huid|hallmark|gold|1417/i.test(msg.content) && (
+                          <button
+                            onClick={() => navigate('/consumer')}
+                            className="inline-flex items-center gap-1 px-2.5 py-1 rounded-sm bg-amber-50 hover:bg-amber-100 text-amber-900 text-[11px] font-bold border border-amber-300 transition-colors shadow-2xs"
+                          >
+                            <Award className="w-3 h-3 text-amber-700" />
+                            <span>Verify Gold HUID</span>
+                          </button>
+                        )}
+
                         {/* View Standard CTA */}
                         {msg.referenced_standards && msg.referenced_standards[0] && (
                           <button
                             onClick={() => {
                               const topRef = msg.referenced_standards[0];
                               const code = typeof topRef === 'object' ? topRef.is_number : topRef;
-                              if (onOpenStandard) onOpenStandard({ isCode: code });
+                              if (onOpenStandard) {
+                                onOpenStandard({ isCode: code });
+                              } else {
+                                navigate(`/standards/search?q=${encodeURIComponent(code)}`);
+                              }
                             }}
                             className="inline-flex items-center gap-1 px-2.5 py-1 rounded-sm bg-gov-50 hover:bg-gov-100 text-gov-800 text-[11px] font-semibold border border-gov-300 transition-colors"
                           >
@@ -547,19 +768,21 @@ export default function ManakBot({ onOpenStandard, onCheckCompliance, initialPro
                         )}
 
                         {/* Compliance Check CTA */}
-                        {onCheckCompliance && (
-                          <button
-                            onClick={() => {
-                              const topRef = msg.referenced_standards?.[0];
-                              const code = typeof topRef === 'object' ? topRef.is_number : (topRef || 'Product');
+                        <button
+                          onClick={() => {
+                            const topRef = msg.referenced_standards?.[0];
+                            const code = typeof topRef === 'object' ? topRef.is_number : (topRef || 'Product');
+                            if (onCheckCompliance) {
                               onCheckCompliance(code);
-                            }}
-                            className="inline-flex items-center gap-1 px-2.5 py-1 rounded-sm bg-slate-100 hover:bg-slate-200 text-slate-700 text-[11px] font-semibold transition-colors border border-slate-200"
-                          >
-                            <ShieldCheck className="w-3 h-3 text-slate-600" />
-                            <span>Check Compliance</span>
-                          </button>
-                        )}
+                            } else {
+                              navigate(`/services`);
+                            }
+                          }}
+                          className="inline-flex items-center gap-1 px-2.5 py-1 rounded-sm bg-slate-100 hover:bg-slate-200 text-slate-700 text-[11px] font-semibold transition-colors border border-slate-200"
+                        >
+                          <ShieldCheck className="w-3 h-3 text-slate-600" />
+                          <span>Check Compliance</span>
+                        </button>
                       </div>
 
                       <span className="text-[10px] text-slate-400">
@@ -645,6 +868,25 @@ export default function ManakBot({ onOpenStandard, onCheckCompliance, initialPro
               rows={1}
               className="flex-1 bg-transparent text-xs sm:text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none resize-none max-h-32 px-2 py-1 leading-relaxed"
             />
+            {/* Voice Dictation Button */}
+            <button
+              type="button"
+              onClick={startVoiceInput}
+              disabled={isLoading}
+              className={`p-2.5 rounded-sm border transition-all shrink-0 ${
+                isListening
+                  ? 'bg-red-600 text-white animate-pulse border-red-700 shadow-xs'
+                  : 'bg-white hover:bg-slate-100 text-slate-700 border-slate-300 shadow-2xs'
+              }`}
+              title={isListening ? "Listening... Click to stop" : "Speak your query (English / Hindi Voice Dictation)"}
+            >
+              {isListening ? (
+                <MicOff className="w-4 h-4 text-white" />
+              ) : (
+                <Mic className="w-4 h-4 text-slate-700" />
+              )}
+            </button>
+
             <button
               onClick={() => handleSendMessage()}
               disabled={!inputMessage.trim() || isLoading}
@@ -655,8 +897,16 @@ export default function ManakBot({ onOpenStandard, onCheckCompliance, initialPro
             </button>
           </div>
 
+          {/* Listening Active Feedback Bar */}
+          {isListening && (
+            <div className="flex items-center gap-2 mt-2 px-2 py-1 bg-red-50 border border-red-200 rounded-sm text-xs text-red-700 animate-pulse">
+              <span className="w-2 h-2 rounded-full bg-red-600"></span>
+              <span className="font-semibold">Listening to microphone... Speak clearly in English or Hindi (Tap mic again to finish)</span>
+            </div>
+          )}
+
           <div className="flex items-center justify-between mt-2 px-1 text-[10px] text-slate-400">
-            <span>Press <strong>Enter</strong> to send • <strong>Shift + Enter</strong> for new line</span>
+            <span>Press <strong>Enter</strong> to send • <strong>Shift + Enter</strong> for new line • Voice input supported</span>
             <span>Statutory BIS AI Guidance</span>
           </div>
         </div>

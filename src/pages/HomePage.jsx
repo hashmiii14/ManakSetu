@@ -416,16 +416,16 @@ export default function HomePage({ onOpenStandard, onOpenReport }) {
 
                     <div>
                       <h3 className="text-xs font-bold text-gov-900 group-hover:text-gov-700 transition-colors line-clamp-1">
-                        {service.title}
+                        {t(service.title)}
                       </h3>
                       <p className="text-[11px] text-slate-600 mt-1 line-clamp-2 leading-relaxed">
-                        {service.desc}
+                        {t(service.desc)}
                       </p>
                     </div>
                   </div>
 
                   <div className="pt-2 mt-2 border-t border-slate-100 flex items-center justify-between text-[11px] font-semibold text-gov-800">
-                    <span>{service.isExternal ? 'Official Portal' : 'View Details'}</span>
+                    <span>{service.isExternal ? t('Official Portal') : t('View Details')}</span>
                     {service.isExternal ? (
                       <ExternalLink className="w-3 h-3 text-slate-400" />
                     ) : (

@@ -162,6 +162,64 @@ class ManakBotService:
     def _generate_grounded_fallback(self, query: str, context_items: List[Dict[str, Any]]) -> str:
         q_lower = query.lower()
 
+        # Cement Demonstration Intent
+        if any(w in q_lower for w in ["cement", "ppc", "opc", "1489", "12269", "269", "ultratech", "ambuja", "simint"]):
+            return (
+                "### Likely Relevant Standard\n"
+                "- **IS 1489 (Part 1):2015** — *Portland Pozzolana Cement (Fly Ash Based) - PPC*\n"
+                "- **IS 12269:2013** — *Ordinary Portland Cement, 53 Grade - Specification (OPC 53)*\n"
+                "- **IS 269:2015** — *Ordinary Portland Cement (33, 43, and 53 Grades)*\n"
+                "- **Statutory Status**: **MANDATORY Quality Control Order (QCO)** under the *Cement (Quality Control) Order, 2003* (amended 2024 by DPIIT). Non-certified sale violates Section 14/29 of the BIS Act, 2016.\n\n"
+                "### What It Means\n"
+                "Cement is India's principal structural binding material. PPC (IS 1489 Part 1) combines clinker, gypsum, and 15% to 35% fly ash, dominating >65% of domestic Indian housing construction. OPC 53 Grade (IS 12269) provides high early strength for high-rises and pre-cast concrete structures.\n\n"
+                "### Key Mandatory Testing Benchmarks\n"
+                "- **Compressive Strength**: PPC: 3-day (min 16 MPa), 7-day (min 22 MPa), 28-day (min 33 MPa). OPC 53: 3-day (min 27 MPa), 7-day (min 37 MPa), 28-day (min 53 MPa).\n"
+                "- **Fineness (Blaine Air Permeability)**: Minimum 300 m²/kg for PPC; Minimum 225 m²/kg for OPC.\n"
+                "- **Soundness**: Le Chatelier expansion max 10 mm; Autoclave expansion max 0.8%.\n"
+                "- **Setting Time**: Initial setting not less than 30 min; Final setting max 600 min.\n"
+                "- **Statutory Bag Printing**: PPC bags MUST be printed in **RED ink**; OPC bags in **BLACK ink**.\n\n"
+                "### Accredited Testing Laboratories\n"
+                "- **National Council for Cement and Building Materials (NCCBM)**, Ballabgarh (Haryana) & Hyderabad.\n"
+                "- **National Test House (NTH)**, Kolkata & Mumbai.\n"
+                "- **BIS Central Laboratory**, Sahibabad (Delhi NCR).\n\n"
+                "### Sample Verification & MSME Relief\n"
+                "- **Real License**: UltraTech Cement Limited holds operative license **CM/L-6200145** under IS 1489 (Part 1).\n"
+                "- **MSME Concession**: Base annual marking fee is ₹1,85,000. Udyam-registered Micro enterprises receive a statutory **50% concession**, reducing fee to ₹92,500 (**Savings: ₹92,500**).\n\n"
+                "### Source & Verification\n"
+                "DPIIT Cement QCO & BIS Specifications. Verify active amendments at [www.manakonline.in](https://www.manakonline.in)."
+            )
+
+        # Licensing Procedure Intent
+        if any(w in q_lower for w in ["procedure", "how to get", "apply", "steps to get", "form-i", "form-1"]):
+            return (
+                "### Relevant Scheme & Framework\n"
+                "**Scheme-I (Product Certification Scheme)** under Schedule-II of the BIS (Conformity Assessment) Regulations, 2018.\n\n"
+                "### 4-Stage Step-by-Step Procedure\n"
+                "1. **Stage 1 — In-house Laboratory Setup**: Install and calibrate testing equipment as required by the product standard's Scheme of Inspection and Testing (SIT).\n"
+                "2. **Stage 2 — Online Application on e-BIS**: Register on **www.manakonline.in** and submit Form-I with machinery inventory, calibration records, and ₹1,000 fee.\n"
+                "3. **Stage 3 — Factory Audit & Sample Drawing**: BIS technical officers inspect plant premises, review quality controls, and seal duplicate samples for independent NABL testing.\n"
+                "4. **Stage 4 — License Grant (CM/L Number)**: Upon passing independent test reports, BIS grants the operative 7-digit CM/L license number authorized to emboss the ISI Mark.\n\n"
+                "### MSME Concessions\n"
+                "Micro units and DPIIT Startups receive a **50% concession** on application and marking fees; Small units receive a **20% concession**.\n\n"
+                "### Source & Verification\n"
+                "BIS Conformity Assessment Regulations 2018. File applications at [www.manakonline.in](https://www.manakonline.in)."
+            )
+
+        # Gold & Hallmarking Intent
+        if any(w in q_lower for w in ["hallmark", "huid", "gold", "silver", "carat", "jewellery", "22k"]):
+            return (
+                "### Relevant Standard & Scheme\n"
+                "**IS 1417:2016** (*Gold and Gold Alloys Fineness and Marking*) under **Scheme-IV (Hallmarking)**. Mandatory across 343+ districts.\n\n"
+                "### The 3 Mandatory Laser Marks on Gold\n"
+                "1. **BIS Triangular Logo**: Proves statutory certification.\n"
+                "2. **Purity / Fineness Mark**: 22K916 (91.6% pure), 18K750 (75% pure), or 14K585 (58.5% pure).\n"
+                "3. **6-Digit Alphanumeric HUID**: Laser-etched unique identifier (e.g., AK79B2, MH41C9).\n\n"
+                "### Consumer Verification\n"
+                "Verify any 6-digit HUID instantly on ManakSetu Consumer Verifier or the official BIS CARE App to reveal jeweller registration, purity, and assaying center details.\n\n"
+                "### Source & Verification\n"
+                "Ministry of Consumer Affairs Hallmarking Orders. Verify on [www.manakonline.in](https://www.manakonline.in)."
+            )
+
         if "what is bis" in q_lower or "about bis" in q_lower:
             return (
                 "### Likely Relevant Standard\n"

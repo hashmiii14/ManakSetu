@@ -5,8 +5,10 @@ import {
   QrCode, ExternalLink, PhoneCall, Send, FileWarning, CheckCheck, X
 } from 'lucide-react';
 import { verifyIdentifier } from '../services/api';
+import { useLanguage } from '../context/LanguageContext';
 
 export default function ConsumerVerifier({ onOpenReport }) {
+  const { t } = useLanguage();
   const [activeTab, setActiveTab] = useState('gold'); // 'gold' | 'isi'
   
   // HUID State

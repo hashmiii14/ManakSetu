@@ -1,13 +1,10 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useRef } from 'react';
+import { HINDI_DICTIONARY, HINDI_LOWER_MAP } from '../translations/hindiDictionary';
 
 const LanguageContext = createContext();
 
 const TRANSLATIONS = {
   en: {
-    // Top Bar
-    'top.gov': 'भारत सरकार | Government of India',
-    'top.ministry': 'Ministry of Consumer Affairs, Food & Public Distribution',
-    
     // Navigation
     'nav.home': 'Home',
     'nav.standards': 'Standards',
@@ -29,11 +26,13 @@ const TRANSLATIONS = {
     'btn.calculate': 'Calculate Tariff',
     'btn.view_specs': 'View Full Standard & Roadmap',
 
-    // Search Section
-    'hero.badge': 'AI-Powered Standards & Statutory Compliance Portal',
-    'hero.title': 'Unified National Standards & Certification Copilot',
-    'hero.subtitle': 'Assisting Indian manufacturers, MSMEs, and citizens with instant IS code discovery, mandatory QCO rules, and license authenticity verification.',
-    'search.placeholder': 'Search by IS number, product name, or keyword (e.g., IS 12269, cement, geyser, helmet)...',
+    // Top Bar & Hero
+    'top.gov': 'भारत सरकार | Government of India',
+    'top.ministry': 'Ministry of Consumer Affairs, Food & Public Distribution',
+    'hero.badge': 'Public Service Navigation Portal',
+    'hero.title': 'Find Indian Standards and BIS Services',
+    'hero.subtitle': 'National assistance portal for Indian enterprises, manufacturers, exporters, and citizens to discover Indian Standards (IS Codes), verify statutory Quality Control Orders (QCOs), and navigate Bureau of Indian Standards (BIS) conformity assessment procedures.',
+    'search.placeholder': 'Search by IS Number, product, keyword or standard (e.g., IS 2082, geyser, cement, helmet)...',
     'search.filter_all': 'All Sectors',
     'search.filter_mandatory': 'Mandatory QCO Only',
     'search.quick_searches': 'Popular Searches:',
@@ -55,10 +54,6 @@ const TRANSLATIONS = {
     'footer.rights': 'Smart India Hackathon 2026 | Jamia Hamdard, New Delhi | Team Code Snippet'
   },
   hi: {
-    // Top Bar
-    'top.gov': 'भारत सरकार | Government of India',
-    'top.ministry': 'उपभोक्ता मामले, खाद्य और सार्वजनिक वितरण मंत्रालय',
-
     // Navigation
     'nav.home': 'मुख्य पृष्ठ',
     'nav.standards': 'मानक निर्देशिका',
@@ -77,14 +72,16 @@ const TRANSLATIONS = {
     'btn.report': 'उल्लंघन की रिपोर्ट करें',
     'btn.close': 'बंद करें',
     'btn.apply_official': 'आधिकारिक मानक ऑनलाइन पर आवेदन करें',
-    'btn.calculate': 'लागत की गणना करें',
+    'btn.calculate': 'लागत एवं छूट की गणना करें',
     'btn.view_specs': 'मानक विवरण एवं रोडमैप देखें',
 
-    // Search Section
-    'hero.badge': 'एआई-संचालित भारतीय मानक एवं वैधानिक अनुपालन पोर्टल',
-    'hero.title': 'एकीकृत राष्ट्रीय मानक एवं प्रमाणन सेतु',
-    'hero.subtitle': 'भारतीय निर्माताओं, सूक्ष्म-लघु उद्योगों (MSMEs) और नागरिकों को आईएस कोड खोज, अनिवार्य गुणवत्ता आदेश (QCO) और लाइसेंस सत्यापन में त्वरित सहायता।',
-    'search.placeholder': 'आईएस संख्या, उत्पाद या कीवर्ड खोजें (उदा. IS 12269, सीमेंट, गीजर, हेलमेट)...',
+    // Top Bar & Hero
+    'top.gov': 'भारत सरकार | Government of India',
+    'top.ministry': 'उपभोक्ता मामले, खाद्य और सार्वजनिक वितरण मंत्रालय',
+    'hero.badge': 'सार्वजनिक सेवा मार्गदर्शन पोर्टल',
+    'hero.title': 'भारतीय मानक एवं बीआईएस सेवाएं खोजें',
+    'hero.subtitle': 'भारतीय उद्यमों, निर्माताओं, निर्यातकों और नागरिकों के लिए भारतीय मानकों (IS कोड), अनिवार्य गुणवत्ता नियंत्रण आदेशों (QCO) की खोज और बीआईएस प्रमाणन प्रक्रियाओं में सहायता हेतु राष्ट्रीय पोर्टल।',
+    'search.placeholder': 'आईएस संख्या, उत्पाद या कीवर्ड से खोजें (उदा. IS 2082, गीजर, सीमेंट, हेलमेट)...',
     'search.filter_all': 'सभी क्षेत्र',
     'search.filter_mandatory': 'केवल अनिवार्य QCO',
     'search.quick_searches': 'लोकप्रिय खोजें:',
@@ -102,7 +99,7 @@ const TRANSLATIONS = {
     'msme.subtitle': 'सूक्ष्म उद्यमों (Micro) एवं डीपीआईआईटी मान्यता प्राप्त स्टार्टअप्स को बीआईएस आवेदन और अंकन शुल्क पर 50% की वैधानिक छूट।',
 
     // Footer
-    'footer.disclaimer': 'मानक सेतु स्मार्ट इंडिया हैकाथॉन (SIH 2026) के लिए विकसित एक स्वतंत्र निर्णय-समर्थन प्रोटोटाइप है। आधिकारिक लाइसेंस आवेदन www.manakonline.in पर किए जाने चाहिए।',
+    'footer.disclaimer': 'मानक सेतु स्मार्ट इंडिया हैकाथॉन (SIH 2026) के लिए विकसित एक स्वतंत्र निर्णय-समर्थन प्रोटोटाइप है। सभी आधिकारिक लाइसेंस आवेदन www.manakonline.in पर किए जाने चाहिए।',
     'footer.rights': 'स्मार्ट इंडिया हैकाथॉन 2026 | जामिया हमदर्द, नई दिल्ली | टीम कोड स्निपेट'
   }
 };
@@ -132,15 +129,133 @@ export function LanguageProvider({ children }) {
     setLanguage(language === 'en' ? 'hi' : 'en');
   };
 
-  const t = (key, fallback = '') => {
-    const dict = TRANSLATIONS[language] || TRANSLATIONS.en;
-    if (dict[key]) return dict[key];
-    if (TRANSLATIONS.en[key]) return TRANSLATIONS.en[key];
-    return fallback || key;
+  // Smart bilingual translator
+  const t = (keyOrText, fallback = '') => {
+    if (language === 'en') {
+      return fallback || TRANSLATIONS.en[keyOrText] || keyOrText;
+    }
+
+    // Language is 'hi':
+    // 1. Direct key match in TRANSLATIONS.hi
+    if (TRANSLATIONS.hi[keyOrText]) return TRANSLATIONS.hi[keyOrText];
+
+    // 2. Direct exact match in HINDI_DICTIONARY
+    const candidate = fallback || keyOrText;
+    if (HINDI_DICTIONARY[candidate]) return HINDI_DICTIONARY[candidate];
+
+    const trimmed = String(candidate).trim();
+    if (HINDI_DICTIONARY[trimmed]) return HINDI_DICTIONARY[trimmed];
+
+    // 3. Lowercase match
+    const lower = trimmed.toLowerCase();
+    if (HINDI_LOWER_MAP[lower]) return HINDI_LOWER_MAP[lower];
+
+    // 4. If keyOrText itself was a phrase in dictionary
+    if (HINDI_DICTIONARY[keyOrText]) return HINDI_DICTIONARY[keyOrText];
+    if (HINDI_LOWER_MAP[String(keyOrText).trim().toLowerCase()]) {
+      return HINDI_LOWER_MAP[String(keyOrText).trim().toLowerCase()];
+    }
+
+    return fallback || keyOrText;
   };
 
+  // Global DOM Text Observer to guarantee 100% full-page Hindi conversion
   useEffect(() => {
     document.documentElement.lang = language;
+    if (typeof window === 'undefined') return;
+
+    const originalTexts = new WeakMap();
+
+    function translateTextNode(node) {
+      if (node.nodeType === Node.TEXT_NODE) {
+        const text = node.nodeValue;
+        if (!text || !text.trim()) return;
+        const trimmed = text.trim();
+
+        // Skip pure numbers, codes, dates
+        if (/^(IS\s*\d+|CM\/L[-\s]*\d+|\d+[\d\s,.\/:-]*)$/i.test(trimmed)) return;
+
+        let match = HINDI_DICTIONARY[trimmed] || HINDI_LOWER_MAP[trimmed.toLowerCase()];
+        if (match) {
+          if (!originalTexts.has(node)) {
+            originalTexts.set(node, text);
+          }
+          const leading = text.match(/^\s*/)[0];
+          const trailing = text.match(/\s*$/)[0];
+          node.nodeValue = leading + match + trailing;
+        }
+      } else if (node.nodeType === Node.ELEMENT_NODE) {
+        const tag = node.tagName.toLowerCase();
+        if (tag === 'script' || tag === 'style' || tag === 'code' || tag === 'pre') return;
+
+        // Translate placeholders
+        if (node.hasAttribute('placeholder')) {
+          const ph = node.getAttribute('placeholder');
+          if (ph) {
+            const trPh = HINDI_DICTIONARY[ph.trim()] || HINDI_LOWER_MAP[ph.trim().toLowerCase()];
+            if (trPh) {
+              if (!node.hasAttribute('data-orig-ph')) {
+                node.setAttribute('data-orig-ph', ph);
+              }
+              node.setAttribute('placeholder', trPh);
+            }
+          }
+        }
+
+        // Translate titles / tooltips
+        if (node.hasAttribute('title')) {
+          const tit = node.getAttribute('title');
+          if (tit) {
+            const trTit = HINDI_DICTIONARY[tit.trim()] || HINDI_LOWER_MAP[tit.trim().toLowerCase()];
+            if (trTit) {
+              if (!node.hasAttribute('data-orig-title')) {
+                node.setAttribute('data-orig-title', tit);
+              }
+              node.setAttribute('title', trTit);
+            }
+          }
+        }
+
+        for (let i = 0; i < node.childNodes.length; i++) {
+          translateTextNode(node.childNodes[i]);
+        }
+      }
+    }
+
+    function restoreTextNode(node) {
+      if (node.nodeType === Node.TEXT_NODE) {
+        if (originalTexts.has(node)) {
+          node.nodeValue = originalTexts.get(node);
+        }
+      } else if (node.nodeType === Node.ELEMENT_NODE) {
+        if (node.hasAttribute('data-orig-ph')) {
+          node.setAttribute('placeholder', node.getAttribute('data-orig-ph'));
+          node.removeAttribute('data-orig-ph');
+        }
+        if (node.hasAttribute('data-orig-title')) {
+          node.setAttribute('title', node.getAttribute('data-orig-title'));
+          node.removeAttribute('data-orig-title');
+        }
+        for (let i = 0; i < node.childNodes.length; i++) {
+          restoreTextNode(node.childNodes[i]);
+        }
+      }
+    }
+
+    if (language === 'hi') {
+      translateTextNode(document.body);
+      const observer = new MutationObserver((mutations) => {
+        for (const mut of mutations) {
+          for (let i = 0; i < mut.addedNodes.length; i++) {
+            translateTextNode(mut.addedNodes[i]);
+          }
+        }
+      });
+      observer.observe(document.body, { childList: true, subtree: true });
+      return () => observer.disconnect();
+    } else {
+      restoreTextNode(document.body);
+    }
   }, [language]);
 
   return (

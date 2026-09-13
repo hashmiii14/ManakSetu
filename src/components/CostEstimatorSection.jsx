@@ -4,9 +4,11 @@ import {
   CheckCircle2, FlaskConical, MapPin, Sparkles, Building2, Award, FileCheck 
 } from 'lucide-react';
 import { estimateCost } from '../services/api';
+import { useLanguage } from '../context/LanguageContext';
 import LabLocator from './LabLocator';
 
 export default function CostEstimatorSection({ embedded = false }) {
+  const { t } = useLanguage();
   const [activeTab, setActiveTab] = useState('fees'); // 'fees' | 'labs'
 
   const popularStandards = [
