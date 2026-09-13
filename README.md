@@ -1,11 +1,14 @@
 # ManakSetu
-### AI-Powered BIS Standards Recommendation, Compliance & Consumer Vigilance Copilot
+### AI-Powered BIS Standards Recommendation, Compliance & Consumer Vigilance Portal
 
 **Smart India Hackathon (SIH 2026)** | **Problem Statement ID:** `26107`  
 **Ministry:** Ministry of Consumer Affairs, Food & Public Distribution  
 **Department:** Department of Consumer Affairs (DoCA) & Bureau of Indian Standards (BIS)  
 **Institution:** Jamia Hamdard, New Delhi  
-**Team:** SnippetSquad  
+**Team:** Code Snippet  
+**Live Application:** [https://manaksetu.vercel.app/](https://manaksetu.vercel.app/)  
+**Live Backend API:** [https://backend-nu-nine-48.vercel.app/api](https://backend-nu-nine-48.vercel.app/api)  
+**Official Visual Reference:** [https://www.manakonline.in/MANAK/](https://www.manakonline.in/MANAK/)  
 
 ---
 
@@ -174,7 +177,7 @@ cd ManakSetu
 
 ---
 
-## 📡 Key API Endpoints
+## Key API Endpoints
 
 | Method | Endpoint | Description | Sample Query / Body |
 | :--- | :--- | :--- | :--- |
@@ -232,4 +235,4 @@ In accordance with responsible engineering practices and hackathon evaluation cr
 
 ---
 
-**Developed with ❤️ by Team SnippetSquad | Jamia Hamdard, New Delhi**
+**Developed by Team Code Snippet | Jamia Hamdard, New Delhi**
