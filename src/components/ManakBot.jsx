@@ -230,9 +230,9 @@ export default function ManakBot({ onOpenStandard, onCheckCompliance, initialPro
           if (sec.startsWith('### ')) {
             const heading = sec.replace('### ', '');
             return (
-              <div key={sIdx} className="pt-2 border-b border-neutral-100 pb-1.5 first:pt-0">
-                <h3 className="font-bold text-neutral-900 text-sm flex items-center gap-1.5">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
+              <div key={sIdx} className="pt-2 border-b border-slate-200 pb-1.5 first:pt-0">
+                <h3 className="font-bold text-gov-900 text-sm flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-xs bg-gov-800"></span>
                   <span>{heading}</span>
                 </h3>
               </div>
@@ -247,13 +247,13 @@ export default function ManakBot({ onOpenStandard, onCheckCompliance, initialPro
                 {items.map((it, iIdx) => {
                   const cleaned = it.replace(/^[-*]\s+/, '');
                   return (
-                    <li key={iIdx} className="flex items-start gap-2 text-neutral-700">
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 mt-1.5 shrink-0" />
+                    <li key={iIdx} className="flex items-start gap-2 text-slate-700">
+                      <span className="w-1.5 h-1.5 rounded-xs bg-gov-800 mt-1.5 shrink-0" />
                       <span dangerouslySetInnerHTML={{ 
                         __html: cleaned
-                          .replace(/\*\*(.*?)\*\*/g, '<strong class="font-bold text-neutral-900">$1</strong>')
-                          .replace(/\*(.*?)\*/g, '<em class="italic text-neutral-800">$1</em>')
-                          .replace(/`(IS\s*\d+[^`]*)`/g, '<code class="px-1.5 py-0.5 rounded bg-emerald-50 text-emerald-800 font-mono text-[11px] font-bold border border-emerald-200">$1</code>')
+                          .replace(/\*\*(.*?)\*\*/g, '<strong class="font-bold text-slate-900">$1</strong>')
+                          .replace(/\*(.*?)\*/g, '<em class="italic text-slate-800">$1</em>')
+                          .replace(/`(IS\s*\d+[^`]*)`/g, '<code class="px-1.5 py-0.5 rounded-sm bg-gov-50 text-gov-900 font-mono text-[11px] font-bold border border-gov-300">$1</code>')
                       }} />
                     </li>
                   );
@@ -272,15 +272,15 @@ export default function ManakBot({ onOpenStandard, onCheckCompliance, initialPro
                   const num = numMatch ? numMatch[1] : (iIdx + 1);
                   const body = numMatch ? numMatch[2] : it;
                   return (
-                    <li key={iIdx} className="flex items-start gap-2.5 text-neutral-700">
-                      <span className="w-5 h-5 rounded-full bg-emerald-50 text-emerald-800 font-bold text-[10px] flex items-center justify-center shrink-0 mt-0.5 border border-emerald-200">
+                    <li key={iIdx} className="flex items-start gap-2.5 text-slate-700">
+                      <span className="w-5 h-5 rounded-sm bg-gov-100 text-gov-800 font-bold text-[10px] flex items-center justify-center shrink-0 mt-0.5 border border-gov-300">
                         {num}
                       </span>
                       <span dangerouslySetInnerHTML={{ 
                         __html: body
-                          .replace(/\*\*(.*?)\*\*/g, '<strong class="font-bold text-neutral-900">$1</strong>')
-                          .replace(/\*(.*?)\*/g, '<em class="italic text-neutral-800">$1</em>')
-                          .replace(/`(IS\s*\d+[^`]*)`/g, '<code class="px-1.5 py-0.5 rounded bg-emerald-50 text-emerald-800 font-mono text-[11px] font-bold border border-emerald-200">$1</code>')
+                          .replace(/\*\*(.*?)\*\*/g, '<strong class="font-bold text-slate-900">$1</strong>')
+                          .replace(/\*(.*?)\*/g, '<em class="italic text-slate-800">$1</em>')
+                          .replace(/`(IS\s*\d+[^`]*)`/g, '<code class="px-1.5 py-0.5 rounded-sm bg-gov-50 text-gov-900 font-mono text-[11px] font-bold border border-gov-300">$1</code>')
                       }} />
                     </li>
                   );
@@ -414,7 +414,7 @@ export default function ManakBot({ onOpenStandard, onCheckCompliance, initialPro
                   Welcome to ManakBot
                 </h3>
                 <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                  Your intelligent assistant for Indian Standards, BIS licensing, statutory QCO rules, and manufacturing compliance.
+                  Interactive inquiry system for Indian Standards (IS), BIS licensing schemes, statutory Quality Control Orders (QCO), and laboratory testing benchmarks.
                 </p>
               </div>
 

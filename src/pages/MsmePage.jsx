@@ -39,10 +39,10 @@ export default function MsmePage() {
                   href="https://udyamregistration.gov.in/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="px-3.5 py-2 rounded-lg bg-gov-800 hover:bg-gov-900 text-white font-bold text-xs inline-flex items-center gap-1.5 shadow-gov-sm transition-colors"
+                  className="px-3.5 py-2 rounded-sm bg-gov-800 hover:bg-gov-900 text-white font-bold text-xs inline-flex items-center gap-1.5 shadow-xs transition-colors"
                 >
                   <span>Verify Udyam Portal</span>
-                  <ExternalLink className="w-3.5 h-3.5 text-saffron-400" />
+                  <ExternalLink className="w-3.5 h-3.5 text-amber-400" />
                 </a>
               </div>
             </div>
@@ -92,7 +92,7 @@ export default function MsmePage() {
                   GeM Tender Eligibility
                 </h3>
                 <p className="text-xs text-slate-600 mt-1 leading-relaxed">
-                  A valid BIS CM/L license unlocks preference in Government e-Marketplace (GeM) tenders under the Public Procurement (Preference to Make in India) Order.
+                  A valid BIS CM/L license provides statutory preference in Government e-Marketplace (GeM) tenders under the Public Procurement (Preference to Make in India) Order.
                 </p>
               </div>
             </div>
@@ -158,7 +158,7 @@ export default function MsmePage() {
                 onClick={() => navigate('/manakbot?prompt=How do I comply with BIS standards for selling on the GeM portal?')}
                 className="text-gov-800 font-bold hover:text-gov-950 flex items-center gap-1"
               >
-                <span>Ask ManakBot AI</span>
+                <span>Consult ManakBot on GeM Compliance</span>
                 <ArrowRight className="w-3.5 h-3.5" />
               </button>
             </div>

@@ -30,24 +30,24 @@ export default class ErrorBoundary extends React.Component {
       }
 
       return (
-        <div className="min-h-[300px] flex items-center justify-center p-6 bg-neutral-50 border border-neutral-200 rounded-2xl m-4 text-left">
+        <div className="min-h-[300px] flex items-center justify-center p-6 bg-slate-50 border border-slate-300 rounded-sm m-4 text-left">
           <div className="max-w-md w-full space-y-4">
-            <div className="flex items-center gap-3 text-red-600">
-              <div className="p-2.5 bg-red-100 rounded-xl">
-                <AlertTriangle className="w-6 h-6 text-red-600" />
+            <div className="flex items-center gap-3 text-red-700">
+              <div className="p-2 bg-red-100 border border-red-200 rounded-sm">
+                <AlertTriangle className="w-5 h-5 text-red-700" />
               </div>
               <div>
-                <h3 className="text-base font-bold text-neutral-900">
-                  Something went wrong in this section
+                <h3 className="text-sm font-bold text-slate-900">
+                  Section Display Exception
                 </h3>
-                <p className="text-xs text-neutral-500">
-                  ManakSetu recovered safely to prevent a blank screen.
+                <p className="text-xs text-slate-500">
+                  ManakSetu recovered safely to maintain portal availability.
                 </p>
               </div>
             </div>
 
             {this.state.error && (
-              <div className="p-3 bg-white rounded-xl border border-neutral-200 text-xs text-neutral-700 font-mono overflow-auto max-h-32">
+              <div className="p-3 bg-white rounded-sm border border-slate-300 text-xs text-slate-700 font-mono overflow-auto max-h-32">
                 {this.state.error.message || String(this.state.error)}
               </div>
             )}
@@ -55,15 +55,15 @@ export default class ErrorBoundary extends React.Component {
             <div className="flex items-center gap-2 pt-2">
               <button
                 onClick={this.handleReset}
-                className="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold inline-flex items-center gap-1.5 transition-colors shadow-xs"
+                className="px-3.5 py-1.5 rounded-sm bg-gov-800 hover:bg-gov-900 text-white text-xs font-bold inline-flex items-center gap-1.5 transition-colors shadow-2xs"
               >
                 <RotateCcw className="w-3.5 h-3.5" />
-                <span>Try Again</span>
+                <span>Retry Action</span>
               </button>
 
               <button
                 onClick={() => window.location.reload()}
-                className="px-4 py-2 rounded-xl bg-neutral-200 hover:bg-neutral-300 text-neutral-800 text-xs font-semibold inline-flex items-center gap-1.5 transition-colors"
+                className="px-3.5 py-1.5 rounded-sm bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 text-xs font-semibold inline-flex items-center gap-1.5 transition-colors"
               >
                 <Home className="w-3.5 h-3.5" />
                 <span>Reload Page</span>

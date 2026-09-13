@@ -136,7 +136,7 @@ export default function ServicesPage() {
           name: "Grievance Redressal & Surveillance (BIS CARE)",
           statutoryAuthority: "Consumer Protection Act, 2019 & BIS Act, 2016",
           mandate: "Public platform to file complaints regarding substandard goods, fake ISI marks, hallmarking discrepancies, and unlicensed manufacturers.",
-          scope: "Empowers consumers to verify license status and report statutory violations directly to BIS Branch Officers and NCH 1915.",
+          scope: "Enables consumers to verify license status and report statutory violations directly to BIS Branch Officers and NCH 1915.",
           msmeRelief: "Protects compliant MSME manufacturers against unfair competition from counterfeit and substandard imports.",
           portalUrl: "https://play.google.com/store/apps/details?id=com.bis.biscare"
         }

@@ -51,70 +51,70 @@ export default function ReportModal({ isOpen, onClose, initialIdentifier = '', i
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-neutral-900/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
-      <div className="bg-white rounded-2xl max-w-lg w-full shadow-modal border border-neutral-200 animate-in zoom-in-95 text-left overflow-hidden">
+    <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
+      <div className="bg-white rounded-sm max-w-lg w-full shadow-lg border border-slate-300 animate-in zoom-in-95 text-left overflow-hidden">
         
         {/* Header */}
-        <div className="p-5 border-b border-neutral-200 flex items-center justify-between bg-neutral-50">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-red-100 text-red-700 flex items-center justify-center">
+        <div className="p-4 sm:p-5 border-b border-slate-200 flex items-center justify-between bg-slate-50">
+          <div className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-sm bg-red-100 text-red-700 flex items-center justify-center border border-red-200">
               <Flag className="w-4 h-4" />
             </div>
             <div>
-              <h3 className="text-base font-bold text-neutral-900">
-                Report Non-Compliant Product / Mark
+              <h3 className="text-sm font-bold text-gov-900 uppercase tracking-wide">
+                Report Statutory Violation / Counterfeit Mark
               </h3>
-              <p className="text-xs text-neutral-500">
-                Log suspected fake ISI marks, illegal HUIDs, or substandard goods.
+              <p className="text-[11px] text-slate-500">
+                Log suspected counterfeit ISI marks, illegal HUIDs, or substandard goods.
               </p>
             </div>
           </div>
 
           <button
             onClick={onClose}
-            className="p-1.5 text-neutral-400 hover:text-neutral-700 hover:bg-neutral-200 rounded-lg transition-colors"
+            className="p-1.5 text-slate-400 hover:text-slate-700 hover:bg-slate-200 rounded-sm transition-colors"
           >
-            <X className="w-5 h-5" />
+            <X className="w-4 h-4" />
           </button>
         </div>
 
         {/* Content */}
-        <div className="p-6 space-y-4">
+        <div className="p-5 sm:p-6 space-y-4">
           {submittedReport ? (
             <div className="text-center py-6 space-y-3">
-              <div className="w-12 h-12 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto">
-                <CheckCircle2 className="w-6 h-6" />
+              <div className="w-10 h-10 rounded-sm bg-emerald-100 text-emerald-700 flex items-center justify-center mx-auto border border-emerald-300">
+                <CheckCircle2 className="w-5 h-5" />
               </div>
-              <h4 className="text-lg font-bold text-neutral-900">Report Submitted Successfully</h4>
-              <p className="text-xs text-neutral-600 max-w-sm mx-auto leading-relaxed">
-                Your report has been logged in the prototype surveillance registry under tracking code:
+              <h4 className="text-base font-bold text-gov-900">Report Submitted to Dossier Registry</h4>
+              <p className="text-xs text-slate-600 max-w-sm mx-auto leading-relaxed">
+                Your report has been logged in the surveillance registry under official tracking code:
               </p>
-              <div className="inline-block bg-neutral-100 font-mono font-bold text-sm px-3 py-1 rounded-lg border border-neutral-300">
+              <div className="inline-block bg-slate-100 font-mono font-bold text-sm px-3 py-1 rounded-sm border border-slate-300 text-gov-800">
                 {submittedReport.id}
               </div>
-              <p className="text-[11px] text-neutral-400 pt-2">
-                Reports are forwarded for administrative scrutiny as per BIS Act conformity assessment guidelines.
+              <p className="text-[11px] text-slate-500 pt-2">
+                Reports are forwarded for administrative scrutiny under Section 29 of the Bureau of Indian Standards Act, 2016.
               </p>
               <div className="pt-4">
                 <button
                   onClick={onClose}
-                  className="px-5 py-2 bg-emerald-600 text-white rounded-xl text-xs font-bold hover:bg-emerald-700 transition-colors"
+                  className="px-5 py-2 bg-gov-800 hover:bg-gov-900 text-white rounded-sm text-xs font-bold transition-colors"
                 >
-                  Done
+                  Close Dossier
                 </button>
               </div>
             </div>
           ) : (
-            <form onSubmit={handleSubmit} className="space-y-4 text-xs">
+            <form onSubmit={handleSubmit} className="space-y-3.5 text-xs">
               {errorMessage && (
-                <div className="p-3 bg-red-50 rounded-xl border border-red-200 text-red-700 flex items-start gap-2">
+                <div className="p-3 bg-red-50 rounded-sm border border-red-200 text-red-700 flex items-start gap-2">
                   <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
                   <span>{errorMessage}</span>
                 </div>
               )}
 
               <div>
-                <label className="font-bold text-neutral-700 block mb-1">
+                <label className="font-bold text-slate-700 block mb-1">
                   Product / License Identifier <span className="text-red-500">*</span>
                 </label>
                 <input
@@ -122,19 +122,19 @@ export default function ReportModal({ isOpen, onClose, initialIdentifier = '', i
                   value={identifier}
                   onChange={(e) => setIdentifier(e.target.value)}
                   placeholder="e.g. CM/L-8400192, HUID AK79B2, or Brand & Product name"
-                  className="w-full px-3.5 py-2.5 bg-neutral-50 border border-neutral-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-600 font-medium text-neutral-900"
+                  className="w-full px-3 py-2 bg-white border border-slate-300 rounded-sm focus:outline-none focus:border-gov-800 focus:ring-1 focus:ring-gov-800 font-medium text-slate-900"
                   required
                 />
               </div>
 
               <div>
-                <label className="font-bold text-neutral-700 block mb-1">
+                <label className="font-bold text-slate-700 block mb-1">
                   Violation Category <span className="text-red-500">*</span>
                 </label>
                 <select
                   value={category}
                   onChange={(e) => setCategory(e.target.value)}
-                  className="w-full px-3.5 py-2.5 bg-neutral-50 border border-neutral-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-600 font-medium text-neutral-900"
+                  className="w-full px-3 py-2 bg-white border border-slate-300 rounded-sm focus:outline-none focus:border-gov-800 focus:ring-1 focus:ring-gov-800 font-medium text-slate-900"
                 >
                   <option value="Suspected Counterfeit ISI Mark">Suspected Counterfeit ISI Mark</option>
                   <option value="Fake or Unregistered Gold HUID">Fake or Unregistered Gold HUID</option>
@@ -145,7 +145,7 @@ export default function ReportModal({ isOpen, onClose, initialIdentifier = '', i
               </div>
 
               <div>
-                <label className="font-bold text-neutral-700 block mb-1">
+                <label className="font-bold text-slate-700 block mb-1">
                   Description of Violation <span className="text-red-500">*</span>
                 </label>
                 <textarea
@@ -153,13 +153,13 @@ export default function ReportModal({ isOpen, onClose, initialIdentifier = '', i
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                   placeholder="Provide context: vendor name, retail shop / e-commerce link, batch number, or reason for suspicion..."
-                  className="w-full px-3.5 py-2.5 bg-neutral-50 border border-neutral-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-600 font-medium text-neutral-900"
+                  className="w-full px-3 py-2 bg-white border border-slate-300 rounded-sm focus:outline-none focus:border-gov-800 focus:ring-1 focus:ring-gov-800 font-medium text-slate-900"
                   required
                 />
               </div>
 
               <div>
-                <label className="font-bold text-neutral-700 block mb-1">
+                <label className="font-bold text-slate-700 block mb-1">
                   Reporter Contact (Optional / Anonymous)
                 </label>
                 <input
@@ -167,22 +167,22 @@ export default function ReportModal({ isOpen, onClose, initialIdentifier = '', i
                   value={contact}
                   onChange={(e) => setContact(e.target.value)}
                   placeholder="Email, phone number, or leave blank to report anonymously"
-                  className="w-full px-3.5 py-2.5 bg-neutral-50 border border-neutral-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-600 font-medium text-neutral-900"
+                  className="w-full px-3 py-2 bg-white border border-slate-300 rounded-sm focus:outline-none focus:border-gov-800 focus:ring-1 focus:ring-gov-800 font-medium text-slate-900"
                 />
               </div>
 
-              <div className="pt-2 flex items-center justify-end gap-2 border-t border-neutral-100">
+              <div className="pt-2 flex items-center justify-end gap-2 border-t border-slate-200">
                 <button
                   type="button"
                   onClick={onClose}
-                  className="px-4 py-2 text-neutral-600 bg-neutral-100 hover:bg-neutral-200 rounded-xl font-semibold transition-colors"
+                  className="px-4 py-2 text-slate-600 bg-slate-100 hover:bg-slate-200 border border-slate-300 rounded-sm font-semibold transition-colors"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={loading}
-                  className="px-5 py-2 bg-red-600 hover:bg-red-700 text-white rounded-xl font-bold transition-colors disabled:opacity-50 flex items-center gap-1.5 shadow-xs"
+                  className="px-5 py-2 bg-red-700 hover:bg-red-800 text-white rounded-sm font-bold transition-colors disabled:opacity-50 flex items-center gap-1.5 shadow-2xs"
                 >
                   {loading && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
                   <span>Submit Violation Report</span>

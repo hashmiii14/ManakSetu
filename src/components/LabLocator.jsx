@@ -121,24 +121,24 @@ export default function LabLocator({ initialStandard = 'ALL' }) {
   return (
     <div className="space-y-6 text-left">
       {/* Control Bar: Filters & Geolocation Button */}
-      <div className="bg-white rounded-2xl border border-neutral-200 p-5 shadow-xs space-y-4">
+      <div className="bg-white rounded-sm border border-slate-300 p-5 shadow-xs space-y-4">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
           <div>
-            <span className="text-[10px] font-bold text-emerald-800 uppercase tracking-widest block mb-0.5">
-              NABL & BIS Recognized Testing Network
+            <span className="text-[10px] font-bold text-gov-800 uppercase tracking-widest block mb-0.5">
+              NABL &amp; BIS Recognized Testing Network
             </span>
-            <h3 className="text-base sm:text-lg font-bold text-neutral-900">
+            <h3 className="text-base sm:text-lg font-bold text-gov-900">
               Find Accredited Laboratories for Sample Testing
             </h3>
-            <p className="text-xs text-neutral-600 mt-0.5">
-              Locate NABL accredited laboratories authorized to conduct statutory sample verification under Scheme-I & CRS.
+            <p className="text-xs text-slate-600 mt-0.5">
+              Locate NABL accredited laboratories authorized to conduct statutory sample verification under Scheme-I &amp; CRS.
             </p>
           </div>
 
           <button
             onClick={handleLocateMe}
             disabled={isLocating}
-            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition-all shadow-xs shrink-0 disabled:opacity-50"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-sm bg-gov-800 hover:bg-gov-900 text-white text-xs font-bold transition-all shadow-2xs shrink-0 disabled:opacity-50"
           >
             <Compass className={`w-4 h-4 ${isLocating ? 'animate-spin' : ''}`} />
             <span>{userCoords ? `Near: ${userCoords.label}` : 'Find Nearest Labs to Me'}</span>
@@ -146,16 +146,16 @@ export default function LabLocator({ initialStandard = 'ALL' }) {
         </div>
 
         {/* Filters Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2 border-t border-neutral-100">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2 border-t border-slate-200">
           {/* 1. Standard Filter */}
           <div>
-            <label className="block text-[11px] font-bold text-neutral-700 mb-1">
+            <label className="block text-[11px] font-bold text-slate-700 mb-1">
               Filter by Product Standard:
             </label>
             <select
               value={selectedStandard}
               onChange={(e) => setSelectedStandard(e.target.value)}
-              className="w-full px-3 py-2 bg-neutral-50 border border-neutral-300 rounded-xl text-xs font-medium text-neutral-900 focus:outline-none focus:ring-2 focus:ring-emerald-600"
+              className="w-full px-3 py-2 bg-white border border-slate-300 rounded-sm text-xs font-medium text-slate-900 focus:outline-none focus:border-gov-800 focus:ring-1 focus:ring-gov-800"
             >
               {standardOptions.map((opt, i) => (
                 <option key={i} value={opt.code}>{opt.label}</option>
@@ -165,13 +165,13 @@ export default function LabLocator({ initialStandard = 'ALL' }) {
 
           {/* 2. State Filter */}
           <div>
-            <label className="block text-[11px] font-bold text-neutral-700 mb-1">
+            <label className="block text-[11px] font-bold text-slate-700 mb-1">
               Filter by State / UT:
             </label>
             <select
               value={selectedState}
               onChange={(e) => setSelectedState(e.target.value)}
-              className="w-full px-3 py-2 bg-neutral-50 border border-neutral-300 rounded-xl text-xs font-medium text-neutral-900 focus:outline-none focus:ring-2 focus:ring-emerald-600"
+              className="w-full px-3 py-2 bg-white border border-slate-300 rounded-sm text-xs font-medium text-slate-900 focus:outline-none focus:border-gov-800 focus:ring-1 focus:ring-gov-800"
             >
               {stateOptions.map((st, i) => (
                 <option key={i} value={st}>{st === 'ALL' ? 'All States & UTs' : st}</option>
@@ -181,28 +181,28 @@ export default function LabLocator({ initialStandard = 'ALL' }) {
 
           {/* 3. Keyword Search */}
           <div>
-            <label className="block text-[11px] font-bold text-neutral-700 mb-1">
+            <label className="block text-[11px] font-bold text-slate-700 mb-1">
               Search Lab or Scope:
             </label>
             <div className="relative">
-              <Search className="w-3.5 h-3.5 absolute left-3 top-2.5 text-neutral-400" />
+              <Search className="w-3.5 h-3.5 absolute left-3 top-2.5 text-slate-400" />
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="e.g. Geyser, High Voltage, ARAI, Mumbai"
-                className="w-full pl-8 pr-3 py-2 bg-neutral-50 border border-neutral-300 rounded-xl text-xs font-medium text-neutral-900 focus:outline-none focus:ring-2 focus:ring-emerald-600"
+                className="w-full pl-8 pr-3 py-2 bg-white border border-slate-300 rounded-sm text-xs font-medium text-slate-900 focus:outline-none focus:border-gov-800 focus:ring-1 focus:ring-gov-800"
               />
             </div>
           </div>
         </div>
 
         {/* Active Results Summary */}
-        <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-neutral-500 pt-1">
+        <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-slate-500 pt-1">
           <span>Showing <strong>{filteredLabs.length}</strong> accredited laboratories in national network</span>
           {userCoords && (
-            <span className="text-emerald-700 font-semibold flex items-center gap-1">
-              <Navigation className="w-3 h-3 text-emerald-600" />
+            <span className="text-gov-800 font-semibold flex items-center gap-1">
+              <Navigation className="w-3 h-3 text-gov-800" />
               Sorted by proximity from {userCoords.label}
             </span>
           )}
@@ -214,28 +214,28 @@ export default function LabLocator({ initialStandard = 'ALL' }) {
         {filteredLabs.map((lab) => (
           <div 
             key={lab.id} 
-            className="bg-white rounded-2xl border border-neutral-200 hover:border-emerald-400 p-5 shadow-2xs hover:shadow-xs transition-all space-y-4 flex flex-col justify-between"
+            className="bg-white rounded-sm border border-slate-300 hover:border-gov-800 p-5 shadow-2xs hover:shadow-xs transition-all space-y-4 flex flex-col justify-between"
           >
             {/* Header */}
             <div>
               <div className="flex items-start justify-between gap-2">
                 <div>
-                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-neutral-100 text-neutral-700 border border-neutral-200">
-                    <ShieldCheck className="w-3 h-3 text-emerald-600" />
+                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-sm text-[10px] font-mono font-bold bg-slate-100 text-slate-700 border border-slate-300">
+                    <ShieldCheck className="w-3 h-3 text-gov-800" />
                     {lab.accreditationCode}
                   </span>
-                  <h4 className="text-sm sm:text-base font-bold text-neutral-900 mt-1.5 leading-snug">
+                  <h4 className="text-sm sm:text-base font-bold text-gov-900 mt-1.5 leading-snug">
                     {lab.name}
                   </h4>
-                  <p className="text-xs text-neutral-500 flex items-center gap-1 mt-0.5">
-                    <MapPin className="w-3.5 h-3.5 text-neutral-400 shrink-0" />
+                  <p className="text-xs text-slate-500 flex items-center gap-1 mt-0.5">
+                    <MapPin className="w-3.5 h-3.5 text-slate-400 shrink-0" />
                     <span>{lab.city}, {lab.state}</span>
                   </p>
                 </div>
 
                 {lab.distanceKm !== null && (
-                  <span className="shrink-0 px-2.5 py-1 rounded-lg bg-emerald-50 text-emerald-800 font-mono font-bold text-xs border border-emerald-200 flex items-center gap-1">
-                    <Navigation className="w-3 h-3 text-emerald-600" />
+                  <span className="shrink-0 px-2 py-0.5 rounded-sm bg-gov-100 text-gov-900 font-mono font-bold text-xs border border-gov-300 flex items-center gap-1">
+                    <Navigation className="w-3 h-3 text-gov-800" />
                     {lab.distanceKm} km
                   </span>
                 )}
@@ -243,14 +243,14 @@ export default function LabLocator({ initialStandard = 'ALL' }) {
 
               {/* Scopes */}
               <div className="mt-3 space-y-1">
-                <span className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider block">
+                <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">
                   Accredited Test Capabilities:
                 </span>
                 <div className="flex flex-wrap gap-1.5">
                   {lab.scopes.map((sc, i) => (
                     <span 
                       key={i} 
-                      className="px-2 py-0.5 rounded-md text-[11px] font-medium bg-neutral-50 text-neutral-700 border border-neutral-200"
+                      className="px-2 py-0.5 rounded-sm text-[11px] font-medium bg-slate-100 text-slate-700 border border-slate-200"
                     >
                       {sc}
                     </span>
@@ -259,33 +259,33 @@ export default function LabLocator({ initialStandard = 'ALL' }) {
               </div>
 
               {/* Standards Recognized */}
-              <div className="mt-3 flex items-center gap-1.5 text-xs text-neutral-600">
-                <FlaskConical className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
-                <span className="font-semibold text-neutral-700">Standards:</span>
-                <span className="line-clamp-1 font-mono text-[11px] text-neutral-600">
+              <div className="mt-3 flex items-center gap-1.5 text-xs text-slate-700">
+                <FlaskConical className="w-3.5 h-3.5 text-gov-800 shrink-0" />
+                <span className="font-semibold text-slate-900">Standards:</span>
+                <span className="line-clamp-1 font-mono text-[11px] text-slate-600">
                   {lab.applicableStandards.join(', ')}
                 </span>
               </div>
 
               {/* Turnaround Time */}
-              <div className="mt-2 flex items-center gap-1.5 text-xs text-amber-900 bg-amber-50/70 px-2.5 py-1 rounded-lg border border-amber-200/80">
-                <Clock className="w-3.5 h-3.5 text-amber-600 shrink-0" />
+              <div className="mt-2 flex items-center gap-1.5 text-xs text-amber-900 bg-amber-50 px-2.5 py-1 rounded-sm border border-amber-200">
+                <Clock className="w-3.5 h-3.5 text-amber-700 shrink-0" />
                 <span>Estimated turnaround: <strong>{lab.turnaroundTime}</strong></span>
               </div>
             </div>
 
             {/* Footer Contact & Actions */}
-            <div className="pt-3 border-t border-neutral-100 space-y-2.5">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-neutral-600">
+            <div className="pt-3 border-t border-slate-200 space-y-2.5">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-slate-600">
                 <div className="flex items-center gap-1.5 truncate">
-                  <Phone className="w-3 h-3 text-neutral-400 shrink-0" />
-                  <a href={`tel:${lab.phone}`} className="hover:text-emerald-700 truncate font-medium">
+                  <Phone className="w-3 h-3 text-slate-400 shrink-0" />
+                  <a href={`tel:${lab.phone}`} className="hover:text-gov-800 truncate font-medium">
                     {lab.phone}
                   </a>
                 </div>
                 <div className="flex items-center gap-1.5 truncate">
-                  <Mail className="w-3 h-3 text-neutral-400 shrink-0" />
-                  <a href={`mailto:${lab.email}`} className="hover:text-emerald-700 truncate font-medium">
+                  <Mail className="w-3 h-3 text-slate-400 shrink-0" />
+                  <a href={`mailto:${lab.email}`} className="hover:text-gov-800 truncate font-medium">
                     {lab.email}
                   </a>
                 </div>
@@ -294,16 +294,16 @@ export default function LabLocator({ initialStandard = 'ALL' }) {
               <div className="flex items-center justify-between gap-2 pt-1">
                 <button
                   onClick={() => handleCopyLab(lab)}
-                  className="px-3 py-1.5 rounded-lg border border-neutral-200 hover:border-neutral-300 bg-neutral-50 text-neutral-700 text-xs font-semibold inline-flex items-center gap-1 transition-colors"
+                  className="px-3 py-1.5 rounded-sm border border-slate-300 hover:bg-slate-100 bg-white text-slate-700 text-xs font-semibold inline-flex items-center gap-1 transition-colors"
                 >
                   {copiedId === lab.id ? (
                     <>
                       <Check className="w-3 h-3 text-emerald-600" />
-                      <span>Copied!</span>
+                      <span className="text-emerald-700 font-bold">Copied</span>
                     </>
                   ) : (
                     <>
-                      <Copy className="w-3 h-3 text-neutral-400" />
+                      <Copy className="w-3 h-3 text-slate-500" />
                       <span>Copy Details</span>
                     </>
                   )}
@@ -313,10 +313,10 @@ export default function LabLocator({ initialStandard = 'ALL' }) {
                   href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${lab.name} ${lab.city}`)}`}
                   target="_blank"
                   rel="noreferrer"
-                  className="px-3 py-1.5 rounded-lg bg-emerald-50 hover:bg-emerald-100 text-emerald-800 text-xs font-bold inline-flex items-center gap-1 border border-emerald-200 transition-colors"
+                  className="px-3 py-1.5 rounded-sm bg-gov-50 hover:bg-gov-100 text-gov-800 text-xs font-bold inline-flex items-center gap-1 border border-gov-300 transition-colors"
                 >
                   <span>Get Directions</span>
-                  <ExternalLink className="w-3 h-3 text-emerald-600" />
+                  <ExternalLink className="w-3 h-3 text-gov-700" />
                 </a>
               </div>
             </div>

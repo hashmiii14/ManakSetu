@@ -64,30 +64,30 @@ export default function ComplianceChecker({ initialProduct = '', onOpenStandard,
     switch (status) {
       case 'identified':
         return (
-          <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200 inline-flex items-center gap-1">
+          <span className="px-2 py-0.5 rounded-sm text-[10px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-300 inline-flex items-center gap-1">
             <CheckCircle2 className="w-2.5 h-2.5 text-emerald-600" />
             <span>Identified</span>
           </span>
         );
       case 'review_required':
         return (
-          <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 text-amber-800 border border-amber-200 inline-flex items-center gap-1">
-            <span className="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
-            <span>• Review Required</span>
+          <span className="px-2 py-0.5 rounded-sm text-[10px] font-bold bg-amber-50 text-amber-800 border border-amber-300 inline-flex items-center gap-1">
+            <span className="w-1.5 h-1.5 rounded-xs bg-amber-500"></span>
+            <span>Review Required</span>
           </span>
         );
       case 'verify':
         return (
-          <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-50 text-blue-800 border border-blue-200 inline-flex items-center gap-1">
+          <span className="px-2 py-0.5 rounded-sm text-[10px] font-bold bg-blue-50 text-blue-800 border border-blue-300 inline-flex items-center gap-1">
             <AlertTriangle className="w-2.5 h-2.5 text-blue-600" />
-            <span>! Verify</span>
+            <span>Verify</span>
           </span>
         );
       default:
         return (
-          <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-neutral-100 text-neutral-600 border border-neutral-200 inline-flex items-center gap-1">
-            <span className="w-1.5 h-1.5 rounded-full bg-neutral-400"></span>
-            <span>○ Not Provided</span>
+          <span className="px-2 py-0.5 rounded-sm text-[10px] font-bold bg-slate-100 text-slate-600 border border-slate-300 inline-flex items-center gap-1">
+            <span className="w-1.5 h-1.5 rounded-xs bg-slate-400"></span>
+            <span>Not Provided</span>
           </span>
         );
     }

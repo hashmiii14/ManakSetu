@@ -323,9 +323,9 @@ export default function StandardDetailPage({ standardId }) {
                   {keyTests.map((test, idx) => (
                     <div 
                       key={idx}
-                      className="p-3.5 rounded-lg border border-slate-200 bg-slate-50/60 hover:bg-slate-50 flex items-start gap-3 transition-colors"
+                      className="p-3.5 rounded-sm border border-slate-200 bg-slate-50 hover:bg-white flex items-start gap-3 transition-colors"
                     >
-                      <div className="w-5 h-5 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0 mt-0.5 font-bold text-[10px]">
+                      <div className="w-5 h-5 rounded-sm bg-gov-100 text-gov-800 border border-gov-300 flex items-center justify-center shrink-0 mt-0.5 font-bold text-[10px]">
                         {idx + 1}
                       </div>
                       <div className="space-y-1">
@@ -342,14 +342,14 @@ export default function StandardDetailPage({ standardId }) {
               </div>
 
               {/* 2. FACTORY INFRASTRUCTURE & DOCUMENTATION CHECKLIST */}
-              <div className="bg-white rounded-xl border border-slate-200 shadow-gov p-6 space-y-4">
-                <div className="flex items-center gap-2.5 pb-3 border-b border-slate-100">
-                  <div className="w-8 h-8 rounded-lg bg-gov-100 text-gov-800 flex items-center justify-center">
+              <div className="bg-white rounded-sm border border-slate-300 p-5 space-y-4">
+                <div className="flex items-center gap-2.5 pb-3 border-b border-slate-200">
+                  <div className="w-7 h-7 rounded-sm bg-slate-100 text-gov-800 flex items-center justify-center border border-slate-200 font-mono font-bold text-xs">
                     <FileText className="w-4 h-4" />
                   </div>
                   <div>
-                    <h2 className="text-base font-bold text-gov-900">
-                      Factory Audit &amp; Documentation Checklist
+                    <h2 className="text-sm font-bold text-gov-900 uppercase tracking-wide">
+                      2. Factory Audit &amp; Documentation Checklist
                     </h2>
                     <p className="text-xs text-slate-500">
                       Statutory prerequisites required prior to scheduling the BIS Bureau Officer factory inspection.
@@ -357,9 +357,9 @@ export default function StandardDetailPage({ standardId }) {
                   </div>
                 </div>
 
-                <ul className="space-y-3">
+                <ul className="space-y-2.5">
                   {documentationRequired.map((doc, idx) => (
-                    <li key={idx} className="flex items-start gap-3 text-xs text-slate-700 p-2.5 rounded-lg bg-slate-50 border border-slate-150">
+                    <li key={idx} className="flex items-start gap-3 text-xs text-slate-700 p-2.5 rounded-sm bg-slate-50 border border-slate-200">
                       <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
                       <div>
                         <span className="font-semibold text-slate-900 block">{doc}</span>
@@ -372,14 +372,14 @@ export default function StandardDetailPage({ standardId }) {
 
               {/* 3. GLOBAL HARMONIZATION (ISO / IEC / WTO TBT) */}
               {globalHarmonization && (
-                <div className="bg-white rounded-xl border border-slate-200 shadow-gov p-6 space-y-4">
-                  <div className="flex items-center gap-2.5 pb-3 border-b border-slate-100">
-                    <div className="w-8 h-8 rounded-lg bg-blue-100 text-blue-800 flex items-center justify-center">
+                <div className="bg-white rounded-sm border border-slate-300 p-5 space-y-4">
+                  <div className="flex items-center gap-2.5 pb-3 border-b border-slate-200">
+                    <div className="w-7 h-7 rounded-sm bg-gov-100 text-gov-800 flex items-center justify-center border border-gov-300 font-mono font-bold text-xs">
                       <Globe className="w-4 h-4" />
                     </div>
                     <div>
-                      <h2 className="text-base font-bold text-gov-900">
-                        International Harmonization &amp; Export Equivalence
+                      <h2 className="text-sm font-bold text-gov-900 uppercase tracking-wide">
+                        3. International Harmonization &amp; Export Equivalence
                       </h2>
                       <p className="text-xs text-slate-500">
                         Cross-walk with ISO, IEC, and WTO Technical Barriers to Trade (TBT) agreements.
@@ -387,33 +387,33 @@ export default function StandardDetailPage({ standardId }) {
                     </div>
                   </div>
 
-                  <div className="p-4 rounded-lg bg-blue-50/50 border border-blue-150 space-y-3">
+                  <div className="p-4 rounded-sm bg-gov-50/50 border border-gov-200 space-y-3">
                     <div className="flex flex-wrap items-center justify-between gap-2">
                       <div>
-                        <span className="text-xs text-blue-900/70 uppercase tracking-wider font-bold block">
+                        <span className="text-xs text-gov-900/70 uppercase tracking-wider font-bold block">
                           International Equivalent Standard:
                         </span>
-                        <span className="font-mono font-bold text-sm text-blue-950">
+                        <span className="font-mono font-bold text-sm text-gov-950">
                           {globalHarmonization.standard}
                         </span>
                       </div>
-                      <span className="px-2 py-0.5 rounded bg-blue-200 text-blue-900 font-medium text-[11px]">
+                      <span className="px-2 py-0.5 rounded-sm bg-gov-100 text-gov-900 border border-gov-300 font-bold text-[11px]">
                         {globalHarmonization.org}
                       </span>
                     </div>
 
-                    <p className="text-xs text-blue-900/80 leading-relaxed">
+                    <p className="text-xs text-slate-700 leading-relaxed">
                       {globalHarmonization.note}
                     </p>
 
                     {Array.isArray(globalHarmonization.compatibleMarkets) && (
-                      <div className="pt-2 border-t border-blue-200/60">
-                        <span className="text-[11px] font-bold text-blue-900 block mb-1.5">
+                      <div className="pt-2 border-t border-gov-200">
+                        <span className="text-[11px] font-bold text-gov-900 block mb-1.5">
                           Target Export Compatibility:
                         </span>
                         <div className="flex flex-wrap gap-1.5">
                           {globalHarmonization.compatibleMarkets.map((mkt, idx) => (
-                            <span key={idx} className="px-2 py-0.5 rounded bg-white text-blue-900 border border-blue-200 text-[11px] font-medium">
+                            <span key={idx} className="px-2 py-0.5 rounded-sm bg-white text-gov-900 border border-slate-300 text-[11px] font-medium">
                               {mkt}
                             </span>
                           ))}
@@ -426,14 +426,14 @@ export default function StandardDetailPage({ standardId }) {
 
               {/* 4. CITIZEN MARK VERIFICATION GUIDE */}
               {citizenCard && (
-                <div className="bg-white rounded-xl border border-slate-200 shadow-gov p-6 space-y-4">
-                  <div className="flex items-center gap-2.5 pb-3 border-b border-slate-100">
-                    <div className="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-800 flex items-center justify-center">
+                <div className="bg-white rounded-sm border border-slate-300 p-5 space-y-4">
+                  <div className="flex items-center gap-2.5 pb-3 border-b border-slate-200">
+                    <div className="w-7 h-7 rounded-sm bg-gov-100 text-gov-800 flex items-center justify-center border border-gov-300 font-mono font-bold text-xs">
                       <ShieldCheck className="w-4 h-4" />
                     </div>
                     <div>
-                      <h2 className="text-base font-bold text-gov-900">
-                        Consumer Quality &amp; Authenticity Mark Guide
+                      <h2 className="text-sm font-bold text-gov-900 uppercase tracking-wide">
+                        4. Consumer Quality &amp; Authenticity Mark Guide
                       </h2>
                       <p className="text-xs text-slate-500">
                         How buyers and citizens can verify authentic certification on this product.
@@ -441,21 +441,21 @@ export default function StandardDetailPage({ standardId }) {
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
-                    <div className="p-3.5 rounded-lg bg-slate-50 border border-slate-200 space-y-1">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+                    <div className="p-3.5 rounded-sm bg-slate-50 border border-slate-200 space-y-1">
                       <span className="font-bold text-slate-900 block">Required Label Mark:</span>
                       <p className="text-slate-600">{citizenCard.mandatoryMark}</p>
                     </div>
 
-                    <div className="p-3.5 rounded-lg bg-slate-50 border border-slate-200 space-y-1">
+                    <div className="p-3.5 rounded-sm bg-slate-50 border border-slate-200 space-y-1">
                       <span className="font-bold text-slate-900 block">Placement Rule:</span>
                       <p className="text-slate-600">{citizenCard.labelInstruction}</p>
                     </div>
 
-                    <div className="md:col-span-2 p-3.5 rounded-lg bg-amber-50/70 border border-amber-200 space-y-1">
-                      <span className="font-bold text-amber-900 block">Non-compliance Risk:</span>
-                      <p className="text-amber-800">{citizenCard.safetyRisk}</p>
-                      <p className="text-[11px] text-amber-900 font-semibold pt-1">
+                    <div className="md:col-span-2 p-3.5 rounded-sm bg-amber-50 border border-amber-300 space-y-1">
+                      <span className="font-bold text-amber-950 block">Non-compliance Risk:</span>
+                      <p className="text-amber-900">{citizenCard.safetyRisk}</p>
+                      <p className="text-[11px] text-amber-950 font-semibold pt-1">
                         Tip: {citizenCard.actionTip}
                       </p>
                     </div>
@@ -470,10 +470,10 @@ export default function StandardDetailPage({ standardId }) {
               
               {/* MSME STATUTORY FEE CALCULATOR */}
               {feeCalculation && (
-                <div className="bg-white rounded-xl border border-slate-200 shadow-gov p-5 space-y-4">
-                  <div className="flex items-center gap-2 pb-3 border-b border-slate-100">
+                <div className="bg-white rounded-sm border border-slate-300 p-5 space-y-4">
+                  <div className="flex items-center gap-2 pb-3 border-b border-slate-200">
                     <Calculator className="w-4 h-4 text-gov-800" />
-                    <h3 className="text-sm font-bold text-gov-900">
+                    <h3 className="text-sm font-bold text-gov-900 uppercase tracking-wide">
                       Statutory Fee &amp; MSME Concession
                     </h3>
                   </div>
@@ -493,9 +493,9 @@ export default function StandardDetailPage({ standardId }) {
                           key={cat.id}
                           type="button"
                           onClick={() => setEnterpriseType(cat.id)}
-                          className={`py-1.5 text-xs font-semibold rounded border transition-colors ${
+                          className={`py-1.5 text-xs font-semibold rounded-sm border transition-colors ${
                             enterpriseType === cat.id
-                              ? 'bg-gov-800 text-white border-gov-800 shadow-gov-sm'
+                              ? 'bg-gov-800 text-white border-gov-800 shadow-2xs'
                               : 'bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100'
                           }`}
                         >
@@ -552,7 +552,7 @@ export default function StandardDetailPage({ standardId }) {
                     </div>
 
                     {feeCalculation.totalSavings > 0 && (
-                      <div className="p-2 rounded bg-emerald-50 border border-emerald-200 text-emerald-800 text-[11px] font-semibold text-center">
+                      <div className="p-2 rounded-sm bg-emerald-50 border border-emerald-300 text-emerald-800 text-[11px] font-semibold text-center">
                         Total MSME Saving: ₹{feeCalculation.totalSavings.toLocaleString('en-IN')}
                       </div>
                     )}
@@ -565,27 +565,27 @@ export default function StandardDetailPage({ standardId }) {
               )}
 
               {/* NABL ACCREDITED TESTING LABORATORIES */}
-              <div className="bg-white rounded-xl border border-slate-200 shadow-gov p-5 space-y-4">
-                <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+              <div className="bg-white rounded-sm border border-slate-300 p-5 space-y-4">
+                <div className="flex items-center justify-between pb-3 border-b border-slate-200">
                   <div className="flex items-center gap-2">
                     <Building2 className="w-4 h-4 text-gov-800" />
-                    <h3 className="text-sm font-bold text-gov-900">
+                    <h3 className="text-sm font-bold text-gov-900 uppercase tracking-wide">
                       Recognized Testing Labs
                     </h3>
                   </div>
-                  <span className="text-[10px] font-mono bg-slate-100 px-1.5 py-0.5 rounded text-slate-600">
+                  <span className="text-[10px] font-mono bg-slate-100 px-1.5 py-0.5 rounded-sm border border-slate-200 text-slate-600">
                     {labsAvailable.length} Labs Listed
                   </span>
                 </div>
 
                 <div className="space-y-2.5 text-xs">
                   {labsAvailable.map((lab, idx) => (
-                    <div key={idx} className="p-3 rounded-lg border border-slate-200 bg-slate-50 hover:bg-white transition-colors space-y-1">
+                    <div key={idx} className="p-3 rounded-sm border border-slate-200 bg-slate-50 hover:bg-white transition-colors space-y-1">
                       <div className="flex items-start justify-between gap-2">
                         <span className="font-bold text-slate-900 text-xs">
                           {lab.name}
                         </span>
-                        <span className="px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-800 text-[9px] font-bold shrink-0">
+                        <span className="px-1.5 py-0.5 rounded-sm bg-emerald-100 text-emerald-800 border border-emerald-200 text-[9px] font-bold shrink-0">
                           NABL / BIS
                         </span>
                       </div>
@@ -601,7 +601,7 @@ export default function StandardDetailPage({ standardId }) {
                   href="https://www.services.bis.gov.in/php/BIS_2.0/bisconnect/lab/accreditedlabs"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-full py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-lg inline-flex items-center justify-center gap-1 transition-colors"
+                  className="w-full py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs rounded-sm border border-slate-300 inline-flex items-center justify-center gap-1 transition-colors"
                 >
                   <span>BIS Laboratory Directory</span>
                   <ExternalLink className="w-3 h-3 text-slate-400" />
@@ -609,9 +609,9 @@ export default function StandardDetailPage({ standardId }) {
               </div>
 
               {/* MANAKBOT ADVISORY CARD */}
-              <div className="bg-gov-900 text-white rounded-xl p-5 shadow-gov space-y-3">
+              <div className="bg-gov-900 text-white rounded-sm p-5 border border-gov-800 space-y-3">
                 <div className="flex items-center gap-2">
-                  <Sparkles className="w-4 h-4 text-saffron-400" />
+                  <Sparkles className="w-4 h-4 text-amber-400" />
                   <h3 className="text-sm font-bold text-white">
                     Need Guidance on {isCode}?
                   </h3>
@@ -621,7 +621,7 @@ export default function StandardDetailPage({ standardId }) {
                 </p>
                 <button
                   onClick={() => navigate(`/manakbot?std=${encodeURIComponent(isCode)}`)}
-                  className="w-full py-2 bg-saffron-600 hover:bg-saffron-700 text-white font-bold text-xs rounded-lg shadow-gov-sm transition-colors"
+                  className="w-full py-2 bg-gov-800 hover:bg-gov-700 text-white border border-gov-600 font-bold text-xs rounded-sm shadow-2xs transition-colors"
                 >
                   Start Consultation on {isCode}
                 </button>

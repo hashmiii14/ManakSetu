@@ -76,38 +76,38 @@ export default function StandardDetailModal({ standard, onClose, onAskBot, onChe
   );
 
   return (
-    <div className="fixed inset-0 z-50 bg-neutral-900/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
-      <div className="bg-white rounded-2xl max-w-3xl w-full max-h-[90vh] flex flex-col shadow-modal border border-neutral-200 animate-in zoom-in-95 text-left">
+    <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
+      <div className="bg-white rounded-sm max-w-3xl w-full max-h-[90vh] flex flex-col shadow-lg border border-slate-300 animate-in zoom-in-95 text-left">
         
         {/* Modal Header */}
-        <div className="p-5 sm:p-6 border-b border-neutral-200 flex items-start justify-between gap-4 sticky top-0 bg-white rounded-t-2xl z-10">
+        <div className="p-5 sm:p-6 border-b border-slate-200 flex items-start justify-between gap-4 sticky top-0 bg-white rounded-t-sm z-10">
           <div className="space-y-1">
             <div className="flex flex-wrap items-center gap-2">
-              <span className="text-xs font-bold text-emerald-800 bg-emerald-50 px-2.5 py-0.5 rounded border border-emerald-200 font-mono">
+              <span className="text-xs font-bold text-gov-900 bg-gov-50 px-2.5 py-0.5 rounded-sm border border-gov-300 font-mono">
                 {isCode}
               </span>
-              <span className="text-xs font-medium text-neutral-600 bg-neutral-100 px-2 py-0.5 rounded">
+              <span className="text-xs font-medium text-slate-700 bg-slate-100 px-2 py-0.5 rounded-sm border border-slate-200">
                 {category}
               </span>
               {mandatoryQCO ? (
-                <span className="text-[11px] font-bold text-amber-800 bg-amber-50 px-2 py-0.5 rounded border border-amber-200 flex items-center gap-1">
+                <span className="text-[11px] font-bold text-amber-800 bg-amber-50 px-2 py-0.5 rounded-sm border border-amber-300 flex items-center gap-1">
                   <AlertTriangle className="w-3 h-3 text-amber-600" />
                   Mandatory QCO
                 </span>
               ) : (
-                <span className="text-[11px] font-medium text-neutral-500 bg-neutral-100 px-2 py-0.5 rounded">
+                <span className="text-[11px] font-medium text-slate-600 bg-slate-100 px-2 py-0.5 rounded-sm border border-slate-200">
                   Voluntary Standard
                 </span>
               )}
             </div>
-            <h2 className="text-lg sm:text-xl font-bold text-neutral-900 leading-snug">
+            <h2 className="text-lg sm:text-xl font-bold text-gov-900 leading-snug">
               {title}
             </h2>
           </div>
 
           <button
             onClick={onClose}
-            className="p-1.5 text-neutral-400 hover:text-neutral-700 hover:bg-neutral-100 rounded-lg transition-colors shrink-0"
+            className="p-1.5 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-sm transition-colors shrink-0"
             aria-label="Close modal"
           >
             <X className="w-5 h-5" />
@@ -127,14 +127,14 @@ export default function StandardDetailModal({ standard, onClose, onAskBot, onChe
             </p>
 
             {scope && scope !== description && (
-              <div className="p-3 bg-neutral-50 rounded-xl border border-neutral-200 text-xs text-neutral-700">
-                <span className="font-semibold text-neutral-900">Technical Scope: </span>
+              <div className="p-3 bg-slate-50 rounded-sm border border-slate-300 text-xs text-slate-700">
+                <span className="font-semibold text-slate-900">Technical Scope: </span>
                 <span>{scope}</span>
               </div>
             )}
 
             {mandatoryQCO && (
-              <div className="p-3 bg-amber-50/70 border border-amber-200/80 rounded-xl text-xs text-amber-900 flex items-start gap-2 mt-2">
+              <div className="p-3 bg-amber-50/80 border border-amber-300 rounded-sm text-xs text-amber-950 flex items-start gap-2 mt-2">
                 <ShieldCheck className="w-4 h-4 text-amber-700 shrink-0 mt-0.5" />
                 <div>
                   <span className="font-bold">Statutory Quality Control Order: </span>
@@ -144,39 +144,39 @@ export default function StandardDetailModal({ standard, onClose, onAskBot, onChe
             )}
           </section>
 
-          {/* Global Standards Harmonization (Slide 2 Pillar) */}
+          {/* Global Standards Harmonization */}
           {globalHarmonization && (
-            <section className="p-4 bg-emerald-50/70 border border-emerald-300 rounded-xl space-y-2.5 text-xs">
+            <section className="p-4 bg-gov-50/50 border border-gov-300 rounded-sm space-y-2.5 text-xs">
               <div className="flex flex-wrap items-center justify-between gap-2">
-                <h3 className="text-xs font-bold text-emerald-950 uppercase tracking-wider flex items-center gap-1.5">
-                  <Globe className="w-4 h-4 text-emerald-700" />
+                <h3 className="text-xs font-bold text-gov-900 uppercase tracking-wider flex items-center gap-1.5">
+                  <Globe className="w-4 h-4 text-gov-800" />
                   Global Standards Harmonization (Export Alignment)
                 </h3>
-                <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-700 text-white shadow-2xs">
+                <span className="px-2.5 py-0.5 rounded-sm text-[11px] font-bold bg-gov-800 text-white shadow-2xs">
                   {globalHarmonization.exportEquivalence}
                 </span>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-neutral-800">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-slate-800">
                 <div>
-                  <span className="font-semibold text-neutral-900">International Standard: </span>
-                  <span className="font-mono font-bold">{globalHarmonization.standard}</span>
+                  <span className="font-semibold text-slate-900">International Standard: </span>
+                  <span className="font-mono font-bold text-gov-900">{globalHarmonization.standard}</span>
                 </div>
                 <div>
-                  <span className="font-semibold text-neutral-900">Standard Body: </span>
+                  <span className="font-semibold text-slate-900">Standard Body: </span>
                   <span>{globalHarmonization.org}</span>
                 </div>
               </div>
 
-              <p className="text-[11px] text-emerald-950 leading-relaxed">
+              <p className="text-[11px] text-slate-700 leading-relaxed">
                 {globalHarmonization.note}
               </p>
 
               {Array.isArray(globalHarmonization.compatibleMarkets) && globalHarmonization.compatibleMarkets.length > 0 && (
                 <div className="pt-1 flex flex-wrap items-center gap-1.5">
-                  <span className="text-[10px] font-bold text-neutral-500 uppercase">Export Markets:</span>
+                  <span className="text-[10px] font-bold text-slate-500 uppercase">Export Markets:</span>
                   {globalHarmonization.compatibleMarkets.map((m, idx) => (
-                    <span key={idx} className="px-2 py-0.5 rounded bg-white text-emerald-900 border border-emerald-300 text-[10px] font-semibold">
+                    <span key={idx} className="px-2 py-0.5 rounded-sm bg-white text-gov-900 border border-slate-300 text-[10px] font-semibold">
                       {m}
                     </span>
                   ))}
@@ -188,62 +188,62 @@ export default function StandardDetailModal({ standard, onClose, onAskBot, onChe
           {/* 2. Compliance Guidance */}
           <section className="space-y-2.5">
             <div className="flex items-center justify-between">
-              <h3 className="text-xs font-bold text-neutral-400 uppercase tracking-wider flex items-center gap-1.5">
-                <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
+              <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1.5">
+                <ShieldCheck className="w-3.5 h-3.5 text-gov-800" />
                 Compliance Guidance
               </h3>
-              <span className="text-[11px] text-neutral-400 font-mono">
+              <span className="text-[11px] text-slate-400 font-mono">
                 Source: {source}
               </span>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
-              <div className="bg-neutral-50 p-3 rounded-xl border border-neutral-200">
-                <span className="text-[10px] text-neutral-400 uppercase font-bold block">Applicable Standard</span>
-                <p className="font-bold text-neutral-900 mt-0.5">{isCode}</p>
+              <div className="bg-slate-50 p-3 rounded-sm border border-slate-300">
+                <span className="text-[10px] text-slate-500 uppercase font-bold block">Applicable Standard</span>
+                <p className="font-bold text-slate-900 mt-0.5">{isCode}</p>
               </div>
-              <div className="bg-neutral-50 p-3 rounded-xl border border-neutral-200">
-                <span className="text-[10px] text-neutral-400 uppercase font-bold block">Conformity Scheme</span>
-                <p className="font-bold text-emerald-700 mt-0.5">Scheme-I (ISI Certification Mark)</p>
+              <div className="bg-slate-50 p-3 rounded-sm border border-slate-300">
+                <span className="text-[10px] text-slate-500 uppercase font-bold block">Conformity Scheme</span>
+                <p className="font-bold text-gov-800 mt-0.5">Scheme-I (ISI Certification Mark)</p>
               </div>
             </div>
           </section>
 
           {/* 3. Key Testing Benchmarks */}
           <section className="space-y-2.5">
-            <h3 className="text-xs font-bold text-neutral-400 uppercase tracking-wider flex items-center gap-1.5">
-              <FlaskConical className="w-3.5 h-3.5 text-emerald-600" />
+            <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1.5">
+              <FlaskConical className="w-3.5 h-3.5 text-gov-800" />
               Key Testing Parameters
             </h3>
             {keyTests.length > 0 ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-neutral-700">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-slate-700">
                 {keyTests.map((t, idx) => (
-                  <div key={idx} className="flex items-start gap-2 bg-neutral-50 p-2.5 rounded-lg border border-neutral-100">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0 mt-0.5" />
+                  <div key={idx} className="flex items-start gap-2 bg-slate-50 p-2.5 rounded-sm border border-slate-200">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-gov-800 shrink-0 mt-0.5" />
                     <span>{typeof t === 'string' ? t : (t?.name || t?.title || JSON.stringify(t))}</span>
                   </div>
                 ))}
               </div>
             ) : (
-              <p className="text-xs text-neutral-500 italic">Information not available in the current prototype dataset.</p>
+              <p className="text-xs text-slate-500 italic">Information not available in the current prototype dataset.</p>
             )}
           </section>
 
           {/* 4. Cost Estimator & MSME Concessions */}
           {feeCalculation && (
-            <section className="space-y-3 bg-neutral-50 p-4 rounded-xl border border-neutral-200">
+            <section className="space-y-3 bg-slate-50 p-4 rounded-sm border border-slate-300">
               <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
                 <div>
-                  <h3 className="text-xs font-bold text-neutral-900 uppercase tracking-wider flex items-center gap-1.5">
-                    <Calculator className="w-3.5 h-3.5 text-emerald-700" />
-                    Estimated Cost & MSME Concessions
+                  <h3 className="text-xs font-bold text-slate-900 uppercase tracking-wider flex items-center gap-1.5">
+                    <Calculator className="w-3.5 h-3.5 text-gov-800" />
+                    Estimated Cost &amp; MSME Concessions
                   </h3>
-                  <p className="text-[11px] text-neutral-500">
+                  <p className="text-[11px] text-slate-500">
                     Select enterprise scale to see applicable statutory concessions:
                   </p>
                 </div>
 
-                <div className="flex items-center gap-1 bg-white p-1 rounded-lg border border-neutral-200 text-xs font-medium">
+                <div className="flex items-center gap-1 bg-white p-1 rounded-sm border border-slate-300 text-xs font-medium">
                   {[
                     { id: 'micro', label: 'Micro (50% Off)' },
                     { id: 'small', label: 'Small (20% Off)' },
@@ -252,10 +252,10 @@ export default function StandardDetailModal({ standard, onClose, onAskBot, onChe
                     <button
                       key={t.id}
                       onClick={() => setEnterpriseType(t.id)}
-                      className={`px-2.5 py-1 rounded transition-colors ${
+                      className={`px-2.5 py-1 rounded-sm transition-colors text-xs ${
                         enterpriseType === t.id
-                          ? 'bg-emerald-600 text-white font-semibold'
-                          : 'text-neutral-600 hover:text-neutral-900'
+                          ? 'bg-gov-800 text-white font-bold'
+                          : 'text-slate-600 hover:text-slate-900'
                       }`}
                     >
                       {t.label}
@@ -265,32 +265,32 @@ export default function StandardDetailModal({ standard, onClose, onAskBot, onChe
               </div>
 
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1">
-                <div className="bg-white p-2.5 rounded-lg border border-neutral-200">
-                  <span className="text-[10px] text-neutral-400 font-bold block">Application Fee</span>
-                  <p className="text-sm font-bold text-neutral-900 mt-0.5">₹{(feeCalculation.applicationFee ?? 0).toLocaleString()}</p>
+                <div className="bg-white p-2.5 rounded-sm border border-slate-300">
+                  <span className="text-[10px] text-slate-500 font-bold block">Application Fee</span>
+                  <p className="text-sm font-bold text-slate-900 mt-0.5 font-mono">₹{(feeCalculation.applicationFee ?? 0).toLocaleString('en-IN')}</p>
                 </div>
-                <div className="bg-white p-2.5 rounded-lg border border-neutral-200">
-                  <span className="text-[10px] text-neutral-400 font-bold block">Audit Fee (2 Days)</span>
-                  <p className="text-sm font-bold text-neutral-900 mt-0.5">₹{(feeCalculation.inspectionFee ?? 0).toLocaleString()}</p>
+                <div className="bg-white p-2.5 rounded-sm border border-slate-300">
+                  <span className="text-[10px] text-slate-500 font-bold block">Audit Fee (2 Days)</span>
+                  <p className="text-sm font-bold text-slate-900 mt-0.5 font-mono">₹{(feeCalculation.inspectionFee ?? 0).toLocaleString('en-IN')}</p>
                 </div>
-                <div className="bg-white p-2.5 rounded-lg border border-neutral-200">
-                  <span className="text-[10px] text-neutral-400 font-bold block">Effective Marking Fee</span>
-                  <p className="text-sm font-bold text-emerald-700 mt-0.5">₹{(feeCalculation.effectiveMarking ?? 0).toLocaleString()}</p>
+                <div className="bg-white p-2.5 rounded-sm border border-slate-300">
+                  <span className="text-[10px] text-slate-500 font-bold block">Effective Marking Fee</span>
+                  <p className="text-sm font-bold text-gov-800 mt-0.5 font-mono">₹{(feeCalculation.effectiveMarking ?? 0).toLocaleString('en-IN')}</p>
                 </div>
-                <div className="bg-emerald-50 p-2.5 rounded-lg border border-emerald-200">
+                <div className="bg-emerald-50 p-2.5 rounded-sm border border-emerald-300">
                   <span className="text-[10px] text-emerald-800 font-bold block flex items-center gap-1">
                     <TrendingDown className="w-3 h-3" /> Total Savings
                   </span>
-                  <p className="text-sm font-bold text-emerald-700 mt-0.5">₹{(feeCalculation.totalSavings ?? 0).toLocaleString()}</p>
+                  <p className="text-sm font-bold text-emerald-700 mt-0.5 font-mono">₹{(feeCalculation.totalSavings ?? 0).toLocaleString('en-IN')}</p>
                 </div>
               </div>
 
-              <div className="pt-2 border-t border-neutral-200/80 flex items-center justify-between text-xs">
-                <span className="text-neutral-600 font-medium">Estimated First-Year Total:</span>
-                <span className="text-sm font-extrabold text-neutral-900">₹{(feeCalculation.totalEstimatedCost ?? 0).toLocaleString()}</span>
+              <div className="pt-2 border-t border-slate-200 flex items-center justify-between text-xs">
+                <span className="text-slate-600 font-medium">Estimated First-Year Total:</span>
+                <span className="text-sm font-extrabold text-gov-900 font-mono">₹{(feeCalculation.totalEstimatedCost ?? 0).toLocaleString('en-IN')}</span>
               </div>
 
-              <p className="text-[10px] text-neutral-400 italic pt-1">
+              <p className="text-[10px] text-slate-400 italic pt-1">
                 Fee estimates are for prototype guidance and should be verified against the latest official BIS fee schedule.
               </p>
             </section>
@@ -298,48 +298,48 @@ export default function StandardDetailModal({ standard, onClose, onAskBot, onChe
 
           {/* 5. Recognized Laboratories */}
           <section className="space-y-2">
-            <h3 className="text-xs font-bold text-neutral-400 uppercase tracking-wider flex items-center gap-1.5">
-              <Building className="w-3.5 h-3.5 text-neutral-500" />
+            <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1.5">
+              <Building className="w-3.5 h-3.5 text-gov-800" />
               BIS Recognized Testing Laboratories
             </h3>
             {labs.length > 0 ? (
-              <div className="space-y-1.5 text-xs text-neutral-700">
+              <div className="space-y-1.5 text-xs text-slate-700">
                 {labs.map((lab, idx) => (
-                  <div key={idx} className="p-2.5 rounded-lg bg-neutral-50 border border-neutral-100 flex items-center justify-between">
-                    <span className="font-semibold text-neutral-900">{typeof lab === 'string' ? lab : (lab?.name || "BIS Recognized Lab")}</span>
-                    <span className="text-neutral-500">{typeof lab === 'object' && lab?.city ? `${lab.city}${lab.state ? ', ' + lab.state : ''}` : ''}</span>
+                  <div key={idx} className="p-2.5 rounded-sm bg-white border border-slate-200 flex items-center justify-between">
+                    <span className="font-semibold text-slate-900">{typeof lab === 'string' ? lab : (lab?.name || "BIS Recognized Lab")}</span>
+                    <span className="text-slate-500">{typeof lab === 'object' && lab?.city ? `${lab.city}${lab.state ? ', ' + lab.state : ''}` : ''}</span>
                   </div>
                 ))}
               </div>
             ) : (
-              <p className="text-xs text-neutral-500 italic">Information not available in the current prototype dataset.</p>
+              <p className="text-xs text-slate-500 italic">Information not available in the current prototype dataset.</p>
             )}
           </section>
 
           {/* 6. Required Documentation */}
           <section className="space-y-2">
-            <h3 className="text-xs font-bold text-neutral-400 uppercase tracking-wider flex items-center gap-1.5">
-              <FileText className="w-3.5 h-3.5 text-neutral-500" />
+            <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1.5">
+              <FileText className="w-3.5 h-3.5 text-gov-800" />
               Required Documentation
             </h3>
             {docs.length > 0 ? (
-              <ul className="space-y-1 text-xs text-neutral-600">
+              <ul className="space-y-1 text-xs text-slate-600">
                 {docs.map((doc, idx) => (
                   <li key={idx} className="flex items-start gap-2">
-                    <span className="w-1.5 h-1.5 rounded-full bg-neutral-400 mt-1.5 shrink-0"></span>
+                    <span className="w-1.5 h-1.5 rounded-xs bg-gov-800 mt-1.5 shrink-0"></span>
                     <span>{typeof doc === 'string' ? doc : (doc?.title || doc?.name || JSON.stringify(doc))}</span>
                   </li>
                 ))}
               </ul>
             ) : (
-              <p className="text-xs text-neutral-500 italic">Information not available in the current prototype dataset.</p>
+              <p className="text-xs text-slate-500 italic">Information not available in the current prototype dataset.</p>
             )}
           </section>
 
         </div>
 
         {/* Modal Footer */}
-        <div className="p-4 sm:p-5 border-t border-neutral-200 bg-neutral-50 rounded-b-2xl flex flex-col md:flex-row items-center justify-between gap-3">
+        <div className="p-4 sm:p-5 border-t border-slate-300 bg-slate-50 rounded-b-sm flex flex-col md:flex-row items-center justify-between gap-3">
           <div className="flex flex-wrap items-center gap-2 w-full md:w-auto">
             {onAskBot && (
               <button
@@ -347,9 +347,9 @@ export default function StandardDetailModal({ standard, onClose, onAskBot, onChe
                   onClose();
                   onAskBot(`Explain the compliance requirements, testing parameters, and factory setup for ${isCode} (${title})`);
                 }}
-                className="px-3.5 py-2 text-xs font-bold text-emerald-800 bg-emerald-50 border border-emerald-200 rounded-xl hover:bg-emerald-100 transition-colors inline-flex items-center gap-1.5 shadow-2xs"
+                className="px-3.5 py-2 text-xs font-bold text-gov-900 bg-gov-50 border border-gov-300 rounded-sm hover:bg-gov-100 transition-colors inline-flex items-center gap-1.5 shadow-2xs"
               >
-                <Sparkles className="w-3.5 h-3.5 text-emerald-600" />
+                <Sparkles className="w-3.5 h-3.5 text-amber-600" />
                 <span>Ask ManakBot About This Standard</span>
               </button>
             )}
@@ -360,9 +360,9 @@ export default function StandardDetailModal({ standard, onClose, onAskBot, onChe
                   onClose();
                   onCheckCompliance(isCode);
                 }}
-                className="px-3.5 py-2 text-xs font-bold text-neutral-800 bg-white border border-neutral-300 rounded-xl hover:border-emerald-500 hover:text-emerald-900 transition-colors inline-flex items-center gap-1.5 shadow-2xs"
+                className="px-3.5 py-2 text-xs font-bold text-slate-800 bg-white border border-slate-300 rounded-sm hover:bg-slate-100 transition-colors inline-flex items-center gap-1.5 shadow-2xs"
               >
-                <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
+                <ShieldCheck className="w-3.5 h-3.5 text-gov-800" />
                 <span>Run Compliance Check</span>
               </button>
             )}
@@ -371,7 +371,7 @@ export default function StandardDetailModal({ standard, onClose, onAskBot, onChe
           <div className="flex items-center gap-2 w-full md:w-auto justify-end">
             <button
               onClick={onClose}
-              className="px-4 py-2 text-xs font-semibold text-neutral-700 bg-white border border-neutral-300 rounded-xl hover:bg-neutral-50 transition-colors"
+              className="px-4 py-2 text-xs font-semibold text-slate-700 bg-white border border-slate-300 rounded-sm hover:bg-slate-100 transition-colors"
             >
               Close
             </button>
@@ -379,7 +379,7 @@ export default function StandardDetailModal({ standard, onClose, onAskBot, onChe
               href="https://www.manakonline.in"
               target="_blank"
               rel="noreferrer"
-              className="inline-flex items-center justify-center gap-1.5 px-4 py-2 text-xs font-semibold text-white bg-emerald-600 rounded-xl hover:bg-emerald-700 transition-colors shadow-2xs"
+              className="inline-flex items-center justify-center gap-1.5 px-4 py-2 text-xs font-semibold text-white bg-gov-800 rounded-sm hover:bg-gov-900 transition-colors shadow-2xs"
             >
               <span>e-BIS Portal</span>
               <ExternalLink className="w-3.5 h-3.5" />
