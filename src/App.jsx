@@ -1,42 +1,32 @@
 import React, { useState } from 'react';
-import Navbar from './components/Navbar';
-import Hero from './components/Hero';
-import CoreActions from './components/CoreActions';
-import ManakBot from './components/ManakBot';
-import ProductDiscovery from './components/ProductDiscovery';
-import ComplianceChecker from './components/ComplianceChecker';
-import ExploreStandards from './components/ExploreStandards';
-import CostEstimatorSection from './components/CostEstimatorSection';
-import ConsumerVerifier from './components/ConsumerVerifier';
-import HowItWorks from './components/HowItWorks';
-import AboutSection from './components/AboutSection';
-import TrustSection from './components/TrustSection';
-import FAQSection from './components/FAQSection';
-import FinalCTA from './components/FinalCTA';
+import Header from './components/Header';
 import Footer from './components/Footer';
 import StandardDetailModal from './components/StandardDetailModal';
 import ReportModal from './components/ReportModal';
 import ErrorBoundary from './components/ErrorBoundary';
+import { useRouter } from './context/RouterContext';
 import { BIS_STANDARDS } from './data/bisStandards';
 
+// Pages
+import HomePage from './pages/HomePage';
+import StandardsSearchPage from './pages/StandardsSearchPage';
+import StandardDetailPage from './pages/StandardDetailPage';
+import ManakBotPage from './pages/ManakBotPage';
+import ServicesPage from './pages/ServicesPage';
+import ConsumerPage from './pages/ConsumerPage';
+import MsmePage from './pages/MsmePage';
+import NewsPage from './pages/NewsPage';
+import AboutPage from './pages/AboutPage';
+import FaqPage from './pages/FaqPage';
+
 export default function App() {
-  const [activeMode, setActiveMode] = useState('msme'); // 'msme' | 'citizen'
+  const { path, navigate } = useRouter();
   const [selectedStandard, setSelectedStandard] = useState(null);
-  const [activeComplianceProduct, setActiveComplianceProduct] = useState('');
   const [reportState, setReportState] = useState({
     isOpen: false,
     identifier: '',
     category: ''
   });
-
-  const handleToggleMode = (newMode) => {
-    setActiveMode(newMode);
-    if (newMode === 'citizen') {
-      handleScrollToSection('consumer-check');
-    } else {
-      handleScrollToSection('discovery');
-    }
-  };
 
   const handleOpenStandard = (std) => {
     if (!std) {
@@ -67,126 +57,93 @@ export default function App() {
     setReportState(prev => ({ ...prev, isOpen: false }));
   };
 
-  const handleScrollToSection = (id) => {
-    const el = document.getElementById(id);
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
+  // Route Resolution
+  const renderCurrentPage = () => {
+    const normalizedPath = path.length > 1 && path.endsWith('/') ? path.slice(0, -1) : path;
 
-  const handleAskBot = (promptQuery = '') => {
-    handleScrollToSection('assistant');
-    if (promptQuery) {
-      setTimeout(() => {
-        const textarea = document.querySelector('#assistant textarea');
-        if (textarea) {
-          textarea.value = promptQuery;
-          textarea.dispatchEvent(new Event('input', { bubbles: true }));
-          textarea.focus();
-        }
-      }, 400);
+    if (normalizedPath === '/' || normalizedPath === '') {
+      return <HomePage onOpenStandard={handleOpenStandard} onOpenReport={handleOpenReport} />;
     }
-  };
 
-  const handleCheckCompliance = (productOrCode = '') => {
-    if (productOrCode) {
-      setActiveComplianceProduct(productOrCode);
+    if (normalizedPath === '/standards/search' || normalizedPath.startsWith('/standards/search')) {
+      return <StandardsSearchPage onOpenStandardModal={handleOpenStandard} />;
     }
-    handleScrollToSection('compliance');
+
+    if (normalizedPath.startsWith('/standards/')) {
+      return <StandardDetailPage />;
+    }
+
+    if (normalizedPath === '/manakbot' || normalizedPath.startsWith('/manakbot')) {
+      return (
+        <ManakBotPage 
+          onOpenStandard={handleOpenStandard} 
+          onCheckCompliance={() => navigate('/services')} 
+        />
+      );
+    }
+
+    if (normalizedPath === '/services') {
+      return <ServicesPage />;
+    }
+
+    if (normalizedPath === '/consumer') {
+      return <ConsumerPage onOpenReport={handleOpenReport} />;
+    }
+
+    if (normalizedPath === '/msme') {
+      return <MsmePage />;
+    }
+
+    if (normalizedPath === '/news') {
+      return <NewsPage />;
+    }
+
+    if (normalizedPath === '/about') {
+      return <AboutPage />;
+    }
+
+    if (normalizedPath === '/faq') {
+      return <FaqPage />;
+    }
+
+    // Default Fallback
+    return <HomePage onOpenStandard={handleOpenStandard} onOpenReport={handleOpenReport} />;
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-white text-neutral-900 font-sans selection:bg-emerald-600 selection:text-white antialiased">
-      {/* 1. Navbar */}
-      <Navbar 
-        activeMode={activeMode}
-        onToggleMode={handleToggleMode}
-        onAskBot={() => handleScrollToSection('assistant')}
-        onOpenReport={() => handleOpenReport()} 
-      />
+    <div className="min-h-screen flex flex-col bg-white text-neutral-900 font-sans antialiased selection:bg-saffron-500 selection:text-white">
+      {/* 1. Global Government-Grade Header */}
+      <Header />
 
-      {/* 2. Hero with Instant Search & Live Result */}
-      <Hero 
-        onOpenStandard={handleOpenStandard} 
-        onAskQuestion={handleAskBot} 
-        onExploreStandards={() => handleScrollToSection('standards')}
-        onSwitchMode={handleToggleMode}
-      />
+      {/* 2. Main Page Content View */}
+      <main className="flex-1 flex flex-col">
+        <ErrorBoundary>
+          {renderCurrentPage()}
+        </ErrorBoundary>
+      </main>
 
-      {/* 3. Core Tools Section (4 Distinct Actions) */}
-      <CoreActions
-        onAskBot={() => handleScrollToSection('assistant')}
-        onFindStandards={() => handleScrollToSection('discovery')}
-        onComplianceCheck={() => handleScrollToSection('compliance')}
-        onUnderstandStandard={() => handleScrollToSection('standards')}
-      />
-
-      {/* 4. Dedicated AI Regulatory Assistant (ManakBot) */}
-      <ManakBot
-        onOpenStandard={handleOpenStandard}
-        onCheckCompliance={handleCheckCompliance}
-      />
-
-      {/* 5. Product → Standard Discovery Workflow */}
-      <ProductDiscovery
-        onOpenStandard={handleOpenStandard}
-        onCheckCompliance={handleCheckCompliance}
-        onAskBot={handleAskBot}
-      />
-
-      {/* 6. Interactive 7-Stage Compliance Roadmap */}
-      <ComplianceChecker
-        initialProduct={activeComplianceProduct}
-        onOpenStandard={handleOpenStandard}
-        onAskBot={handleAskBot}
-      />
-
-      {/* 7. Complete Standards Directory & Search (572+ IS Standards) */}
-      <ExploreStandards 
-        onSelectStandard={handleOpenStandard} 
-        onAskBot={handleAskBot}
-        onCheckCompliance={handleCheckCompliance}
-      />
-
-      {/* 8. Statutory Cost Estimator & MSME Concessions */}
-      <CostEstimatorSection />
-
-      {/* 9. Consumer Verification Tool (Gold HUID & ISI CML Checker) */}
-      <ConsumerVerifier 
-        onOpenReport={handleOpenReport} 
-      />
-
-      {/* 10. How It Works (4 Clear Linear Steps) */}
-      <HowItWorks />
-
-      {/* 11. About ManakSetu (Bridging Industry & Standards) */}
-      <AboutSection />
-
-      {/* 12. Trust & Statutory Transparency */}
-      <TrustSection />
-
-      {/* 13. Useful FAQs */}
-      <FAQSection />
-
-      {/* 14. Final Call to Action */}
-      <FinalCTA onGetStarted={() => window.scrollTo({ top: 0, behavior: 'smooth' })} />
-
-      {/* 15. Footer */}
+      {/* 3. Global Statutory Footer */}
       <Footer onOpenReport={() => handleOpenReport()} />
 
-      {/* Standard Full Detail Modal */}
+      {/* Standard Detail Modal */}
       {selectedStandard && (
         <ErrorBoundary onReset={() => setSelectedStandard(null)}>
           <StandardDetailModal
             standard={selectedStandard}
             onClose={() => setSelectedStandard(null)}
-            onAskBot={handleAskBot}
-            onCheckCompliance={handleCheckCompliance}
+            onAskBot={(promptQuery) => {
+              setSelectedStandard(null);
+              navigate(`/manakbot?prompt=${encodeURIComponent(promptQuery || '')}`);
+            }}
+            onCheckCompliance={() => {
+              setSelectedStandard(null);
+              navigate('/services');
+            }}
           />
         </ErrorBoundary>
       )}
 
-      {/* Violation Report Modal */}
+      {/* Statutory Violation Report Modal */}
       <ReportModal
         isOpen={reportState.isOpen}
         initialIdentifier={reportState.identifier}

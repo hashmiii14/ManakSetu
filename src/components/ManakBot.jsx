@@ -18,14 +18,21 @@ const SUGGESTED_CHIPS = [
   { label: "MSME Certification Fee Concessions", prompt: "What concessions do Micro and Small enterprises get on BIS marking fees?" }
 ];
 
-export default function ManakBot({ onOpenStandard, onCheckCompliance }) {
+export default function ManakBot({ onOpenStandard, onCheckCompliance, initialPrompt = '' }) {
   const [sessions, setSessions] = useState([]);
   const [activeSessionId, setActiveSessionId] = useState(null);
-  const [inputMessage, setInputMessage] = useState('');
+  const [inputMessage, setInputMessage] = useState(initialPrompt || '');
   const [isLoading, setIsLoading] = useState(false);
   const [copiedIndex, setCopiedIndex] = useState(null);
   const [errorState, setErrorState] = useState(null);
   const [isHistoryOpen, setIsHistoryOpen] = useState(false);
+
+  // Sync initialPrompt if provided and input is currently empty
+  useEffect(() => {
+    if (initialPrompt && !inputMessage) {
+      setInputMessage(initialPrompt);
+    }
+  }, [initialPrompt]);
 
   const messagesEndRef = useRef(null);
   const textareaRef = useRef(null);
