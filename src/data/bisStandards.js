@@ -586,6 +586,138 @@ export const BIS_STANDARDS = [
     consumerTip: "Check that the week and year of manufacture are clearly printed on the side gusset."
   },
 
+  // 9B. PORTLAND POZZOLANA CEMENT (PPC - FLY ASH BASED)
+  {
+    id: "IS-1489-1",
+    isCode: "IS 1489 (Part 1):2015",
+    title: "Portland Pozzolana Cement - Specification: Part 1 Fly Ash Based (PPC)",
+    category: "Construction Materials",
+    sector: "Civil Engineering",
+    keywords: ["cement", "ppc cement", "portland pozzolana", "fly ash cement", "ultratech cement", "ambuja cement", "acc cement", "building material", "concrete"],
+    colloquialTerms: ["cement", "ppc", "ultratech", "ambuja", "acc cement", "fly ash cement", "ghar banane wala cement", "plaster cement", "chhat wala cement", "dalmia cement", "shree cement"],
+    scheme: "Scheme-I (ISI Mark)",
+    schemeCode: "SCHEME_1",
+    mandatoryQCO: true,
+    qcoNotification: "Cement (Quality Control) Order, 2003 (as amended 2024)",
+    qcoDate: "Mandatory since 2003 (DPIIT)",
+    gazetteNotification: {
+      order: "Cement (Quality Control) Order",
+      ministry: "DPIIT, Ministry of Commerce & Industry",
+      date: "17-Feb-2003",
+      gazetteRef: "S.O. 191(E)"
+    },
+    description: "Prescribes chemical, physical, and durability requirements for Portland Pozzolana Cement (fly ash based) comprising intimate grinding of OPC clinker, gypsum, and 15% to 35% pozzolana (fly ash). Dominates >65% of domestic Indian retail construction.",
+    scope: "Covers manufacture, chemical composition, physical properties, packaging, and marking of fly ash based Portland Pozzolana Cement for general construction, plastering, masonry, and hydraulic works.",
+    keyTests: [
+      "Compressive Strength: 72h (min 16 MPa), 168h (min 22 MPa), 672h / 28-day (min 33 MPa)",
+      "Fineness by Specific Surface (Blaine Air Permeability Method - Min 300 m2/kg)",
+      "Soundness Test (Le Chatelier expansion max 10 mm; Autoclave expansion max 0.8%)",
+      "Setting Time: Initial Setting (Not less than 30 min) & Final Setting (Max 600 min)",
+      "Chemical Requirements: Insoluble Residue max [x + 4.0(100 - x)/100]%, Magnesia max 6.0%, SO3 max 3.5%"
+    ],
+    globalHarmonization: {
+      standard: "ASTM C595 (Type IP Blended Hydraulic Cement) / EN 197-1 (CEM II/B-V 32.5 R)",
+      org: "ASTM International / CEN",
+      exportEquivalence: "Directly Equivalent to ASTM Type IP Blended Cement and European CEM II/B-V",
+      note: "High sulphate resistance, lower heat of hydration, widely exported across Indian Ocean rim and Middle East.",
+      compatibleMarkets: ["Middle East", "Southeast Asia", "Africa", "SAARC"]
+    },
+    citizenCard: {
+      headline: "Verifying PPC Cement Bags for Home Construction",
+      mandatoryMark: "ISI Mark with 7-digit CML Number + Red Ink Print on Bag",
+      safetyRisk: "Fake or sub-standard fly-ash content exceeding 35% severely retards setting time and causes building collapse.",
+      labelInstruction: "Ensure the bag displays: 1) 'IS 1489 (Part 1)', 2) 'PORTLAND POZZOLANA CEMENT', 3) Fly ash percentage (15-35%), 4) Week & Year of packing, 5) Red lettering, 6) CM/L-XXXXXXX.",
+      actionTip: "Verify CML (e.g. 6200145 for UltraTech) on ManakSetu or official BIS portal."
+    },
+    labsAvailable: [
+      { name: "National Council for Cement and Building Materials (NCCBM)", city: "Ballabgarh", state: "Haryana" },
+      { name: "NCCBM Regional Centre", city: "Hyderabad", state: "Telangana" },
+      { name: "BIS Central Laboratory", city: "Sahibabad", state: "Uttar Pradesh" },
+      { name: "National Test House (NTH)", city: "Alipore, Kolkata", state: "West Bengal" }
+    ],
+    feeStructure: {
+      applicationFee: 1000,
+      annualLicenseFee: 1000,
+      auditFeePerManDay: 7000,
+      baseMarkingFee: 185000,
+      microConcessionPercent: 50,
+      smallConcessionPercent: 20,
+      womenStartupConcessionPercent: 50
+    },
+    documentationRequired: [
+      "NTPC/Thermal Power Plant certified dry fly ash test compliance certificates",
+      "In-house Blaine air permeability apparatus, Le Chatelier split cylinder, and digital compressive test machine (CTM)",
+      "Standard sand conforming to IS 650 procurement records for mortar cube testing",
+      "Daily physical test register recording 3-day, 7-day, and 28-day cube crushing strength"
+    ],
+    consumerTip: "PPC cement bags are statutorily printed with RED font on HDPE bags (IS 1489 Part 1). Never accept plain unprinted bags."
+  },
+
+  // 9C. ORDINARY PORTLAND CEMENT (OPC 33, 43, 53 GRADES CONSOLIDATED)
+  {
+    id: "IS-269",
+    isCode: "IS 269:2015",
+    title: "Ordinary Portland Cement - Specification (33 Grade, 43 Grade and 53 Grade)",
+    category: "Construction Materials",
+    sector: "Civil Engineering",
+    keywords: ["cement", "opc cement", "ordinary portland cement", "opc 43", "opc 33", "opc 53", "building material", "concrete"],
+    colloquialTerms: ["opc", "opc 43 grade", "opc 33 grade", "cement", "simint", "concrete cement", "shuttering cement"],
+    scheme: "Scheme-I (ISI Mark)",
+    schemeCode: "SCHEME_1",
+    mandatoryQCO: true,
+    qcoNotification: "Cement (Quality Control) Order, 2003",
+    qcoDate: "Mandatory since 2003 (DPIIT)",
+    gazetteNotification: {
+      order: "Cement (Quality Control) Order",
+      ministry: "DPIIT, Ministry of Commerce & Industry",
+      date: "17-Feb-2003",
+      gazetteRef: "S.O. 191(E)"
+    },
+    description: "Consolidated Indian Standard specifying requirements for 33 grade, 43 grade, and 53 grade Ordinary Portland Cement, manufactured by pulverizing clinker formed by calcining argillaceous and calcareous materials.",
+    scope: "Specification for manufacture, chemical composition, physical properties, packaging, and marking of 33, 43, and 53 grade ordinary portland cements.",
+    keyTests: [
+      "Compressive Strength Grade 43: 72h (min 23 MPa), 168h (min 33 MPa), 672h (min 43 MPa)",
+      "Compressive Strength Grade 53: 72h (min 27 MPa), 168h (min 37 MPa), 672h (min 53 MPa)",
+      "Specific Surface Blaine Fineness (Min 225 m2/kg)",
+      "Le Chatelier Soundness (Max 10 mm) & Autoclave Soundness (Max 0.8%)",
+      "Chemical Analysis: Insoluble residue max 5.0%, Magnesia max 6.0%, Loss on ignition max 5.0%"
+    ],
+    globalHarmonization: {
+      standard: "ASTM C150 (Type I / Type II) / EN 197-1 (CEM I 42.5 N/R)",
+      org: "ASTM / CEN",
+      exportEquivalence: "Harmonized with ASTM C150 and European EN 197-1 CEM I",
+      note: "Accepted internationally for pre-cast structural concrete and airport runways.",
+      compatibleMarkets: ["Middle East", "Europe", "North America", "Africa"]
+    },
+    citizenCard: {
+      headline: "OPC Grade Identification on Cement Bags",
+      mandatoryMark: "ISI Mark with 7-digit CML Number + Black Ink Lettering on Bag",
+      safetyRisk: "Using uncertified cement in load-bearing columns risks catastrophic structural failure.",
+      labelInstruction: "OPC bags are statutorily printed with BLACK font (in contrast to RED for PPC) stating 'IS 269', the grade (33, 43, or 53), and CM/L license.",
+      actionTip: "Verify license authenticity on the ManakSetu verification portal."
+    },
+    labsAvailable: [
+      { name: "National Council for Cement and Building Materials (NCCBM)", city: "Ballabgarh", state: "Haryana" },
+      { name: "National Test House (NTH - Western Region)", city: "Mumbai", state: "Maharashtra" },
+      { name: "BIS Central Laboratory", city: "Sahibabad", state: "Uttar Pradesh" }
+    ],
+    feeStructure: {
+      applicationFee: 1000,
+      annualLicenseFee: 1000,
+      auditFeePerManDay: 7000,
+      baseMarkingFee: 185000,
+      microConcessionPercent: 50,
+      smallConcessionPercent: 20,
+      womenStartupConcessionPercent: 50
+    },
+    documentationRequired: [
+      "Raw mix design sheet and clinker microscopic analysis reports",
+      "Complete in-house physical & chemical testing laboratory setup",
+      "ISO 9001 quality management system certification and sampling plan"
+    ],
+    consumerTip: "OPC cement bags are statutorily printed with BLACK lettering. Grade 43 is ideal for general RCC; Grade 53 is used for high-rises and pre-stressed concrete."
+  },
+
   // 10. TMT STEEL BARS
   {
     id: "IS-1786",
@@ -1653,7 +1785,7 @@ export const NABL_LABS = [
     lng: 88.3308,
     accreditation: "NABL TC-5012 / Ministry of Consumer Affairs",
     testingScope: ["Packaged Drinking Water", "Cement & Concrete", "Rebars & Steel", "Chemicals", "Cookware"],
-    supportedStandards: ["IS 14543:2016", "IS 12269:2013", "IS 1786:2008", "IS 2347:2017", "IS 2062:2011"],
+    supportedStandards: ["IS 14543:2016", "IS 12269:2013", "IS 1489 (Part 1):2015", "IS 269:2015", "IS 1786:2008", "IS 2347:2017", "IS 2062:2011"],
     contact: "nthcal@wb.nic.in | +91-33-24791221",
     address: "11/1 Judges Court Road, Alipore, Kolkata, West Bengal 700027"
   },
@@ -1679,7 +1811,7 @@ export const NABL_LABS = [
     lng: 77.3245,
     accreditation: "NABL TC-5421 / Apex Body for Cement & Construction",
     testingScope: ["Ordinary Portland Cement 53 Grade", "PPC Cement", "Concrete Admixtures", "Structural Mortars"],
-    supportedStandards: ["IS 12269:2013"],
+    supportedStandards: ["IS 12269:2013", "IS 1489 (Part 1):2015", "IS 269:2015"],
     contact: "nccbm@ncbindia.com | +91-129-4258258",
     address: "34 Km Stone, Delhi-Mathura Road (NH-2), Ballabgarh, Haryana 121004"
   },

@@ -8,13 +8,14 @@ import { checkCompliance } from '../services/api';
 import { SCHEMES_INFO } from '../data/bisStandards';
 
 const POPULAR_CHECKLIST_PRODUCTS = [
+  "Portland Pozzolana Cement PPC (IS 1489)",
+  "Ordinary Portland Cement 53 Grade (IS 12269)",
   "Electric Immersion Water Heater (IS 368)",
   "Stationary Storage Electric Geyser (IS 2082)",
   "Two-Wheeler Motorcycle Helmet (IS 4151)",
   "Packaged Drinking Water (IS 14543)",
   "Safety of Toys (IS 9873 Part 1)",
   "Domestic Pressure Cooker (IS 2347)",
-  "Ordinary Portland Cement 53 Grade (IS 12269)",
   "High Strength Deformed Steel Bars (IS 1786)",
   "Electric Dry & Steam Iron (IS 302-2-3)",
   "Information Technology Equipment (IS 13252)"

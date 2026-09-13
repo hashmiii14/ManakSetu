@@ -315,6 +315,7 @@ export default function ConsumerVerifier({ onOpenReport }) {
             <div className="flex flex-wrap items-center gap-1.5 text-xs text-slate-500">
               <span className="font-semibold text-slate-600 text-[11px]">Sample Licenses:</span>
               {[
+                { code: '6200145', label: 'UltraTech Cement', isFake: false },
                 { code: '8400192', label: 'Havells Geyser', isFake: false },
                 { code: '9200341', label: 'Bisleri Water', isFake: false },
                 { code: '4151908', label: 'Steelbird Helmet', isFake: false },

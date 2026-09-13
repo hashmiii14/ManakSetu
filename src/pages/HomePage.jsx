@@ -5,11 +5,13 @@ import {
   FlaskConical, Award, Globe, Scale, Users, MapPin, Calendar, HelpCircle
 } from 'lucide-react';
 import { useRouter } from '../context/RouterContext';
+import { useLanguage } from '../context/LanguageContext';
 import { POPULAR_SEARCH_CHIPS, SECTORS_LIST } from '../data/bisStandards';
 import ErrorBoundary from '../components/ErrorBoundary';
 
 export default function HomePage({ onOpenStandard, onOpenReport }) {
   const { navigate } = useRouter();
+  const { t, language } = useLanguage();
   const [searchQuery, setSearchQuery] = useState('');
 
   const handleSearchSubmit = (e) => {
@@ -168,9 +170,9 @@ export default function HomePage({ onOpenStandard, onOpenReport }) {
   ];
 
   const popularSearchesList = [
+    { label: "Cement (IS 1489/12269)", query: "cement" },
     { label: "IS 302 (Electric Iron)", query: "IS 302" },
     { label: "Helmet (IS 4151)", query: "helmet" },
-    { label: "Cement 53 Grade", query: "cement" },
     { label: "Electrical Appliances", query: "electrical" },
     { label: "Packaged Drinking Water", query: "water" },
     { label: "Toys (IS 9873)", query: "toys" },
@@ -191,18 +193,18 @@ export default function HomePage({ onOpenStandard, onOpenReport }) {
                 
                 {/* Breadcrumb / Portal Label */}
                 <div className="flex items-center gap-2 text-[11px] text-slate-500 font-medium">
-                  <span>Home</span>
+                  <span>{t('nav.home', 'Home')}</span>
                   <span>/</span>
-                  <span className="text-gov-800 font-semibold">Public Service Navigation Portal</span>
+                  <span className="text-gov-800 font-semibold">{t('hero.badge', 'Public Service Navigation Portal')}</span>
                 </div>
 
                 {/* Restrained Title & Description */}
                 <div className="space-y-1.5">
                   <h1 className="text-2xl sm:text-3xl font-extrabold text-gov-900 tracking-tight">
-                    Find Indian Standards and BIS Services
+                    {t('hero.title', 'Find Indian Standards and BIS Services')}
                   </h1>
                   <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                    National assistance portal for Indian enterprises, manufacturers, exporters, and citizens to discover Indian Standards (IS Codes), verify statutory Quality Control Orders (QCOs), and navigate Bureau of Indian Standards (BIS) conformity assessment procedures.
+                    {t('hero.subtitle', 'National assistance portal for Indian enterprises, manufacturers, exporters, and citizens to discover Indian Standards (IS Codes), verify statutory Quality Control Orders (QCOs), and navigate Bureau of Indian Standards (BIS) conformity assessment procedures.')}
                   </p>
                 </div>
 
@@ -216,7 +218,7 @@ export default function HomePage({ onOpenStandard, onOpenReport }) {
                           type="text"
                           value={searchQuery}
                           onChange={(e) => setSearchQuery(e.target.value)}
-                          placeholder="Search by IS Number, product, keyword or standard (e.g., IS 2082, geyser, cement, helmet)..."
+                          placeholder={t('search.placeholder', 'Search by IS Number, product, keyword or standard (e.g., IS 2082, geyser, cement, helmet)...')}
                           className="w-full pl-10 pr-4 py-2.5 text-xs sm:text-sm text-slate-900 bg-white border border-slate-300 rounded-sm focus:outline-none focus:border-gov-800 focus:ring-1 focus:ring-gov-800 placeholder:text-slate-400"
                         />
                       </div>
@@ -227,7 +229,7 @@ export default function HomePage({ onOpenStandard, onOpenReport }) {
                           className="px-5 py-2.5 bg-gov-800 hover:bg-gov-900 text-white font-bold text-xs rounded-sm transition-colors shadow-sm flex items-center justify-center gap-1.5"
                         >
                           <Search className="w-3.5 h-3.5 text-amber-400" />
-                          <span>Search Standards</span>
+                          <span>{t('btn.search', 'Search Standards')}</span>
                         </button>
 
                         <button
@@ -236,7 +238,7 @@ export default function HomePage({ onOpenStandard, onOpenReport }) {
                           className="px-4 py-2.5 bg-white hover:bg-slate-50 text-gov-800 border border-gov-800 font-bold text-xs rounded-sm transition-colors flex items-center justify-center gap-1.5"
                         >
                           <Sparkles className="w-3.5 h-3.5 text-amber-600" />
-                          <span>Ask ManakBot</span>
+                          <span>{t('btn.manakbot', 'Ask ManakBot')}</span>
                         </button>
                       </div>
                     </div>
@@ -244,7 +246,7 @@ export default function HomePage({ onOpenStandard, onOpenReport }) {
 
                   {/* Popular Searches Row (No Emojis) */}
                   <div className="pt-2.5 flex flex-wrap items-center gap-1.5 text-xs text-slate-500">
-                    <span className="font-semibold text-slate-600 text-[11px]">Popular Searches:</span>
+                    <span className="font-semibold text-slate-600 text-[11px]">{t('search.quick_searches', 'Popular Searches:')}</span>
                     {popularSearchesList.map((item, idx) => (
                       <button
                         key={idx}

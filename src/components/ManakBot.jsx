@@ -10,6 +10,7 @@ import Logo from './Logo';
 const STORAGE_KEY = 'manaksetu_chat_sessions_v2';
 
 const SUGGESTED_CHIPS = [
+  { label: "Cement Certification (IS 1489/12269)", prompt: "What are the mandatory testing requirements and BIS certification procedure for Portland Pozzolana Cement (IS 1489) and 53 Grade OPC (IS 12269)?" },
   { label: "What is an Indian Standard?", prompt: "What is an Indian Standard (IS Code) and how are standards published under the BIS Act 2016?" },
   { label: "Find standard for product", prompt: "How do I identify the applicable Indian Standard and scheme for my product?" },
   { label: "How BIS certification works", prompt: "Explain the step-by-step procedure for obtaining a BIS product certification license (Scheme-I)." },

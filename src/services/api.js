@@ -371,11 +371,16 @@ export async function estimateCost(standardCode, enterpriseType = "micro") {
   }
 
   // Local fallback calculation
-  const base = 65000;
+  const cleanStandard = (standardCode || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+  const matchedStd = BIS_STANDARDS.find(s => {
+    const sCode = s.isCode.toLowerCase().replace(/[^a-z0-9]/g, '');
+    return sCode === cleanStandard || cleanStandard.includes(sCode) || sCode.includes(cleanStandard);
+  });
+  const base = matchedStd?.feeStructure?.baseMarkingFee || 65000;
   const concession = enterpriseType === 'micro' ? 50 : enterpriseType === 'small' ? 20 : 0;
   const effective = base * (1 - concession / 100);
-  const appFee = 1000;
-  const auditFee = 14000;
+  const appFee = matchedStd?.feeStructure?.applicationFee || 1000;
+  const auditFee = (matchedStd?.feeStructure?.auditFeePerManDay || 7000) * 2;
   return {
     standard_code: standardCode,
     enterprise_type: enterpriseType,

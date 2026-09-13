@@ -217,6 +217,18 @@ export function verifyCMLLicense(cmlInput) {
       surveillance_status: "Active • Mechanical Tensile Benchmarks Met",
       qco_compliance: "Mandatory QCO Certified",
       audit_trace: "AUDIT-BIS-7100456-2026"
+    },
+    '6200145': {
+      cml_number: "CM/L-6200145",
+      licensee: "UltraTech Cement Limited (Aditya Birla Group)",
+      brand: "UltraTech Cement",
+      product: "Portland Pozzolana Cement (Fly Ash Based) - PPC",
+      applicable_standard: "IS 1489 (Part 1):2015",
+      valid_upto: "31-December-2027",
+      factory_location: "Kotputli Cement Works, Mohanpura, Jaipur District, Rajasthan - 303108",
+      surveillance_status: "Active • 28-Day Compressive Strength & Le Chatelier Tests Passed",
+      qco_compliance: "Mandatory Cement (Quality Control) Order Compliant",
+      audit_trace: "AUDIT-BIS-6200145-2026"
     }
   };
 

@@ -3,24 +3,25 @@ import {
   Menu, X, Search, ExternalLink, Globe, ChevronRight
 } from 'lucide-react';
 import { useRouter } from '../context/RouterContext';
+import { useLanguage } from '../context/LanguageContext';
 import Logo from './Logo';
 
 export default function Header() {
   const { path, navigate } = useRouter();
+  const { language, setLanguage, t } = useLanguage();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [fontScale, setFontScale] = useState('normal'); // 'normal' | 'small' | 'large'
-  const [language, setLanguage] = useState('en'); // 'en' | 'hi'
 
   const navLinks = [
-    { label: "Home", to: "/" },
-    { label: "Standards", to: "/standards/search" },
-    { label: "Services", to: "/services" },
-    { label: "ManakBot", to: "/manakbot" },
-    { label: "Consumer Protection", to: "/consumer" },
-    { label: "MSME Relief", to: "/msme" },
-    { label: "Resources", to: "/news" },
-    { label: "Support", to: "/faq" },
-    { label: "About", to: "/about" }
+    { label: t('nav.home', 'Home'), to: "/" },
+    { label: t('nav.standards', 'Standards'), to: "/standards/search" },
+    { label: t('nav.services', 'Services'), to: "/services" },
+    { label: t('nav.manakbot', 'ManakBot'), to: "/manakbot" },
+    { label: t('nav.consumer', 'Consumer Protection'), to: "/consumer" },
+    { label: t('nav.msme', 'MSME Relief'), to: "/msme" },
+    { label: t('nav.news', 'Resources'), to: "/news" },
+    { label: t('nav.faq', 'Support'), to: "/faq" },
+    { label: t('nav.about', 'About'), to: "/about" }
   ];
 
   const handleNavClick = (to) => {
@@ -30,13 +31,12 @@ export default function Header() {
 
   const handleFontChange = (scale) => {
     setFontScale(scale);
-    document.documentElement.classList.remove('text-sm', 'text-base', 'text-lg');
     if (scale === 'small') {
-      document.documentElement.classList.add('text-sm');
+      document.documentElement.style.fontSize = '14px';
     } else if (scale === 'large') {
-      document.documentElement.classList.add('text-lg');
+      document.documentElement.style.fontSize = '18px';
     } else {
-      document.documentElement.classList.add('text-base');
+      document.documentElement.style.fontSize = '16px';
     }
   };
 
@@ -61,7 +61,7 @@ export default function Header() {
 
           {/* Right: Ministry Info */}
           <div className="text-slate-300 text-[11px] hidden sm:block">
-            <span>Ministry of Consumer Affairs, Food &amp; Public Distribution</span>
+            <span>{t('top.ministry', 'Ministry of Consumer Affairs, Food & Public Distribution')}</span>
           </div>
 
         </div>
@@ -218,6 +218,31 @@ export default function Header() {
       {/* 4. MOBILE DRAWER NAVIGATION */}
       {mobileMenuOpen && (
         <div className="md:hidden bg-white border-b-2 border-gov-800 shadow-lg animate-in fade-in">
+          {/* Mobile Utility Controls */}
+          <div className="px-4 py-2.5 bg-slate-100 border-b border-slate-200 flex items-center justify-between text-xs">
+            <div className="flex items-center gap-1">
+              <span className="text-slate-600 text-[11px] font-medium mr-1">Language:</span>
+              <button
+                onClick={() => setLanguage('en')}
+                className={`px-2 py-0.5 rounded text-[11px] font-semibold ${language === 'en' ? 'bg-gov-800 text-white' : 'bg-white text-slate-700 border border-slate-300'}`}
+              >
+                English
+              </button>
+              <button
+                onClick={() => setLanguage('hi')}
+                className={`px-2 py-0.5 rounded text-[11px] font-semibold ${language === 'hi' ? 'bg-gov-800 text-white' : 'bg-white text-slate-700 border border-slate-300'}`}
+              >
+                हिन्दी
+              </button>
+            </div>
+            <div className="flex items-center gap-1 text-[11px]">
+              <span className="text-slate-500 font-medium">Text:</span>
+              <button onClick={() => handleFontChange('small')} className={`px-1.5 py-0.5 rounded ${fontScale === 'small' ? 'bg-gov-800 text-white font-bold' : 'bg-white border border-slate-200'}`}>A-</button>
+              <button onClick={() => handleFontChange('normal')} className={`px-1.5 py-0.5 rounded ${fontScale === 'normal' ? 'bg-gov-800 text-white font-bold' : 'bg-white border border-slate-200'}`}>A</button>
+              <button onClick={() => handleFontChange('large')} className={`px-1.5 py-0.5 rounded ${fontScale === 'large' ? 'bg-gov-800 text-white font-bold' : 'bg-white border border-slate-200'}`}>A+</button>
+            </div>
+          </div>
+
           <div className="px-4 py-3 space-y-1 divide-y divide-slate-100 text-xs">
             {navLinks.map((link) => {
               const active = isActive(link.to);

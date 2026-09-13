@@ -10,16 +10,16 @@ export default function CostEstimatorSection({ embedded = false }) {
   const [activeTab, setActiveTab] = useState('fees'); // 'fees' | 'labs'
 
   const popularStandards = [
+    { label: "Portland Pozzolana Cement PPC (IS 1489)", code: "IS 1489 (Part 1): 2015" },
+    { label: "53 Grade Portland Cement (IS 12269)", code: "IS 12269: 2013" },
+    { label: "Ordinary Portland Cement (IS 269)", code: "IS 269: 2015" },
     { label: "Immersion Water Heater (IS 368)", code: "IS 368: 2014" },
     { label: "Storage Geyser (IS 2082)", code: "IS 2082: 2018" },
     { label: "Packaged Drinking Water (IS 14543)", code: "IS 14543: 2016" },
     { label: "Children's Toys (IS 9873)", code: "IS 9873 (Part 1): 2019" },
     { label: "Two-Wheeler Helmet (IS 4151)", code: "IS 4151: 2020" },
     { label: "Domestic Pressure Cooker (IS 2347)", code: "IS 2347: 2017" },
-    { label: "53 Grade Portland Cement (IS 12269)", code: "IS 12269: 2013" },
-    { label: "Concrete Reinforcement Steel (IS 1786)", code: "IS 1786: 2008" },
-    { label: "Household Plugs & Sockets (IS 1293)", code: "IS 1293: 2019" },
-    { label: "Electric Iron / Press (IS 302-2-3)", code: "IS 302 (Part 2/Sec 3): 2007" }
+    { label: "Concrete Reinforcement Steel (IS 1786)", code: "IS 1786: 2008" }
   ];
 
   const [selectedStandard, setSelectedStandard] = useState(popularStandards[0].code);
