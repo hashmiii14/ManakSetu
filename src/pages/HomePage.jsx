@@ -1,15 +1,12 @@
 import React, { useState } from 'react';
 import { 
-  Search, ArrowRight, CheckCircle2, AlertTriangle, ShieldCheck, 
-  Sparkles, ExternalLink, Calculator, FlaskConical, ChevronRight, 
-  Bot, Globe, Award, Factory, Users, Building2, Bell, FileText,
-  BadgeCheck, Scale, Compass, HelpCircle, Layers, Check
+  Search, ArrowRight, ExternalLink, ShieldCheck, FileText, 
+  Building2, CheckCircle2, ChevronRight, BookOpen, Sparkles, 
+  FlaskConical, Award, Globe, Scale, Users, MapPin, Calendar, HelpCircle
 } from 'lucide-react';
 import { useRouter } from '../context/RouterContext';
 import { POPULAR_SEARCH_CHIPS, SECTORS_LIST } from '../data/bisStandards';
 import ErrorBoundary from '../components/ErrorBoundary';
-import ConsumerVerifier from '../components/ConsumerVerifier';
-import FAQSection from '../components/FAQSection';
 
 export default function HomePage({ onOpenStandard, onOpenReport }) {
   const { navigate } = useRouter();
@@ -24,398 +21,583 @@ export default function HomePage({ onOpenStandard, onOpenReport }) {
     }
   };
 
+  const handleAskBotSubmit = () => {
+    if (searchQuery.trim()) {
+      navigate(`/manakbot?prompt=${encodeURIComponent(`Explain standard and certification requirements for ${searchQuery.trim()}`)}`);
+    } else {
+      navigate('/manakbot');
+    }
+  };
+
   const handleChipClick = (term) => {
     navigate(`/standards/search?q=${encodeURIComponent(term)}`);
   };
 
-  // 12 Services matching official Manak Online / e-BIS structure
-  const officialServices = [
+  // 12 Institutional Service Modules (Strictly aligned with Manak Online / e-BIS)
+  const portalServices = [
     {
-      id: "scheme1",
+      id: "standardization",
+      code: "STD",
+      title: "Standardization",
+      desc: "Formulation and periodic revision of Indian Standards (IS Codes) across electrotechnical, chemical, civil and mechanical divisions.",
+      link: "/standards/search",
+      icon: BookOpen
+    },
+    {
+      id: "conformity",
       code: "Scheme-I",
-      title: "Product Certification (ISI Mark)",
-      desc: "Mandatory & voluntary certification for domestic manufacturers. Includes factory inspection, testing facility validation & grant of CM/L license.",
-      link: "/services#scheme-1",
-      isGov: true,
-      badge: "Most Common"
+      title: "Conformity Assessment (ISI Mark)",
+      desc: "Product certification for domestic manufacturers. Mandatory for 760+ items governed by Gazette Quality Control Orders (QCOs).",
+      link: "/services",
+      icon: ShieldCheck
     },
     {
-      id: "scheme2",
-      code: "Scheme-II (CRS)",
+      id: "crs",
+      code: "Scheme-II",
       title: "Compulsory Registration (CRS)",
-      desc: "Self-declaration of conformity for IT, electronics, solar inverters, and telecom equipment based on NABL test reports.",
-      link: "/services#scheme-2",
-      isGov: true,
-      badge: "IT & Electronics"
-    },
-    {
-      id: "scheme4",
-      code: "Scheme-IV",
-      title: "Hallmarking of Gold & Silver (HUID)",
-      desc: "Mandatory hallmarking for 14K, 18K, 20K, 22K, 23K and 24K gold jewellery with 6-digit alphanumeric laser-etched HUID.",
-      link: "/consumer",
-      isGov: true,
-      badge: "Mandatory (300+ Dists)"
+      desc: "Self-declaration registration scheme for electronics, IT goods, and solar equipment based on recognized lab test reports.",
+      link: "/services",
+      icon: FileText
     },
     {
       id: "fmcs",
       code: "FMCS",
       title: "Foreign Manufacturers Scheme",
-      desc: "Certification for overseas manufacturing facilities exporting goods to India under mandatory Quality Control Orders (QCOs).",
-      link: "/services#fmcs",
-      isGov: true,
-      badge: "Import / Export"
-    },
-    {
-      id: "labs",
-      code: "LRS",
-      title: "Laboratory Recognition Scheme",
-      desc: "Directory of 120+ NABL accredited & BIS recognized commercial testing laboratories across India for compliance samples.",
-      link: "/standards/search",
-      isGov: true,
-      badge: "NABL Accredited"
-    },
-    {
-      id: "nits",
-      code: "NITS",
-      title: "National Training Institute (NITS)",
-      desc: "Capacity building, quality management training, and standardization workshops for industry professionals & MSMEs.",
-      link: "/services#nits",
-      isGov: false,
-      badge: "Skill Development"
+      desc: "Certification for overseas manufacturing facilities producing goods destined for export into Indian customs territory.",
+      link: "/services",
+      icon: Globe
     },
     {
       id: "mscs",
       code: "MSCS",
       title: "Management Systems Certification",
-      desc: "Accreditation for ISO 9001 (Quality), ISO 14001 (Environment), ISO 22000 (Food Safety) and ISO 45001 (OH&S).",
-      link: "/services#mscs",
-      isGov: false,
-      badge: "ISO Standards"
+      desc: "Accredited certification for ISO 9001 (Quality), ISO 14001 (Environment), ISO 22000 (Food Safety), and ISO 45001 (OH&S).",
+      link: "/services",
+      icon: Scale
     },
     {
-      id: "qco",
-      code: "QCO Tracker",
-      title: "Quality Control Orders Monitor",
-      desc: "Track statutory QCOs published in Gazette of India by DPIIT, Ministry of Steel, MeitY, and MoRTH with enforcement dates.",
-      link: "/news",
-      isGov: true,
-      badge: "Statutory"
+      id: "laboratory",
+      code: "LRS",
+      title: "Laboratory Recognition Scheme",
+      desc: "Network of Central, Regional, Branch, and NABL-accredited commercial testing facilities for conformity sample evaluation.",
+      link: "/standards/search",
+      icon: FlaskConical
     },
     {
-      id: "truemark",
-      code: "TrueMark",
-      title: "Citizen Mark Verifier (HUID & CML)",
-      desc: "Instant verification of 6-digit Gold HUID codes and 7-digit ISI License (CM/L) numbers against national databases.",
+      id: "hallmarking",
+      code: "Scheme-IV",
+      title: "Hallmarking (Gold & Silver HUID)",
+      desc: "Mandatory third-party purity certification of gold jewellery with laser-etched 6-digit Hallmark Unique Identification (HUID).",
       link: "/consumer",
-      isGov: true,
-      badge: "Consumer Protection"
+      icon: Award
     },
     {
-      id: "msme",
-      code: "Udyam Rel",
-      title: "MSME 50% Concession Helpdesk",
-      desc: "Statutory fee calculator with 50% concession for Micro enterprises & women startups, and 20% for Small enterprises.",
-      link: "/msme",
-      isGov: true,
-      badge: "50% Discount"
+      id: "standards-promotion",
+      code: "PROMO",
+      title: "Standards Promotion & Outreach",
+      desc: "Standard clubs in educational institutions, consumer awareness campaigns, and industry stakeholder consultation workshops.",
+      link: "/about",
+      icon: Users
     },
     {
-      id: "gem",
-      code: "GeM Tender",
-      title: "GeM Portal Compliance Integration",
-      desc: "Mandatory BIS certification documentation and compliance validation for participating in Central & State Government tenders.",
-      link: "/msme#gem",
-      isGov: true,
-      badge: "Public Procurement"
+      id: "nits",
+      code: "NITS",
+      title: "National Training Institute (NITS)",
+      desc: "Standardization training courses, quality management programs, and statistical process control certifications for industry.",
+      link: "/services",
+      icon: Building2
     },
     {
-      id: "grievance",
-      code: "Jan Sunvai",
-      title: "Grievance & Fake Mark Redressal",
-      desc: "File complaints regarding counterfeit ISI marks, misuse of hallmarks, or non-compliant goods directly with BIS and NCH 1915.",
-      link: "/consumer#report",
-      isGov: true,
-      badge: "Toll Free 1915"
+      id: "careers",
+      code: "HR",
+      title: "Human Resources & Recruitment",
+      desc: "Official notifications for Scientist-B technical recruitment, Graduate Engineers, and BIS administrative personnel.",
+      link: "https://www.bis.gov.in/",
+      isExternal: true,
+      icon: Users
+    },
+    {
+      id: "gis",
+      code: "GIS",
+      title: "GIS & Testing Lab Locator",
+      desc: "Geospatial mapping of authorized BIS assaying centres, branch offices, and accredited testing laboratories across Indian states.",
+      link: "/standards/search",
+      icon: MapPin
+    },
+    {
+      id: "links",
+      code: "PORTAL",
+      title: "Important Official Links",
+      desc: "Direct gateways to official Manak Online, e-BIS Officer Login, e-Gazette of India, and the National Consumer Helpline 1915.",
+      link: "https://www.manakonline.in/MANAK/",
+      isExternal: true,
+      icon: ExternalLink
     }
+  ];
+
+  // News & Gazette Circulars in Classic Government Portal List Layout
+  const portalCirculars = [
+    {
+      date: "15-Feb-2026",
+      ministry: "DPIIT",
+      title: "Electrical Appliances for Domestic Use (Quality Control) Order, 2026 notified in Gazette",
+      ref: "S.O. 1248(E)",
+      link: "/news"
+    },
+    {
+      date: "10-Jan-2026",
+      ministry: "Ministry of Steel",
+      title: "Mandatory BIS certification enforced for High Strength Deformed Steel Bars (Fe 500D)",
+      ref: "IS 1786:2008",
+      link: "/news"
+    },
+    {
+      date: "28-Dec-2025",
+      ministry: "BIS HQ",
+      title: "Renewal of 50% marking fee concession for Udyam-registered Micro Enterprises and Startups",
+      ref: "Circular CMD-III/MSME",
+      link: "/msme"
+    },
+    {
+      date: "15-Nov-2025",
+      ministry: "Consumer Affairs",
+      title: "Phase-V mandatory gold hallmarking expanded to 28 additional districts nationwide",
+      ref: "Hallmarking Order 2025",
+      link: "/consumer"
+    }
+  ];
+
+  const popularSearchesList = [
+    { label: "IS 302 (Electric Iron)", query: "IS 302" },
+    { label: "Helmet (IS 4151)", query: "helmet" },
+    { label: "Cement 53 Grade", query: "cement" },
+    { label: "Electrical Appliances", query: "electrical" },
+    { label: "Packaged Drinking Water", query: "water" },
+    { label: "Toys (IS 9873)", query: "toys" },
+    { label: "TMT Steel Bars", query: "sariya" }
   ];
 
   return (
     <ErrorBoundary>
       <div className="min-h-screen bg-slate-50 text-slate-900 text-left">
         
-        {/* 1. OFFICIAL NOTIFICATION TICKER / STATUTORY BANNER */}
-        <div className="bg-amber-50 border-b border-amber-200 py-2 px-4 text-xs text-amber-900">
-          <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
-            <div className="flex items-center gap-2">
-              <span className="px-1.5 py-0.5 rounded bg-amber-600 text-white font-bold text-[10px] uppercase tracking-wide flex items-center gap-1">
-                <Bell className="w-3 h-3 animate-pulse" />
-                Gazette Alert
-              </span>
-              <span className="font-medium text-amber-950 truncate max-w-2xl">
-                DPIIT notifies Mandatory Quality Control Orders (QCOs) for Electrical Accessories &amp; Solar Inverters. Micro enterprises granted 12-month grace period.
-              </span>
-            </div>
-            <button 
-              onClick={() => navigate('/news')}
-              className="font-bold underline underline-offset-2 hover:text-amber-800 text-[11px] shrink-0"
-            >
-              View QCO Schedule &rarr;
-            </button>
-          </div>
-        </div>
-
-        {/* 2. HERO PORTAL SECTION */}
-        <section className="bg-gradient-to-b from-gov-950 via-gov-900 to-gov-800 text-white py-14 sm:py-20 px-4 sm:px-6 relative overflow-hidden">
-          
-          {/* Subtle decorative grid background */}
-          <div className="absolute inset-0 opacity-5 pointer-events-none bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:16px_16px]" />
-
-          <div className="max-w-5xl mx-auto text-center space-y-6 relative z-10">
+        {/* 1. WELCOME & SEARCH AREA (CLEAN GOVERNMENT PORTAL HERO) */}
+        <section className="bg-white border-b border-slate-300 py-8 sm:py-10 px-4 sm:px-6">
+          <div className="max-w-6xl mx-auto space-y-4">
             
-            {/* Ministry / Institutional Tag */}
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gov-800/80 border border-gov-700 text-slate-200 text-xs font-semibold shadow-gov-sm backdrop-blur-xs">
-              <span className="w-2 h-2 rounded-full bg-saffron-500 animate-pulse" />
-              <span>Smart India Hackathon 2026 • AI Assistance Platform for BIS &amp; Indian Standards</span>
+            {/* Breadcrumb / Portal Label */}
+            <div className="flex items-center gap-2 text-[11px] text-slate-500 font-medium">
+              <span>Home</span>
+              <span>/</span>
+              <span className="text-gov-800 font-semibold">Public Service Navigation Portal</span>
             </div>
 
-            {/* Main Headline */}
-            <div className="space-y-3">
-              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight leading-tight text-white">
-                Intelligent Gateway to <br className="hidden sm:inline" />
-                <span className="text-saffron-400">Indian Standards</span> &amp; <span className="text-bisgreen-400">BIS Services</span>
+            {/* Restrained Title & Description */}
+            <div className="space-y-1.5 max-w-4xl">
+              <h1 className="text-2xl sm:text-3xl font-extrabold text-gov-900 tracking-tight">
+                Find Indian Standards and BIS Services
               </h1>
-              <p className="text-sm sm:text-base md:text-lg text-slate-300 max-w-3xl mx-auto font-normal leading-relaxed">
-                Empowering Indian MSMEs, manufacturers, exporters, and consumers to discover Indian Standards (IS Codes), verify mandatory Quality Control Orders (QCOs), and test authentic ISI &amp; Gold Hallmarks.
+              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                National assistance portal for Indian enterprises, manufacturers, exporters, and citizens to discover Indian Standards (IS Codes), verify statutory Quality Control Orders (QCOs), and navigate Bureau of Indian Standards (BIS) conformity assessment procedures.
               </p>
             </div>
 
-            {/* SEARCH BOX CONTAINER */}
-            <div className="max-w-3xl mx-auto pt-2">
-              <form onSubmit={handleSearchSubmit} className="relative">
-                <div className="relative flex items-center">
-                  <Search className="absolute left-4 w-5 h-5 text-slate-400" />
-                  <input
-                    type="text"
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    placeholder="Search by IS code (IS 2082), product (geyser, helmet), sector, or colloquial term..."
-                    className="w-full pl-12 pr-32 py-4 text-sm sm:text-base text-slate-900 bg-white rounded-xl shadow-gov border-2 border-transparent focus:border-saffron-500 focus:outline-none transition-all placeholder:text-slate-400"
-                  />
-                  <button
-                    type="submit"
-                    className="absolute right-2 px-5 py-2.5 bg-gov-800 hover:bg-gov-900 text-white font-bold text-xs sm:text-sm rounded-lg transition-colors flex items-center gap-1.5 shadow-gov-sm"
-                  >
-                    <span>Search</span>
-                    <ArrowRight className="w-4 h-4 text-saffron-400" />
-                  </button>
+            {/* Main Portal Search Form */}
+            <div className="pt-2 max-w-4xl">
+              <form onSubmit={handleSearchSubmit} className="space-y-2">
+                <div className="flex flex-col sm:flex-row items-stretch gap-2">
+                  <div className="relative flex-1">
+                    <Search className="absolute left-3.5 top-3 w-4 h-4 text-slate-400" />
+                    <input
+                      type="text"
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      placeholder="Search by IS Number, product, keyword or standard (e.g., IS 2082, geyser, cement, helmet)..."
+                      className="w-full pl-10 pr-4 py-2.5 text-xs sm:text-sm text-slate-900 bg-white border border-slate-300 rounded-sm focus:outline-none focus:border-gov-800 focus:ring-1 focus:ring-gov-800 placeholder:text-slate-400"
+                    />
+                  </div>
+
+                  <div className="flex items-center gap-2 shrink-0">
+                    <button
+                      type="submit"
+                      className="px-5 py-2.5 bg-gov-800 hover:bg-gov-900 text-white font-bold text-xs rounded-sm transition-colors shadow-sm flex items-center justify-center gap-1.5"
+                    >
+                      <Search className="w-3.5 h-3.5 text-amber-400" />
+                      <span>Search Standards</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={handleAskBotSubmit}
+                      className="px-4 py-2.5 bg-white hover:bg-slate-50 text-gov-800 border border-gov-800 font-bold text-xs rounded-sm transition-colors flex items-center justify-center gap-1.5"
+                    >
+                      <Sparkles className="w-3.5 h-3.5 text-amber-600" />
+                      <span>Ask ManakBot</span>
+                    </button>
+                  </div>
                 </div>
               </form>
 
-              {/* POPULAR SEARCH CHIPS */}
-              <div className="pt-3 flex flex-wrap items-center justify-center gap-1.5 text-xs text-slate-300">
-                <span className="text-slate-400 font-medium">Quick Standards:</span>
-                {POPULAR_SEARCH_CHIPS.slice(0, 6).map((chip, idx) => (
+              {/* Popular Searches Row (No Emojis) */}
+              <div className="pt-2.5 flex flex-wrap items-center gap-1.5 text-xs text-slate-500">
+                <span className="font-semibold text-slate-600 text-[11px]">Popular Searches:</span>
+                {popularSearchesList.map((item, idx) => (
                   <button
                     key={idx}
-                    onClick={() => handleChipClick(chip.term)}
-                    className="px-2.5 py-1 rounded-md bg-gov-800/80 hover:bg-gov-700 text-slate-200 hover:text-white border border-gov-700/80 transition-colors text-[11px]"
+                    type="button"
+                    onClick={() => handleChipClick(item.query)}
+                    className="px-2 py-0.5 rounded-sm bg-slate-100 hover:bg-slate-200 text-slate-700 text-[11px] font-medium border border-slate-200 transition-colors"
                   >
-                    {chip.term}
+                    {item.label}
                   </button>
                 ))}
               </div>
             </div>
 
-            {/* 4 FAST PILLARS / ACTION BUTTONS */}
-            <div className="pt-6 grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-4xl mx-auto">
-              <button
-                onClick={() => navigate('/standards/search')}
-                className="p-3.5 rounded-xl bg-white/10 hover:bg-white/15 border border-white/15 text-left transition-all group backdrop-blur-xs"
-              >
-                <div className="w-7 h-7 rounded-lg bg-saffron-500/20 text-saffron-400 flex items-center justify-center mb-2 group-hover:scale-105 transition-transform">
-                  <Search className="w-4 h-4" />
-                </div>
-                <div className="text-xs font-bold text-white">Search Standards</div>
-                <div className="text-[10px] text-slate-300 mt-0.5">21,000+ IS catalog</div>
-              </button>
-
-              <button
-                onClick={() => navigate('/manakbot')}
-                className="p-3.5 rounded-xl bg-white/10 hover:bg-white/15 border border-white/15 text-left transition-all group backdrop-blur-xs"
-              >
-                <div className="w-7 h-7 rounded-lg bg-saffron-500/20 text-saffron-400 flex items-center justify-center mb-2 group-hover:scale-105 transition-transform">
-                  <Sparkles className="w-4 h-4" />
-                </div>
-                <div className="text-xs font-bold text-white">Consult ManakBot AI</div>
-                <div className="text-[10px] text-slate-300 mt-0.5">5-part regulatory advice</div>
-              </button>
-
-              <button
-                onClick={() => navigate('/consumer')}
-                className="p-3.5 rounded-xl bg-white/10 hover:bg-white/15 border border-white/15 text-left transition-all group backdrop-blur-xs"
-              >
-                <div className="w-7 h-7 rounded-lg bg-emerald-500/20 text-bisgreen-400 flex items-center justify-center mb-2 group-hover:scale-105 transition-transform">
-                  <ShieldCheck className="w-4 h-4" />
-                </div>
-                <div className="text-xs font-bold text-white">Verify HUID &amp; ISI</div>
-                <div className="text-[10px] text-slate-300 mt-0.5">Anti-counterfeit check</div>
-              </button>
-
-              <button
-                onClick={() => navigate('/msme')}
-                className="p-3.5 rounded-xl bg-white/10 hover:bg-white/15 border border-white/15 text-left transition-all group backdrop-blur-xs"
-              >
-                <div className="w-7 h-7 rounded-lg bg-blue-500/20 text-blue-300 flex items-center justify-center mb-2 group-hover:scale-105 transition-transform">
-                  <Calculator className="w-4 h-4" />
-                </div>
-                <div className="text-xs font-bold text-white">MSME Fee Calculator</div>
-                <div className="text-[10px] text-slate-300 mt-0.5">50% statutory relief</div>
-              </button>
-            </div>
-
-          </div>
-        </section>
-
-        {/* 3. STATISTICAL METRICS STRIP */}
-        <section className="bg-white border-b border-slate-200 py-6 px-4">
-          <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-            <div className="space-y-1">
-              <div className="text-2xl sm:text-3xl font-extrabold text-gov-900 font-mono">21,000+</div>
-              <div className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Indian Standards Indexed</div>
-            </div>
-            <div className="space-y-1">
-              <div className="text-2xl sm:text-3xl font-extrabold text-amber-700 font-mono">760+</div>
-              <div className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Mandatory QCO Products</div>
-            </div>
-            <div className="space-y-1">
-              <div className="text-2xl sm:text-3xl font-extrabold text-emerald-700 font-mono">50%</div>
-              <div className="text-xs font-semibold text-slate-500 uppercase tracking-wide">MSME Fee Concession</div>
-            </div>
-            <div className="space-y-1">
-              <div className="text-2xl sm:text-3xl font-extrabold text-gov-800 font-mono">100%</div>
-              <div className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Free Open Access AI</div>
-            </div>
-          </div>
-        </section>
-
-        {/* 4. OFFICIAL BIS E-GOVERNANCE SERVICES DIRECTORY (12 TILES) */}
-        <section className="py-12 px-4 sm:px-6 max-w-7xl mx-auto space-y-8">
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
-            <div>
-              <div className="text-xs font-bold text-saffron-700 uppercase tracking-wider">
-                Services Architecture
+            {/* Official Portal Notice Banner */}
+            <div className="mt-4 p-3 bg-slate-100 border-l-4 border-gov-800 rounded-r-sm flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs text-slate-700">
+              <div className="flex items-center gap-2">
+                <span className="font-bold text-gov-900">Notice:</span>
+                <span>ManakSetu provides assistive guidance. Official applications and fee filings must be submitted at</span>
+                <a 
+                  href="https://www.manakonline.in/MANAK/" 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="text-gov-800 font-bold underline inline-flex items-center gap-0.5"
+                >
+                  <span>manakonline.in</span>
+                  <ExternalLink className="w-2.5 h-2.5" />
+                </a>
               </div>
-              <h2 className="text-2xl sm:text-3xl font-extrabold text-gov-900 tracking-tight mt-1">
-                Official BIS Services &amp; Schemes Directory
+              <button 
+                onClick={() => navigate('/about')}
+                className="text-[11px] text-slate-500 hover:text-slate-800 underline shrink-0"
+              >
+                About this Project
+              </button>
+            </div>
+
+          </div>
+        </section>
+
+        {/* 2. CORE BIS SERVICES (12 COMPACT GOVERNMENT TILES) */}
+        <section className="py-8 px-4 sm:px-6 max-w-6xl mx-auto space-y-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-300 pb-2">
+            <div>
+              <h2 className="text-lg sm:text-xl font-bold text-gov-900">
+                BIS Services Directory
               </h2>
-              <p className="text-xs sm:text-sm text-slate-600 mt-1 max-w-2xl leading-relaxed">
-                Structured reference inspired by the official Manak Online and e-BIS portals of the Bureau of Indian Standards.
+              <p className="text-xs text-slate-600">
+                Statutory schemes and service divisions operated by the Bureau of Indian Standards
               </p>
             </div>
 
             <button
               onClick={() => navigate('/services')}
-              className="text-gov-800 hover:text-gov-950 font-bold text-xs inline-flex items-center gap-1 shrink-0"
+              className="text-xs font-bold text-gov-800 hover:text-gov-950 inline-flex items-center gap-1"
             >
-              <span>View Comprehensive Directory</span>
-              <ArrowRight className="w-3.5 h-3.5" />
+              <span>View All Services</span>
+              <ChevronRight className="w-3.5 h-3.5" />
             </button>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-            {officialServices.map((srv) => (
-              <div
-                key={srv.id}
-                onClick={() => navigate(srv.link)}
-                className="bg-white rounded-xl border border-slate-200 p-5 shadow-gov-sm hover:shadow-gov hover:border-gov-300 transition-all cursor-pointer flex flex-col justify-between group"
-              >
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between gap-2">
-                    <span className="px-2 py-0.5 rounded bg-gov-100 text-gov-800 font-mono font-bold text-[10px]">
-                      {srv.code}
-                    </span>
-                    <span className="px-2 py-0.5 rounded bg-slate-100 text-slate-600 font-semibold text-[10px]">
-                      {srv.badge}
-                    </span>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+            {portalServices.map((service) => {
+              const IconComp = service.icon;
+              return (
+                <div
+                  key={service.id}
+                  onClick={() => {
+                    if (service.isExternal) {
+                      window.open(service.link, '_blank', 'noopener,noreferrer');
+                    } else {
+                      navigate(service.link);
+                    }
+                  }}
+                  className="bg-white border border-slate-300 rounded-sm p-3.5 hover:border-gov-800 hover:bg-slate-50 transition-all cursor-pointer flex flex-col justify-between group"
+                >
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <div className="w-7 h-7 rounded-sm bg-slate-100 text-gov-800 flex items-center justify-center border border-slate-200">
+                        <IconComp className="w-4 h-4 text-gov-800" />
+                      </div>
+                      <span className="text-[10px] font-mono font-bold text-slate-500 bg-slate-100 px-1.5 py-0.5 rounded-sm">
+                        {service.code}
+                      </span>
+                    </div>
+
+                    <div>
+                      <h3 className="text-xs font-bold text-gov-900 group-hover:text-gov-700 transition-colors line-clamp-1">
+                        {service.title}
+                      </h3>
+                      <p className="text-[11px] text-slate-600 mt-1 line-clamp-2 leading-relaxed">
+                        {service.desc}
+                      </p>
+                    </div>
                   </div>
 
+                  <div className="pt-2 mt-2 border-t border-slate-100 flex items-center justify-between text-[11px] font-semibold text-gov-800">
+                    <span>{service.isExternal ? 'Official Portal' : 'View Details'}</span>
+                    {service.isExternal ? (
+                      <ExternalLink className="w-3 h-3 text-slate-400" />
+                    ) : (
+                      <ChevronRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
+                    )}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </section>
+
+        {/* 3. TWO-COLUMN SPLIT: STANDARDS DIRECTORY & MANAKBOT ASSISTANT */}
+        <section className="py-6 px-4 sm:px-6 max-w-6xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            
+            {/* LEFT 2 COLS: INSTANT STANDARDS SEARCH PANEL */}
+            <div className="lg:col-span-2 bg-white border border-slate-300 rounded-sm p-5 space-y-4">
+              <div className="flex items-center justify-between border-b border-slate-200 pb-3">
+                <div>
+                  <h3 className="text-base font-bold text-gov-900">
+                    Instant Standards Directory
+                  </h3>
+                  <p className="text-xs text-slate-500">
+                    Direct access to indexed Indian Standards across major industrial sectors
+                  </p>
+                </div>
+
+                <button
+                  onClick={() => navigate('/standards/search')}
+                  className="px-3 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-sm border border-slate-300 transition-colors"
+                >
+                  Full Directory
+                </button>
+              </div>
+
+              {/* Sector Quick Buttons */}
+              <div className="space-y-2">
+                <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wide block">
+                  Browse by Sector:
+                </span>
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-1.5 text-xs">
+                  {SECTORS_LIST.filter(s => s !== 'All Sectors').slice(0, 6).map((sector, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => navigate(`/standards/search?sector=${encodeURIComponent(sector)}`)}
+                      className="p-2 text-left bg-slate-50 hover:bg-gov-50 border border-slate-200 hover:border-gov-400 rounded-sm text-[11px] font-medium text-slate-800 transition-colors truncate"
+                    >
+                      {sector}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Sample Standards Table */}
+              <div className="space-y-1.5 pt-2">
+                <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wide block">
+                  Frequently Referenced Mandatory Standards:
+                </span>
+                <div className="border border-slate-200 rounded-sm overflow-hidden text-xs">
+                  <table className="w-full text-left">
+                    <thead className="bg-slate-100 text-slate-700 text-[11px] font-bold border-b border-slate-200">
+                      <tr>
+                        <th className="py-2 px-3">IS Number</th>
+                        <th className="py-2 px-3">Title</th>
+                        <th className="py-2 px-3 hidden sm:table-cell">Status</th>
+                        <th className="py-2 px-3 text-right">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-100">
+                      {[
+                        { code: "IS 2082:2018", id: "IS-2082", title: "Stationary Storage Electric Water Heaters", qco: true },
+                        { code: "IS 4151:2020", id: "IS-4151", title: "Protective Helmets for Two-Wheeler Vehicles", qco: true },
+                        { code: "IS 14543:2016", id: "IS-14543", title: "Packaged Drinking Water", qco: true },
+                        { code: "IS 1786:2008", id: "IS-1786", title: "High Strength Deformed Steel Bars (Fe 500D)", qco: true }
+                      ].map((item, idx) => (
+                        <tr key={idx} className="hover:bg-slate-50 transition-colors">
+                          <td className="py-2 px-3 font-mono font-bold text-gov-800 text-[11px] whitespace-nowrap">
+                            {item.code}
+                          </td>
+                          <td className="py-2 px-3 text-slate-800 text-[11px] line-clamp-1">
+                            {item.title}
+                          </td>
+                          <td className="py-2 px-3 hidden sm:table-cell">
+                            <span className="px-1.5 py-0.5 rounded-sm bg-amber-50 text-amber-900 border border-amber-200 text-[10px] font-bold">
+                              Mandatory QCO
+                            </span>
+                          </td>
+                          <td className="py-2 px-3 text-right whitespace-nowrap">
+                            <button
+                              onClick={() => navigate(`/standards/${encodeURIComponent(item.id)}`)}
+                              className="text-gov-800 font-bold hover:underline text-[11px]"
+                            >
+                              View &rarr;
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            {/* RIGHT 1 COL: COMPACT MANAKBOT ASSISTANT PANEL */}
+            <div className="bg-white border border-slate-300 rounded-sm p-5 flex flex-col justify-between space-y-4">
+              <div className="space-y-3">
+                <div className="flex items-center gap-2 pb-2 border-b border-slate-200">
+                  <div className="w-7 h-7 rounded-sm bg-gov-800 text-white flex items-center justify-center">
+                    <Sparkles className="w-4 h-4 text-amber-400" />
+                  </div>
                   <div>
-                    <h3 className="text-sm font-bold text-gov-900 group-hover:text-gov-700 transition-colors">
-                      {srv.title}
+                    <h3 className="text-sm font-bold text-gov-900">
+                      ManakBot AI Assistant
                     </h3>
-                    <p className="text-xs text-slate-600 mt-1 leading-relaxed">
-                      {srv.desc}
+                    <p className="text-[11px] text-slate-500">
+                      Automated Standards &amp; QCO Guidance
                     </p>
                   </div>
                 </div>
 
-                <div className="pt-4 mt-3 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-gov-800 group-hover:text-saffron-700">
-                  <span>Explore Guidelines</span>
-                  <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                <p className="text-xs text-slate-600 leading-relaxed">
+                  Ask compliance questions regarding Indian Standards, testing tolerances, factory audit requirements, or MSME fee concessions.
+                </p>
+
+                {/* Suggested Query Buttons */}
+                <div className="space-y-1.5 text-xs">
+                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wide block">
+                    Quick Consultation Topics:
+                  </span>
+                  {[
+                    "What are the testing requirements for IS 2082 geysers?",
+                    "How does 50% MSME fee concession work under Scheme-I?",
+                    "Which standard applies to electric immersion heaters?",
+                    "What documents are required for BIS factory audit?"
+                  ].map((q, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => navigate(`/manakbot?prompt=${encodeURIComponent(q)}`)}
+                      className="w-full text-left p-2 rounded-sm bg-slate-50 hover:bg-gov-50 hover:text-gov-900 border border-slate-200 text-[11px] text-slate-700 transition-colors leading-snug truncate"
+                    >
+                      {q}
+                    </button>
+                  ))}
                 </div>
+              </div>
+
+              <div className="pt-3 border-t border-slate-200">
+                <button
+                  onClick={() => navigate('/manakbot')}
+                  className="w-full py-2 bg-gov-800 hover:bg-gov-900 text-white font-bold text-xs rounded-sm transition-colors flex items-center justify-center gap-1.5"
+                >
+                  <span>Open Full ManakBot Assistant</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </button>
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+        {/* 4. NEWS & CIRCULARS (GOVERNMENT PORTAL LIST FORMAT) */}
+        <section className="py-6 px-4 sm:px-6 max-w-6xl mx-auto space-y-3">
+          <div className="flex items-center justify-between border-b border-slate-300 pb-2">
+            <div>
+              <h2 className="text-lg font-bold text-gov-900">
+                Gazette Notifications &amp; Quality Control Orders
+              </h2>
+              <p className="text-xs text-slate-600">
+                Recent statutory orders published in the Gazette of India
+              </p>
+            </div>
+
+            <button
+              onClick={() => navigate('/news')}
+              className="text-xs font-bold text-gov-800 hover:text-gov-950 inline-flex items-center gap-1"
+            >
+              <span>All Circulars</span>
+              <ChevronRight className="w-3.5 h-3.5" />
+            </button>
+          </div>
+
+          <div className="bg-white border border-slate-300 rounded-sm divide-y divide-slate-200">
+            {portalCirculars.map((item, idx) => (
+              <div 
+                key={idx}
+                className="p-3 sm:p-4 hover:bg-slate-50 transition-colors flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs"
+              >
+                <div className="flex items-start sm:items-center gap-3">
+                  <span className="font-mono text-[11px] text-slate-500 bg-slate-100 px-2 py-1 rounded-sm border border-slate-200 whitespace-nowrap">
+                    {item.date}
+                  </span>
+                  <div>
+                    <span className="font-bold text-slate-900 hover:text-gov-800 block cursor-pointer" onClick={() => navigate(item.link)}>
+                      {item.title}
+                    </span>
+                    <span className="text-[11px] text-slate-500">
+                      Notifying Authority: <strong>{item.ministry}</strong> | Gazette Reference: {item.ref}
+                    </span>
+                  </div>
+                </div>
+
+                <button
+                  onClick={() => navigate(item.link)}
+                  className="text-gov-800 font-bold text-xs hover:underline inline-flex items-center gap-1 shrink-0 self-start sm:self-auto"
+                >
+                  <span>Read Order</span>
+                  <ChevronRight className="w-3.5 h-3.5" />
+                </button>
               </div>
             ))}
           </div>
         </section>
 
-        {/* 5. CONSUMER VERIFICATION SPOTLIGHT (INLINE VERIFIER) */}
-        <section className="bg-slate-100/70 border-y border-slate-200 py-12 px-4 sm:px-6">
-          <div className="max-w-7xl mx-auto space-y-6">
-            <div className="text-center space-y-2 max-w-2xl mx-auto">
-              <span className="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-xs font-bold">
-                Citizen Protection
-              </span>
-              <h2 className="text-2xl sm:text-3xl font-extrabold text-gov-900 tracking-tight">
-                Authenticity &amp; Anti-Counterfeit Verification
-              </h2>
-              <p className="text-xs sm:text-sm text-slate-600">
-                Verify 6-digit Hallmark Unique Identification (HUID) for gold jewellery or 7-digit ISI License (CM/L) number.
-              </p>
+        {/* 5. CITIZEN & MSME ASSISTANCE SHORTCUTS */}
+        <section className="py-6 px-4 sm:px-6 max-w-6xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            
+            {/* Consumer Protection */}
+            <div className="bg-white border border-slate-300 rounded-sm p-4 flex items-start gap-3">
+              <div className="w-8 h-8 rounded-sm bg-emerald-100 text-emerald-800 flex items-center justify-center shrink-0 border border-emerald-200">
+                <ShieldCheck className="w-4 h-4" />
+              </div>
+              <div className="space-y-1">
+                <h4 className="text-xs font-bold text-slate-900">
+                  Consumer Verification &amp; Hallmarking
+                </h4>
+                <p className="text-[11px] text-slate-600 leading-relaxed">
+                  Verify 6-digit Hallmark Unique Identification (HUID) on gold jewellery or 7-digit ISI Certification License (CM/L) numbers.
+                </p>
+                <button
+                  onClick={() => navigate('/consumer')}
+                  className="text-[11px] font-bold text-gov-800 hover:underline inline-flex items-center gap-1 pt-1"
+                >
+                  <span>Verify Mark Authenticity &rarr;</span>
+                </button>
+              </div>
             </div>
 
-            <div className="bg-white rounded-2xl border border-slate-200 shadow-gov p-6 max-w-4xl mx-auto">
-              <ConsumerVerifier onOpenReport={onOpenReport} />
+            {/* MSME Guidance */}
+            <div className="bg-white border border-slate-300 rounded-sm p-4 flex items-start gap-3">
+              <div className="w-8 h-8 rounded-sm bg-blue-100 text-blue-800 flex items-center justify-center shrink-0 border border-blue-200">
+                <Award className="w-4 h-4" />
+              </div>
+              <div className="space-y-1">
+                <h4 className="text-xs font-bold text-slate-900">
+                  MSME &amp; Startup Statutory Relief
+                </h4>
+                <p className="text-[11px] text-slate-600 leading-relaxed">
+                  Micro enterprises and women-led startups receive 50% concession on BIS marking fees. Learn how to link your Udyam Certificate.
+                </p>
+                <button
+                  onClick={() => navigate('/msme')}
+                  className="text-[11px] font-bold text-gov-800 hover:underline inline-flex items-center gap-1 pt-1"
+                >
+                  <span>Calculate MSME Concessions &rarr;</span>
+                </button>
+              </div>
             </div>
-          </div>
-        </section>
 
-        {/* 6. SECTORS COMPENDIUM EXPLORER */}
-        <section className="py-12 px-4 sm:px-6 max-w-7xl mx-auto space-y-6">
-          <div className="space-y-1">
-            <div className="text-xs font-bold text-saffron-700 uppercase tracking-wider">
-              Browse by Industry
-            </div>
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-gov-900 tracking-tight">
-              Indian Standards Across Key Sectors
-            </h2>
-          </div>
-
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-            {SECTORS_LIST.filter(s => s !== 'All Sectors').map((sector, idx) => (
-              <button
-                key={idx}
-                onClick={() => navigate(`/standards/search?sector=${encodeURIComponent(sector)}`)}
-                className="p-4 rounded-xl bg-white border border-slate-200 hover:border-gov-400 shadow-gov-sm hover:shadow-gov text-center transition-all group"
-              >
-                <div className="w-10 h-10 rounded-lg bg-gov-50 text-gov-800 flex items-center justify-center mx-auto mb-2.5 group-hover:bg-gov-100 transition-colors">
-                  <Layers className="w-5 h-5" />
-                </div>
-                <div className="text-xs font-bold text-slate-800 group-hover:text-gov-800 transition-colors">
-                  {sector}
-                </div>
-                <div className="text-[10px] text-slate-400 mt-1">
-                  View Standards &rarr;
-                </div>
-              </button>
-            ))}
-          </div>
-        </section>
-
-        {/* 7. FREQUENTLY ASKED QUESTIONS */}
-        <section className="bg-white border-t border-slate-200 py-12 px-4 sm:px-6">
-          <div className="max-w-4xl mx-auto">
-            <FAQSection />
           </div>
         </section>
 

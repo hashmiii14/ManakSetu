@@ -254,13 +254,23 @@ export default function StandardDetailPage({ standardId }) {
               </div>
             )}
 
+            {/* STATUTORY ADVISORY NOTICE */}
+            <div className="p-3 bg-slate-100 border-l-4 border-gov-800 rounded-r-sm text-xs text-slate-700 flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <ShieldCheck className="w-4 h-4 text-gov-800 shrink-0" />
+                <span>
+                  <strong>Important Statutory Notice:</strong> Verify the latest applicable requirements, gazette amendments, and operative licensing fees directly on the official BIS portal (<a href="https://www.manakonline.in" target="_blank" rel="noopener noreferrer" className="underline font-bold text-gov-900">www.manakonline.in</a>).
+                </span>
+              </div>
+            </div>
+
             {/* PRIMARY ACTION BUTTONS */}
-            <div className="pt-2 flex flex-wrap items-center gap-3">
+            <div className="pt-1 flex flex-wrap items-center gap-2.5">
               <button
                 onClick={() => navigate(`/manakbot?std=${encodeURIComponent(isCode)}`)}
-                className="px-4 py-2.5 rounded-lg bg-saffron-600 hover:bg-saffron-700 text-white font-bold text-xs inline-flex items-center gap-2 shadow-gov-sm transition-colors"
+                className="px-4 py-2 bg-gov-800 hover:bg-gov-900 text-white font-bold text-xs rounded-sm inline-flex items-center gap-2 shadow-xs transition-colors"
               >
-                <Sparkles className="w-4 h-4" />
+                <Sparkles className="w-3.5 h-3.5 text-amber-400" />
                 <span>Ask ManakBot About {isCode}</span>
               </button>
 
@@ -268,42 +278,40 @@ export default function StandardDetailPage({ standardId }) {
                 href="https://www.manakonline.in/MANAK/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="px-4 py-2.5 rounded-lg bg-gov-800 hover:bg-gov-900 text-white font-bold text-xs inline-flex items-center gap-2 shadow-gov-sm transition-colors"
+                className="px-4 py-2 bg-white hover:bg-slate-50 text-gov-800 border border-gov-800 font-bold text-xs rounded-sm inline-flex items-center gap-2 transition-colors"
               >
-                <span>Apply on Manak Online</span>
-                <ExternalLink className="w-3.5 h-3.5" />
+                <span>Apply on Official Manak Online</span>
+                <ExternalLink className="w-3 h-3" />
               </a>
 
-              <a
-                href="https://www.services.bis.gov.in/php/BIS_2.0/bisconnect/knowyourstandards/indian_standards/isdetails"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="px-3.5 py-2.5 rounded-lg bg-white hover:bg-slate-100 text-slate-700 border border-slate-300 font-semibold text-xs inline-flex items-center gap-1.5 transition-colors"
+              <button
+                onClick={handlePrint}
+                className="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 font-semibold text-xs rounded-sm inline-flex items-center gap-1.5 transition-colors"
               >
-                <span>Official BIS Compendium</span>
-                <ExternalLink className="w-3 h-3 text-slate-400" />
-              </a>
+                <Printer className="w-3.5 h-3.5 text-slate-500" />
+                <span>Print Specification</span>
+              </button>
             </div>
 
           </div>
         </section>
 
-        {/* MAIN BODY: 2-COLUMN GRID (LEFT TECHNICAL SPECS, RIGHT FEE & LAB CALCULATOR) */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        {/* MAIN BODY: 2-COLUMN GRID */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             
             {/* LEFT COLUMN: 2 COLS WIDE (TECHNICAL TESTS, FACTORY REQUIREMENTS, HARMONIZATION) */}
-            <div className="lg:col-span-2 space-y-8">
+            <div className="lg:col-span-2 space-y-6">
               
               {/* 1. MANDATORY LABORATORY TESTING PARAMETERS */}
-              <div className="bg-white rounded-xl border border-slate-200 shadow-gov p-6 space-y-4">
-                <div className="flex items-center gap-2.5 pb-3 border-b border-slate-100">
-                  <div className="w-8 h-8 rounded-lg bg-gov-100 text-gov-800 flex items-center justify-center">
-                    <FlaskConical className="w-4 h-4" />
+              <div className="bg-white rounded-sm border border-slate-300 p-5 space-y-4">
+                <div className="flex items-center gap-2.5 pb-2.5 border-b border-slate-200">
+                  <div className="w-7 h-7 rounded-sm bg-slate-100 text-gov-800 flex items-center justify-center border border-slate-200 font-mono font-bold text-xs">
+                    01
                   </div>
                   <div>
-                    <h2 className="text-base font-bold text-gov-900">
-                      Mandatory Quality &amp; Safety Testing Parameters
+                    <h2 className="text-sm font-bold text-gov-900 uppercase tracking-wide">
+                      1. Mandatory Quality &amp; Safety Testing Parameters
                     </h2>
                     <p className="text-xs text-slate-500">
                       Essential physical, electrical, and chemical performance tests required for compliance.
@@ -311,7 +319,7 @@ export default function StandardDetailPage({ standardId }) {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                   {keyTests.map((test, idx) => (
                     <div 
                       key={idx}

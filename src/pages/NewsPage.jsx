@@ -124,8 +124,8 @@ export default function NewsPage() {
         </section>
 
         {/* CONTROLS BAR */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 space-y-4">
-          <div className="bg-white rounded-xl border border-slate-200 p-4 shadow-gov-sm flex flex-col sm:flex-row items-center justify-between gap-3">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6 space-y-4">
+          <div className="bg-white rounded-sm border border-slate-300 p-3.5 flex flex-col sm:flex-row items-center justify-between gap-3 shadow-xs">
             
             {/* Search filter */}
             <div className="relative w-full sm:w-80">
@@ -135,7 +135,7 @@ export default function NewsPage() {
                 value={filterQuery}
                 onChange={(e) => setFilterQuery(e.target.value)}
                 placeholder="Filter by order, product, or IS code..."
-                className="w-full pl-9 pr-3 py-1.5 text-xs bg-slate-50 border border-slate-300 rounded-lg focus:outline-none focus:border-gov-700"
+                className="w-full pl-9 pr-3 py-1.5 text-xs bg-white border border-slate-300 rounded-sm focus:outline-none focus:border-gov-800"
               />
             </div>
 
@@ -145,10 +145,10 @@ export default function NewsPage() {
                 <button
                   key={min}
                   onClick={() => setSelectedMinistry(min)}
-                  className={`px-2.5 py-1 rounded-md text-xs font-semibold transition-colors ${
+                  className={`px-2.5 py-1 rounded-sm text-xs font-semibold transition-colors ${
                     selectedMinistry === min
-                      ? 'bg-gov-800 text-white'
-                      : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                      ? 'bg-gov-800 text-white font-bold'
+                      : 'bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-200'
                   }`}
                 >
                   {min === 'ALL' ? 'All Ministries' : min}
@@ -159,11 +159,11 @@ export default function NewsPage() {
           </div>
 
           {/* NOTIFICATION CARDS */}
-          <div className="space-y-4">
+          <div className="space-y-3">
             {filtered.map((item) => (
               <div
                 key={item.id}
-                className="bg-white rounded-xl border border-slate-200 shadow-gov-sm hover:shadow-gov transition-all p-5 sm:p-6 space-y-3"
+                className="bg-white rounded-sm border border-slate-300 hover:border-gov-800 transition-all p-4 sm:p-5 space-y-3 shadow-xs"
               >
                 <div className="flex flex-wrap items-center justify-between gap-2">
                   <div className="flex items-center gap-2">

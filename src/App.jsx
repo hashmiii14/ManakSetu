@@ -65,7 +65,7 @@ export default function App() {
       return <HomePage onOpenStandard={handleOpenStandard} onOpenReport={handleOpenReport} />;
     }
 
-    if (normalizedPath === '/standards/search' || normalizedPath.startsWith('/standards/search')) {
+    if (normalizedPath === '/standards' || normalizedPath === '/standards/search' || normalizedPath.startsWith('/standards/search')) {
       return <StandardsSearchPage onOpenStandardModal={handleOpenStandard} />;
     }
 
@@ -82,7 +82,7 @@ export default function App() {
       );
     }
 
-    if (normalizedPath === '/services') {
+    if (normalizedPath === '/services' || normalizedPath.startsWith('/services/')) {
       return <ServicesPage />;
     }
 
@@ -94,7 +94,7 @@ export default function App() {
       return <MsmePage />;
     }
 
-    if (normalizedPath === '/news') {
+    if (normalizedPath === '/news' || normalizedPath === '/resources') {
       return <NewsPage />;
     }
 
@@ -102,12 +102,38 @@ export default function App() {
       return <AboutPage />;
     }
 
-    if (normalizedPath === '/faq') {
+    if (normalizedPath === '/faq' || normalizedPath === '/support') {
       return <FaqPage />;
     }
 
-    // Default Fallback
-    return <HomePage onOpenStandard={handleOpenStandard} onOpenReport={handleOpenReport} />;
+    // Official Government Portal 404 State
+    return (
+      <div className="min-h-[60vh] flex flex-col items-center justify-center p-6 text-center space-y-4">
+        <div className="p-3 bg-slate-100 border border-slate-300 rounded-sm font-mono text-sm font-bold text-gov-800">
+          404 | NOT FOUND
+        </div>
+        <h2 className="text-xl sm:text-2xl font-bold text-gov-900">
+          Page Not Found
+        </h2>
+        <p className="text-xs sm:text-sm text-slate-600 max-w-md leading-relaxed">
+          The requested page <code className="font-mono font-bold bg-slate-100 px-1 py-0.5 rounded-sm">{path}</code> could not be found on the ManakSetu portal.
+        </p>
+        <div className="pt-2 flex items-center gap-3">
+          <button
+            onClick={() => navigate('/')}
+            className="px-4 py-2 bg-gov-800 hover:bg-gov-900 text-white font-bold text-xs rounded-sm transition-colors"
+          >
+            Go to Home
+          </button>
+          <button
+            onClick={() => navigate('/standards/search')}
+            className="px-4 py-2 bg-white hover:bg-slate-50 text-gov-800 border border-gov-800 font-bold text-xs rounded-sm transition-colors"
+          >
+            Search Standards
+          </button>
+        </div>
+      </div>
+    );
   };
 
   return (

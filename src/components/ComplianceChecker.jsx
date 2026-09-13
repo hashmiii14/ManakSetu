@@ -66,7 +66,7 @@ export default function ComplianceChecker({ initialProduct = '', onOpenStandard,
         return (
           <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200 inline-flex items-center gap-1">
             <CheckCircle2 className="w-2.5 h-2.5 text-emerald-600" />
-            <span>✓ Identified</span>
+            <span>Identified</span>
           </span>
         );
       case 'review_required':

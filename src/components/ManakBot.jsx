@@ -10,12 +10,12 @@ import Logo from './Logo';
 const STORAGE_KEY = 'manaksetu_chat_sessions_v2';
 
 const SUGGESTED_CHIPS = [
-  { label: "Electrical Switch Standards", prompt: "My product is an electrical switch. Which Indian Standard should I check?" },
-  { label: "Packaged Drinking Water", prompt: "I manufacture packaged drinking water. What standards apply?" },
-  { label: "What is IS 302?", prompt: "What is IS 302 and what electrical safety requirements does it prescribe?" },
-  { label: "Standards for Helmets", prompt: "Find standards related to two-wheeler motorcycle helmets and QCO rules." },
-  { label: "Baby Toys Safety Rules", prompt: "What are the mandatory testing rules for baby toys under BIS QCO?" },
-  { label: "MSME Certification Fee Concessions", prompt: "What concessions do Micro and Small enterprises get on BIS marking fees?" }
+  { label: "What is an Indian Standard?", prompt: "What is an Indian Standard (IS Code) and how are standards published under the BIS Act 2016?" },
+  { label: "Find standard for product", prompt: "How do I identify the applicable Indian Standard and scheme for my product?" },
+  { label: "How BIS certification works", prompt: "Explain the step-by-step procedure for obtaining a BIS product certification license (Scheme-I)." },
+  { label: "Verify requirement", prompt: "How can a manufacturer verify whether a standard is subject to a mandatory Quality Control Order (QCO)?" },
+  { label: "IS 2082 Testing Requirements", prompt: "What are the mandatory testing and safety parameters for electric storage geysers under IS 2082:2018?" },
+  { label: "MSME Fee Concessions", prompt: "What concessions do Micro and Small enterprises receive on BIS application, audit, and marking fees?" }
 ];
 
 export default function ManakBot({ onOpenStandard, onCheckCompliance, initialPrompt = '' }) {
@@ -465,22 +465,22 @@ export default function ManakBot({ onOpenStandard, onCheckCompliance, initialPro
                 >
                   {/* Assistant Avatar */}
                   {msg.role === 'assistant' && (
-                    <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-emerald-600 to-emerald-800 text-white flex items-center justify-center shrink-0 shadow-2xs mt-0.5">
-                      <Bot className="w-4 h-4" />
+                    <div className="w-7 h-7 rounded-sm bg-gov-800 text-white flex items-center justify-center shrink-0 mt-0.5 border border-gov-900">
+                      <Bot className="w-3.5 h-3.5" />
                     </div>
                   )}
 
                   {/* Message Bubble Container */}
-                  <div className={`max-w-[88%] sm:max-w-[80%] space-y-2.5 ${msg.role === 'user' ? 'items-end' : 'items-start'}`}>
+                  <div className={`max-w-[88%] sm:max-w-[82%] space-y-2 ${msg.role === 'user' ? 'items-end' : 'items-start'}`}>
                     
                     {/* User Bubble */}
                     {msg.role === 'user' ? (
-                      <div className="p-3.5 sm:p-4 rounded-2xl bg-neutral-900 text-white text-xs sm:text-sm font-medium shadow-xs leading-relaxed">
+                      <div className="p-3 sm:p-3.5 rounded-sm bg-slate-900 text-white text-xs sm:text-sm font-medium leading-relaxed">
                         {msg.content}
                       </div>
                     ) : (
                       /* Assistant Card */
-                      <div className="p-4 sm:p-5 rounded-2xl bg-white border border-neutral-200 shadow-sm space-y-4">
+                      <div className="p-4 rounded-sm bg-white border border-slate-300 shadow-xs space-y-3">
                         
                         {/* Top Metadata Header */}
                         <div className="flex flex-wrap items-center justify-between gap-2 pb-2.5 border-b border-neutral-100 text-[11px]">

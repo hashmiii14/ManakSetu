@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { 
   ShieldCheck, Award, CheckCircle2, XCircle, AlertTriangle, 
   HelpCircle, Sparkles, Check, Copy, AlertCircle, Flag, Loader2, 
-  QrCode, ExternalLink, PhoneCall, Send, FileWarning, CheckCheck
+  QrCode, ExternalLink, PhoneCall, Send, FileWarning, CheckCheck, X
 } from 'lucide-react';
 import { verifyIdentifier } from '../services/api';
 
@@ -145,7 +145,7 @@ export default function ConsumerVerifier({ onOpenReport }) {
                   { code: 'AK79B2', label: 'Tanishq 22K', isFake: false },
                   { code: 'MH41C9', label: 'Malabar 18K', isFake: false },
                   { code: 'KA88X1', label: 'Kalyan 24K', isFake: false },
-                  { code: 'XX9999', label: '⚠️ Fake HUID', isFake: true }
+                  { code: 'XX9999', label: 'Unregistered Fake', isFake: true }
                 ].map((item) => (
                   <button
                     key={item.code}
@@ -336,7 +336,7 @@ export default function ConsumerVerifier({ onOpenReport }) {
                   { code: '9200341', label: 'Bisleri Water', isFake: false },
                   { code: '4151908', label: 'Steelbird Helmet', isFake: false },
                   { code: '7100456', label: 'SAIL TMT Steel', isFake: false },
-                  { code: '3344556', label: '⚠️ Suspended Apex', isFake: true }
+                  { code: '3344556', label: 'Suspended License', isFake: true }
                 ].map((item) => (
                   <button
                     key={item.code}
@@ -518,7 +518,7 @@ export default function ConsumerVerifier({ onOpenReport }) {
                   onClick={() => setNchModal(prev => ({ ...prev, isOpen: false }))}
                   className="text-neutral-400 hover:text-neutral-700 p-1"
                 >
-                  ✕
+                  <X className="w-4 h-4" />
                 </button>
               </div>
 

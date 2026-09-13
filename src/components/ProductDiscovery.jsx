@@ -102,8 +102,8 @@ export default function ProductDiscovery({ onOpenStandard, onCheckCompliance, on
             <span className="text-[11px] font-bold text-neutral-400 uppercase tracking-wider block">
               Test Colloquial & Vernacular Prompts (Judges 1-Click Demo):
             </span>
-            <span className="text-[11px] text-emerald-700 font-semibold hidden sm:inline">
-              ⚡ Hindi & Hinglish colloquial mapping
+            <span className="text-[11px] text-slate-600 font-semibold hidden sm:inline">
+              Hindi & Hinglish colloquial mapping
             </span>
           </div>
           <div className="flex flex-wrap gap-2">

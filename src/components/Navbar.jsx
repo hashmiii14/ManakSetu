@@ -18,7 +18,7 @@ export default function Navbar({ onAskBot, onOpenReport, activeMode = 'msme', on
       {/* Top SIH 2026 Problem Statement 26107 Banner */}
       <div className="bg-neutral-900 text-white text-[11px] py-1 px-4 text-center sm:flex items-center justify-between border-b border-neutral-800">
         <div className="flex items-center justify-center sm:justify-start gap-2 font-medium tracking-wide">
-          <span className="font-bold text-amber-400">🇮🇳 Smart India Hackathon 2026</span>
+          <span className="font-bold text-amber-400">Smart India Hackathon 2026</span>
           <span className="hidden md:inline text-neutral-400">•</span>
           <span className="hidden md:inline text-neutral-300">PS ID: <strong>26107</strong></span>
           <span className="hidden lg:inline text-neutral-400">•</span>

@@ -1,123 +1,148 @@
 import React from 'react';
-import { ExternalLink, ShieldCheck, Heart, Flag, PhoneCall } from 'lucide-react';
+import { ExternalLink, ShieldCheck, Flag, PhoneCall } from 'lucide-react';
 import { useRouter } from '../context/RouterContext';
+import Logo from './Logo';
 
 export default function Footer({ onOpenReport }) {
   const { navigate } = useRouter();
 
   return (
-    <footer className="bg-slate-900 text-slate-300 text-xs py-12 border-t-4 border-saffron-500 text-left">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 space-y-10">
+    <footer className="bg-slate-900 text-slate-300 text-xs py-10 border-t-2 border-gov-800 text-left">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 space-y-8">
         
-        {/* Top 4 Columns */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8">
+        {/* Top 5 Institutional Columns */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
           
-          {/* Brand & Purpose */}
+          {/* Col 1: About ManakSetu (2 cols wide) */}
           <div className="lg:col-span-2 space-y-3">
-            <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-lg bg-gov-700 text-white flex items-center justify-center font-bold text-base border border-saffron-500">
-                <span className="font-serif">मानक</span>
-              </div>
-              <div>
-                <span className="font-extrabold text-lg text-white tracking-tight block leading-none">
-                  MANAKSETU
-                </span>
-                <span className="text-[10px] text-slate-400">
-                  AI-assisted BIS & Standards Guidance
-                </span>
-              </div>
-            </div>
+            <Logo variant="white" size="default" />
 
-            <p className="text-slate-400 text-xs leading-relaxed max-w-md">
-              ManakSetu empowers Indian micro, small, and medium enterprises (MSMEs), exporters, startups, and citizens to discover Indian Standards, navigate mandatory Quality Control Orders (QCOs), and verify authentic ISI and Gold HUID marks.
+            <p className="text-slate-400 text-xs leading-relaxed max-w-sm">
+              ManakSetu is an assistance and navigation platform designed to simplify access to Indian Standards, mandatory Quality Control Orders (QCOs), and Bureau of Indian Standards (BIS) conformity assessment procedures.
             </p>
 
-            <div className="pt-2 text-[11px] text-slate-400 space-y-1">
-              <p>Smart India Hackathon (SIH) 2026 • Problem Statement ID: <strong>26107</strong></p>
+            <div className="pt-1 text-[11px] text-slate-400 space-y-0.5">
+              <p>Smart India Hackathon 2026 • Problem Statement ID: <strong>26107</strong></p>
               <p>Theme: <strong>Smart Automation</strong> • Team: <strong>Code Snippet</strong></p>
             </div>
           </div>
 
-          {/* Quick Navigation */}
-          <div>
-            <h4 className="font-bold text-white uppercase tracking-wider text-[11px] mb-3 pb-1 border-b border-slate-800">
-              Navigation
+          {/* Col 2: Standards */}
+          <div className="space-y-2">
+            <h4 className="font-bold text-white uppercase tracking-wider text-[11px] pb-1 border-b border-slate-800">
+              Standards
             </h4>
-            <ul className="space-y-2 text-xs">
+            <ul className="space-y-1.5 text-xs text-slate-400">
               <li>
-                <button onClick={() => navigate('/')} className="hover:text-saffron-400 transition-colors">
-                  Home
+                <button onClick={() => navigate('/standards/search')} className="hover:text-white transition-colors">
+                  Instant Standards Search
                 </button>
               </li>
               <li>
-                <button onClick={() => navigate('/standards/search')} className="hover:text-saffron-400 transition-colors">
-                  Standards Search
+                <button onClick={() => navigate('/standards/search?sector=Electrical+Engineering')} className="hover:text-white transition-colors">
+                  Electrical Engineering
                 </button>
               </li>
               <li>
-                <button onClick={() => navigate('/services')} className="hover:text-saffron-400 transition-colors">
-                  BIS Services Directory
+                <button onClick={() => navigate('/standards/search?sector=Civil+Engineering')} className="hover:text-white transition-colors">
+                  Civil &amp; Construction
                 </button>
               </li>
               <li>
-                <button onClick={() => navigate('/manakbot')} className="hover:text-saffron-400 transition-colors text-saffron-400 font-semibold">
-                  ManakBot AI Copilot
+                <button onClick={() => navigate('/standards/search?sector=Food+%26+Agriculture')} className="hover:text-white transition-colors">
+                  Food &amp; Packaged Water
                 </button>
               </li>
               <li>
-                <button onClick={() => navigate('/consumer')} className="hover:text-saffron-400 transition-colors">
-                  TrueMark Verifier (HUID/CML)
-                </button>
-              </li>
-              <li>
-                <button onClick={() => navigate('/msme')} className="hover:text-saffron-400 transition-colors">
-                  MSME Fee Concessions
-                </button>
-              </li>
-              <li>
-                <button onClick={() => navigate('/news')} className="hover:text-saffron-400 transition-colors">
-                  News & Circulars
+                <button onClick={() => navigate('/standards/search?sector=Electronics+%26+IT+Goods')} className="hover:text-white transition-colors">
+                  Electronics &amp; IT
                 </button>
               </li>
             </ul>
           </div>
 
-          {/* Official BIS Portals */}
-          <div>
-            <h4 className="font-bold text-white uppercase tracking-wider text-[11px] mb-3 pb-1 border-b border-slate-800">
-              Official BIS Portals
+          {/* Col 3: Services */}
+          <div className="space-y-2">
+            <h4 className="font-bold text-white uppercase tracking-wider text-[11px] pb-1 border-b border-slate-800">
+              Services
             </h4>
-            <ul className="space-y-2 text-xs">
+            <ul className="space-y-1.5 text-xs text-slate-400">
+              <li>
+                <button onClick={() => navigate('/services')} className="hover:text-white transition-colors">
+                  Product Certification (ISI)
+                </button>
+              </li>
+              <li>
+                <button onClick={() => navigate('/services')} className="hover:text-white transition-colors">
+                  Compulsory Registration (CRS)
+                </button>
+              </li>
+              <li>
+                <button onClick={() => navigate('/consumer')} className="hover:text-white transition-colors">
+                  Hallmarking (HUID)
+                </button>
+              </li>
+              <li>
+                <button onClick={() => navigate('/services')} className="hover:text-white transition-colors">
+                  Foreign Manufacturers (FMCS)
+                </button>
+              </li>
+              <li>
+                <button onClick={() => navigate('/services')} className="hover:text-white transition-colors">
+                  Testing Labs (LRS)
+                </button>
+              </li>
+            </ul>
+          </div>
+
+          {/* Col 4: Resources */}
+          <div className="space-y-2">
+            <h4 className="font-bold text-white uppercase tracking-wider text-[11px] pb-1 border-b border-slate-800">
+              Resources
+            </h4>
+            <ul className="space-y-1.5 text-xs text-slate-400">
+              <li>
+                <button onClick={() => navigate('/manakbot')} className="hover:text-white transition-colors text-amber-400 font-semibold">
+                  ManakBot Assistant
+                </button>
+              </li>
+              <li>
+                <button onClick={() => navigate('/msme')} className="hover:text-white transition-colors">
+                  MSME 50% Concessions
+                </button>
+              </li>
+              <li>
+                <button onClick={() => navigate('/news')} className="hover:text-white transition-colors">
+                  Gazette QCO Orders
+                </button>
+              </li>
+              <li>
+                <button onClick={() => navigate('/faq')} className="hover:text-white transition-colors">
+                  Frequently Asked Questions
+                </button>
+              </li>
+              <li>
+                <button onClick={() => navigate('/about')} className="hover:text-white transition-colors">
+                  About Project
+                </button>
+              </li>
+            </ul>
+          </div>
+
+          {/* Col 5: Official BIS Links & Helpline */}
+          <div className="space-y-2">
+            <h4 className="font-bold text-white uppercase tracking-wider text-[11px] pb-1 border-b border-slate-800">
+              Official Links
+            </h4>
+            <ul className="space-y-1.5 text-xs text-slate-400">
               <li>
                 <a
                   href="https://www.manakonline.in/MANAK/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="hover:text-saffron-400 inline-flex items-center gap-1 transition-colors"
+                  className="hover:text-amber-400 inline-flex items-center gap-1 transition-colors"
                 >
                   <span>Manak Online (e-BIS)</span>
-                  <ExternalLink className="w-2.5 h-2.5 text-slate-500" />
-                </a>
-              </li>
-              <li>
-                <a
-                  href="https://www.manakonline.in/MANAK/login"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:text-saffron-400 inline-flex items-center gap-1 transition-colors"
-                >
-                  <span>Manak Online Login</span>
-                  <ExternalLink className="w-2.5 h-2.5 text-slate-500" />
-                </a>
-              </li>
-              <li>
-                <a
-                  href="https://www.manakonline.in/MANAK/eBISLogin"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:text-saffron-400 inline-flex items-center gap-1 transition-colors"
-                >
-                  <span>e-BIS Officer Login</span>
                   <ExternalLink className="w-2.5 h-2.5 text-slate-500" />
                 </a>
               </li>
@@ -126,93 +151,67 @@ export default function Footer({ onOpenReport }) {
                   href="https://www.bis.gov.in/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="hover:text-saffron-400 inline-flex items-center gap-1 transition-colors"
+                  className="hover:text-amber-400 inline-flex items-center gap-1 transition-colors"
                 >
-                  <span>BIS Headquarters Portal</span>
+                  <span>BIS Website</span>
                   <ExternalLink className="w-2.5 h-2.5 text-slate-500" />
                 </a>
               </li>
               <li>
                 <a
-                  href="https://www.services.bis.gov.in/php/BIS_2.0/bisconnect/knowyourstandards/indian_standards/isdetails/"
+                  href="https://www.crsbis.in/BIS/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="hover:text-saffron-400 inline-flex items-center gap-1 transition-colors"
+                  className="hover:text-amber-400 inline-flex items-center gap-1 transition-colors"
                 >
-                  <span>Know Your Standards (BIS)</span>
+                  <span>CRS Portal</span>
+                  <ExternalLink className="w-2.5 h-2.5 text-slate-500" />
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://www.egazette.gov.in"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-amber-400 inline-flex items-center gap-1 transition-colors"
+                >
+                  <span>e-Gazette of India</span>
                   <ExternalLink className="w-2.5 h-2.5 text-slate-500" />
                 </a>
               </li>
             </ul>
-          </div>
 
-          {/* Support & Grievances */}
-          <div>
-            <h4 className="font-bold text-white uppercase tracking-wider text-[11px] mb-3 pb-1 border-b border-slate-800">
-              Support & Jan Sunvai
-            </h4>
-            <div className="space-y-3 text-xs">
-              <div className="p-3 rounded-lg bg-slate-800/80 border border-slate-700 space-y-1">
-                <span className="text-[10px] text-slate-400 font-bold block uppercase">
-                  National Consumer Helpline
-                </span>
-                <p className="text-saffron-400 font-mono font-bold text-sm">
-                  1915 (Toll Free)
-                </p>
-                <span className="text-[10px] text-slate-400 block">
-                  Ministry of Consumer Affairs
-                </span>
-              </div>
-
-              <div className="space-y-1.5">
-                <button 
-                  onClick={() => navigate('/faq')}
-                  className="hover:text-saffron-400 text-xs block transition-colors"
-                >
-                  Frequently Asked Questions
-                </button>
-                <button 
-                  onClick={() => navigate('/about')}
-                  className="hover:text-saffron-400 text-xs block transition-colors"
-                >
-                  About ManakSetu Project
-                </button>
-                {onOpenReport && (
-                  <button 
-                    onClick={onOpenReport}
-                    className="text-red-400 hover:text-red-300 text-xs font-semibold inline-flex items-center gap-1 transition-colors pt-1"
-                  >
-                    <Flag className="w-3 h-3 text-red-400" />
-                    <span>Report Fake Mark to BIS</span>
-                  </button>
-                )}
+            <div className="pt-2">
+              <div className="p-2 bg-slate-800 rounded-sm border border-slate-700 text-[11px] space-y-0.5">
+                <span className="text-slate-400 block font-medium">Consumer Helpline:</span>
+                <span className="text-amber-400 font-mono font-bold block">1915 (Toll Free)</span>
               </div>
             </div>
           </div>
 
         </div>
 
-        {/* STATUTORY DISCLAIMER (EXPLICIT GOVERNMENT-GRADE COMPLIANCE) */}
+        {/* STATUTORY MANDATORY DISCLAIMER (PROMPT ITEM 32) */}
         <div className="pt-6 border-t border-slate-800 space-y-3">
-          <div className="p-4 rounded-xl bg-slate-800/60 border border-slate-700/80 text-[11px] text-slate-400 leading-relaxed">
-            <strong className="text-slate-200 block mb-1">
-              Statutory Transparency & Legal Disclaimer:
-            </strong>
+          <div className="p-3 bg-slate-800/80 border border-slate-700 rounded-sm text-[11px] text-slate-400 leading-relaxed">
+            <strong className="text-slate-200 block mb-0.5">Statutory Disclaimer:</strong>
             <p>
-              ManakSetu is an independent assistive and informational prototype platform created for the Smart India Hackathon 2026. It is <strong>NOT</strong> the official portal of the Bureau of Indian Standards (BIS) or the Government of India. All Indian Standards specifications, Quality Control Orders (QCOs), fee structures, and laboratory details provided are for guidance and educational purposes. Manufacturers and citizens must verify current statutory requirements, gazette amendments, and operative licenses directly on the official Bureau of Indian Standards portal (<a href="https://www.manakonline.in" target="_blank" rel="noopener noreferrer" className="text-saffron-400 underline">www.manakonline.in</a>).
+              ManakSetu is an assistance/prototype platform intended to simplify navigation of BIS-related information. Users should verify current requirements, standards and official documents through BIS (<a href="https://www.manakonline.in" target="_blank" rel="noopener noreferrer" className="text-amber-400 underline">www.manakonline.in</a>).
             </p>
           </div>
 
           <div className="flex flex-col sm:flex-row items-center justify-between gap-2 text-[11px] text-slate-500">
             <div>
-              © 2026 ManakSetu Assistive Platform • SIH Team Code Snippet
+              &copy; 2026 MANAKSETU Assistive Platform • SIH 2026 Team Code Snippet
             </div>
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-3">
               <button onClick={() => navigate('/about')} className="hover:text-slate-300">Privacy Policy</button>
-              <span>•</span>
+              <span>|</span>
               <button onClick={() => navigate('/about')} className="hover:text-slate-300">Terms of Assistance</button>
-              <span>•</span>
+              <span>|</span>
               <button onClick={() => navigate('/about')} className="hover:text-slate-300">Accessibility Statement</button>
+              <span>|</span>
+              <button onClick={() => navigate('/faq')} className="hover:text-slate-300">Contact</button>
             </div>
           </div>
         </div>

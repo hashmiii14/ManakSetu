@@ -1,72 +1,103 @@
 import React from 'react';
 
 /**
- * ManakSetu Brand Logo
- * Concept: "Setu" (Bridge) + Certification Shield + Verification Checkmark
+ * ORIGINAL MANAKSETU LOGO MARK
+ * 
+ * Concept: 
+ * Manak (Standard) = Two solid structural foundation pillars
+ * Setu (Bridge)    = Clean architectural lintel and connector arch
+ * Identity         = Stable, institutional, print-friendly, 2D flat geometric mark
+ * 
+ * Complies strictly with Master Prompt:
+ * - NOT a recreation or modification of the BIS emblem
+ * - No 3D, no gradients, no glow, no cartoon ornamentation
  */
-export default function Logo({ className = '', iconOnly = false, size = 'default' }) {
-  const iconSizes = {
-    sm: 'w-6 h-6',
-    default: 'w-8 h-8',
-    lg: 'w-10 h-10',
-    xl: 'w-12 h-12'
-  };
-
-  const textSizes = {
-    sm: 'text-base',
-    default: 'text-lg',
-    lg: 'text-xl',
-    xl: 'text-2xl'
-  };
+export function LogoMark({ className = "w-8 h-8", variant = "default" }) {
+  // Color variants: 'default' (gov blue + saffron accent), 'white', 'monochrome'
+  const pillarColor = variant === 'white' ? '#FFFFFF' : variant === 'monochrome' ? '#0F172A' : '#0A3871';
+  const bridgeColor = variant === 'white' ? '#FDBA74' : variant === 'monochrome' ? '#334155' : '#D97706';
+  const baseColor = variant === 'white' ? '#FFFFFF' : variant === 'monochrome' ? '#0F172A' : '#0A3871';
 
   return (
-    <div className={`inline-flex items-center gap-2.5 select-none ${className}`}>
-      {/* Setu Bridge + Shield SVG Icon */}
-      <div 
-        className={`${iconSizes[size] || iconSizes.default} rounded-xl bg-gradient-to-br from-emerald-600 to-emerald-800 flex items-center justify-center text-white shadow-sm ring-1 ring-emerald-900/20 shrink-0`}
-      >
-        <svg
-          viewBox="0 0 32 32"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-          className="w-5 h-5 text-white"
-        >
-          {/* Bridge Arch */}
-          <path
-            d="M5 21C7 16 11 13 16 13C21 13 25 16 27 21"
-            stroke="currentColor"
-            strokeWidth="2.5"
-            strokeLinecap="round"
-          />
-          {/* Bridge Pillars */}
-          <path
-            d="M10 21V16M22 21V16"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            opacity="0.8"
-          />
-          {/* Center Checkmark / Verification Star */}
-          <path
-            d="M13 10L15.5 12.5L20 8"
-            stroke="#A7F3D0"
-            strokeWidth="2.2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
+    <svg 
+      viewBox="0 0 40 40" 
+      fill="none" 
+      xmlns="http://www.w3.org/2000/svg"
+      className={className}
+      aria-label="ManakSetu Institutional Mark"
+    >
+      {/* Foundation plinth */}
+      <rect x="4" y="32" width="32" height="3" rx="0.5" fill={baseColor} />
+
+      {/* Left Standard Pillar (Manak) */}
+      <rect x="7" y="15" width="6" height="15" fill={pillarColor} />
+      <rect x="5.5" y="13" width="9" height="2" fill={pillarColor} />
+
+      {/* Right Standard Pillar (Manak) */}
+      <rect x="27" y="15" width="6" height="15" fill={pillarColor} />
+      <rect x="25.5" y="13" width="9" height="2" fill={pillarColor} />
+
+      {/* Connecting Bridge Arch & Deck (Setu) */}
+      <path 
+        d="M13 19C15 16 25 16 27 19V15H13V19Z" 
+        fill={bridgeColor} 
+      />
+      {/* Upper Arch Connector Bar */}
+      <rect x="4" y="8" width="32" height="3" rx="0.5" fill={pillarColor} />
+      
+      {/* Center Keystone / Calibration Benchmark */}
+      <polygon points="20,4 23.5,8 16.5,8" fill={bridgeColor} />
+      <rect x="18.5" y="10" width="3" height="12" fill={bridgeColor} />
+    </svg>
+  );
+}
+
+/**
+ * Full Horizontal & Compact Logo Component
+ */
+export default function Logo({ 
+  variant = 'default', // 'default' | 'white' | 'monochrome'
+  iconOnly = false,
+  size = 'default', // 'sm' | 'default' | 'lg'
+  className = ''
+}) {
+  const markSizes = {
+    sm: 'w-7 h-7',
+    default: 'w-9 h-9',
+    lg: 'w-11 h-11'
+  };
+
+  const titleSizes = {
+    sm: 'text-base',
+    default: 'text-lg sm:text-xl',
+    lg: 'text-2xl'
+  };
+
+  const subtitleSizes = {
+    sm: 'text-[9px]',
+    default: 'text-[10px] sm:text-[11px]',
+    lg: 'text-xs'
+  };
+
+  const textColor = variant === 'white' ? 'text-white' : 'text-slate-900';
+  const subtitleColor = variant === 'white' ? 'text-slate-300' : 'text-slate-600';
+
+  return (
+    <div className={`inline-flex items-center gap-3 select-none ${className}`}>
+      {/* The Original ManakSetu Architectural Emblem */}
+      <div className="shrink-0">
+        <LogoMark className={markSizes[size] || markSizes.default} variant={variant} />
       </div>
 
       {!iconOnly && (
-        <div className="flex flex-col leading-none">
-          <div className="flex items-center gap-1">
-            <span className={`font-extrabold tracking-tight text-neutral-900 ${textSizes[size] || textSizes.default}`}>
-              ManaK<span className="text-emerald-700">Setu</span>
+        <div className="flex flex-col text-left leading-tight">
+          <div className="flex items-center gap-1.5">
+            <span className={`font-extrabold tracking-tight font-sans ${titleSizes[size] || titleSizes.default} ${textColor}`}>
+              MANAKSETU
             </span>
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 mb-2"></span>
           </div>
-          <span className="text-[9px] font-semibold uppercase tracking-widest text-neutral-600">
-            Indian Standards AI
+          <span className={`font-medium tracking-normal ${subtitleSizes[size] || subtitleSizes.default} ${subtitleColor}`}>
+            AI-assisted BIS &amp; Standards Guidance
           </span>
         </div>
       )}

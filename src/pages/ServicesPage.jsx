@@ -1,167 +1,189 @@
 import React, { useState } from 'react';
 import { 
   Building2, ShieldCheck, ExternalLink, Sparkles, CheckCircle2, 
-  ArrowRight, FileText, Globe, Award, HelpCircle, Layers, Check,
-  AlertTriangle, Users, ChevronRight, PhoneCall, Info
+  ArrowRight, FileText, Globe, Award, HelpCircle, Layers, 
+  FlaskConical, Scale, Users, ChevronRight, Info
 } from 'lucide-react';
 import { useRouter } from '../context/RouterContext';
 import ErrorBoundary from '../components/ErrorBoundary';
 
 export default function ServicesPage() {
   const { navigate } = useRouter();
-  const [activeTab, setActiveTab] = useState('scheme1');
+  const [activeCategory, setActiveCategory] = useState('ALL');
 
-  const services = [
+  const serviceCategories = [
     {
-      id: 'scheme1',
-      title: 'Scheme-I: Product Certification (ISI Mark)',
-      shortCode: 'Scheme-I',
-      subtitle: 'Mandatory & Voluntary Certification for Domestic Manufacturers',
-      statutoryRef: 'Bureau of Indian Standards (Conformity Assessment) Regulations, 2018 (Scheme-I)',
-      overview: 'The Product Certification Scheme of BIS is one of the largest in the world, with over 41,000 active licenses. It grants licenses to use the prestigious standard ISI Mark upon verification of manufacturing infrastructure, production process, quality control capabilities, and in-house testing facilities.',
-      eligibility: [
-        'Manufacturers with physical factory premises in India',
-        'Capability to produce goods conforming to relevant Indian Standard (IS Code)',
-        'Fully equipped in-house testing laboratory with calibrated apparatus',
-        'Competent technical quality control personnel'
-      ],
-      steps: [
-        'Step 1: Submission of online Form-I application along with required factory layout & machinery documents on Manak Online',
-        'Step 2: Preliminary scrutiny of technical documents by BIS Bureau officers within 15 working days',
-        'Step 3: On-site factory audit by BIS inspection officer and extraction of official verification test samples',
-        'Step 4: Independent laboratory testing of samples in BIS or NABL recognized testing facilities',
-        'Step 5: Grant of Certification Marks License (CM/L) and authorization to affix ISI Monogram'
-      ],
-      msmeRelief: '50% concession on application fee, annual license fee, and base minimum marking fee for Micro enterprises and women/SC/ST owned startups; 20% concession for Small enterprises.',
-      portalUrl: 'https://www.manakonline.in/MANAK/eBISLogin'
+      categoryKey: "CERTIFICATION",
+      categoryTitle: "Certification & Conformity Assessment",
+      description: "Product certification schemes governing domestic and foreign production under the Bureau of Indian Standards Act, 2016.",
+      services: [
+        {
+          id: "scheme1",
+          code: "Scheme-I",
+          name: "Product Certification Scheme (ISI Mark)",
+          statutoryAuthority: "Bureau of Indian Standards (Conformity Assessment) Regulations, 2018",
+          mandate: "Grants license to use the Standard ISI Mark based on factory premises audit, calibrated in-house testing facility verification, and independent lab test reports.",
+          scope: "Mandatory for 760+ products covered under Gazette Quality Control Orders (QCOs) including electrical appliances, steel rebars, cement, and packaged drinking water.",
+          msmeRelief: "50% concession on application fee, annual license fee, and minimum marking fee for Micro enterprises and women startups; 20% for Small enterprises.",
+          portalUrl: "https://www.manakonline.in/MANAK/eBISLogin"
+        },
+        {
+          id: "scheme2",
+          code: "Scheme-II",
+          name: "Compulsory Registration Scheme (CRS)",
+          statutoryAuthority: "Ministry of Electronics & IT (MeitY) / Ministry of New and Renewable Energy (MNRE)",
+          mandate: "Self-Declaration of Conformity registration for notified electronic, IT, and solar photovoltaic products based on third-party test reports from BIS recognized labs.",
+          scope: "Over 70 notified categories including laptops, mobile phones, power adapters, LED luminaires, and grid solar inverters.",
+          msmeRelief: "Standard government fees; testing fee subsidies available under Ministry of MSME testing reimbursement scheme.",
+          portalUrl: "https://www.crsbis.in/BIS/"
+        },
+        {
+          id: "fmcs",
+          code: "FMCS",
+          name: "Foreign Manufacturers Certification Scheme",
+          statutoryAuthority: "Section 13, Bureau of Indian Standards Act, 2016",
+          mandate: "Enables overseas production facilities exporting goods to India to obtain an operative BIS license and affix the ISI mark prior to dispatch.",
+          scope: "Ensures imported goods adhere to identical quality and safety benchmarks as domestic Indian manufacturing.",
+          msmeRelief: "Restricted to domestic Indian registered manufacturing units.",
+          portalUrl: "https://www.manakonline.in/MANAK/fmcs"
+        },
+        {
+          id: "mscs",
+          code: "MSCS",
+          name: "Management Systems Certification Scheme",
+          statutoryAuthority: "ISO/IEC 17021 Accreditation Standard",
+          mandate: "Statutory third-party certification of organizational management systems for quality, environment, food safety, and occupational health.",
+          scope: "ISO 9001 (Quality), ISO 14001 (Environment), ISO 22000 (Food Safety), ISO 45001 (OH&S), ISO 50001 (Energy).",
+          msmeRelief: "Subsidized government audit tariffs compared to private foreign certification registries.",
+          portalUrl: "https://www.manakonline.in/MANAK/mscs"
+        }
+      ]
     },
     {
-      id: 'scheme2',
-      title: 'Scheme-II: Compulsory Registration Scheme (CRS)',
-      shortCode: 'Scheme-II (CRS)',
-      subtitle: 'Self-Declaration of Conformity for Electronic & IT Goods',
-      statutoryRef: 'Ministry of Electronics & Information Technology (MeitY) & BIS CRO Orders',
-      overview: 'Under Scheme-II, manufacturers of notified electronic and IT goods (laptops, mobile phones, power adapters, LED luminaires, solar inverters) obtain registration based on Self-Declaration of Conformity and submission of test reports from BIS recognized labs.',
-      eligibility: [
-        'Manufacturers of electronic and IT products covered under the Electronics & IT Goods (Requirements for Compulsory Registration) Order',
-        'Both domestic and overseas manufacturers are eligible (overseas manufacturers must nominate an Authorized Indian Representative - AIR)',
-        'Product tested in BIS recognized labs in India prior to filing'
-      ],
-      steps: [
-        'Step 1: Sample testing in a BIS recognized laboratory in India as per applicable IS standard',
-        'Step 2: Receipt of test report (valid for 90 days from issuance)',
-        'Step 3: Online application on CRS portal (crsbis.in) with test reports & Authorized Indian Representative undertaking',
-        'Step 4: Document verification by BIS registration division',
-        'Step 5: Grant of R-Number (Registration Number) and authorization to display CRS standard mark'
-      ],
-      msmeRelief: 'Statutory government fee is uniform; testing fee concessions available under Ministry of MSME testing subsidy reimbursement scheme.',
-      portalUrl: 'https://www.crsbis.in/BIS/'
+      categoryKey: "STANDARDS",
+      categoryTitle: "Standardization & Technical Specifications",
+      description: "Establishment, harmonization, and maintenance of the national repository of Indian Standards (IS Codes).",
+      services: [
+        {
+          id: "formulation",
+          code: "FORMULATION",
+          name: "Standard Formulation & Revision",
+          statutoryAuthority: "Section 10, Bureau of Indian Standards Act, 2016",
+          mandate: "Formulation of national standards through 15 Division Councils and 400+ Sectional Technical Committees representing industry, consumers, and government.",
+          scope: "Covers over 21,000 active Indian Standards, periodically reviewed every 5 years for technological and international alignment.",
+          msmeRelief: "Open public review and stakeholder comment mechanism available to all industry associations and MSME clusters.",
+          portalUrl: "https://www.services.bis.gov.in/php/BIS_2.0/bisconnect/knowyourstandards/indian_standards/isdetails/"
+        },
+        {
+          id: "promotion",
+          code: "PROMO",
+          name: "Standards Promotion & Standards Clubs",
+          statutoryAuthority: "Bureau of Indian Standards Educational Outreach Mandate",
+          mandate: "Promotion of quality consciousness through Standards Clubs in schools, colleges, engineering institutions, and consumer organizations.",
+          scope: "Over 10,000 Standards Clubs established across India providing youth exposure to scientific testing and quality control.",
+          msmeRelief: "Grants and technical kits provided by BIS to academic and polytechnic institutions.",
+          portalUrl: "https://www.bis.gov.in/"
+        }
+      ]
     },
     {
-      id: 'scheme4',
-      title: 'Scheme-IV: Hallmarking of Gold & Silver Jewellery',
-      shortCode: 'Scheme-IV (HUID)',
-      subtitle: 'Consumer Protection & Purity Certification for Precious Metals',
-      statutoryRef: 'Hallmarking of Gold Jewellery and Gold Artefacts Order, 2020 (as amended)',
-      overview: 'Mandatory hallmarking guarantees purity and fineness of gold jewellery in India. Each hallmarked item carries the BIS Triangle logo, purity in Karat/fineness (e.g., 22K916), and a 6-digit laser-etched alphanumeric Hallmark Unique Identification (HUID) code tracked in the national central server.',
-      eligibility: [
-        'All jewellers selling gold jewellery in notified hallmarking districts across India',
-        'Jewellers with annual turnover below ₹40 Lakhs are exempted from mandatory registration, though consumers can request hallmarking'
-      ],
-      steps: [
-        'Step 1: Online jeweller registration on Manak Online portal (zero government fee for registration)',
-        'Step 2: Submission of jewellery batches to BIS-recognized Assaying and Hallmarking Centres (AHC)',
-        'Step 3: Fire assay purity testing and laser engraving of 6-digit HUID onto each article',
-        'Step 4: Uploading HUID serial numbers to central national database for citizen verification in BIS CARE app'
-      ],
-      msmeRelief: 'Registration is free for life for all jewellers. Hallmarking fee is fixed at ₹45 per gold article.',
-      portalUrl: 'https://www.manakonline.in/MANAK/hallmarkingNew'
+      categoryKey: "TESTING",
+      categoryTitle: "Testing & Laboratory Services",
+      description: "State-of-the-art laboratory network verifying product compliance against technical parameters.",
+      services: [
+        {
+          id: "lrs",
+          code: "LRS",
+          name: "Laboratory Recognition Scheme",
+          statutoryAuthority: "Bureau of Indian Standards (Conformity Assessment) Regulations",
+          mandate: "Recognition and monitoring of independent external laboratories meeting ISO/IEC 17025 accreditation standards for testing official enforcement samples.",
+          scope: "Directory of 120+ NABL accredited testing facilities across chemical, civil, electrical, food, and mechanical sectors.",
+          msmeRelief: "MSMEs can select geographically proximate accredited laboratories to minimize transport and dispatch lead times.",
+          portalUrl: "https://www.services.bis.gov.in/php/BIS_2.0/bisconnect/lab/accreditedlabs"
+        },
+        {
+          id: "central-labs",
+          code: "CL",
+          name: "BIS In-House Central & Regional Laboratories",
+          statutoryAuthority: "Direct Apex Testing Facilities of the Bureau",
+          mandate: "Operates apex facilities including Central Laboratory (Sahibabad), Western (Mumbai), Eastern (Kolkata), Southern (Chennai), and Northern (Mohali).",
+          scope: "Reference testing, inter-laboratory proficiency testing, dispute arbitration, and research development.",
+          msmeRelief: "Statutory calibration and verification support for factory in-house equipment.",
+          portalUrl: "https://www.bis.gov.in/"
+        }
+      ]
     },
     {
-      id: 'fmcs',
-      title: 'Foreign Manufacturers Certification Scheme (FMCS)',
-      shortCode: 'FMCS',
-      subtitle: 'ISI Mark Certification for Overseas Manufacturing Facilities',
-      statutoryRef: 'Section 13, Bureau of Indian Standards Act, 2016',
-      overview: 'FMCS enables foreign manufacturing facilities located outside India to obtain a BIS license and affix the ISI mark on goods exported to India. Certification ensures that imported goods meet the exact same statutory safety and quality standards as domestic production.',
-      eligibility: [
-        'Foreign manufacturers having their own manufacturing plant outside India',
-        'Appointment of an Authorized Indian Representative (AIR) based in India',
-        'Conformity to relevant Indian Standard and acceptance of factory inspection'
-      ],
-      steps: [
-        'Step 1: Submission of Form-I application along with preliminary document fee and AIR agreement',
-        'Step 2: Technical review and scheduling of factory inspection by BIS auditor team',
-        'Step 3: Physical factory audit abroad, testing witness, and drawing of counter-samples',
-        'Step 4: Sample testing in Indian BIS laboratory',
-        'Step 5: Submission of Performance Bank Guarantee (PBG) and grant of CM/L license'
-      ],
-      msmeRelief: 'Standard foreign inspection travel and per-diem fees apply. MSME concessions are restricted to domestic Indian registered entities.',
-      portalUrl: 'https://www.manakonline.in/MANAK/fmcs'
+      categoryKey: "CONSUMER",
+      categoryTitle: "Consumer Affairs & Hallmarking",
+      description: "Consumer protection mechanisms, precious metal purity verification, and grievance redressal.",
+      services: [
+        {
+          id: "hallmarking-scheme",
+          code: "Scheme-IV",
+          name: "Hallmarking of Gold & Silver Jewellery",
+          statutoryAuthority: "Hallmarking of Gold Jewellery and Gold Artefacts Order, 2020",
+          mandate: "Mandatory hallmarking of gold articles with 3 canonical marks: BIS triangular mark, purity in Karat/fineness (e.g. 22K916), and 6-digit laser-etched HUID.",
+          scope: "Mandatory across 340+ notified districts in India for 14K, 18K, 20K, 22K, 23K, and 24K gold articles.",
+          msmeRelief: "Free online lifetime registration for jewellers. Subsidized testing fee of ₹45 per gold article at recognized AHCs.",
+          portalUrl: "https://www.manakonline.in/MANAK/hallmarkingNew"
+        },
+        {
+          id: "grievances",
+          code: "JAN SUNVAI",
+          name: "Grievance Redressal & Surveillance (BIS CARE)",
+          statutoryAuthority: "Consumer Protection Act, 2019 & BIS Act, 2016",
+          mandate: "Public platform to file complaints regarding substandard goods, fake ISI marks, hallmarking discrepancies, and unlicensed manufacturers.",
+          scope: "Empowers consumers to verify license status and report statutory violations directly to BIS Branch Officers and NCH 1915.",
+          msmeRelief: "Protects compliant MSME manufacturers against unfair competition from counterfeit and substandard imports.",
+          portalUrl: "https://play.google.com/store/apps/details?id=com.bis.biscare"
+        }
+      ]
     },
     {
-      id: 'nits',
-      title: 'National Institute of Training for Standardization (NITS)',
-      shortCode: 'NITS',
-      subtitle: 'Capacity Building, Training & Certification for Industry Personnel',
-      statutoryRef: 'Bureau of Indian Standards Training Mandate',
-      overview: 'NITS is the training arm of BIS established to impart training in the fields of standardization, quality control, laboratory testing, statistical quality control, and management system auditing.',
-      eligibility: [
-        'Quality managers, test engineers, laboratory technicians, and industry executives',
-        'Government procurement officers and academic institutions'
-      ],
-      steps: [
-        'Step 1: Selection of specialized course from annual training calendar',
-        'Step 2: Online registration through Manak Online NITS portal',
-        'Step 3: Completion of theoretical instruction and practical laboratory hands-on training',
-        'Step 4: Examination and award of Certificate of Competence'
-      ],
-      msmeRelief: 'Special subsidized fee packages for MSME personnel and academic researchers.',
-      portalUrl: 'https://www.manakonline.in/MANAK/nits'
-    },
-    {
-      id: 'mscs',
-      title: 'Management Systems Certification Scheme (MSCS)',
-      shortCode: 'MSCS',
-      subtitle: 'Auditing & Certification for International Management Standards',
-      statutoryRef: 'ISO/IEC 17021 Accreditation Framework',
-      overview: 'BIS provides statutory third-party audit and certification for organizations implementing management systems like ISO 9001 (Quality), ISO 14001 (Environment), ISO 45001 (Occupational Health & Safety), and ISO 22000 (Food Safety).',
-      eligibility: [
-        'Any industrial, commercial, healthcare, or government enterprise operating an active management system for at least 3 months'
-      ],
-      steps: [
-        'Step 1: Application submission with quality manual and internal audit records',
-        'Step 2: Stage-1 readiness review audit',
-        'Step 3: Stage-2 full compliance audit of organization processes',
-        'Step 4: Corrective action verification and grant of Management System Certificate'
-      ],
-      msmeRelief: 'Competitive statutory audit tariffs compared to private foreign certification bodies.',
-      portalUrl: 'https://www.manakonline.in/MANAK/mscs'
+      categoryKey: "TRAINING",
+      categoryTitle: "Training & Capacity Building",
+      description: "Human resource development, professional certification, and technical training in standardization.",
+      services: [
+        {
+          id: "nits-institute",
+          code: "NITS",
+          name: "National Institute of Training for Standardization",
+          statutoryAuthority: "BIS Capacity Building Mandate",
+          mandate: "Training institute at Noida, UP, conducting residential and virtual workshops on quality auditing, laboratory test methods, and statistical quality control.",
+          scope: "Trains over 4,000 industry professionals, laboratory analysts, and foreign delegates annually.",
+          msmeRelief: "Special subsidized fee packages for MSME executives and academic polytechnic faculty.",
+          portalUrl: "https://www.manakonline.in/MANAK/nits"
+        }
+      ]
     }
   ];
 
-  const current = services.find(s => s.id === activeTab) || services[0];
+  const filteredCategories = serviceCategories.filter(cat => {
+    if (activeCategory === 'ALL') return true;
+    return cat.categoryKey === activeCategory;
+  });
 
   return (
     <ErrorBoundary>
       <div className="min-h-screen bg-slate-50 text-slate-900 text-left">
         
         {/* HEADER SECTION */}
-        <section className="bg-white border-b border-slate-200 py-8 px-4 sm:px-6">
-          <div className="max-w-7xl mx-auto space-y-2">
-            <div className="flex items-center gap-2 text-xs text-slate-500 font-medium">
+        <section className="bg-white border-b border-slate-300 py-8 px-4 sm:px-6">
+          <div className="max-w-6xl mx-auto space-y-2">
+            <div className="flex items-center gap-2 text-[11px] text-slate-500 font-medium">
               <button onClick={() => navigate('/')} className="hover:text-gov-800">Home</button>
               <span>/</span>
-              <span className="text-gov-900 font-bold">Services &amp; Schemes Directory</span>
+              <span className="text-gov-800 font-semibold">BIS Services Directory</span>
             </div>
 
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-1">
               <div>
                 <h1 className="text-2xl sm:text-3xl font-extrabold text-gov-900 tracking-tight">
-                  BIS Services &amp; Conformity Schemes
+                  BIS Services &amp; Conformity Assessment Directory
                 </h1>
                 <p className="text-xs sm:text-sm text-slate-600 mt-1 max-w-3xl leading-relaxed">
-                  Comprehensive architectural guide to the Bureau of Indian Standards certification schemes, compliance pathways, statutory regulations, and official portal destinations.
+                  Government-directory architectural guide to statutory conformity schemes, standardization divisions, laboratory networks, and citizen services operated by the Bureau of Indian Standards.
                 </p>
               </div>
 
@@ -170,168 +192,126 @@ export default function ServicesPage() {
                   href="https://www.manakonline.in/MANAK/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="px-3.5 py-2 rounded-lg bg-gov-800 hover:bg-gov-900 text-white font-bold text-xs inline-flex items-center gap-1.5 shadow-gov-sm transition-colors"
+                  className="px-3.5 py-2 bg-gov-800 hover:bg-gov-900 text-white font-bold text-xs rounded-sm inline-flex items-center gap-1.5 shadow-sm transition-colors"
                 >
-                  <span>Official Manak Online Portal</span>
-                  <ExternalLink className="w-3.5 h-3.5 text-saffron-400" />
+                  <span>Official Manak Online</span>
+                  <ExternalLink className="w-3.5 h-3.5 text-amber-400" />
                 </a>
               </div>
             </div>
           </div>
         </section>
 
-        {/* TABS NAVIGATION & CONTENT CONTAINER */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-            
-            {/* LEFT SIDEBAR: SCHEME TABS */}
-            <div className="lg:col-span-1 space-y-2">
-              <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block px-2 mb-2">
-                Conformity Schemes:
-              </span>
-              {services.map((item) => (
-                <button
-                  key={item.id}
-                  onClick={() => setActiveTab(item.id)}
-                  className={`w-full text-left p-3 rounded-xl border transition-all text-xs flex flex-col gap-1 ${
-                    activeTab === item.id
-                      ? 'bg-gov-800 text-white border-gov-800 shadow-gov font-bold'
-                      : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-100 font-medium'
-                  }`}
-                >
-                  <span className={`text-[10px] font-mono block ${activeTab === item.id ? 'text-saffron-400' : 'text-slate-400'}`}>
-                    {item.shortCode}
-                  </span>
-                  <span className="line-clamp-1">{item.title.split(':')[1] || item.title}</span>
-                </button>
-              ))}
-
-              {/* Quick AI consultation card */}
-              <div className="pt-4">
-                <div className="p-4 rounded-xl bg-gov-900 text-white shadow-gov space-y-2.5">
-                  <div className="flex items-center gap-1.5 text-xs font-bold text-saffron-400">
-                    <Sparkles className="w-3.5 h-3.5" />
-                    <span>Unsure Which Scheme?</span>
-                  </div>
-                  <p className="text-[11px] text-slate-300 leading-relaxed">
-                    ManakBot AI can analyze your product description and identify the exact statutory scheme applicable to your facility.
-                  </p>
-                  <button
-                    onClick={() => navigate('/manakbot')}
-                    className="w-full py-1.5 bg-saffron-600 hover:bg-saffron-700 text-white font-bold text-xs rounded-lg transition-colors"
-                  >
-                    Ask ManakBot
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            {/* RIGHT MAIN PANEL: ACTIVE SCHEME DETAILS */}
-            <div className="lg:col-span-3 space-y-6">
-              
-              <div className="bg-white rounded-2xl border border-slate-200 shadow-gov p-6 sm:p-8 space-y-6">
-                
-                {/* Title & Statutory Reference */}
-                <div className="space-y-2 pb-4 border-b border-slate-200">
-                  <div className="flex items-center gap-2">
-                    <span className="px-2.5 py-0.5 rounded bg-gov-100 text-gov-800 font-mono font-bold text-xs">
-                      {current.shortCode}
-                    </span>
-                    <span className="text-xs text-slate-500 font-semibold">
-                      Official Conformity Assessment Scheme
-                    </span>
-                  </div>
-
-                  <h2 className="text-xl sm:text-2xl font-extrabold text-gov-900 tracking-tight">
-                    {current.title}
-                  </h2>
-                  <p className="text-xs sm:text-sm text-slate-600 font-medium">
-                    {current.subtitle}
-                  </p>
-                  <div className="text-[11px] text-slate-500 font-mono pt-1">
-                    Statutory Authority: <strong>{current.statutoryRef}</strong>
-                  </div>
-                </div>
-
-                {/* Overview */}
-                <div className="space-y-2">
-                  <h3 className="text-sm font-bold text-gov-900 uppercase tracking-wide">
-                    Scheme Overview
-                  </h3>
-                  <p className="text-xs sm:text-sm text-slate-700 leading-relaxed">
-                    {current.overview}
-                  </p>
-                </div>
-
-                {/* Eligibility Criteria */}
-                <div className="space-y-3">
-                  <h3 className="text-sm font-bold text-gov-900 uppercase tracking-wide">
-                    Applicant Eligibility Criteria
-                  </h3>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                    {current.eligibility.map((item, idx) => (
-                      <div key={idx} className="p-3 rounded-lg bg-slate-50 border border-slate-200 flex items-start gap-2.5 text-xs text-slate-700">
-                        <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
-                        <span>{item}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Step-by-Step Procedure */}
-                <div className="space-y-3">
-                  <h3 className="text-sm font-bold text-gov-900 uppercase tracking-wide">
-                    Step-by-Step Licensing Procedure
-                  </h3>
-                  <div className="space-y-2">
-                    {current.steps.map((step, idx) => (
-                      <div key={idx} className="p-3 rounded-lg border border-slate-200 bg-white hover:bg-slate-50/80 transition-colors flex items-start gap-3 text-xs text-slate-800">
-                        <span className="w-5 h-5 rounded-full bg-gov-100 text-gov-800 font-bold text-[10px] flex items-center justify-center shrink-0 mt-0.5">
-                          {idx + 1}
-                        </span>
-                        <span className="leading-snug">{step}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* MSME Relief & Concession Banner */}
-                <div className="p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-950 space-y-1">
-                  <div className="flex items-center gap-2 font-bold text-xs">
-                    <ShieldCheck className="w-4 h-4 text-emerald-700" />
-                    <span>Statutory MSME Fee Concession &amp; Relief:</span>
-                  </div>
-                  <p className="text-xs text-emerald-900 leading-relaxed">
-                    {current.msmeRelief}
-                  </p>
-                </div>
-
-                {/* Action CTA Bar */}
-                <div className="pt-4 border-t border-slate-200 flex flex-wrap items-center justify-between gap-3">
-                  <button
-                    onClick={() => navigate(`/manakbot?prompt=${encodeURIComponent(`Explain the application requirements and step-by-step procedure for ${current.title}.`)}`)}
-                    className="px-4 py-2 bg-saffron-600 hover:bg-saffron-700 text-white font-bold text-xs rounded-lg inline-flex items-center gap-2 shadow-gov-sm transition-colors"
-                  >
-                    <Sparkles className="w-4 h-4" />
-                    <span>Consult ManakBot on this Scheme</span>
-                  </button>
-
-                  <a
-                    href={current.portalUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="px-4 py-2 bg-gov-800 hover:bg-gov-900 text-white font-bold text-xs rounded-lg inline-flex items-center gap-2 shadow-gov-sm transition-colors"
-                  >
-                    <span>Proceed to Official Portal</span>
-                    <ExternalLink className="w-3.5 h-3.5" />
-                  </a>
-                </div>
-
-              </div>
-
-            </div>
-
+        {/* CATEGORY SELECTOR TABS */}
+        <div className="bg-slate-100 border-b border-slate-300 px-4 sm:px-6 sticky top-0 z-10">
+          <div className="max-w-6xl mx-auto flex items-center gap-1 overflow-x-auto py-2 text-xs">
+            <button
+              onClick={() => setActiveCategory('ALL')}
+              className={`px-3 py-1.5 rounded-sm font-semibold whitespace-nowrap transition-colors ${
+                activeCategory === 'ALL'
+                  ? 'bg-gov-800 text-white'
+                  : 'text-slate-700 hover:bg-slate-200'
+              }`}
+            >
+              All Categories
+            </button>
+            {serviceCategories.map((cat) => (
+              <button
+                key={cat.categoryKey}
+                onClick={() => setActiveCategory(cat.categoryKey)}
+                className={`px-3 py-1.5 rounded-sm font-semibold whitespace-nowrap transition-colors ${
+                  activeCategory === cat.categoryKey
+                    ? 'bg-gov-800 text-white'
+                    : 'text-slate-700 hover:bg-slate-200'
+                }`}
+              >
+                {cat.categoryTitle.split('&')[0].trim()}
+              </button>
+            ))}
           </div>
+        </div>
+
+        {/* MAIN DIRECTORY CONTENT */}
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 space-y-8">
+          {filteredCategories.map((catGroup) => (
+            <div key={catGroup.categoryKey} className="space-y-3">
+              
+              {/* Category Header */}
+              <div className="border-b-2 border-gov-800 pb-1.5">
+                <h2 className="text-base sm:text-lg font-bold text-gov-900 uppercase tracking-wide">
+                  {catGroup.categoryTitle}
+                </h2>
+                <p className="text-xs text-slate-600 mt-0.5">
+                  {catGroup.description}
+                </p>
+              </div>
+
+              {/* Service Rows */}
+              <div className="space-y-3">
+                {catGroup.services.map((item) => (
+                  <div
+                    key={item.id}
+                    className="bg-white border border-slate-300 rounded-sm p-4 sm:p-5 hover:border-gov-800 transition-all space-y-3"
+                  >
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-2">
+                      <div className="flex items-center gap-2">
+                        <span className="px-2 py-0.5 bg-gov-100 text-gov-900 font-mono font-bold text-[11px] rounded-sm">
+                          {item.code}
+                        </span>
+                        <h3 className="text-sm font-bold text-gov-900">
+                          {item.name}
+                        </h3>
+                      </div>
+
+                      <span className="text-[11px] text-slate-500 font-mono">
+                        {item.statutoryAuthority}
+                      </span>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs text-slate-700">
+                      <div className="space-y-1">
+                        <span className="font-bold text-slate-900 block">Mandate &amp; Method:</span>
+                        <p className="text-slate-600 leading-relaxed">{item.mandate}</p>
+                      </div>
+
+                      <div className="space-y-1">
+                        <span className="font-bold text-slate-900 block">Product Scope &amp; Applicability:</span>
+                        <p className="text-slate-600 leading-relaxed">{item.scope}</p>
+                      </div>
+                    </div>
+
+                    {/* MSME Concession Note */}
+                    <div className="p-2.5 bg-slate-50 border border-slate-200 rounded-sm text-xs text-slate-700 flex items-start gap-2">
+                      <span className="font-bold text-gov-800 shrink-0">MSME Relief:</span>
+                      <p className="text-slate-600">{item.msmeRelief}</p>
+                    </div>
+
+                    {/* Action Links */}
+                    <div className="pt-2 border-t border-slate-100 flex flex-wrap items-center justify-between gap-2 text-xs">
+                      <button
+                        onClick={() => navigate(`/manakbot?prompt=${encodeURIComponent(`Explain application requirements and fees for ${item.name}`)}`)}
+                        className="text-gov-800 hover:text-gov-950 font-bold inline-flex items-center gap-1"
+                      >
+                        <Sparkles className="w-3 h-3 text-amber-600" />
+                        <span>Ask ManakBot about {item.code}</span>
+                      </button>
+
+                      <a
+                        href={item.portalUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="px-3 py-1 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold rounded-sm border border-slate-300 inline-flex items-center gap-1.5 transition-colors"
+                      >
+                        <span>Official Portal Access</span>
+                        <ExternalLink className="w-3 h-3 text-slate-500" />
+                      </a>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+            </div>
+          ))}
         </div>
 
       </div>
