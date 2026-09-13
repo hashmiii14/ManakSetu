@@ -16,6 +16,7 @@ import FinalCTA from './components/FinalCTA';
 import Footer from './components/Footer';
 import StandardDetailModal from './components/StandardDetailModal';
 import ReportModal from './components/ReportModal';
+import ErrorBoundary from './components/ErrorBoundary';
 import { BIS_STANDARDS } from './data/bisStandards';
 
 export default function App() {
@@ -38,7 +39,20 @@ export default function App() {
   };
 
   const handleOpenStandard = (std) => {
-    setSelectedStandard(std || BIS_STANDARDS[0]);
+    if (!std) {
+      setSelectedStandard(BIS_STANDARDS[0]);
+      return;
+    }
+    const code = (std.isCode || std.is_number || '').trim().toLowerCase().replace(/[^a-z0-9]/g, '');
+    const found = BIS_STANDARDS.find(s => {
+      const sCode = s.isCode.toLowerCase().replace(/[^a-z0-9]/g, '');
+      return sCode === code || (code.length > 3 && (sCode.includes(code) || code.includes(sCode)));
+    });
+    if (found) {
+      setSelectedStandard({ ...found, ...std, isCode: found.isCode, title: std.title || found.title });
+    } else {
+      setSelectedStandard(std);
+    }
   };
 
   const handleOpenReport = (identifier = '', category = '') => {
@@ -162,12 +176,14 @@ export default function App() {
 
       {/* Standard Full Detail Modal */}
       {selectedStandard && (
-        <StandardDetailModal
-          standard={selectedStandard}
-          onClose={() => setSelectedStandard(null)}
-          onAskBot={handleAskBot}
-          onCheckCompliance={handleCheckCompliance}
-        />
+        <ErrorBoundary onReset={() => setSelectedStandard(null)}>
+          <StandardDetailModal
+            standard={selectedStandard}
+            onClose={() => setSelectedStandard(null)}
+            onAskBot={handleAskBot}
+            onCheckCompliance={handleCheckCompliance}
+          />
+        </ErrorBoundary>
       )}
 
       {/* Violation Report Modal */}

@@ -287,7 +287,7 @@ export default function Hero({ onOpenStandard, onAskQuestion, onExploreStandards
                 </button>
 
                 <button
-                  onClick={() => onOpenStandard(activeStandard)}
+                  onClick={() => activeStandard && onOpenStandard && onOpenStandard(activeStandard)}
                   className="inline-flex items-center justify-center gap-1.5 px-4 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition-colors shrink-0 shadow-2xs"
                 >
                   <span>View Details & Labs</span>

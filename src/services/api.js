@@ -5,7 +5,7 @@
 
 import { BIS_STANDARDS } from '../data/bisStandards';
 
-const API_BASE = import.meta.env.VITE_API_BASE_URL || (
+const API_BASE = (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.VITE_API_BASE_URL) || (
   typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
     ? 'http://127.0.0.1:8000'
     : 'https://backend-nu-nine-48.vercel.app'
@@ -16,26 +16,35 @@ const API_BASE = import.meta.env.VITE_API_BASE_URL || (
  */
 function normalizeStandard(item) {
   if (!item) return null;
+  const isCode = item.is_number || item.isCode || 'IS Standard';
+  const cleanCode = isCode.toLowerCase().replace(/[^a-z0-9]/g, '');
+  const localMatch = BIS_STANDARDS.find(s => {
+    const sCode = s.isCode.toLowerCase().replace(/[^a-z0-9]/g, '');
+    return sCode === cleanCode || (cleanCode.length > 3 && (sCode.includes(cleanCode) || cleanCode.includes(sCode)));
+  });
+
   return {
-    id: item.is_number ? item.is_number.replace(/[^a-zA-Z0-9]/g, '-') : (item.id || 'STD-01'),
-    isCode: item.is_number || item.isCode || 'IS Standard',
-    title: item.title || 'Standard Specification',
-    category: item.category || 'General',
-    description: item.description || (item.scope ? item.scope.slice(0, 200) : 'Indian Standard Specification'),
-    scope: item.scope || item.description || '',
-    mandatoryQCO: Boolean(item.mandatory_qco ?? item.mandatoryQCO),
-    qcoNotification: item.qco_notification || item.qcoNotification || (item.mandatory_qco ? 'Quality Control Order (Statutory)' : null),
-    relevanceScore: item.relevance_score || 0.85,
-    keyTests: item.key_tests && item.key_tests.length > 0 ? item.key_tests : (item.keyTests || [
+    ...(localMatch || {}),
+    ...item,
+    id: isCode ? isCode.replace(/[^a-zA-Z0-9]/g, '-') : (item.id || 'STD-01'),
+    isCode,
+    title: item.title || localMatch?.title || 'Standard Specification',
+    category: item.category || localMatch?.category || 'General',
+    description: item.description || item.scope || localMatch?.description || 'Indian Standard Specification',
+    scope: item.scope || item.description || localMatch?.scope || '',
+    mandatoryQCO: Boolean(item.mandatory_qco ?? item.mandatoryQCO ?? localMatch?.mandatoryQCO),
+    qcoNotification: item.qco_notification || item.qcoNotification || localMatch?.qcoNotification || (item.mandatory_qco ? 'Quality Control Order (Statutory)' : null),
+    relevanceScore: item.relevance_score || item.relevanceScore || localMatch?.relevanceScore || 0.85,
+    keyTests: (item.key_tests && item.key_tests.length > 0 ? item.key_tests : null) || item.keyTests || localMatch?.keyTests || [
       "Compressive / Tensile Mechanical Strength Testing",
       "Dimensional Tolerances & Material Uniformity",
       "Chemical Purity & Deleterious Substances Assay"
-    ]),
-    labsAvailable: item.labs_available && item.labs_available.length > 0 ? item.labs_available : (item.labsAvailable || [
+    ],
+    labsAvailable: (item.labs_available && item.labs_available.length > 0 ? item.labs_available : null) || item.labsAvailable || localMatch?.labsAvailable || [
       { name: "BIS Central Laboratory", city: "Sahibabad", state: "Uttar Pradesh" },
       { name: "National Test House (NTH)", city: "Kolkata", state: "West Bengal" }
-    ]),
-    feeStructure: item.fee_structure && Object.keys(item.fee_structure).length > 0 ? {
+    ],
+    feeStructure: (item.fee_structure && Object.keys(item.fee_structure).length > 0 ? {
       applicationFee: item.fee_structure.application_fee ?? 1000,
       annualLicenseFee: item.fee_structure.annual_license_fee ?? 1000,
       auditFeePerManDay: item.fee_structure.audit_fee_per_man_day ?? 7000,
@@ -43,7 +52,7 @@ function normalizeStandard(item) {
       microConcessionPercent: item.fee_structure.micro_concession_percent ?? 50,
       smallConcessionPercent: item.fee_structure.small_concession_percent ?? 20,
       womenStartupConcessionPercent: 50
-    } : (item.feeStructure || {
+    } : null) || item.feeStructure || localMatch?.feeStructure || {
       applicationFee: 1000,
       annualLicenseFee: 1000,
       auditFeePerManDay: 7000,
@@ -51,13 +60,16 @@ function normalizeStandard(item) {
       microConcessionPercent: 50,
       smallConcessionPercent: 20,
       womenStartupConcessionPercent: 50
-    }),
-    documentationRequired: item.documentation_required && item.documentation_required.length > 0 ? item.documentation_required : (item.documentationRequired || [
+    },
+    documentationRequired: (item.documentation_required && item.documentation_required.length > 0 ? item.documentation_required : null) || item.documentationRequired || localMatch?.documentationRequired || [
       "Manufacturing machinery & calibrated test equipment list",
       "In-house testing facility with qualified technical personnel",
       "Valid factory premise proof and pollution clearances"
-    ]),
-    source: item.source || 'BIS Catalogue'
+    ],
+    globalHarmonization: item.global_harmonization || item.globalHarmonization || localMatch?.globalHarmonization,
+    citizenCard: item.citizen_card || item.citizenCard || localMatch?.citizenCard,
+    gazetteNotification: item.gazette_notification || item.gazetteNotification || localMatch?.gazetteNotification,
+    source: item.source || localMatch?.source || 'BIS Catalogue'
   };
 }
 
@@ -93,6 +105,7 @@ export async function searchStandards(query, topK = 6) {
       item.title.toLowerCase(),
       item.category.toLowerCase(),
       item.description.toLowerCase(),
+      ...(item.colloquialTerms || []).map(k => k.toLowerCase()),
       ...(item.keywords || []).map(k => k.toLowerCase())
     ];
     return terms.some(t => haystacks.some(h => h.includes(t)));

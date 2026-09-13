@@ -402,7 +402,7 @@ export default function ProductDiscovery({ onOpenStandard, onCheckCompliance, on
                 {/* Primary Action Buttons */}
                 <div className="pt-2 flex flex-wrap gap-2.5">
                   <button
-                    onClick={() => onOpenStandard && onOpenStandard({ isCode: result.primary_standard.is_number, title: result.primary_standard.title })}
+                    onClick={() => onOpenStandard && onOpenStandard(result.primary_standard)}
                     className="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold inline-flex items-center gap-1.5 shadow-2xs transition-colors"
                   >
                     <BookOpen className="w-3.5 h-3.5" />
@@ -410,7 +410,7 @@ export default function ProductDiscovery({ onOpenStandard, onCheckCompliance, on
                   </button>
 
                   <button
-                    onClick={() => onCheckCompliance && onCheckCompliance(result.primary_standard.is_number)}
+                    onClick={() => onCheckCompliance && onCheckCompliance(result.primary_standard.is_number || result.primary_standard.isCode)}
                     className="px-4 py-2 rounded-xl bg-white border border-neutral-300 hover:border-emerald-500 text-neutral-800 hover:text-emerald-900 text-xs font-bold inline-flex items-center gap-1.5 shadow-2xs transition-colors"
                   >
                     <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
@@ -418,7 +418,7 @@ export default function ProductDiscovery({ onOpenStandard, onCheckCompliance, on
                   </button>
 
                   <button
-                    onClick={() => onAskBot && onAskBot(`Explain the compliance requirements, testing rules, and international equivalents for ${result.primary_standard.is_number} (${result.product_name})`)}
+                    onClick={() => onAskBot && onAskBot(`Explain the compliance requirements, testing rules, and international equivalents for ${result.primary_standard.is_number || result.primary_standard.isCode} (${result.product_name})`)}
                     className="px-4 py-2 rounded-xl bg-neutral-100 hover:bg-neutral-200 text-neutral-700 text-xs font-semibold inline-flex items-center gap-1.5 transition-colors"
                   >
                     <Sparkles className="w-3.5 h-3.5 text-emerald-600" />
@@ -429,7 +429,7 @@ export default function ProductDiscovery({ onOpenStandard, onCheckCompliance, on
             )}
 
             {/* 2. Related Standards */}
-            {result.related_standards && result.related_standards.length > 0 && (
+            {Array.isArray(result.related_standards) && result.related_standards.length > 0 && (
               <div className="space-y-2">
                 <span className="text-xs font-bold text-neutral-700 uppercase tracking-wider block">
                   Secondary / Associated Standards:
@@ -442,14 +442,14 @@ export default function ProductDiscovery({ onOpenStandard, onCheckCompliance, on
                     >
                       <div>
                         <span className="font-mono font-bold text-xs text-neutral-900 block">
-                          {rel.is_number}
+                          {rel.is_number || rel.isCode}
                         </span>
                         <p className="text-xs text-neutral-600 line-clamp-1 mt-0.5">
                           {rel.title}
                         </p>
                       </div>
                       <button
-                        onClick={() => onOpenStandard && onOpenStandard({ isCode: rel.is_number, title: rel.title })}
+                        onClick={() => onOpenStandard && onOpenStandard(rel)}
                         className="text-xs text-emerald-700 hover:underline font-bold shrink-0 mt-0.5"
                       >
                         Inspect →

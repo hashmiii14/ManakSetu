@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { 
   X, AlertTriangle, CheckCircle2, FlaskConical, Building, 
-  Calculator, ExternalLink, ShieldCheck, FileText, TrendingDown, Info, Globe, Award 
+  Calculator, ExternalLink, ShieldCheck, FileText, TrendingDown, Info, Globe, Award, Sparkles 
 } from 'lucide-react';
 
 export default function StandardDetailModal({ standard, onClose, onAskBot, onCheckCompliance }) {
@@ -51,23 +51,29 @@ export default function StandardDetailModal({ standard, onClose, onAskBot, onChe
   const source = standard.source || 'BIS Catalogue';
   const globalHarmonization = standard.globalHarmonization || standard.global_harmonization;
 
-  const keyTests = standard.keyTests || standard.key_tests || [
-    "Compressive / Tensile Mechanical Strength Testing",
-    "Dimensional Tolerances & Material Uniformity",
-    "Chemical Purity & Deleterious Substances Assay",
-    "Durability, Soundness & Environmental Conditioning"
-  ];
+  const keyTests = Array.isArray(standard.keyTests) ? standard.keyTests : (
+    Array.isArray(standard.key_tests) ? standard.key_tests : [
+      "Compressive / Tensile Mechanical Strength Testing",
+      "Dimensional Tolerances & Material Uniformity",
+      "Chemical Purity & Deleterious Substances Assay",
+      "Durability, Soundness & Environmental Conditioning"
+    ]
+  );
 
-  const labs = standard.labsAvailable || standard.labs_available || [
-    { name: "BIS Central Laboratory", city: "Sahibabad", state: "Uttar Pradesh" },
-    { name: "National Test House (NTH)", city: "Kolkata", state: "West Bengal" }
-  ];
+  const labs = Array.isArray(standard.labsAvailable) ? standard.labsAvailable : (
+    Array.isArray(standard.labs_available) ? standard.labs_available : [
+      { name: "BIS Central Laboratory", city: "Sahibabad", state: "Uttar Pradesh" },
+      { name: "National Test House (NTH)", city: "Kolkata", state: "West Bengal" }
+    ]
+  );
 
-  const docs = standard.documentationRequired || standard.documentation_required || [
-    "Manufacturing plant machinery layout and calibration certificates",
-    "In-house test equipment verification and inspection reports",
-    "Raw material test certificates from recognized laboratories"
-  ];
+  const docs = Array.isArray(standard.documentationRequired) ? standard.documentationRequired : (
+    Array.isArray(standard.documentation_required) ? standard.documentation_required : [
+      "Manufacturing plant machinery layout and calibration certificates",
+      "In-house test equipment verification and inspection reports",
+      "Raw material test certificates from recognized laboratories"
+    ]
+  );
 
   return (
     <div className="fixed inset-0 z-50 bg-neutral-900/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
@@ -166,7 +172,7 @@ export default function StandardDetailModal({ standard, onClose, onAskBot, onChe
                 {globalHarmonization.note}
               </p>
 
-              {globalHarmonization.compatibleMarkets && (
+              {Array.isArray(globalHarmonization.compatibleMarkets) && globalHarmonization.compatibleMarkets.length > 0 && (
                 <div className="pt-1 flex flex-wrap items-center gap-1.5">
                   <span className="text-[10px] font-bold text-neutral-500 uppercase">Export Markets:</span>
                   {globalHarmonization.compatibleMarkets.map((m, idx) => (

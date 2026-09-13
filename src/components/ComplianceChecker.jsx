@@ -316,7 +316,7 @@ export default function ComplianceChecker({ initialProduct = '', onOpenStandard,
 
                 {complianceData.primary_standard && (
                   <button
-                    onClick={() => onOpenStandard && onOpenStandard({ isCode: complianceData.primary_standard.is_number, title: complianceData.primary_standard.title })}
+                    onClick={() => onOpenStandard && onOpenStandard(complianceData.primary_standard)}
                     className="px-3.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold inline-flex items-center gap-1.5 shadow-2xs transition-colors"
                   >
                     <span>View Standard Specs</span>
@@ -354,7 +354,7 @@ export default function ComplianceChecker({ initialProduct = '', onOpenStandard,
               </span>
 
               <div className="space-y-3">
-                {complianceData.phases.map((phase, idx) => {
+                {Array.isArray(complianceData.phases) && complianceData.phases.map((phase, idx) => {
                   const itemKey = `phase-${idx}`;
                   const isChecked = Boolean(completedItems[itemKey]);
 
