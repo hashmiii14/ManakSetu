@@ -14,33 +14,47 @@ export default function AboutPage() {
       <div className="min-h-screen bg-slate-50 text-slate-900 text-left">
         
         {/* HEADER */}
-        <section className="bg-white border-b border-slate-200 py-8 px-4 sm:px-6">
+        <section className="bg-white border-b border-slate-300 py-6 px-4 sm:px-6 lg:px-8">
           <div className="max-w-7xl mx-auto space-y-2">
-            <div className="flex items-center gap-2 text-xs text-slate-500 font-medium">
+            <div className="flex items-center gap-2 text-[11px] text-slate-500 font-medium">
               <button onClick={() => navigate('/')} className="hover:text-gov-800">Home</button>
               <span>/</span>
-              <span className="text-gov-900 font-bold">About ManakSetu</span>
+              <span className="text-gov-800 font-semibold">About ManakSetu</span>
             </div>
 
-            <div>
-              <h1 className="text-2xl sm:text-3xl font-extrabold text-gov-900 tracking-tight">
-                About ManakSetu (मानक सेतु)
-              </h1>
-              <p className="text-xs sm:text-sm text-slate-600 mt-1 max-w-3xl leading-relaxed">
-                National AI Assistant for Indian Standards Discovery, Mandatory Quality Control Orders (QCOs), and BIS e-Governance Services.
-              </p>
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-1">
+              <div>
+                <h1 className="text-2xl sm:text-3xl font-extrabold text-gov-900 tracking-tight">
+                  About ManakSetu (मानक सेतु)
+                </h1>
+                <p className="text-xs sm:text-sm text-slate-600 mt-1 max-w-3xl leading-relaxed">
+                  National AI Assistant for Indian Standards Discovery, Mandatory Quality Control Orders (QCOs), and BIS e-Governance Services.
+                </p>
+              </div>
+
+              <div className="flex items-center gap-2 shrink-0">
+                <a
+                  href="https://www.manakonline.in"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-3.5 py-2 bg-gov-800 hover:bg-gov-900 text-white font-bold text-xs rounded-sm inline-flex items-center gap-1.5 shadow-sm transition-colors"
+                >
+                  <span>Official BIS Portal</span>
+                  <ExternalLink className="w-3.5 h-3.5 text-amber-400" />
+                </a>
+              </div>
             </div>
           </div>
         </section>
 
         {/* CONTENT */}
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-10 space-y-10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
           
           {/* Mission & Problem Statement */}
-          <div className="bg-white rounded-2xl border border-slate-200 shadow-gov p-6 sm:p-8 space-y-4">
-            <div className="flex items-center gap-2 text-xs font-bold text-saffron-700 uppercase tracking-wide">
-              <Scale className="w-4 h-4" />
-              <span>Smart India Hackathon 2026</span>
+          <div className="bg-white rounded-sm border border-slate-300 shadow-sm p-6 sm:p-8 space-y-4">
+            <div className="flex items-center gap-2 text-xs font-bold text-gov-800 uppercase tracking-wide">
+              <Scale className="w-4 h-4 text-gov-800" />
+              <span>Smart India Hackathon 2026 Initiative</span>
             </div>
 
             <h2 className="text-xl sm:text-2xl font-bold text-gov-900">
@@ -56,12 +70,12 @@ export default function AboutPage() {
             </p>
 
             <div className="pt-2 grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
-              <div className="p-3.5 rounded-lg bg-slate-50 border border-slate-200 space-y-1">
+              <div className="p-3.5 rounded-sm bg-slate-50 border border-slate-300 space-y-1">
                 <span className="font-bold text-slate-900 block">Problem Statement ID:</span>
                 <span className="font-mono font-bold text-gov-800">26107</span>
                 <span className="text-slate-500 block">Theme: Smart Automation / E-Governance</span>
               </div>
-              <div className="p-3.5 rounded-lg bg-slate-50 border border-slate-200 space-y-1">
+              <div className="p-3.5 rounded-sm bg-slate-50 border border-slate-300 space-y-1">
                 <span className="font-bold text-slate-900 block">Developed By:</span>
                 <span className="font-bold text-slate-800">Team Code Snippet</span>
                 <span className="text-slate-500 block">Smart India Hackathon 2026 Initiative</span>
@@ -69,15 +83,15 @@ export default function AboutPage() {
             </div>
           </div>
 
-          {/* Architecture & Zero-Hallucination Guarantees */}
-          <div className="bg-white rounded-2xl border border-slate-200 shadow-gov p-6 sm:p-8 space-y-4">
+          {/* Architecture & Reliability Guarantees */}
+          <div className="bg-white rounded-sm border border-slate-300 shadow-sm p-6 sm:p-8 space-y-4">
             <h3 className="text-lg font-bold text-gov-900">
               Technical Architecture &amp; Reliability Guarantees
             </h3>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
-              <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
-                <div className="w-8 h-8 rounded-lg bg-gov-100 text-gov-800 flex items-center justify-center font-bold">
+              <div className="p-4 rounded-sm bg-slate-50 border border-slate-300 space-y-2">
+                <div className="w-8 h-8 rounded-sm bg-gov-100 text-gov-800 border border-gov-300 flex items-center justify-center font-bold">
                   01
                 </div>
                 <h4 className="font-bold text-slate-900">Grounded Knowledge Base</h4>
@@ -86,8 +100,8 @@ export default function AboutPage() {
                 </p>
               </div>
 
-              <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
-                <div className="w-8 h-8 rounded-lg bg-saffron-100 text-saffron-800 flex items-center justify-center font-bold">
+              <div className="p-4 rounded-sm bg-slate-50 border border-slate-300 space-y-2">
+                <div className="w-8 h-8 rounded-sm bg-gov-100 text-gov-800 border border-gov-300 flex items-center justify-center font-bold">
                   02
                 </div>
                 <h4 className="font-bold text-slate-900">Multi-Token Normalizer</h4>
@@ -96,8 +110,8 @@ export default function AboutPage() {
                 </p>
               </div>
 
-              <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
-                <div className="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-800 flex items-center justify-center font-bold">
+              <div className="p-4 rounded-sm bg-slate-50 border border-slate-300 space-y-2">
+                <div className="w-8 h-8 rounded-sm bg-gov-100 text-gov-800 border border-gov-300 flex items-center justify-center font-bold">
                   03
                 </div>
                 <h4 className="font-bold text-slate-900">Anti-Counterfeit Protection</h4>
@@ -109,7 +123,7 @@ export default function AboutPage() {
           </div>
 
           {/* Mandatory Statutory Notice */}
-          <div className="p-5 rounded-xl bg-amber-50 border border-amber-300 text-amber-950 space-y-2 text-xs">
+          <div className="p-5 rounded-sm bg-amber-50 border border-amber-300 text-amber-950 space-y-2 text-xs">
             <div className="flex items-center gap-2 font-bold text-sm">
               <ShieldCheck className="w-4 h-4 text-amber-700" />
               <span>Independent Public Service Prototype Disclaimer</span>

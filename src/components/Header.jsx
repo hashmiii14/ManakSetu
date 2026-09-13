@@ -16,6 +16,8 @@ export default function Header() {
     { label: "Standards", to: "/standards/search" },
     { label: "Services", to: "/services" },
     { label: "ManakBot", to: "/manakbot" },
+    { label: "Consumer Protection", to: "/consumer" },
+    { label: "MSME Relief", to: "/msme" },
     { label: "Resources", to: "/news" },
     { label: "Support", to: "/faq" },
     { label: "About", to: "/about" }
@@ -47,7 +49,7 @@ export default function Header() {
     <header className="w-full bg-white border-b border-slate-300 select-none text-left">
       
       {/* 1. TOP INSTITUTIONAL BAR (GOVERNMENT OF INDIA) */}
-      <div className="bg-slate-900 text-slate-200 text-xs py-1.5 px-4 border-b border-slate-800">
+      <div className="bg-slate-900 text-slate-200 text-xs py-1.5 px-4 sm:px-6 lg:px-8 border-b border-slate-800">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-1 text-[11px]">
           
           {/* Left: Government of India */}
@@ -66,7 +68,7 @@ export default function Header() {
       </div>
 
       {/* 2. MAIN BRAND & UTILITY BAR */}
-      <div className="bg-white border-b border-slate-200 py-3.5 px-4 sm:px-6">
+      <div className="bg-white border-b border-slate-200 py-3.5 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
           
           {/* Left: Original ManakSetu Brand Identity */}
@@ -175,7 +177,7 @@ export default function Header() {
 
       {/* 3. MAIN NAVIGATION BAR (DEEP GOVERNMENT NAVY) */}
       <nav className="bg-gov-800 text-white border-t border-gov-900 shadow-sm hidden md:block">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
           
           {/* Nav Items */}
           <ul className="flex items-center flex-wrap text-xs font-semibold">
@@ -185,7 +187,7 @@ export default function Header() {
                 <li key={link.to}>
                   <button
                     onClick={() => handleNavClick(link.to)}
-                    className={`px-4 py-3 border-b-2 transition-colors flex items-center gap-1.5 ${
+                    className={`px-2.5 lg:px-3.5 py-3 border-b-2 transition-colors flex items-center gap-1.5 text-[11px] lg:text-xs ${
                       active 
                         ? 'border-saffron-500 bg-gov-900 text-white font-bold' 
                         : 'border-transparent text-slate-100 hover:bg-gov-700 hover:text-white'
@@ -199,14 +201,14 @@ export default function Header() {
           </ul>
 
           {/* Quick Search Trigger */}
-          <div className="flex items-center">
+          <div className="flex items-center shrink-0 pl-2">
             <button
               onClick={() => handleNavClick('/standards/search')}
-              className="px-3 py-1.5 text-xs text-slate-200 hover:text-white hover:bg-gov-700 rounded-sm transition-colors flex items-center gap-1.5 border border-gov-700"
+              className="px-2.5 lg:px-3 py-1.5 text-xs text-slate-200 hover:text-white hover:bg-gov-700 rounded-sm transition-colors flex items-center gap-1.5 border border-gov-700"
               title="Quick Search Indian Standards"
             >
               <Search className="w-3.5 h-3.5 text-saffron-400" />
-              <span>Search Standards</span>
+              <span className="hidden xl:inline">Search Standards</span>
             </button>
           </div>
 

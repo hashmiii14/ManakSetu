@@ -20,7 +20,7 @@ const POPULAR_CHECKLIST_PRODUCTS = [
   "Information Technology Equipment (IS 13252)"
 ];
 
-export default function ComplianceChecker({ initialProduct = '', onOpenStandard, onAskBot }) {
+export default function ComplianceChecker({ initialProduct = '', onOpenStandard, onAskBot, embedded = false }) {
   const [productQuery, setProductQuery] = useState(initialProduct || 'Electric Immersion Water Heater (IS 368)');
   const [isLoading, setIsLoading] = useState(false);
   const [complianceData, setComplianceData] = useState(null);
@@ -121,311 +121,323 @@ export default function ComplianceChecker({ initialProduct = '', onOpenStandard,
 
   const selectedSchemeDetails = SCHEMES_INFO.find(s => s.code === activeSchemeTab) || SCHEMES_INFO[0];
 
+  const contentBody = (
+    <div className="space-y-6 text-left">
+      
+      {/* 4 Core Pathways Showcase Grid */}
+      <div className="bg-white rounded-sm border border-slate-300 p-5 shadow-xs space-y-4">
+        <div className="flex items-center justify-between pb-3 border-b border-slate-200">
+          <div>
+            <span className="text-[10px] font-bold text-gov-800 uppercase tracking-widest block">
+              Statutory Certification Frameworks
+            </span>
+            <h3 className="text-sm sm:text-base font-bold text-gov-900">
+              The 4 Pillars of BIS Conformity Assessment
+            </h3>
+          </div>
+          <span className="text-xs text-slate-500 hidden sm:inline">
+            Select any scheme to inspect statutory workflow &amp; relief
+          </span>
+        </div>
+
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+          {SCHEMES_INFO.map((scheme) => (
+            <button
+              key={scheme.code}
+              onClick={() => setActiveSchemeTab(scheme.code)}
+              className={`p-3.5 rounded-sm border text-left transition-all flex flex-col justify-between ${
+                activeSchemeTab === scheme.code
+                  ? 'bg-gov-50 border-gov-700 ring-1 ring-gov-700 shadow-2xs'
+                  : 'bg-slate-50 hover:bg-slate-100 border-slate-200'
+              }`}
+            >
+              <div>
+                <div className="flex items-center justify-between gap-1 mb-1.5">
+                  <span className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded-sm bg-white border border-slate-300 text-slate-800">
+                    {scheme.badge}
+                  </span>
+                  {activeSchemeTab === scheme.code && (
+                    <CheckCircle2 className="w-3.5 h-3.5 text-gov-800" />
+                  )}
+                </div>
+                <h4 className="text-xs sm:text-sm font-bold text-gov-900 line-clamp-1">
+                  {scheme.name.split(' (')[0]}
+                </h4>
+                <p className="text-[11px] text-slate-600 mt-1 line-clamp-2 leading-relaxed">
+                  {scheme.target}
+                </p>
+              </div>
+              <div className="mt-3 pt-2 border-t border-slate-200 text-[10px] font-semibold text-gov-800">
+                {scheme.concessions}
+              </div>
+            </button>
+          ))}
+        </div>
+
+        {/* Active Scheme Expanded Drawer */}
+        {selectedSchemeDetails && (
+          <div className="p-4 bg-slate-50 rounded-sm border border-slate-300 space-y-3 animate-in fade-in text-xs">
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <div className="flex items-center gap-2">
+                <span className="px-2 py-0.5 rounded-sm bg-gov-800 text-white font-mono font-bold text-xs">
+                  {selectedSchemeDetails.badge}
+                </span>
+                <h4 className="text-sm font-bold text-gov-900">
+                  {selectedSchemeDetails.name}
+                </h4>
+              </div>
+              <span className="text-xs font-semibold text-gov-800 bg-gov-100 px-2 py-0.5 rounded-sm border border-gov-300">
+                {selectedSchemeDetails.concessions}
+              </span>
+            </div>
+
+            <p className="text-xs text-slate-700 leading-relaxed">
+              {selectedSchemeDetails.description}
+            </p>
+
+            <div className="space-y-1.5 pt-1">
+              <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block">
+                Mandatory Statutory Progression:
+              </span>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                {selectedSchemeDetails.steps.map((st, i) => (
+                  <div key={i} className="p-2 bg-white rounded-sm border border-slate-200 text-slate-800 font-medium">
+                    {st}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Product Selection / Input Bar */}
+      <div className="bg-white rounded-sm border border-slate-300 p-5 sm:p-6 shadow-xs space-y-3">
+        <div>
+          <span className="text-[10px] font-bold text-gov-800 uppercase tracking-widest block mb-0.5">
+            Automated 7-Stage Roadmap Generator
+          </span>
+          <h3 className="text-base sm:text-lg font-bold text-gov-900">
+            Generate Custom Compliance Roadmap &amp; Document Checklist
+          </h3>
+          <p className="text-xs text-slate-600 mt-0.5">
+            Select or type any industrial product to map required testing parameters, laboratory equipment, and documentation.
+          </p>
+        </div>
+
+        <div className="flex flex-col sm:flex-row gap-2">
+          <input
+            type="text"
+            value={productQuery}
+            onChange={(e) => setProductQuery(e.target.value)}
+            placeholder="e.g. Electric Immersion Geyser, Baby Toys, Helmet, Packaged Drinking Water..."
+            className="flex-1 px-3.5 py-2 bg-white border border-slate-300 rounded-sm text-xs sm:text-sm font-medium text-slate-900 focus:outline-none focus:border-gov-800 focus:ring-1 focus:ring-gov-800"
+            onKeyDown={(e) => e.key === 'Enter' && handleGenerateChecklist()}
+          />
+          <button
+            onClick={() => handleGenerateChecklist()}
+            disabled={isLoading || !productQuery.trim()}
+            className="px-5 py-2 bg-gov-800 hover:bg-gov-900 text-white text-xs sm:text-sm font-bold inline-flex items-center justify-center gap-1.5 rounded-sm transition-colors disabled:opacity-50 shadow-xs shrink-0"
+          >
+            {isLoading ? (
+              <>
+                <Loader2 className="w-4 h-4 animate-spin text-amber-400" />
+                <span>Evaluating...</span>
+              </>
+            ) : (
+              <>
+                <ShieldCheck className="w-4 h-4 text-amber-400" />
+                <span>Generate Roadmap</span>
+              </>
+            )}
+          </button>
+        </div>
+
+        {/* Quick preset chips */}
+        <div className="flex flex-wrap gap-1.5 pt-1">
+          {POPULAR_CHECKLIST_PRODUCTS.map((prod, idx) => (
+            <button
+              key={idx}
+              onClick={() => {
+                setProductQuery(prod);
+                handleGenerateChecklist(prod);
+              }}
+              className="px-2.5 py-1 rounded-sm bg-slate-100 hover:bg-gov-50 hover:text-gov-900 border border-slate-200 text-[11px] font-medium text-slate-700 transition-colors"
+            >
+              {prod.split(' (')[0]}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Structured Checklist Content */}
+      {complianceData && (
+        <div className="bg-white rounded-sm border border-slate-300 shadow-sm p-5 sm:p-6 space-y-5 animate-in fade-in">
+          
+          {/* Top Overview Banner */}
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-slate-200">
+            <div className="space-y-1">
+              <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">
+                Product Compliance Dossier
+              </span>
+              <h3 className="text-lg sm:text-xl font-bold text-gov-900">
+                {complianceData.product_name}
+              </h3>
+              {complianceData.primary_standard && (
+                <p className="text-xs text-slate-600">
+                  Primary Reference: <span className="font-mono font-bold text-gov-800">{complianceData.primary_standard.is_number}</span> ({complianceData.primary_standard.title})
+                </p>
+              )}
+            </div>
+
+            <div className="flex flex-wrap items-center gap-2">
+              <button
+                onClick={handleCopySummary}
+                className="px-3 py-1.5 rounded-sm border border-slate-300 hover:bg-slate-50 text-slate-700 text-xs font-semibold inline-flex items-center gap-1.5 shadow-2xs transition-colors"
+              >
+                {copiedSummary ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Download className="w-3.5 h-3.5 text-slate-500" />}
+                <span>{copiedSummary ? "Copied" : "Export Summary"}</span>
+              </button>
+
+              {complianceData.primary_standard && (
+                <button
+                  onClick={() => onOpenStandard && onOpenStandard(complianceData.primary_standard)}
+                  className="px-3 py-1.5 rounded-sm bg-gov-800 hover:bg-gov-900 text-white text-xs font-bold inline-flex items-center gap-1.5 shadow-2xs transition-colors"
+                >
+                  <span>View Standard Specs</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </button>
+              )}
+            </div>
+          </div>
+
+          {/* Scheme & QCO Highlight Card */}
+          <div className={`p-3.5 rounded-sm border flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs ${
+            complianceData.mandatory_qco 
+              ? 'bg-amber-50 border-amber-300 text-amber-950' 
+              : 'bg-emerald-50 border-emerald-200 text-emerald-950'
+          }`}>
+            <div className="flex items-start gap-2.5">
+              <AlertTriangle className={`w-4 h-4 shrink-0 mt-0.5 ${complianceData.mandatory_qco ? 'text-amber-700' : 'text-emerald-700'}`} />
+              <div>
+                <h4 className="text-xs sm:text-sm font-bold">
+                  {complianceData.conformance_scheme}
+                </h4>
+                <p className="text-xs opacity-90 mt-0.5 leading-relaxed">
+                  {complianceData.mandatory_qco 
+                    ? "Mandatory Quality Control Order (QCO) in effect. Under Section 29 of the BIS Act, 2016, manufacturing, storing, or selling without an operative ISI mark is prohibited."
+                    : "Voluntary certification under Scheme-I. Conformance establishes benchmark market credibility and qualifies products for GeM portal tenders."}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* 7-Stage Linear Checklist */}
+          <div className="space-y-3">
+            <span className="text-xs font-bold text-slate-500 uppercase tracking-wider block">
+              Linear 7-Stage Compliance Verification Checklist:
+            </span>
+
+            <div className="space-y-2.5">
+              {Array.isArray(complianceData.phases) && complianceData.phases.map((phase, idx) => {
+                const itemKey = `phase-${idx}`;
+                const isChecked = Boolean(completedItems[itemKey]);
+
+                return (
+                  <div
+                    key={idx}
+                    className={`p-3.5 rounded-sm border transition-all ${
+                      isChecked 
+                        ? 'bg-emerald-50/50 border-emerald-300' 
+                        : 'bg-slate-50/70 border-slate-200 hover:border-slate-300'
+                    }`}
+                  >
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="flex items-start gap-3">
+                        <input
+                          type="checkbox"
+                          checked={isChecked}
+                          onChange={() => toggleItemCheck(itemKey)}
+                          className="mt-1 w-4 h-4 text-gov-800 rounded-sm border-slate-300 focus:ring-gov-700 cursor-pointer"
+                        />
+                        <div>
+                          <div className="flex items-center gap-2">
+                            <span className="font-mono text-xs font-bold text-slate-500">
+                              {phase.phase}
+                            </span>
+                            <h5 className={`text-sm font-bold ${isChecked ? 'text-emerald-950 line-through' : 'text-gov-900'}`}>
+                              {phase.title}
+                            </h5>
+                          </div>
+                          <p className="text-xs text-slate-600 mt-0.5 leading-relaxed">
+                            {phase.description}
+                          </p>
+                        </div>
+                      </div>
+
+                      {getStatusBadge(phase.status)}
+                    </div>
+
+                    {/* Details checklist items */}
+                    {phase.details && phase.details.length > 0 && (
+                      <div className="mt-2.5 pl-7 pt-2 border-t border-slate-200/60 space-y-1">
+                        {phase.details.map((detail, dIdx) => (
+                          <p key={dIdx} className="text-xs text-slate-700 flex items-start gap-1.5">
+                            <span className="text-gov-800 font-bold">•</span>
+                            <span>{detail}</span>
+                          </p>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Footnote */}
+          <div className="pt-2 border-t border-slate-200 text-[11px] text-slate-500 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
+            <span>Guidance derived from Bureau of Indian Standards (Conformity Assessment) Regulations.</span>
+            <a
+              href="https://www.manakonline.in"
+              target="_blank"
+              rel="noreferrer"
+              className="text-gov-800 hover:underline font-semibold inline-flex items-center gap-1"
+            >
+              <span>File official e-application on Manakonline</span>
+              <ExternalLink className="w-3 h-3" />
+            </a>
+          </div>
+
+        </div>
+      )}
+
+    </div>
+  );
+
+  if (embedded) {
+    return contentBody;
+  }
+
   return (
-    <section id="compliance" className="py-14 md:py-20 bg-neutral-50/60 border-b border-neutral-200 text-left">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 space-y-10">
+    <section id="compliance" className="py-8 md:py-12 bg-slate-50 border-b border-slate-300 text-left">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
         
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto space-y-2">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-semibold">
-            <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
-            <span>BIS Scheme & License Navigator • Module 2</span>
+        <div className="text-left space-y-1.5 border-b border-slate-300 pb-4">
+          <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-sm bg-gov-100 text-gov-800 text-xs font-semibold">
+            <ShieldCheck className="w-3.5 h-3.5 text-gov-800" />
+            <span>BIS Scheme &amp; License Navigator</span>
           </div>
-          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-neutral-900 tracking-tight">
-            Conformity Schemes & Licensing Navigator
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-gov-900 tracking-tight">
+            Conformity Schemes &amp; Licensing Navigator
           </h2>
-          <p className="text-xs sm:text-sm text-neutral-600 leading-relaxed">
+          <p className="text-xs sm:text-sm text-slate-600 max-w-3xl leading-relaxed">
             Navigate the 4 statutory BIS certification pathways: Scheme-I (ISI Mark), Scheme-II (CRS), Scheme-IV (Hallmarking), and FMCS (Foreign Manufacturers). Generate interactive 7-stage compliance roadmaps for any product.
           </p>
         </div>
 
-        {/* 4 Core Pathways Showcase Grid */}
-        <div className="bg-white rounded-2xl border border-neutral-200 p-6 shadow-xs space-y-5">
-          <div className="flex items-center justify-between pb-3 border-b border-neutral-200">
-            <div>
-              <span className="text-[10px] font-bold text-emerald-800 uppercase tracking-widest block">
-                Statutory Certification Frameworks
-              </span>
-              <h3 className="text-base sm:text-lg font-bold text-neutral-900">
-                The 4 Pillars of BIS Conformity Assessment
-              </h3>
-            </div>
-            <span className="text-xs text-neutral-500 hidden sm:inline">
-              Click any scheme to inspect workflow & concessions
-            </span>
-          </div>
-
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-            {SCHEMES_INFO.map((scheme) => (
-              <button
-                key={scheme.code}
-                onClick={() => setActiveSchemeTab(scheme.code)}
-                className={`p-3.5 rounded-xl border text-left transition-all flex flex-col justify-between ${
-                  activeSchemeTab === scheme.code
-                    ? 'bg-emerald-50 border-emerald-500 ring-2 ring-emerald-500/20 shadow-xs'
-                    : 'bg-neutral-50 hover:bg-neutral-100 border-neutral-200'
-                }`}
-              >
-                <div>
-                  <div className="flex items-center justify-between gap-1 mb-1.5">
-                    <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-white border border-neutral-300 text-neutral-800">
-                      {scheme.badge}
-                    </span>
-                    {activeSchemeTab === scheme.code && (
-                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
-                    )}
-                  </div>
-                  <h4 className="text-xs sm:text-sm font-bold text-neutral-900 line-clamp-1">
-                    {scheme.name.split(' (')[0]}
-                  </h4>
-                  <p className="text-[11px] text-neutral-600 mt-1 line-clamp-2">
-                    {scheme.target}
-                  </p>
-                </div>
-                <div className="mt-3 pt-2 border-t border-neutral-200/60 text-[10px] font-semibold text-emerald-800">
-                  {scheme.concessions}
-                </div>
-              </button>
-            ))}
-          </div>
-
-          {/* Active Scheme Expanded Drawer */}
-          {selectedSchemeDetails && (
-            <div className="p-4 sm:p-5 bg-neutral-50 rounded-xl border border-neutral-200 space-y-3 animate-in fade-in">
-              <div className="flex flex-wrap items-center justify-between gap-2">
-                <div className="flex items-center gap-2">
-                  <span className="px-2.5 py-1 rounded-md bg-emerald-600 text-white font-mono font-bold text-xs">
-                    {selectedSchemeDetails.badge}
-                  </span>
-                  <h4 className="text-sm font-bold text-neutral-900">
-                    {selectedSchemeDetails.name}
-                  </h4>
-                </div>
-                <span className="text-xs font-semibold text-emerald-800 bg-emerald-100 px-2.5 py-0.5 rounded">
-                  {selectedSchemeDetails.concessions}
-                </span>
-              </div>
-
-              <p className="text-xs text-neutral-700 leading-relaxed">
-                {selectedSchemeDetails.description}
-              </p>
-
-              <div className="space-y-1.5 pt-1">
-                <span className="text-[11px] font-bold text-neutral-500 uppercase tracking-wider block">
-                  Mandatory Statutory Progression:
-                </span>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
-                  {selectedSchemeDetails.steps.map((st, i) => (
-                    <div key={i} className="p-2 bg-white rounded-lg border border-neutral-200 text-neutral-800">
-                      {st}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
-
-        {/* Product Selection / Input Bar */}
-        <div className="bg-white rounded-2xl border border-neutral-200 p-5 sm:p-6 shadow-xs space-y-4">
-          <div>
-            <span className="text-[10px] font-bold text-emerald-800 uppercase tracking-widest block mb-0.5">
-              Automated 7-Stage Roadmap Generator
-            </span>
-            <h3 className="text-base sm:text-lg font-bold text-neutral-900">
-              Generate Custom Compliance Roadmap & Document Checklist
-            </h3>
-            <p className="text-xs text-neutral-600 mt-0.5">
-              Select or type any industrial product to map required testing parameters, laboratory equipment, and documentation.
-            </p>
-          </div>
-
-          <div className="flex flex-col sm:flex-row gap-2.5">
-            <input
-              type="text"
-              value={productQuery}
-              onChange={(e) => setProductQuery(e.target.value)}
-              placeholder="e.g. Electric Immersion Geyser, Baby Toys, Helmet, Packaged Drinking Water..."
-              className="flex-1 px-4 py-2.5 bg-neutral-50 border border-neutral-300 rounded-xl text-xs sm:text-sm font-medium text-neutral-900 focus:outline-none focus:ring-2 focus:ring-emerald-600 focus:bg-white"
-              onKeyDown={(e) => e.key === 'Enter' && handleGenerateChecklist()}
-            />
-            <button
-              onClick={() => handleGenerateChecklist()}
-              disabled={isLoading || !productQuery.trim()}
-              className="px-6 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs sm:text-sm font-bold inline-flex items-center justify-center gap-2 transition-colors disabled:opacity-50 shadow-xs shrink-0"
-            >
-              {isLoading ? (
-                <>
-                  <Loader2 className="w-4 h-4 animate-spin" />
-                  <span>Evaluating...</span>
-                </>
-              ) : (
-                <>
-                  <ShieldCheck className="w-4 h-4" />
-                  <span>Generate Roadmap</span>
-                </>
-              )}
-            </button>
-          </div>
-
-          {/* Quick preset chips */}
-          <div className="flex flex-wrap gap-1.5 pt-1">
-            {POPULAR_CHECKLIST_PRODUCTS.map((prod, idx) => (
-              <button
-                key={idx}
-                onClick={() => {
-                  setProductQuery(prod);
-                  handleGenerateChecklist(prod);
-                }}
-                className="px-2.5 py-1 rounded-lg bg-neutral-100 hover:bg-emerald-50 hover:text-emerald-900 border border-neutral-200 text-[11px] font-medium text-neutral-700 transition-colors"
-              >
-                {prod.split(' (')[0]}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Structured Checklist Content */}
-        {complianceData && (
-          <div className="bg-white rounded-2xl border border-neutral-200 shadow-sm p-5 sm:p-8 space-y-6 animate-in fade-in">
-            
-            {/* Top Overview Banner */}
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-5 border-b border-neutral-200">
-              <div className="space-y-1">
-                <span className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider block">
-                  Product Compliance Dossier
-                </span>
-                <h3 className="text-xl sm:text-2xl font-bold text-neutral-900">
-                  {complianceData.product_name}
-                </h3>
-                {complianceData.primary_standard && (
-                  <p className="text-xs text-neutral-600">
-                    Primary Reference: <span className="font-mono font-bold text-emerald-800">{complianceData.primary_standard.is_number}</span> ({complianceData.primary_standard.title})
-                  </p>
-                )}
-              </div>
-
-              <div className="flex flex-wrap items-center gap-2">
-                <button
-                  onClick={handleCopySummary}
-                  className="px-3.5 py-1.5 rounded-xl border border-neutral-300 hover:border-emerald-500 bg-white text-neutral-700 hover:text-emerald-900 text-xs font-semibold inline-flex items-center gap-1.5 shadow-2xs transition-colors"
-                >
-                  {copiedSummary ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Download className="w-3.5 h-3.5" />}
-                  <span>{copiedSummary ? "Copied to Clipboard" : "Export Summary"}</span>
-                </button>
-
-                {complianceData.primary_standard && (
-                  <button
-                    onClick={() => onOpenStandard && onOpenStandard(complianceData.primary_standard)}
-                    className="px-3.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold inline-flex items-center gap-1.5 shadow-2xs transition-colors"
-                  >
-                    <span>View Standard Specs</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
-                  </button>
-                )}
-              </div>
-            </div>
-
-            {/* Scheme & QCO Highlight Card */}
-            <div className={`p-4 rounded-xl border flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 ${
-              complianceData.mandatory_qco 
-                ? 'bg-amber-50/80 border-amber-300 text-amber-950' 
-                : 'bg-emerald-50/80 border-emerald-200 text-emerald-950'
-            }`}>
-              <div className="flex items-start gap-2.5">
-                <AlertTriangle className={`w-4 h-4 shrink-0 mt-0.5 ${complianceData.mandatory_qco ? 'text-amber-600' : 'text-emerald-600'}`} />
-                <div>
-                  <h4 className="text-xs sm:text-sm font-bold">
-                    {complianceData.conformance_scheme}
-                  </h4>
-                  <p className="text-xs opacity-90 mt-0.5">
-                    {complianceData.mandatory_qco 
-                      ? "Mandatory Quality Control Order (QCO) in effect. Under Section 29 of the BIS Act, 2016, manufacturing, storing, or selling without an operative ISI mark is prohibited."
-                      : "Voluntary certification under Scheme-I. Conformance establishes benchmark market credibility and qualifies products for GeM portal tenders."}
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            {/* 7-Stage Linear Checklist */}
-            <div className="space-y-4">
-              <span className="text-xs font-bold text-neutral-400 uppercase tracking-wider block">
-                Linear 7-Stage Compliance Verification Checklist:
-              </span>
-
-              <div className="space-y-3">
-                {Array.isArray(complianceData.phases) && complianceData.phases.map((phase, idx) => {
-                  const itemKey = `phase-${idx}`;
-                  const isChecked = Boolean(completedItems[itemKey]);
-
-                  return (
-                    <div
-                      key={idx}
-                      className={`p-4 rounded-xl border transition-all ${
-                        isChecked 
-                          ? 'bg-emerald-50/50 border-emerald-300' 
-                          : 'bg-neutral-50/70 border-neutral-200 hover:border-neutral-300'
-                      }`}
-                    >
-                      <div className="flex items-start justify-between gap-3">
-                        <div className="flex items-start gap-3">
-                          <input
-                            type="checkbox"
-                            checked={isChecked}
-                            onChange={() => toggleItemCheck(itemKey)}
-                            className="mt-1 w-4 h-4 text-emerald-600 rounded border-neutral-300 focus:ring-emerald-500 cursor-pointer"
-                          />
-                          <div>
-                            <div className="flex items-center gap-2">
-                              <span className="font-mono text-xs font-bold text-neutral-500">
-                                {phase.phase}
-                              </span>
-                              <h5 className={`text-sm font-bold ${isChecked ? 'text-emerald-950 line-through' : 'text-neutral-900'}`}>
-                                {phase.title}
-                              </h5>
-                            </div>
-                            <p className="text-xs text-neutral-600 mt-1">
-                              {phase.description}
-                            </p>
-                          </div>
-                        </div>
-
-                        {getStatusBadge(phase.status)}
-                      </div>
-
-                      {/* Details checklist items */}
-                      {phase.details && phase.details.length > 0 && (
-                        <div className="mt-3 pl-7 pt-2 border-t border-neutral-200/60 space-y-1">
-                          {phase.details.map((detail, dIdx) => (
-                            <p key={dIdx} className="text-xs text-neutral-700 flex items-start gap-1.5">
-                              <span className="text-emerald-600 font-bold">•</span>
-                              <span>{detail}</span>
-                            </p>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-
-            {/* Footnote */}
-            <div className="pt-2 border-t border-neutral-100 text-[11px] text-neutral-500 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
-              <span>Guidance derived from Bureau of Indian Standards (Conformity Assessment) Regulations.</span>
-              <a
-                href="https://www.manakonline.in"
-                target="_blank"
-                rel="noreferrer"
-                className="text-emerald-700 hover:underline font-semibold inline-flex items-center gap-1"
-              >
-                <span>File official e-application on Manakonline</span>
-                <ExternalLink className="w-3 h-3" />
-              </a>
-            </div>
-
-          </div>
-        )}
+        {contentBody}
 
       </div>
     </section>

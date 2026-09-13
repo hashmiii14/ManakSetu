@@ -181,107 +181,193 @@ export default function HomePage({ onOpenStandard, onOpenReport }) {
     <ErrorBoundary>
       <div className="min-h-screen bg-slate-50 text-slate-900 text-left">
         
-        {/* 1. WELCOME & SEARCH AREA (CLEAN GOVERNMENT PORTAL HERO) */}
-        <section className="bg-white border-b border-slate-300 py-8 sm:py-10 px-4 sm:px-6">
-          <div className="max-w-6xl mx-auto space-y-4">
-            
-            {/* Breadcrumb / Portal Label */}
-            <div className="flex items-center gap-2 text-[11px] text-slate-500 font-medium">
-              <span>Home</span>
-              <span>/</span>
-              <span className="text-gov-800 font-semibold">Public Service Navigation Portal</span>
-            </div>
+        {/* 1. WELCOME & SEARCH AREA (BALANCED GOVERNMENT PORTAL HERO) */}
+        <section className="bg-white border-b border-slate-300 py-8 sm:py-10 px-4 sm:px-6 lg:px-8">
+          <div className="max-w-7xl mx-auto">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+              
+              {/* LEFT 7 COLS: HEADING, SEARCH & ACTIONS */}
+              <div className="lg:col-span-7 space-y-4">
+                
+                {/* Breadcrumb / Portal Label */}
+                <div className="flex items-center gap-2 text-[11px] text-slate-500 font-medium">
+                  <span>Home</span>
+                  <span>/</span>
+                  <span className="text-gov-800 font-semibold">Public Service Navigation Portal</span>
+                </div>
 
-            {/* Restrained Title & Description */}
-            <div className="space-y-1.5 max-w-4xl">
-              <h1 className="text-2xl sm:text-3xl font-extrabold text-gov-900 tracking-tight">
-                Find Indian Standards and BIS Services
-              </h1>
-              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                National assistance portal for Indian enterprises, manufacturers, exporters, and citizens to discover Indian Standards (IS Codes), verify statutory Quality Control Orders (QCOs), and navigate Bureau of Indian Standards (BIS) conformity assessment procedures.
-              </p>
-            </div>
+                {/* Restrained Title & Description */}
+                <div className="space-y-1.5">
+                  <h1 className="text-2xl sm:text-3xl font-extrabold text-gov-900 tracking-tight">
+                    Find Indian Standards and BIS Services
+                  </h1>
+                  <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                    National assistance portal for Indian enterprises, manufacturers, exporters, and citizens to discover Indian Standards (IS Codes), verify statutory Quality Control Orders (QCOs), and navigate Bureau of Indian Standards (BIS) conformity assessment procedures.
+                  </p>
+                </div>
 
-            {/* Main Portal Search Form */}
-            <div className="pt-2 max-w-4xl">
-              <form onSubmit={handleSearchSubmit} className="space-y-2">
-                <div className="flex flex-col sm:flex-row items-stretch gap-2">
-                  <div className="relative flex-1">
-                    <Search className="absolute left-3.5 top-3 w-4 h-4 text-slate-400" />
-                    <input
-                      type="text"
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                      placeholder="Search by IS Number, product, keyword or standard (e.g., IS 2082, geyser, cement, helmet)..."
-                      className="w-full pl-10 pr-4 py-2.5 text-xs sm:text-sm text-slate-900 bg-white border border-slate-300 rounded-sm focus:outline-none focus:border-gov-800 focus:ring-1 focus:ring-gov-800 placeholder:text-slate-400"
-                    />
+                {/* Main Portal Search Form */}
+                <div className="pt-2">
+                  <form onSubmit={handleSearchSubmit} className="space-y-2">
+                    <div className="flex flex-col sm:flex-row items-stretch gap-2">
+                      <div className="relative flex-1">
+                        <Search className="absolute left-3.5 top-3 w-4 h-4 text-slate-400" />
+                        <input
+                          type="text"
+                          value={searchQuery}
+                          onChange={(e) => setSearchQuery(e.target.value)}
+                          placeholder="Search by IS Number, product, keyword or standard (e.g., IS 2082, geyser, cement, helmet)..."
+                          className="w-full pl-10 pr-4 py-2.5 text-xs sm:text-sm text-slate-900 bg-white border border-slate-300 rounded-sm focus:outline-none focus:border-gov-800 focus:ring-1 focus:ring-gov-800 placeholder:text-slate-400"
+                        />
+                      </div>
+
+                      <div className="flex items-center gap-2 shrink-0">
+                        <button
+                          type="submit"
+                          className="px-5 py-2.5 bg-gov-800 hover:bg-gov-900 text-white font-bold text-xs rounded-sm transition-colors shadow-sm flex items-center justify-center gap-1.5"
+                        >
+                          <Search className="w-3.5 h-3.5 text-amber-400" />
+                          <span>Search Standards</span>
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={handleAskBotSubmit}
+                          className="px-4 py-2.5 bg-white hover:bg-slate-50 text-gov-800 border border-gov-800 font-bold text-xs rounded-sm transition-colors flex items-center justify-center gap-1.5"
+                        >
+                          <Sparkles className="w-3.5 h-3.5 text-amber-600" />
+                          <span>Ask ManakBot</span>
+                        </button>
+                      </div>
+                    </div>
+                  </form>
+
+                  {/* Popular Searches Row (No Emojis) */}
+                  <div className="pt-2.5 flex flex-wrap items-center gap-1.5 text-xs text-slate-500">
+                    <span className="font-semibold text-slate-600 text-[11px]">Popular Searches:</span>
+                    {popularSearchesList.map((item, idx) => (
+                      <button
+                        key={idx}
+                        type="button"
+                        onClick={() => handleChipClick(item.query)}
+                        className="px-2 py-0.5 rounded-sm bg-slate-100 hover:bg-slate-200 text-slate-700 text-[11px] font-medium border border-slate-200 transition-colors"
+                      >
+                        {item.label}
+                      </button>
+                    ))}
                   </div>
+                </div>
 
-                  <div className="flex items-center gap-2 shrink-0">
-                    <button
-                      type="submit"
-                      className="px-5 py-2.5 bg-gov-800 hover:bg-gov-900 text-white font-bold text-xs rounded-sm transition-colors shadow-sm flex items-center justify-center gap-1.5"
+                {/* Official Portal Notice Banner */}
+                <div className="mt-4 p-3 bg-slate-100 border-l-4 border-gov-800 rounded-r-sm flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs text-slate-700">
+                  <div className="flex items-center gap-2">
+                    <span className="font-bold text-gov-900">Notice:</span>
+                    <span>ManakSetu provides assistive guidance. Official applications and fee filings must be submitted at</span>
+                    <a 
+                      href="https://www.manakonline.in/MANAK/" 
+                      target="_blank" 
+                      rel="noopener noreferrer" 
+                      className="text-gov-800 font-bold underline inline-flex items-center gap-0.5"
                     >
-                      <Search className="w-3.5 h-3.5 text-amber-400" />
-                      <span>Search Standards</span>
+                      <span>manakonline.in</span>
+                      <ExternalLink className="w-2.5 h-2.5" />
+                    </a>
+                  </div>
+                  <button 
+                    onClick={() => navigate('/about')}
+                    className="text-[11px] text-slate-500 hover:text-slate-800 underline shrink-0"
+                  >
+                    About this Project
+                  </button>
+                </div>
+
+              </div>
+
+              {/* RIGHT 5 COLS: NATIONAL STANDARDIZATION AT A GLANCE DASHBOARD */}
+              <div className="lg:col-span-5 bg-slate-50 border border-slate-300 rounded-sm p-5 space-y-4 shadow-2xs">
+                <div className="flex items-center justify-between border-b border-slate-200 pb-2.5">
+                  <div className="flex items-center gap-2">
+                    <Award className="w-4 h-4 text-gov-800" />
+                    <span className="font-bold text-xs text-gov-900 uppercase tracking-wider">
+                      National Standardization Matrix
+                    </span>
+                  </div>
+                  <span className="px-2 py-0.5 bg-gov-100 text-gov-800 font-mono font-bold text-[10px] rounded-sm">
+                    Live BIS Data
+                  </span>
+                </div>
+
+                {/* 2x2 Key Government Metrics Grid */}
+                <div className="grid grid-cols-2 gap-2.5 text-left">
+                  <div className="bg-white border border-slate-200 rounded-sm p-2.5 space-y-0.5">
+                    <div className="text-base font-extrabold font-mono text-gov-900">21,000+</div>
+                    <div className="text-[11px] font-medium text-slate-600 leading-tight">Indian Standards Active</div>
+                  </div>
+                  <div className="bg-white border border-slate-200 rounded-sm p-2.5 space-y-0.5">
+                    <div className="text-base font-extrabold font-mono text-amber-700">760+</div>
+                    <div className="text-[11px] font-medium text-slate-600 leading-tight">Mandatory QCO Orders</div>
+                  </div>
+                  <div className="bg-white border border-slate-200 rounded-sm p-2.5 space-y-0.5">
+                    <div className="text-base font-extrabold font-mono text-gov-800">1,200+</div>
+                    <div className="text-[11px] font-medium text-slate-600 leading-tight">NABL / BIS Testing Labs</div>
+                  </div>
+                  <div className="bg-white border border-slate-200 rounded-sm p-2.5 space-y-0.5">
+                    <div className="text-base font-extrabold font-mono text-gov-800">10,000+</div>
+                    <div className="text-[11px] font-medium text-slate-600 leading-tight">Active Standards Clubs</div>
+                  </div>
+                </div>
+
+                {/* Quick Gateways */}
+                <div className="space-y-2 pt-1">
+                  <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wide block">
+                    Statutory Action Gateways:
+                  </span>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button
+                      onClick={() => navigate('/consumer')}
+                      className="p-2.5 bg-white hover:bg-gov-50 border border-slate-200 hover:border-gov-400 rounded-sm text-left transition-colors flex items-center justify-between group"
+                    >
+                      <div>
+                        <span className="font-bold text-xs text-gov-900 block group-hover:text-gov-800">
+                          Verify HUID &amp; ISI
+                        </span>
+                        <span className="text-[10px] text-slate-500 block mt-0.5">
+                          Hallmark &amp; License Check
+                        </span>
+                      </div>
+                      <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
                     </button>
 
                     <button
-                      type="button"
-                      onClick={handleAskBotSubmit}
-                      className="px-4 py-2.5 bg-white hover:bg-slate-50 text-gov-800 border border-gov-800 font-bold text-xs rounded-sm transition-colors flex items-center justify-center gap-1.5"
+                      onClick={() => navigate('/msme')}
+                      className="p-2.5 bg-white hover:bg-gov-50 border border-slate-200 hover:border-gov-400 rounded-sm text-left transition-colors flex items-center justify-between group"
                     >
-                      <Sparkles className="w-3.5 h-3.5 text-amber-600" />
-                      <span>Ask ManakBot</span>
+                      <div>
+                        <span className="font-bold text-xs text-gov-900 block group-hover:text-gov-800">
+                          MSME 50% Relief
+                        </span>
+                        <span className="text-[10px] text-slate-500 block mt-0.5">
+                          Fee Concession Calculator
+                        </span>
+                      </div>
+                      <ChevronRight className="w-4 h-4 text-gov-700 shrink-0 group-hover:translate-x-0.5 transition-transform" />
                     </button>
                   </div>
                 </div>
-              </form>
 
-              {/* Popular Searches Row (No Emojis) */}
-              <div className="pt-2.5 flex flex-wrap items-center gap-1.5 text-xs text-slate-500">
-                <span className="font-semibold text-slate-600 text-[11px]">Popular Searches:</span>
-                {popularSearchesList.map((item, idx) => (
-                  <button
-                    key={idx}
-                    type="button"
-                    onClick={() => handleChipClick(item.query)}
-                    className="px-2 py-0.5 rounded-sm bg-slate-100 hover:bg-slate-200 text-slate-700 text-[11px] font-medium border border-slate-200 transition-colors"
-                  >
-                    {item.label}
-                  </button>
-                ))}
+                <div className="text-[10px] text-slate-500 leading-snug border-t border-slate-200 pt-2 flex items-center justify-between">
+                  <span>Operated under BIS Act, 2016 Mandate</span>
+                  <span className="font-mono text-gov-800 font-semibold">NCH: 1915</span>
+                </div>
+
               </div>
-            </div>
 
-            {/* Official Portal Notice Banner */}
-            <div className="mt-4 p-3 bg-slate-100 border-l-4 border-gov-800 rounded-r-sm flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs text-slate-700">
-              <div className="flex items-center gap-2">
-                <span className="font-bold text-gov-900">Notice:</span>
-                <span>ManakSetu provides assistive guidance. Official applications and fee filings must be submitted at</span>
-                <a 
-                  href="https://www.manakonline.in/MANAK/" 
-                  target="_blank" 
-                  rel="noopener noreferrer" 
-                  className="text-gov-800 font-bold underline inline-flex items-center gap-0.5"
-                >
-                  <span>manakonline.in</span>
-                  <ExternalLink className="w-2.5 h-2.5" />
-                </a>
-              </div>
-              <button 
-                onClick={() => navigate('/about')}
-                className="text-[11px] text-slate-500 hover:text-slate-800 underline shrink-0"
-              >
-                About this Project
-              </button>
             </div>
-
           </div>
         </section>
 
         {/* 2. CORE BIS SERVICES (12 COMPACT GOVERNMENT TILES) */}
-        <section className="py-8 px-4 sm:px-6 max-w-6xl mx-auto space-y-4">
+        <section className="py-8 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-4">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-300 pb-2">
             <div>
               <h2 className="text-lg sm:text-xl font-bold text-gov-900">
@@ -314,7 +400,7 @@ export default function HomePage({ onOpenStandard, onOpenReport }) {
                       navigate(service.link);
                     }
                   }}
-                  className="bg-white border border-slate-300 rounded-sm p-3.5 hover:border-gov-800 hover:bg-slate-50 transition-all cursor-pointer flex flex-col justify-between group"
+                  className="bg-white border border-slate-300 rounded-sm p-4 hover:border-gov-800 hover:bg-slate-50 transition-all cursor-pointer flex flex-col justify-between group h-full"
                 >
                   <div className="space-y-2">
                     <div className="flex items-center justify-between">
@@ -351,7 +437,7 @@ export default function HomePage({ onOpenStandard, onOpenReport }) {
         </section>
 
         {/* 3. TWO-COLUMN SPLIT: STANDARDS DIRECTORY & MANAKBOT ASSISTANT */}
-        <section className="py-6 px-4 sm:px-6 max-w-6xl mx-auto">
+        <section className="py-8 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             
             {/* LEFT 2 COLS: INSTANT STANDARDS SEARCH PANEL */}
@@ -409,10 +495,10 @@ export default function HomePage({ onOpenStandard, onOpenReport }) {
                     </thead>
                     <tbody className="divide-y divide-slate-100">
                       {[
-                        { code: "IS 2082:2018", id: "IS-2082", title: "Stationary Storage Electric Water Heaters", qco: true },
-                        { code: "IS 4151:2020", id: "IS-4151", title: "Protective Helmets for Two-Wheeler Vehicles", qco: true },
-                        { code: "IS 14543:2016", id: "IS-14543", title: "Packaged Drinking Water", qco: true },
-                        { code: "IS 1786:2008", id: "IS-1786", title: "High Strength Deformed Steel Bars (Fe 500D)", qco: true }
+                        { code: "IS 2082:2018", id: "IS-2082", isCode: "IS 2082:2018", title: "Stationary Storage Electric Water Heaters", qco: true },
+                        { code: "IS 4151:2020", id: "IS-4151", isCode: "IS 4151:2020", title: "Protective Helmets for Two-Wheeler Vehicles", qco: true },
+                        { code: "IS 14543:2016", id: "IS-14543", isCode: "IS 14543:2016", title: "Packaged Drinking Water", qco: true },
+                        { code: "IS 1786:2008", id: "IS-1786", isCode: "IS 1786:2008", title: "High Strength Deformed Steel Bars (Fe 500D)", qco: true }
                       ].map((item, idx) => (
                         <tr key={idx} className="hover:bg-slate-50 transition-colors">
                           <td className="py-2 px-3 font-mono font-bold text-gov-800 text-[11px] whitespace-nowrap">
@@ -428,10 +514,16 @@ export default function HomePage({ onOpenStandard, onOpenReport }) {
                           </td>
                           <td className="py-2 px-3 text-right whitespace-nowrap">
                             <button
-                              onClick={() => navigate(`/standards/${encodeURIComponent(item.id)}`)}
+                              onClick={() => {
+                                if (onOpenStandard) {
+                                  onOpenStandard(item);
+                                } else {
+                                  navigate(`/standards/${encodeURIComponent(item.id)}`);
+                                }
+                              }}
                               className="text-gov-800 font-bold hover:underline text-[11px]"
                             >
-                              View &rarr;
+                              View Details &rarr;
                             </button>
                           </td>
                         </tr>
@@ -500,7 +592,7 @@ export default function HomePage({ onOpenStandard, onOpenReport }) {
         </section>
 
         {/* 4. NEWS & CIRCULARS (GOVERNMENT PORTAL LIST FORMAT) */}
-        <section className="py-6 px-4 sm:px-6 max-w-6xl mx-auto space-y-3">
+        <section className="py-8 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-3">
           <div className="flex items-center justify-between border-b border-slate-300 pb-2">
             <div>
               <h2 className="text-lg font-bold text-gov-900">
@@ -553,11 +645,11 @@ export default function HomePage({ onOpenStandard, onOpenReport }) {
         </section>
 
         {/* 5. CITIZEN & MSME ASSISTANCE SHORTCUTS */}
-        <section className="py-6 px-4 sm:px-6 max-w-6xl mx-auto">
+        <section className="py-8 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             
             {/* Consumer Protection */}
-            <div className="bg-white border border-slate-300 rounded-sm p-4 flex items-start gap-3">
+            <div className="bg-white border border-slate-300 rounded-sm p-5 flex items-start gap-3.5">
               <div className="w-8 h-8 rounded-sm bg-emerald-100 text-emerald-800 flex items-center justify-center shrink-0 border border-emerald-200">
                 <ShieldCheck className="w-4 h-4" />
               </div>
@@ -578,7 +670,7 @@ export default function HomePage({ onOpenStandard, onOpenReport }) {
             </div>
 
             {/* MSME Guidance */}
-            <div className="bg-white border border-slate-300 rounded-sm p-4 flex items-start gap-3">
+            <div className="bg-white border border-slate-300 rounded-sm p-5 flex items-start gap-3.5">
               <div className="w-8 h-8 rounded-sm bg-blue-100 text-blue-800 flex items-center justify-center shrink-0 border border-blue-200">
                 <Award className="w-4 h-4" />
               </div>

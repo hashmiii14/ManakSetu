@@ -7,12 +7,16 @@ import {
 import { useRouter } from '../context/RouterContext';
 import { searchStandards, getPopularSearches, getSectorsList } from '../services/standardsService';
 import ErrorBoundary from '../components/ErrorBoundary';
+import ProductDiscovery from '../components/ProductDiscovery';
 
 const RECENT_SEARCHES_KEY = 'manaksetu_recent_searches_v1';
 
 export default function StandardsSearchPage({ onOpenStandardModal }) {
   const { searchParams, navigate } = useRouter();
   
+  // Tab Mode: 'DIRECTORY' | 'DISCOVERY'
+  const [activeSearchTab, setActiveSearchTab] = useState('DIRECTORY');
+
   // Read initial query from URL (?q=...)
   const initialQuery = searchParams.get('q') || '';
   const initialSector = searchParams.get('sector') || 'All Sectors';
@@ -153,97 +157,134 @@ export default function StandardsSearchPage({ onOpenStandardModal }) {
                 </span>
               </div>
             </div>
+
+            {/* SEARCH VIEW TABS */}
+            <div className="flex items-center gap-2 pt-3 border-t border-slate-200">
+              <button
+                onClick={() => setActiveSearchTab('DIRECTORY')}
+                className={`px-4 py-2 text-xs font-bold rounded-sm border transition-colors ${
+                  activeSearchTab === 'DIRECTORY'
+                    ? 'bg-gov-800 text-white border-gov-800 shadow-sm'
+                    : 'bg-white text-slate-700 border-slate-300 hover:bg-slate-100'
+                }`}
+              >
+                Standards Directory &amp; Code Search
+              </button>
+              <button
+                onClick={() => setActiveSearchTab('DISCOVERY')}
+                className={`px-4 py-2 text-xs font-bold rounded-sm border transition-colors flex items-center gap-1.5 ${
+                  activeSearchTab === 'DISCOVERY'
+                    ? 'bg-gov-800 text-white border-gov-800 shadow-sm'
+                    : 'bg-white text-slate-700 border-slate-300 hover:bg-slate-100'
+                }`}
+              >
+                <Sparkles className="w-3.5 h-3.5 text-amber-500" />
+                <span>Product Standard Discovery (Colloquial / Vernacular NLP)</span>
+              </button>
+            </div>
           </div>
         </section>
 
-        {/* SEARCH BAR & QUICK SUGGESTIONS CONTAINER */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 space-y-4">
-          
-          <div className="bg-white rounded-sm border border-slate-300 p-4 sm:p-5 space-y-3 shadow-xs">
-            
-            {/* Main Input Box with Search & Clear Buttons */}
-            <div className="flex flex-col sm:flex-row items-stretch gap-2">
-              <div className="relative flex-1">
-                <Search className="absolute left-3.5 top-3 w-4 h-4 text-slate-400" />
-                <input
-                  type="text"
-                  value={query}
-                  onChange={handleSearchChange}
-                  placeholder="Search by IS number (e.g. IS 302, 2082), product (geyser, helmet, cement, water), or sector..."
-                  className="w-full pl-10 pr-10 py-2.5 bg-white border border-slate-300 rounded-sm text-xs sm:text-sm text-slate-900 focus:outline-none focus:border-gov-800 focus:ring-1 focus:ring-gov-800 placeholder:text-slate-400"
-                />
-                {query && (
-                  <button
-                    onClick={() => setQuery('')}
-                    className="absolute right-3 top-2.5 p-1 rounded hover:bg-slate-100 text-slate-400 hover:text-slate-700 transition-colors"
-                    title="Clear search"
-                  >
-                    <X className="w-4 h-4" />
-                  </button>
-                )}
-              </div>
-
-              <div className="flex items-center gap-2 shrink-0">
-                <button
-                  type="button"
-                  onClick={() => saveRecentSearch(query)}
-                  className="px-5 py-2.5 bg-gov-800 hover:bg-gov-900 text-white font-bold text-xs rounded-sm transition-colors shadow-xs"
-                >
-                  Search
-                </button>
-                {query && (
-                  <button
-                    type="button"
-                    onClick={handleClearFilters}
-                    className="px-3.5 py-2.5 bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 font-bold text-xs rounded-sm transition-colors"
-                  >
-                    Clear All
-                  </button>
-                )}
-              </div>
-            </div>
-
-            {/* Popular Searches & Recent Searches Row */}
-            <div className="flex flex-wrap items-center justify-between gap-2 pt-1 text-xs">
-              <div className="flex flex-wrap items-center gap-1.5">
-                <span className="font-bold text-slate-500 text-[11px] uppercase tracking-wider mr-1">
-                  Popular Searches:
-                </span>
-                {popularChips.slice(0, 6).map((chip, idx) => (
-                  <button
-                    key={idx}
-                    onClick={() => handleChipClick(chip.query)}
-                    className="px-2.5 py-1 rounded-md border border-slate-200 bg-slate-50 hover:bg-gov-50 hover:border-gov-400 text-slate-700 hover:text-gov-900 transition-colors font-medium text-[11px]"
-                  >
-                    {chip.label}
-                  </button>
-                ))}
-              </div>
-
-              {recentSearches.length > 0 && (
-                <div className="flex items-center gap-1 text-[11px] text-slate-500">
-                  <Clock className="w-3 h-3 text-slate-400" />
-                  <span>Recent:</span>
-                  {recentSearches.slice(0, 3).map((term, i) => (
-                    <button
-                      key={i}
-                      onClick={() => handleChipClick(term)}
-                      className="hover:underline text-gov-700 font-medium"
-                    >
-                      {term}{i < Math.min(recentSearches.length, 3) - 1 ? ',' : ''}
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
-
+        {activeSearchTab === 'DISCOVERY' ? (
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <ProductDiscovery
+              embedded={true}
+              onOpenStandard={handleViewDetails}
+              onAskBot={(prompt) => navigate(`/manakbot?prompt=${encodeURIComponent(prompt)}`)}
+              onCheckCompliance={() => navigate('/services')}
+              onOpenVerifier={() => navigate('/consumer')}
+            />
           </div>
+        ) : (
+          <>
+            {/* SEARCH BAR & QUICK SUGGESTIONS CONTAINER */}
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 space-y-4">
+              
+              <div className="bg-white rounded-sm border border-slate-300 p-4 sm:p-5 space-y-3 shadow-xs">
+                
+                {/* Main Input Box with Search & Clear Buttons */}
+                <div className="flex flex-col sm:flex-row items-stretch gap-2">
+                  <div className="relative flex-1">
+                    <Search className="absolute left-3.5 top-3 w-4 h-4 text-slate-400" />
+                    <input
+                      type="text"
+                      value={query}
+                      onChange={handleSearchChange}
+                      placeholder="Search by IS number (e.g. IS 302, 2082), product (geyser, helmet, cement, water), or sector..."
+                      className="w-full pl-10 pr-10 py-2.5 bg-white border border-slate-300 rounded-sm text-xs sm:text-sm text-slate-900 focus:outline-none focus:border-gov-800 focus:ring-1 focus:ring-gov-800 placeholder:text-slate-400"
+                    />
+                    {query && (
+                      <button
+                        onClick={() => setQuery('')}
+                        className="absolute right-3 top-2.5 p-1 rounded hover:bg-slate-100 text-slate-400 hover:text-slate-700 transition-colors"
+                        title="Clear search"
+                      >
+                        <X className="w-4 h-4" />
+                      </button>
+                    )}
+                  </div>
 
-          {/* MAIN TWO-COLUMN WORKSPACE: FILTERS + RESULTS */}
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 items-start">
-            
-            {/* DESKTOP LEFT FILTER SIDEBAR */}
-            <aside className="hidden lg:block bg-white rounded-xl border border-slate-200 p-5 shadow-gov-sm space-y-6">
+                  <div className="flex items-center gap-2 shrink-0">
+                    <button
+                      type="button"
+                      onClick={() => saveRecentSearch(query)}
+                      className="px-5 py-2.5 bg-gov-800 hover:bg-gov-900 text-white font-bold text-xs rounded-sm transition-colors shadow-xs"
+                    >
+                      Search
+                    </button>
+                    {query && (
+                      <button
+                        type="button"
+                        onClick={handleClearFilters}
+                        className="px-3.5 py-2.5 bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 font-bold text-xs rounded-sm transition-colors"
+                      >
+                        Clear All
+                      </button>
+                    )}
+                  </div>
+                </div>
+
+                {/* Popular Searches & Recent Searches Row */}
+                <div className="flex flex-wrap items-center justify-between gap-2 pt-1 text-xs">
+                  <div className="flex flex-wrap items-center gap-1.5">
+                    <span className="font-bold text-slate-500 text-[11px] uppercase tracking-wider mr-1">
+                      Popular Searches:
+                    </span>
+                    {popularChips.slice(0, 6).map((chip, idx) => (
+                      <button
+                        key={idx}
+                        onClick={() => handleChipClick(chip.query)}
+                        className="px-2.5 py-1 rounded-sm border border-slate-300 bg-slate-50 hover:bg-gov-50 hover:border-gov-800 text-slate-700 hover:text-gov-900 transition-colors font-medium text-[11px]"
+                      >
+                        {chip.label}
+                      </button>
+                    ))}
+                  </div>
+
+                  {recentSearches.length > 0 && (
+                    <div className="flex items-center gap-1 text-[11px] text-slate-500">
+                      <Clock className="w-3 h-3 text-slate-400" />
+                      <span>Recent:</span>
+                      {recentSearches.slice(0, 3).map((term, i) => (
+                        <button
+                          key={i}
+                          onClick={() => handleChipClick(term)}
+                          className="hover:underline text-gov-800 font-medium"
+                        >
+                          {term}{i < Math.min(recentSearches.length, 3) - 1 ? ',' : ''}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+              </div>
+
+              {/* MAIN TWO-COLUMN WORKSPACE: FILTERS + RESULTS */}
+              <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 items-start">
+                
+                {/* DESKTOP LEFT FILTER SIDEBAR */}
+                <aside className="hidden lg:block bg-white rounded-sm border border-slate-300 p-5 shadow-sm space-y-6">
               
               <div className="flex items-center justify-between pb-3 border-b border-slate-200">
                 <div className="flex items-center gap-2">
@@ -353,7 +394,7 @@ export default function StandardsSearchPage({ onOpenStandardModal }) {
             <main className="lg:col-span-3 space-y-4">
               
               {/* Controls bar: Count, Sort By, View Mode */}
-              <div className="bg-white p-3.5 rounded-xl border border-slate-200 shadow-gov-sm flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 text-xs">
+              <div className="bg-white p-3.5 rounded-sm border border-slate-300 shadow-sm flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 text-xs">
                 
                 <div className="flex items-center justify-between sm:justify-start gap-3">
                   <span className="font-bold text-slate-700">
@@ -368,9 +409,9 @@ export default function StandardsSearchPage({ onOpenStandardModal }) {
                   {/* Mobile Filter Button */}
                   <button
                     onClick={() => setMobileFilterOpen(!mobileFilterOpen)}
-                    className="lg:hidden px-2.5 py-1.5 rounded-lg border border-slate-300 text-xs font-bold text-slate-700 flex items-center gap-1 bg-slate-50"
+                    className="lg:hidden px-2.5 py-1.5 rounded-sm border border-slate-300 text-xs font-bold text-slate-700 flex items-center gap-1 bg-slate-50"
                   >
-                    <SlidersHorizontal className="w-3.5 h-3.5 text-gov-700" />
+                    <SlidersHorizontal className="w-3.5 h-3.5 text-gov-800" />
                     <span>Filter</span>
                   </button>
                 </div>
@@ -382,7 +423,7 @@ export default function StandardsSearchPage({ onOpenStandardModal }) {
                     <select
                       value={sortBy}
                       onChange={(e) => setSortBy(e.target.value)}
-                      className="px-2 py-1 bg-slate-50 border border-slate-300 rounded-md text-xs font-semibold text-slate-800 focus:outline-none focus:ring-1 focus:ring-gov-700"
+                      className="px-2 py-1 bg-slate-50 border border-slate-300 rounded-sm text-xs font-semibold text-slate-800 focus:outline-none focus:ring-1 focus:ring-gov-800"
                     >
                       <option value="relevance">Relevance</option>
                       <option value="code">IS Number</option>
@@ -390,17 +431,17 @@ export default function StandardsSearchPage({ onOpenStandardModal }) {
                     </select>
                   </div>
 
-                  <div className="hidden sm:flex items-center border border-slate-300 rounded-lg p-0.5 bg-slate-50">
+                  <div className="hidden sm:flex items-center border border-slate-300 rounded-sm p-0.5 bg-slate-50">
                     <button
                       onClick={() => setViewMode('table')}
-                      className={`p-1.5 rounded ${viewMode === 'table' ? 'bg-white shadow-gov text-gov-800' : 'text-slate-400 hover:text-slate-700'}`}
+                      className={`p-1.5 rounded-sm ${viewMode === 'table' ? 'bg-white shadow-sm text-gov-800' : 'text-slate-400 hover:text-slate-700'}`}
                       title="Table View"
                     >
                       <TableIcon className="w-4 h-4" />
                     </button>
                     <button
                       onClick={() => setViewMode('cards')}
-                      className={`p-1.5 rounded ${viewMode === 'cards' ? 'bg-white shadow-gov text-gov-800' : 'text-slate-400 hover:text-slate-700'}`}
+                      className={`p-1.5 rounded-sm ${viewMode === 'cards' ? 'bg-white shadow-sm text-gov-800' : 'text-slate-400 hover:text-slate-700'}`}
                       title="Card View"
                     >
                       <LayoutGrid className="w-4 h-4" />
@@ -457,8 +498,8 @@ export default function StandardsSearchPage({ onOpenStandardModal }) {
 
               {/* RESULTS LIST: 0 MATCHES EMPTY STATE */}
               {results.length === 0 && (
-                <div className="bg-white rounded-xl border border-slate-200 p-8 sm:p-12 text-center space-y-4">
-                  <div className="w-12 h-12 rounded-full bg-saffron-100 text-saffron-700 flex items-center justify-center mx-auto">
+                <div className="bg-white rounded-sm border border-slate-300 p-8 sm:p-12 text-center space-y-4">
+                  <div className="w-12 h-12 rounded-sm bg-amber-50 text-amber-700 border border-amber-200 flex items-center justify-center mx-auto">
                     <Search className="w-6 h-6" />
                   </div>
                   
@@ -477,7 +518,7 @@ export default function StandardsSearchPage({ onOpenStandardModal }) {
                   <div className="pt-2 flex flex-wrap justify-center gap-2">
                     <button
                       onClick={handleClearFilters}
-                      className="px-4 py-2 rounded-lg bg-gov-700 hover:bg-gov-800 text-white text-xs font-bold inline-flex items-center gap-1.5 transition-colors shadow-gov"
+                      className="px-4 py-2 rounded-sm bg-gov-800 hover:bg-gov-900 text-white text-xs font-bold inline-flex items-center gap-1.5 transition-colors shadow-xs"
                     >
                       <RotateCcw className="w-3.5 h-3.5" />
                       <span>Reset Search Filters</span>
@@ -485,9 +526,9 @@ export default function StandardsSearchPage({ onOpenStandardModal }) {
 
                     <button
                       onClick={() => navigate(`/manakbot?q=${encodeURIComponent(query)}`)}
-                      className="px-4 py-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold inline-flex items-center gap-1.5 transition-colors"
+                      className="px-4 py-2 rounded-sm bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold inline-flex items-center gap-1.5 transition-colors border border-slate-200"
                     >
-                      <Sparkles className="w-3.5 h-3.5 text-saffron-600" />
+                      <Sparkles className="w-3.5 h-3.5 text-amber-600" />
                       <span>Ask ManakBot AI to Locate</span>
                     </button>
                   </div>
@@ -496,13 +537,13 @@ export default function StandardsSearchPage({ onOpenStandardModal }) {
 
               {/* VIEW MODE 1: GOVERNMENT HYBRID TABLE (DESKTOP) */}
               {results.length > 0 && viewMode === 'table' && (
-                <div className="bg-white rounded-xl border border-slate-200 shadow-gov overflow-hidden">
+                <div className="bg-white rounded-sm border border-slate-300 shadow-sm overflow-hidden">
                   <div className="overflow-x-auto">
                     <table className="w-full text-left border-collapse text-xs">
                       <thead>
-                        <tr className="bg-slate-100/90 text-slate-700 border-b border-slate-200 font-bold">
+                        <tr className="bg-slate-100 text-slate-700 border-b border-slate-200 font-bold">
                           <th className="py-3 px-4 w-36">IS Number</th>
-                          <th className="py-3 px-4">Standard Title & Technical Scope</th>
+                          <th className="py-3 px-4">Standard Title &amp; Technical Scope</th>
                           <th className="py-3 px-4 w-40">Sector / Category</th>
                           <th className="py-3 px-4 w-32">Statutory Status</th>
                           <th className="py-3 px-4 w-36 text-right">Actions</th>
@@ -512,11 +553,11 @@ export default function StandardsSearchPage({ onOpenStandardModal }) {
                         {results.map((std) => (
                           <tr 
                             key={std.id || std.isCode}
-                            className="hover:bg-slate-50/80 transition-colors group"
+                            className="hover:bg-slate-50 transition-colors group"
                           >
                             {/* Col 1: IS Code */}
                             <td className="py-3.5 px-4 align-top">
-                              <span className="font-mono font-bold text-gov-800 bg-gov-50 px-2 py-1 rounded border border-gov-200 block text-xs w-fit">
+                              <span className="font-mono font-bold text-gov-800 bg-gov-50 px-2 py-1 rounded-sm border border-gov-300 block text-xs w-fit">
                                 {std.isCode}
                               </span>
                               <span className="text-[10px] text-slate-500 mt-1 block">
@@ -528,7 +569,7 @@ export default function StandardsSearchPage({ onOpenStandardModal }) {
                             <td className="py-3.5 px-4 align-top space-y-1">
                               <h4 
                                 onClick={() => handleViewDetails(std)}
-                                className="text-sm font-bold text-slate-900 hover:text-gov-700 cursor-pointer transition-colors leading-snug"
+                                className="text-sm font-bold text-slate-900 hover:text-gov-800 cursor-pointer transition-colors leading-snug"
                               >
                                 {std.title}
                               </h4>
@@ -539,7 +580,7 @@ export default function StandardsSearchPage({ onOpenStandardModal }) {
                               {/* Global Harmonization Pill */}
                               {std.globalHarmonization && (
                                 <div className="text-[11px] text-slate-500 flex items-center gap-1.5 pt-0.5">
-                                  <Globe className="w-3 h-3 text-gov-600" />
+                                  <Globe className="w-3 h-3 text-gov-700" />
                                   <span>Int'l Equiv: <strong className="text-slate-700 font-mono">{std.globalHarmonization.standard}</strong></span>
                                 </div>
                               )}
@@ -547,7 +588,7 @@ export default function StandardsSearchPage({ onOpenStandardModal }) {
 
                             {/* Col 3: Category */}
                             <td className="py-3.5 px-4 align-top text-slate-600">
-                              <span className="px-2 py-0.5 rounded bg-slate-100 border border-slate-200 text-[11px] font-medium block w-fit">
+                              <span className="px-2 py-0.5 rounded-sm bg-slate-100 border border-slate-200 text-[11px] font-medium block w-fit">
                                 {std.category}
                               </span>
                               <span className="text-[10px] text-slate-400 block mt-1">
@@ -558,12 +599,12 @@ export default function StandardsSearchPage({ onOpenStandardModal }) {
                             {/* Col 4: Status */}
                             <td className="py-3.5 px-4 align-top">
                               {std.mandatoryQCO ? (
-                                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-bold bg-amber-50 text-amber-900 border border-amber-300">
-                                  <AlertTriangle className="w-3 h-3 text-amber-600 shrink-0" />
+                                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-sm text-[11px] font-bold bg-amber-50 text-amber-900 border border-amber-300">
+                                  <AlertTriangle className="w-3 h-3 text-amber-700 shrink-0" />
                                   <span>Mandatory QCO</span>
                                 </span>
                               ) : (
-                                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-medium bg-slate-100 text-slate-600 border border-slate-200">
+                                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-sm text-[11px] font-medium bg-slate-100 text-slate-600 border border-slate-200">
                                   <span>Voluntary</span>
                                 </span>
                               )}
@@ -573,7 +614,7 @@ export default function StandardsSearchPage({ onOpenStandardModal }) {
                             <td className="py-3.5 px-4 align-top text-right space-y-1.5">
                               <button
                                 onClick={() => handleViewDetails(std)}
-                                className="w-full px-2.5 py-1.5 rounded bg-gov-700 hover:bg-gov-800 text-white font-bold text-xs inline-flex items-center justify-center gap-1 transition-colors shadow-gov-sm"
+                                className="w-full px-2.5 py-1.5 rounded-sm bg-gov-800 hover:bg-gov-900 text-white font-bold text-xs inline-flex items-center justify-center gap-1 transition-colors shadow-xs"
                               >
                                 <span>View Specs</span>
                                 <ChevronRight className="w-3 h-3" />
@@ -581,10 +622,10 @@ export default function StandardsSearchPage({ onOpenStandardModal }) {
 
                               <button
                                 onClick={() => navigate(`/manakbot?std=${encodeURIComponent(std.isCode)}`)}
-                                className="w-full px-2 py-1 rounded bg-slate-100 hover:bg-gov-50 hover:text-gov-800 text-slate-700 font-semibold text-[11px] inline-flex items-center justify-center gap-1 transition-colors border border-slate-200"
+                                className="w-full px-2 py-1 rounded-sm bg-slate-100 hover:bg-gov-50 hover:text-gov-800 text-slate-700 font-semibold text-[11px] inline-flex items-center justify-center gap-1 transition-colors border border-slate-200"
                                 title="Ask ManakBot about requirements"
                               >
-                                <Sparkles className="w-3 h-3 text-saffron-600" />
+                                <Sparkles className="w-3 h-3 text-amber-600" />
                                 <span>Ask ManakBot</span>
                               </button>
                             </td>
@@ -602,20 +643,20 @@ export default function StandardsSearchPage({ onOpenStandardModal }) {
                   {results.map((std) => (
                     <div
                       key={std.id || std.isCode}
-                      className="bg-white p-5 rounded-xl border border-slate-200 hover:border-gov-400 shadow-gov-sm transition-all flex flex-col justify-between space-y-4"
+                      className="bg-white p-5 rounded-sm border border-slate-300 hover:border-gov-800 shadow-sm transition-all flex flex-col justify-between space-y-4"
                     >
                       <div className="space-y-2.5">
                         <div className="flex items-center justify-between gap-2">
-                          <span className="font-mono font-bold text-xs text-gov-800 bg-gov-50 px-2.5 py-1 rounded border border-gov-200">
+                          <span className="font-mono font-bold text-xs text-gov-800 bg-gov-50 px-2.5 py-1 rounded-sm border border-gov-300">
                             {std.isCode}
                           </span>
                           {std.mandatoryQCO ? (
-                            <span className="text-[11px] font-bold text-amber-900 bg-amber-50 px-2 py-0.5 rounded border border-amber-300 flex items-center gap-1">
-                              <AlertTriangle className="w-3 h-3 text-amber-600" />
+                            <span className="text-[11px] font-bold text-amber-900 bg-amber-50 px-2 py-0.5 rounded-sm border border-amber-300 flex items-center gap-1">
+                              <AlertTriangle className="w-3 h-3 text-amber-700" />
                               Mandatory QCO
                             </span>
                           ) : (
-                            <span className="text-[11px] font-medium text-slate-500 bg-slate-100 px-2 py-0.5 rounded">
+                            <span className="text-[11px] font-medium text-slate-500 bg-slate-100 px-2 py-0.5 rounded-sm">
                               Voluntary
                             </span>
                           )}
@@ -623,7 +664,7 @@ export default function StandardsSearchPage({ onOpenStandardModal }) {
 
                         <h4 
                           onClick={() => handleViewDetails(std)}
-                          className="text-base font-bold text-slate-900 hover:text-gov-700 cursor-pointer transition-colors leading-snug"
+                          className="text-base font-bold text-slate-900 hover:text-gov-800 cursor-pointer transition-colors leading-snug"
                         >
                           {std.title}
                         </h4>
@@ -641,15 +682,15 @@ export default function StandardsSearchPage({ onOpenStandardModal }) {
                         <div className="flex items-center gap-2">
                           <button
                             onClick={() => navigate(`/manakbot?std=${encodeURIComponent(std.isCode)}`)}
-                            className="p-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 transition-colors"
+                            className="p-1.5 rounded-sm bg-slate-100 hover:bg-slate-200 text-slate-700 transition-colors border border-slate-200"
                             title="Ask ManakBot"
                           >
-                            <Sparkles className="w-3.5 h-3.5 text-saffron-600" />
+                            <Sparkles className="w-3.5 h-3.5 text-amber-600" />
                           </button>
 
                           <button
                             onClick={() => handleViewDetails(std)}
-                            className="px-3 py-1.5 rounded-lg bg-gov-700 hover:bg-gov-800 text-white text-xs font-bold inline-flex items-center gap-1 transition-colors shadow-gov-sm"
+                            className="px-3 py-1.5 rounded-sm bg-gov-800 hover:bg-gov-900 text-white text-xs font-bold inline-flex items-center gap-1 transition-colors shadow-xs"
                           >
                             <span>View Specs</span>
                             <ArrowRight className="w-3 h-3" />
@@ -666,6 +707,8 @@ export default function StandardsSearchPage({ onOpenStandardModal }) {
           </div>
 
         </div>
+      </>
+    )}
 
       </div>
     </ErrorBoundary>

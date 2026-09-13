@@ -55,8 +55,8 @@ export default function MsmePage() {
           {/* 1. KEY MSME INCENTIVES STRIP (3 CARDS) */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             
-            <div className="bg-white rounded-xl border border-slate-200 shadow-gov-sm p-6 space-y-3">
-              <div className="w-10 h-10 rounded-lg bg-emerald-100 text-emerald-800 flex items-center justify-center font-bold text-base">
+            <div className="bg-white rounded-sm border border-slate-300 shadow-sm p-6 space-y-3">
+              <div className="w-10 h-10 rounded-sm bg-emerald-100 text-emerald-800 flex items-center justify-center font-bold text-base">
                 <BadgePercent className="w-5 h-5" />
               </div>
               <div>
@@ -69,8 +69,8 @@ export default function MsmePage() {
               </div>
             </div>
 
-            <div className="bg-white rounded-xl border border-slate-200 shadow-gov-sm p-6 space-y-3">
-              <div className="w-10 h-10 rounded-lg bg-blue-100 text-blue-800 flex items-center justify-center font-bold text-base">
+            <div className="bg-white rounded-sm border border-slate-300 shadow-sm p-6 space-y-3">
+              <div className="w-10 h-10 rounded-sm bg-blue-100 text-blue-800 flex items-center justify-center font-bold text-base">
                 <Sparkles className="w-5 h-5" />
               </div>
               <div>
@@ -83,8 +83,8 @@ export default function MsmePage() {
               </div>
             </div>
 
-            <div className="bg-white rounded-xl border border-slate-200 shadow-gov-sm p-6 space-y-3">
-              <div className="w-10 h-10 rounded-lg bg-amber-100 text-amber-800 flex items-center justify-center font-bold text-base">
+            <div className="bg-white rounded-sm border border-slate-300 shadow-sm p-6 space-y-3">
+              <div className="w-10 h-10 rounded-sm bg-amber-100 text-amber-800 flex items-center justify-center font-bold text-base">
                 <Award className="w-5 h-5" />
               </div>
               <div>
@@ -100,8 +100,8 @@ export default function MsmePage() {
           </div>
 
           {/* 2. INTERACTIVE FEE CONCESSION ESTIMATOR */}
-          <div className="bg-white rounded-2xl border border-slate-200 shadow-gov p-6 sm:p-8 space-y-6">
-            <div className="border-b border-slate-100 pb-4">
+          <div className="bg-white rounded-sm border border-slate-300 shadow-sm p-6 sm:p-8 space-y-6">
+            <div className="border-b border-slate-200 pb-4">
               <div className="flex items-center gap-2 text-xs font-bold text-gov-800 uppercase tracking-wide">
                 <Calculator className="w-4 h-4" />
                 <span>Statutory Tariff Calculator</span>
@@ -114,13 +114,13 @@ export default function MsmePage() {
               </p>
             </div>
 
-            <CostEstimatorSection />
+            <CostEstimatorSection embedded={true} />
           </div>
 
           {/* 3. GEM PORTAL & PUBLIC PROCUREMENT ROADMAP */}
-          <div id="gem" className="bg-white rounded-2xl border border-slate-200 shadow-gov p-6 sm:p-8 space-y-6">
+          <div id="gem" className="bg-white rounded-sm border border-slate-300 shadow-sm p-6 sm:p-8 space-y-6">
             <div className="space-y-1">
-              <span className="px-2.5 py-0.5 rounded bg-blue-100 text-blue-900 text-xs font-bold uppercase tracking-wide">
+              <span className="px-2.5 py-0.5 rounded-sm bg-gov-100 text-gov-900 text-xs font-bold uppercase tracking-wide border border-gov-300">
                 Public Procurement Integration
               </span>
               <h3 className="text-xl font-bold text-gov-900">
@@ -138,8 +138,8 @@ export default function MsmePage() {
                 { step: "03", title: "Select Product Category", desc: "Select the catalog category matching your Indian Standard (e.g., Geyser IS 2082)." },
                 { step: "04", title: "Validate BIS License", desc: "Enter your CM/L number; GeM validates directly against the BIS API database." }
               ].map((item, idx) => (
-                <div key={idx} className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
-                  <span className="text-xl font-extrabold text-gov-700 font-mono block">
+                <div key={idx} className="p-4 rounded-sm bg-slate-50 border border-slate-300 space-y-2">
+                  <span className="text-xl font-extrabold text-gov-800 font-mono block">
                     {item.step}
                   </span>
                   <h4 className="text-xs font-bold text-slate-900">
@@ -152,7 +152,7 @@ export default function MsmePage() {
               ))}
             </div>
 
-            <div className="pt-2 flex items-center justify-between border-t border-slate-100 text-xs">
+            <div className="pt-2 flex items-center justify-between border-t border-slate-200 text-xs">
               <span className="text-slate-500">Need assistance navigating GeM tender compliance?</span>
               <button
                 onClick={() => navigate('/manakbot?prompt=How do I comply with BIS standards for selling on the GeM portal?')}

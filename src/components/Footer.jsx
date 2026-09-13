@@ -8,7 +8,7 @@ export default function Footer({ onOpenReport }) {
 
   return (
     <footer className="bg-slate-900 text-slate-300 text-xs py-10 border-t-2 border-gov-800 text-left">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 space-y-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
         
         {/* Top 5 Institutional Columns */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">

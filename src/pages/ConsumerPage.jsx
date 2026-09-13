@@ -49,12 +49,12 @@ export default function ConsumerPage({ onOpenReport }) {
         </section>
 
         {/* MAIN BODY CONTAINER */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8 space-y-10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
           
           {/* 1. INTERACTIVE VERIFICATION WIDGET */}
-          <div className="bg-white rounded-2xl border border-slate-200 shadow-gov p-6 sm:p-8 space-y-4">
-            <div className="border-b border-slate-100 pb-4">
-              <div className="flex items-center gap-2 text-xs font-bold text-emerald-800 uppercase tracking-wide">
+          <div className="bg-white rounded-sm border border-slate-300 shadow-sm p-6 sm:p-8 space-y-4">
+            <div className="border-b border-slate-200 pb-4">
+              <div className="flex items-center gap-2 text-xs font-bold text-gov-800 uppercase tracking-wide">
                 <ShieldCheck className="w-4 h-4" />
                 <span>Statutory Anti-Counterfeit Engine</span>
               </div>
@@ -73,9 +73,9 @@ export default function ConsumerPage({ onOpenReport }) {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             
             {/* CARD A: HOW TO READ GOLD HALLMARK */}
-            <div className="bg-white rounded-xl border border-slate-200 shadow-gov-sm p-6 space-y-4">
-              <div className="flex items-center gap-2.5 pb-3 border-b border-slate-100">
-                <div className="w-8 h-8 rounded-lg bg-amber-100 text-amber-800 flex items-center justify-center font-bold text-xs">
+            <div className="bg-white rounded-sm border border-slate-300 shadow-sm p-6 space-y-4">
+              <div className="flex items-center gap-2.5 pb-3 border-b border-slate-200">
+                <div className="w-8 h-8 rounded-sm bg-amber-100 text-amber-800 flex items-center justify-center font-bold text-xs border border-amber-300">
                   Au
                 </div>
                 <div>
@@ -89,7 +89,7 @@ export default function ConsumerPage({ onOpenReport }) {
               </div>
 
               <div className="space-y-3 text-xs text-slate-700">
-                <div className="p-3 rounded-lg bg-slate-50 border border-slate-200 flex items-start gap-3">
+                <div className="p-3 rounded-sm bg-slate-50 border border-slate-200 flex items-start gap-3">
                   <span className="w-5 h-5 rounded-full bg-gov-800 text-white font-bold text-[10px] flex items-center justify-center shrink-0">1</span>
                   <div>
                     <span className="font-bold text-slate-900 block">BIS Standard Mark</span>
@@ -97,7 +97,7 @@ export default function ConsumerPage({ onOpenReport }) {
                   </div>
                 </div>
 
-                <div className="p-3 rounded-lg bg-slate-50 border border-slate-200 flex items-start gap-3">
+                <div className="p-3 rounded-sm bg-slate-50 border border-slate-200 flex items-start gap-3">
                   <span className="w-5 h-5 rounded-full bg-gov-800 text-white font-bold text-[10px] flex items-center justify-center shrink-0">2</span>
                   <div>
                     <span className="font-bold text-slate-900 block">Purity in Karat &amp; Fineness</span>
@@ -105,7 +105,7 @@ export default function ConsumerPage({ onOpenReport }) {
                   </div>
                 </div>
 
-                <div className="p-3 rounded-lg bg-slate-50 border border-slate-200 flex items-start gap-3">
+                <div className="p-3 rounded-sm bg-slate-50 border border-slate-200 flex items-start gap-3">
                   <span className="w-5 h-5 rounded-full bg-gov-800 text-white font-bold text-[10px] flex items-center justify-center shrink-0">3</span>
                   <div>
                     <span className="font-bold text-slate-900 block">6-Digit Alphanumeric HUID</span>
@@ -116,9 +116,9 @@ export default function ConsumerPage({ onOpenReport }) {
             </div>
 
             {/* CARD B: HOW TO READ ISI MARK */}
-            <div className="bg-white rounded-xl border border-slate-200 shadow-gov-sm p-6 space-y-4">
-              <div className="flex items-center gap-2.5 pb-3 border-b border-slate-100">
-                <div className="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-800 flex items-center justify-center font-bold text-xs">
+            <div className="bg-white rounded-sm border border-slate-300 shadow-sm p-6 space-y-4">
+              <div className="flex items-center gap-2.5 pb-3 border-b border-slate-200">
+                <div className="w-8 h-8 rounded-sm bg-gov-100 text-gov-800 flex items-center justify-center font-bold text-xs border border-gov-300">
                   ISI
                 </div>
                 <div>
@@ -132,7 +132,7 @@ export default function ConsumerPage({ onOpenReport }) {
               </div>
 
               <div className="space-y-3 text-xs text-slate-700">
-                <div className="p-3 rounded-lg bg-slate-50 border border-slate-200 flex items-start gap-3">
+                <div className="p-3 rounded-sm bg-slate-50 border border-slate-200 flex items-start gap-3">
                   <span className="w-5 h-5 rounded-full bg-gov-800 text-white font-bold text-[10px] flex items-center justify-center shrink-0">1</span>
                   <div>
                     <span className="font-bold text-slate-900 block">Indian Standard Code (Top)</span>
@@ -140,7 +140,7 @@ export default function ConsumerPage({ onOpenReport }) {
                   </div>
                 </div>
 
-                <div className="p-3 rounded-lg bg-slate-50 border border-slate-200 flex items-start gap-3">
+                <div className="p-3 rounded-sm bg-slate-50 border border-slate-200 flex items-start gap-3">
                   <span className="w-5 h-5 rounded-full bg-gov-800 text-white font-bold text-[10px] flex items-center justify-center shrink-0">2</span>
                   <div>
                     <span className="font-bold text-slate-900 block">Canonical ISI Monogram</span>
@@ -148,7 +148,7 @@ export default function ConsumerPage({ onOpenReport }) {
                   </div>
                 </div>
 
-                <div className="p-3 rounded-lg bg-slate-50 border border-slate-200 flex items-start gap-3">
+                <div className="p-3 rounded-sm bg-slate-50 border border-slate-200 flex items-start gap-3">
                   <span className="w-5 h-5 rounded-full bg-gov-800 text-white font-bold text-[10px] flex items-center justify-center shrink-0">3</span>
                   <div>
                     <span className="font-bold text-slate-900 block">7-Digit CM/L License Number (Bottom)</span>
@@ -161,9 +161,9 @@ export default function ConsumerPage({ onOpenReport }) {
           </div>
 
           {/* 3. GRIEVANCE REDRESSAL & NCH TOLL FREE */}
-          <div className="bg-gov-900 text-white rounded-2xl p-6 sm:p-8 shadow-gov flex flex-col md:flex-row items-center justify-between gap-6">
+          <div className="bg-gov-900 text-white rounded-sm p-6 sm:p-8 border border-gov-950 shadow-sm flex flex-col md:flex-row items-center justify-between gap-6">
             <div className="space-y-2 text-center md:text-left">
-              <span className="px-2.5 py-0.5 rounded bg-saffron-500/20 text-saffron-400 font-bold text-xs uppercase tracking-wide inline-block">
+              <span className="px-2.5 py-0.5 rounded-sm bg-amber-400/20 text-amber-300 font-bold text-xs uppercase tracking-wide inline-block border border-amber-400/30">
                 Consumer Rights
               </span>
               <h3 className="text-xl sm:text-2xl font-extrabold text-white">
@@ -177,7 +177,7 @@ export default function ConsumerPage({ onOpenReport }) {
             <div className="flex flex-col sm:flex-row items-center gap-3 shrink-0">
               <button
                 onClick={() => onOpenReport ? onOpenReport('', 'Suspected Fake Mark') : null}
-                className="px-4 py-2.5 bg-saffron-600 hover:bg-saffron-700 text-white font-bold text-xs rounded-lg shadow-gov-sm transition-colors inline-flex items-center gap-2"
+                className="px-4 py-2 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-xs rounded-sm shadow-xs transition-colors inline-flex items-center gap-2"
               >
                 <FileWarning className="w-4 h-4" />
                 <span>File Violation Report</span>
@@ -185,7 +185,7 @@ export default function ConsumerPage({ onOpenReport }) {
 
               <a
                 href="tel:1915"
-                className="px-4 py-2.5 bg-gov-800 hover:bg-gov-700 text-white border border-gov-700 font-bold text-xs rounded-lg transition-colors inline-flex items-center gap-2"
+                className="px-4 py-2 bg-gov-800 hover:bg-gov-700 text-white border border-gov-700 font-bold text-xs rounded-sm transition-colors inline-flex items-center gap-2"
               >
                 <PhoneCall className="w-4 h-4 text-emerald-400" />
                 <span>Call NCH 1915</span>
