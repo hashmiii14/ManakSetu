@@ -159,102 +159,10 @@ export function LanguageProvider({ children }) {
     return fallback || keyOrText;
   };
 
-  // Global DOM Text Observer to guarantee 100% full-page Hindi conversion
+  // Sync html lang attribute cleanly
   useEffect(() => {
-    document.documentElement.lang = language;
-    if (typeof window === 'undefined') return;
-
-    const originalTexts = new WeakMap();
-
-    function translateTextNode(node) {
-      if (node.nodeType === Node.TEXT_NODE) {
-        const text = node.nodeValue;
-        if (!text || !text.trim()) return;
-        const trimmed = text.trim();
-
-        // Skip pure numbers, codes, dates
-        if (/^(IS\s*\d+|CM\/L[-\s]*\d+|\d+[\d\s,.\/:-]*)$/i.test(trimmed)) return;
-
-        let match = HINDI_DICTIONARY[trimmed] || HINDI_LOWER_MAP[trimmed.toLowerCase()];
-        if (match) {
-          if (!originalTexts.has(node)) {
-            originalTexts.set(node, text);
-          }
-          const leading = text.match(/^\s*/)[0];
-          const trailing = text.match(/\s*$/)[0];
-          node.nodeValue = leading + match + trailing;
-        }
-      } else if (node.nodeType === Node.ELEMENT_NODE) {
-        const tag = node.tagName.toLowerCase();
-        if (tag === 'script' || tag === 'style' || tag === 'code' || tag === 'pre') return;
-
-        // Translate placeholders
-        if (node.hasAttribute('placeholder')) {
-          const ph = node.getAttribute('placeholder');
-          if (ph) {
-            const trPh = HINDI_DICTIONARY[ph.trim()] || HINDI_LOWER_MAP[ph.trim().toLowerCase()];
-            if (trPh) {
-              if (!node.hasAttribute('data-orig-ph')) {
-                node.setAttribute('data-orig-ph', ph);
-              }
-              node.setAttribute('placeholder', trPh);
-            }
-          }
-        }
-
-        // Translate titles / tooltips
-        if (node.hasAttribute('title')) {
-          const tit = node.getAttribute('title');
-          if (tit) {
-            const trTit = HINDI_DICTIONARY[tit.trim()] || HINDI_LOWER_MAP[tit.trim().toLowerCase()];
-            if (trTit) {
-              if (!node.hasAttribute('data-orig-title')) {
-                node.setAttribute('data-orig-title', tit);
-              }
-              node.setAttribute('title', trTit);
-            }
-          }
-        }
-
-        for (let i = 0; i < node.childNodes.length; i++) {
-          translateTextNode(node.childNodes[i]);
-        }
-      }
-    }
-
-    function restoreTextNode(node) {
-      if (node.nodeType === Node.TEXT_NODE) {
-        if (originalTexts.has(node)) {
-          node.nodeValue = originalTexts.get(node);
-        }
-      } else if (node.nodeType === Node.ELEMENT_NODE) {
-        if (node.hasAttribute('data-orig-ph')) {
-          node.setAttribute('placeholder', node.getAttribute('data-orig-ph'));
-          node.removeAttribute('data-orig-ph');
-        }
-        if (node.hasAttribute('data-orig-title')) {
-          node.setAttribute('title', node.getAttribute('data-orig-title'));
-          node.removeAttribute('data-orig-title');
-        }
-        for (let i = 0; i < node.childNodes.length; i++) {
-          restoreTextNode(node.childNodes[i]);
-        }
-      }
-    }
-
-    if (language === 'hi') {
-      translateTextNode(document.body);
-      const observer = new MutationObserver((mutations) => {
-        for (const mut of mutations) {
-          for (let i = 0; i < mut.addedNodes.length; i++) {
-            translateTextNode(mut.addedNodes[i]);
-          }
-        }
-      });
-      observer.observe(document.body, { childList: true, subtree: true });
-      return () => observer.disconnect();
-    } else {
-      restoreTextNode(document.body);
+    if (typeof document !== 'undefined') {
+      document.documentElement.lang = language;
     }
   }, [language]);
 

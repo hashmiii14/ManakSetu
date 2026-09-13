@@ -34,25 +34,6 @@ export default function ConsumerVerifier({ onOpenReport }) {
     submitted: false
   });
 
-  // Auto-run verification if URL parameters provided (e.g. /consumer?cml=6200145)
-  React.useEffect(() => {
-    const cmlParam = searchParams.get('cml');
-    const huidParam = searchParams.get('huid');
-    const tabParam = searchParams.get('tab');
-
-    if (cmlParam) {
-      setActiveTab('isi');
-      setCmlCode(cmlParam);
-      handleCheckCML(cmlParam);
-    } else if (huidParam) {
-      setActiveTab('gold');
-      setHuidCode(huidParam);
-      handleCheckHUID(huidParam);
-    } else if (tabParam === 'isi') {
-      setActiveTab('isi');
-    }
-  }, [searchParams]);
-
   const handleCheckHUID = async (targetCode = null) => {
     const codeToTest = (targetCode || huidCode).trim().toUpperCase();
     if (!codeToTest) return;
@@ -84,6 +65,25 @@ export default function ConsumerVerifier({ onOpenReport }) {
       setCmlLoading(false);
     }
   };
+
+  // Auto-run verification if URL parameters provided (e.g. /consumer?cml=6200145)
+  React.useEffect(() => {
+    const cmlParam = searchParams.get('cml');
+    const huidParam = searchParams.get('huid');
+    const tabParam = searchParams.get('tab');
+
+    if (cmlParam) {
+      setActiveTab('isi');
+      setCmlCode(cmlParam);
+      handleCheckCML(cmlParam);
+    } else if (huidParam) {
+      setActiveTab('gold');
+      setHuidCode(huidParam);
+      handleCheckHUID(huidParam);
+    } else if (tabParam === 'isi') {
+      setActiveTab('isi');
+    }
+  }, [searchParams]);
 
   const handleOpenNCH = (code, type, firm, reason) => {
     const docket = `NCH-2026-BIS-${Math.floor(10000 + Math.random() * 90000)}`;
