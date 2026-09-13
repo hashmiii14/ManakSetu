@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { 
   Search, ArrowRight, ExternalLink, ShieldCheck, FileText, 
   Building2, CheckCircle2, ChevronRight, BookOpen, Sparkles, 
-  FlaskConical, Award, Globe, Scale, Users, MapPin, Calendar, HelpCircle
+  FlaskConical, Award, Globe, Scale, Users, MapPin, Calendar, HelpCircle, Calculator
 } from 'lucide-react';
 import { useRouter } from '../context/RouterContext';
 import { useLanguage } from '../context/LanguageContext';
