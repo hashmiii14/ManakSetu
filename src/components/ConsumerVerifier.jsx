@@ -6,9 +6,11 @@ import {
 } from 'lucide-react';
 import { verifyIdentifier } from '../services/api';
 import { useLanguage } from '../context/LanguageContext';
+import { useRouter } from '../context/RouterContext';
 
 export default function ConsumerVerifier({ onOpenReport }) {
   const { t } = useLanguage();
+  const { searchParams } = useRouter();
   const [activeTab, setActiveTab] = useState('gold'); // 'gold' | 'isi'
   
   // HUID State
@@ -17,7 +19,7 @@ export default function ConsumerVerifier({ onOpenReport }) {
   const [huidLoading, setHuidLoading] = useState(false);
 
   // ISI Mark CML State
-  const [cmlCode, setCmlCode] = useState('8400192');
+  const [cmlCode, setCmlCode] = useState('6200145');
   const [cmlResult, setCmlResult] = useState(null);
   const [cmlLoading, setCmlLoading] = useState(false);
 
@@ -31,6 +33,25 @@ export default function ConsumerVerifier({ onOpenReport }) {
     docketNumber: '',
     submitted: false
   });
+
+  // Auto-run verification if URL parameters provided (e.g. /consumer?cml=6200145)
+  React.useEffect(() => {
+    const cmlParam = searchParams.get('cml');
+    const huidParam = searchParams.get('huid');
+    const tabParam = searchParams.get('tab');
+
+    if (cmlParam) {
+      setActiveTab('isi');
+      setCmlCode(cmlParam);
+      handleCheckCML(cmlParam);
+    } else if (huidParam) {
+      setActiveTab('gold');
+      setHuidCode(huidParam);
+      handleCheckHUID(huidParam);
+    } else if (tabParam === 'isi') {
+      setActiveTab('isi');
+    }
+  }, [searchParams]);
 
   const handleCheckHUID = async (targetCode = null) => {
     const codeToTest = (targetCode || huidCode).trim().toUpperCase();

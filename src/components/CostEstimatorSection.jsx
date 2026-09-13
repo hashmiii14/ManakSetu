@@ -5,10 +5,12 @@ import {
 } from 'lucide-react';
 import { estimateCost } from '../services/api';
 import { useLanguage } from '../context/LanguageContext';
+import { useRouter } from '../context/RouterContext';
 import LabLocator from './LabLocator';
 
 export default function CostEstimatorSection({ embedded = false }) {
   const { t } = useLanguage();
+  const { searchParams } = useRouter();
   const [activeTab, setActiveTab] = useState('fees'); // 'fees' | 'labs'
 
   const popularStandards = [
@@ -28,6 +30,21 @@ export default function CostEstimatorSection({ embedded = false }) {
   const [enterpriseType, setEnterpriseType] = useState("micro");
   const [estimate, setEstimate] = useState(null);
   const [loading, setLoading] = useState(false);
+
+  // Read URL query parameters
+  useEffect(() => {
+    const stdParam = searchParams.get('standard') || searchParams.get('isCode');
+    const tabParam = searchParams.get('tab');
+    if (stdParam) {
+      const match = popularStandards.find(s => s.code.toLowerCase().includes(stdParam.toLowerCase()) || stdParam.toLowerCase().includes(s.code.toLowerCase().slice(0, 7)));
+      if (match) {
+        setSelectedStandard(match.code);
+      }
+    }
+    if (tabParam === 'labs') {
+      setActiveTab('labs');
+    }
+  }, [searchParams]);
 
   useEffect(() => {
     let isMounted = true;
