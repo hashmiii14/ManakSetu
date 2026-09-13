@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { 
   X, AlertTriangle, CheckCircle2, FlaskConical, Building, 
-  Calculator, ExternalLink, ShieldCheck, FileText, TrendingDown, Info 
+  Calculator, ExternalLink, ShieldCheck, FileText, TrendingDown, Info, Globe, Award 
 } from 'lucide-react';
 
 export default function StandardDetailModal({ standard, onClose, onAskBot, onCheckCompliance }) {
@@ -49,6 +49,7 @@ export default function StandardDetailModal({ standard, onClose, onAskBot, onChe
   const mandatoryQCO = Boolean(standard.mandatoryQCO ?? standard.mandatory_qco);
   const qcoNotification = standard.qcoNotification || standard.qco_notification || 'Quality Control Order (Statutory Compliance)';
   const source = standard.source || 'BIS Catalogue';
+  const globalHarmonization = standard.globalHarmonization || standard.global_harmonization;
 
   const keyTests = standard.keyTests || standard.key_tests || [
     "Compressive / Tensile Mechanical Strength Testing",
@@ -136,6 +137,47 @@ export default function StandardDetailModal({ standard, onClose, onAskBot, onChe
               </div>
             )}
           </section>
+
+          {/* Global Standards Harmonization (Slide 2 Pillar) */}
+          {globalHarmonization && (
+            <section className="p-4 bg-emerald-50/70 border border-emerald-300 rounded-xl space-y-2.5 text-xs">
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <h3 className="text-xs font-bold text-emerald-950 uppercase tracking-wider flex items-center gap-1.5">
+                  <Globe className="w-4 h-4 text-emerald-700" />
+                  Global Standards Harmonization (Export Alignment)
+                </h3>
+                <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-700 text-white shadow-2xs">
+                  {globalHarmonization.exportEquivalence}
+                </span>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-neutral-800">
+                <div>
+                  <span className="font-semibold text-neutral-900">International Standard: </span>
+                  <span className="font-mono font-bold">{globalHarmonization.standard}</span>
+                </div>
+                <div>
+                  <span className="font-semibold text-neutral-900">Standard Body: </span>
+                  <span>{globalHarmonization.org}</span>
+                </div>
+              </div>
+
+              <p className="text-[11px] text-emerald-950 leading-relaxed">
+                {globalHarmonization.note}
+              </p>
+
+              {globalHarmonization.compatibleMarkets && (
+                <div className="pt-1 flex flex-wrap items-center gap-1.5">
+                  <span className="text-[10px] font-bold text-neutral-500 uppercase">Export Markets:</span>
+                  {globalHarmonization.compatibleMarkets.map((m, idx) => (
+                    <span key={idx} className="px-2 py-0.5 rounded bg-white text-emerald-900 border border-emerald-300 text-[10px] font-semibold">
+                      {m}
+                    </span>
+                  ))}
+                </div>
+              )}
+            </section>
+          )}
 
           {/* 2. Compliance Guidance */}
           <section className="space-y-2.5">

@@ -22,7 +22,8 @@ export function searchStandards(query) {
       normalizeText(item.title),
       normalizeText(item.category),
       normalizeText(item.description),
-      ...(item.keywords || []).map(normalizeText)
+      ...(item.keywords || []).map(normalizeText),
+      ...(item.colloquialTerms || []).map(normalizeText)
     ];
 
     // Check if any search term matches any haystack
@@ -54,23 +55,77 @@ export function verifyHUID(code) {
     };
   }
 
+  // Known fraudulent/counterfeit demo HUID
+  if (cleanCode === 'XX9999') {
+    return {
+      valid: false,
+      is_fraud: true,
+      nch_escalation_recommended: true,
+      status: "COUNTERFEIT / FRAUD DETECTED",
+      details: {
+        huid: cleanCode,
+        jeweler: "Unregistered Entity (Suspected Counterfeit)",
+        purity: "Unverified (Failed Assay)",
+        jewellery_type: "Suspect Gold Ring",
+        assaying_centre: "NON-EXISTENT / UNLICENSED CENTRE",
+        standard: "IS 1417:2016",
+        note: "SUSPECTED COUNTERFEIT MARK: This code does not exist on BIS Manakonline national registry. Escalate to National Consumer Helpline (NCH)."
+      },
+      message: "This HUID is not registered in the National Hallmarking Database and represents a suspected fake hallmark."
+    };
+  }
+
+  const knownHUIDs = {
+    'AK79B2': {
+      jeweler: "Tanishq (Titan Company Ltd)",
+      purity: "22K (916 Fineness)",
+      jewellery_type: "Gold Ring with Laser Inscription",
+      assaying_centre: "BIS Recognized Assaying Centre, Karol Bagh, Delhi (AHC-0104)",
+      tested_date: "14-Aug-2025",
+      audit_trace: "TLOG-2026-AK79B2"
+    },
+    'MH41C9': {
+      jeweler: "Malabar Gold and Diamonds",
+      purity: "18K (750 Fineness)",
+      jewellery_type: "Diamond Studded Gold Necklace",
+      assaying_centre: "Apex Precious Metals Testing Lab, Andheri East, Mumbai",
+      tested_date: "02-Jan-2026",
+      audit_trace: "TLOG-2026-MH41C9"
+    },
+    'KA88X1': {
+      jeweler: "Kalyan Jewellers India Ltd",
+      purity: "24K (995 Fineness)",
+      jewellery_type: "Gold Minted Bullion Coin (10g)",
+      assaying_centre: "Southern Hallmarking Centre, Bengaluru",
+      tested_date: "20-Dec-2025",
+      audit_trace: "TLOG-2026-KA88X1"
+    }
+  };
+
+  const matched = knownHUIDs[cleanCode];
   const samplePurities = ["22K (916 Fineness)", "18K (750 Fineness)", "24K (995 Fineness)", "14K (585 Fineness)"];
-  const randomPurity = samplePurities[cleanCode.charCodeAt(0) % samplePurities.length];
   const sampleAHCs = [
     "BIS Recognized Assaying Centre, Karol Bagh, Delhi",
     "Apex Precious Metals Testing Laboratory, Mumbai",
     "Southern Hallmarking & Refinery Centre, Bengaluru"
   ];
-  const randomAHC = sampleAHCs[cleanCode.charCodeAt(1) % sampleAHCs.length];
 
   return {
     valid: true,
-    huid: cleanCode,
-    purity: randomPurity,
-    assayingCentre: randomAHC,
-    status: "Active & Verified on BIS Central Registry",
-    hallmarkStandard: "IS 1417:2016",
-    verificationDate: new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })
+    is_valid: true,
+    status: "Valid / Found",
+    details: {
+      huid: cleanCode,
+      jeweler: matched ? matched.jeweler : "BIS Licensed Hallmark Jeweller",
+      purity: matched ? matched.purity : samplePurities[cleanCode.charCodeAt(0) % samplePurities.length],
+      jewellery_type: matched ? matched.jewellery_type : "Hallmarked Gold Jewellery Article",
+      assaying_centre: matched ? matched.assaying_centre : sampleAHCs[cleanCode.charCodeAt(1) % sampleAHCs.length],
+      standard: "IS 1417:2016",
+      tested_date: matched ? matched.tested_date : "14-Aug-2025",
+      audit_trace: matched ? matched.audit_trace : `TLOG-2026-${cleanCode}`,
+      registration_status: "Operative on Central BIS Registry",
+      note: "Authentic BIS 6-digit laser hallmarking verified."
+    }
   };
 }
 
@@ -84,17 +139,106 @@ export function verifyCMLLicense(cmlInput) {
   if (digitsOnly.length !== 7) {
     return {
       valid: false,
+      is_valid: false,
+      status: "Invalid Format",
       message: `CML license number must consist of exactly 7 numeric digits (e.g., CM/L-8400192). Found: ${digitsOnly.length} digits.`
     };
   }
 
+  // Known suspended / fraud license
+  if (digitsOnly === '3344556') {
+    return {
+      valid: false,
+      is_valid: false,
+      is_fraud: true,
+      nch_escalation_recommended: true,
+      status: "SUSPENDED / VIOLATOR",
+      details: {
+        cml_number: "CM/L-3344556",
+        licensee: "Apex Electricals (Suspended Licensee)",
+        brand: "Apex",
+        product: "Electric Immersion Water Heaters",
+        applicable_standard: "IS 368:2014",
+        valid_upto: "EXPIRED (10-Jan-2024)",
+        factory_location: "Mayapuri Industrial Area Phase II, New Delhi - 110064",
+        surveillance_status: "SUSPENDED under Section 14 BIS Act 2016",
+        qco_compliance: "Violation of Mandatory QCO — Commercial Sale Prohibited",
+        note: "SUSPECTED COUNTERFEIT / EXPIRED LICENSE: Selling goods with a suspended ISI mark is a non-bailable offense under BIS Act 2016."
+      },
+      message: "License CM/L-3344556 is statutorily SUSPENDED. Escalate to National Consumer Helpline (NCH)."
+    };
+  }
+
+  const knownLicenses = {
+    '8400192': {
+      cml_number: "CM/L-8400192",
+      licensee: "Havells India Ltd",
+      brand: "Havells",
+      product: "Stationary Storage Electric Water Heaters (Geysers)",
+      applicable_standard: "IS 2082:2018",
+      valid_upto: "31-March-2028",
+      factory_location: "Plot No. 2 & 2A, Sector 12, IIE SIDCUL, Haridwar, Uttarakhand - 249403",
+      surveillance_status: "Active • Periodic Factory Surveillance Passed",
+      qco_compliance: "Mandatory QCO Certified",
+      audit_trace: "AUDIT-BIS-8400192-2026"
+    },
+    '9200341': {
+      cml_number: "CM/L-9200341",
+      licensee: "Bisleri International Pvt Ltd",
+      brand: "Bisleri",
+      product: "Packaged Drinking Water (Other than Natural Mineral Water)",
+      applicable_standard: "IS 14543:2016",
+      valid_upto: "15-October-2027",
+      factory_location: "Western Express Highway, Andheri East, Mumbai, Maharashtra - 400099",
+      surveillance_status: "Active • Microbiological Safety Validated",
+      qco_compliance: "Mandatory QCO Certified",
+      audit_trace: "AUDIT-BIS-9200341-2026"
+    },
+    '4151908': {
+      cml_number: "CM/L-4151908",
+      licensee: "Steelbird Hi-Tech India Ltd",
+      brand: "Steelbird",
+      product: "Protective Helmets for Two-Wheeled Motor Vehicles",
+      applicable_standard: "IS 4151:2020",
+      valid_upto: "28-February-2027",
+      factory_location: "Plot 54, EPIP Phase II, Jharmajri, Baddi, Himachal Pradesh - 174103",
+      surveillance_status: "Active • Drop Tower Impact Tests Passed",
+      qco_compliance: "Mandatory MoRTH QCO Certified",
+      audit_trace: "AUDIT-BIS-4151908-2026"
+    },
+    '7100456': {
+      cml_number: "CM/L-7100456",
+      licensee: "Steel Authority of India Ltd (SAIL)",
+      brand: "SAIL TMT",
+      product: "High Strength Deformed Steel Bars (Fe 500D) for Concrete Reinforcement",
+      applicable_standard: "IS 1786:2008",
+      valid_upto: "30-June-2028",
+      factory_location: "Bhilai Steel Plant, Durg, Chhattisgarh - 490001",
+      surveillance_status: "Active • Mechanical Tensile Benchmarks Met",
+      qco_compliance: "Mandatory QCO Certified",
+      audit_trace: "AUDIT-BIS-7100456-2026"
+    }
+  };
+
+  const matched = knownLicenses[digitsOnly];
+
   return {
     valid: true,
-    cmlNumber: `CM/L-${digitsOnly}`,
-    status: "STATUTORILY OPERATIVE",
-    validUpto: "31-December-2027",
-    scope: "Standard Mark Under Scheme-I (Conformity Assessment)",
-    monitoringStatus: "Periodic Factory Surveillance Passed"
+    is_valid: true,
+    status: "Valid / Found",
+    details: {
+      cml_number: `CM/L-${digitsOnly}`,
+      licensee: matched ? matched.licensee : "Registered Indian Manufacturer",
+      brand: matched ? matched.brand : "Standard Mark Licensee",
+      product: matched ? matched.product : "Conforming Industrial Product under Scheme-I",
+      applicable_standard: matched ? matched.applicable_standard : "Indian Standard Specification",
+      valid_upto: matched ? matched.valid_upto : "31-December-2027",
+      factory_location: matched ? matched.factory_location : "Registered Factory Premise in India",
+      surveillance_status: matched ? matched.surveillance_status : "Active • Periodic Factory Surveillance Passed",
+      qco_compliance: matched ? matched.qco_compliance : "Mandatory QCO Certified",
+      audit_trace: matched ? matched.audit_trace : `AUDIT-BIS-${digitsOnly}-2026`,
+      status: "STATUTORILY OPERATIVE"
+    }
   };
 }
 

@@ -19,6 +19,7 @@ import ReportModal from './components/ReportModal';
 import { BIS_STANDARDS } from './data/bisStandards';
 
 export default function App() {
+  const [activeMode, setActiveMode] = useState('msme'); // 'msme' | 'citizen'
   const [selectedStandard, setSelectedStandard] = useState(null);
   const [activeComplianceProduct, setActiveComplianceProduct] = useState('');
   const [reportState, setReportState] = useState({
@@ -26,6 +27,15 @@ export default function App() {
     identifier: '',
     category: ''
   });
+
+  const handleToggleMode = (newMode) => {
+    setActiveMode(newMode);
+    if (newMode === 'citizen') {
+      handleScrollToSection('consumer-check');
+    } else {
+      handleScrollToSection('discovery');
+    }
+  };
 
   const handleOpenStandard = (std) => {
     setSelectedStandard(std || BIS_STANDARDS[0]);
@@ -75,6 +85,8 @@ export default function App() {
     <div className="min-h-screen flex flex-col bg-white text-neutral-900 font-sans selection:bg-emerald-600 selection:text-white antialiased">
       {/* 1. Navbar */}
       <Navbar 
+        activeMode={activeMode}
+        onToggleMode={handleToggleMode}
         onAskBot={() => handleScrollToSection('assistant')}
         onOpenReport={() => handleOpenReport()} 
       />
@@ -84,6 +96,7 @@ export default function App() {
         onOpenStandard={handleOpenStandard} 
         onAskQuestion={handleAskBot} 
         onExploreStandards={() => handleScrollToSection('standards')}
+        onSwitchMode={handleToggleMode}
       />
 
       {/* 3. Core Tools Section (4 Distinct Actions) */}

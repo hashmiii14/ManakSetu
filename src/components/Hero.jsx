@@ -1,25 +1,34 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { 
   Search, ArrowRight, CheckCircle2, AlertTriangle, ShieldCheck, 
-  Sparkles, ExternalLink, Calculator, FlaskConical, ChevronRight, Loader2, Bot, MessageSquare 
+  Sparkles, ExternalLink, Calculator, FlaskConical, ChevronRight, 
+  Loader2, Bot, MessageSquare, Globe, Award, Factory, Users, Zap
 } from 'lucide-react';
 import { searchStandards } from '../services/api';
 
-export default function Hero({ onOpenStandard, onAskQuestion, onExploreStandards }) {
+export default function Hero({ onOpenStandard, onAskQuestion, onExploreStandards, onSwitchMode }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [activeStandard, setActiveStandard] = useState(null);
   const [isSearching, setIsSearching] = useState(false);
   const debounceTimerRef = useRef(null);
 
   const quickChips = [
-    { label: "Immersion Geyser", query: "immersion geyser" },
-    { label: "Electrical Switch", query: "electrical switch" },
-    { label: "Electric Kettle", query: "electric kettle" },
-    { label: "Safety of Toys", query: "toys" },
-    { label: "Packaged Water", query: "packaged water" },
-    { label: "Motorcycle Helmet", query: "helmet" },
-    { label: "Ordinary Cement", query: "cement" },
-    { label: "Steel Rebar", query: "steel" }
+    { label: "geyser (ग़ीज़र)", query: "geyser" },
+    { label: "khilona (खिलौना)", query: "khilona" },
+    { label: "paani ki botal", query: "paani ki botal" },
+    { label: "switch / plug", query: "switch" },
+    { label: "helmet (हेल्मेट)", query: "helmet" },
+    { label: "sariya / loha", query: "sariya" },
+    { label: "cement 53 grade", query: "cement" },
+    { label: "electric iron", query: "press" }
+  ];
+
+  const pillars = [
+    { icon: Bot, title: "Zero-Hallucination RAG", desc: "Verbatim BIS Act 2016 citations" },
+    { icon: Sparkles, title: "Vernacular Discovery", desc: "Hindi, Hinglish & dialect mapping" },
+    { icon: Calculator, title: "50% MSME Relief", desc: "Statutory fee concessions & calculator" },
+    { icon: ShieldCheck, title: "TrueMark Verifier", desc: "6-digit HUID & 7-digit ISI validation" },
+    { icon: Globe, title: "Global Harmonization", desc: "IS ↔ ISO, IEC, ASTM cross-walk" }
   ];
 
   // Initial load: fetch default standard
@@ -69,61 +78,86 @@ export default function Hero({ onOpenStandard, onAskQuestion, onExploreStandards
   };
 
   return (
-    <section className="pt-10 pb-14 md:pt-16 md:pb-20 bg-white border-b border-neutral-200 text-left">
+    <section className="pt-8 pb-14 md:pt-14 md:pb-20 bg-white border-b border-neutral-200 text-left">
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
         
         {/* Main Positioning & Hero Header */}
-        <div className="text-center max-w-3xl mx-auto mb-10 space-y-4">
+        <div className="text-center max-w-3xl mx-auto mb-8 space-y-4">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-semibold">
             <span className="w-2 h-2 rounded-full bg-emerald-600 animate-pulse"></span>
-            <span>ManakSetu • AI Regulatory Assistant for BIS</span>
+            <span>ManakSetu • AI Intelligent Assistant for Indian Standards & BIS Services</span>
           </div>
 
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-neutral-900 tracking-tight leading-[1.15]">
             Understand Indian Standards. <br className="hidden sm:block" />
-            <span className="text-emerald-700">Simplify Compliance.</span>
+            <span className="text-emerald-700">Simplify BIS Compliance.</span>
           </h1>
 
           <p className="text-sm sm:text-base text-neutral-600 max-w-2xl mx-auto leading-relaxed">
-            An AI-powered assistant that helps businesses discover, understand, and navigate Indian Standards and BIS requirements. Instant IS code lookup, mandatory QCO detection, and 50% MSME fee savings.
+            SIH-ready intelligent assistant that empowers MSMEs, exporters, and consumers to discover Indian Standards, navigate mandatory QCOs, verify authentic ISI & Gold HUID marks, and calculate 50% MSME statutory fee concessions.
           </p>
 
-          {/* Primary & Secondary Action CTAs */}
-          <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
+          {/* Persona Mode Switcher in Hero */}
+          <div className="pt-1 flex flex-wrap items-center justify-center gap-3">
             <button
-              onClick={() => onAskQuestion && onAskQuestion()}
-              className="px-6 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-bold inline-flex items-center gap-2 shadow-xs transition-colors"
+              onClick={() => {
+                if (onSwitchMode) onSwitchMode('msme');
+                const el = document.getElementById('discovery');
+                if (el) el.scrollIntoView({ behavior: 'smooth' });
+              }}
+              className="px-4 py-2 rounded-xl bg-neutral-900 hover:bg-neutral-800 text-white text-xs sm:text-sm font-bold inline-flex items-center gap-2 shadow-xs transition-colors"
             >
-              <Sparkles className="w-4 h-4" />
-              <span>Ask ManakBot</span>
-              <ArrowRight className="w-4 h-4" />
+              <Factory className="w-4 h-4 text-emerald-400" />
+              <span>I am an MSME Manufacturer / Exporter</span>
+              <ArrowRight className="w-3.5 h-3.5 text-neutral-400" />
             </button>
 
             <button
               onClick={() => {
-                if (onExploreStandards) {
-                  onExploreStandards();
-                } else {
-                  const el = document.getElementById('standards');
-                  if (el) el.scrollIntoView({ behavior: 'smooth' });
-                }
+                if (onSwitchMode) onSwitchMode('citizen');
+                const el = document.getElementById('consumer-check');
+                if (el) el.scrollIntoView({ behavior: 'smooth' });
               }}
-              className="px-6 py-3 rounded-xl bg-neutral-50 hover:bg-neutral-100 border border-neutral-300 text-neutral-800 text-sm font-bold inline-flex items-center gap-2 transition-colors shadow-2xs"
+              className="px-4 py-2 rounded-xl bg-emerald-50 hover:bg-emerald-100 border border-emerald-300 text-emerald-900 text-xs sm:text-sm font-bold inline-flex items-center gap-2 shadow-2xs transition-colors"
             >
-              <Search className="w-4 h-4 text-neutral-500" />
-              <span>Explore Standards</span>
+              <Users className="w-4 h-4 text-emerald-700" />
+              <span>I am a Citizen / Consumer</span>
+              <ArrowRight className="w-3.5 h-3.5 text-emerald-700" />
             </button>
           </div>
         </div>
 
-        {/* Subtle Product Preview of ManakBot Conversation */}
+        {/* 5 Pillars of Uniqueness Grid (Slide 2 Alignment) */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5 max-w-4xl mx-auto mb-8">
+          {pillars.map((pillar, idx) => {
+            const Icon = pillar.icon;
+            return (
+              <div 
+                key={idx} 
+                className="p-3 bg-neutral-50 rounded-xl border border-neutral-200 text-center space-y-1 hover:border-emerald-300 transition-colors"
+              >
+                <div className="w-7 h-7 rounded-lg bg-emerald-100 text-emerald-800 flex items-center justify-center mx-auto">
+                  <Icon className="w-3.5 h-3.5 text-emerald-700" />
+                </div>
+                <h4 className="text-[11px] font-bold text-neutral-900 leading-tight">
+                  {pillar.title}
+                </h4>
+                <p className="text-[10px] text-neutral-500 leading-tight">
+                  {pillar.desc}
+                </p>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Live Search & Hybrid Preview Card */}
         <div className="bg-neutral-50 rounded-2xl p-4 sm:p-5 border border-neutral-300 shadow-sm max-w-3xl mx-auto mb-8">
           <div className="flex items-center justify-between mb-3 pb-2 border-b border-neutral-200 text-xs">
             <div className="flex items-center gap-2">
               <Bot className="w-4 h-4 text-emerald-600" />
-              <span className="font-bold text-neutral-800">ManakBot Live Preview</span>
+              <span className="font-bold text-neutral-800">Instant Standards Search</span>
             </div>
-            <span className="text-neutral-400 font-mono text-[10px]">Grounded RAG Engine</span>
+            <span className="text-emerald-700 font-mono font-semibold text-[11px]">Hybrid BM25 + Semantic Vector</span>
           </div>
 
           <div className="flex flex-col sm:flex-row gap-2 mb-3">
@@ -137,8 +171,8 @@ export default function Hero({ onOpenStandard, onAskQuestion, onExploreStandards
                 type="text"
                 value={searchQuery}
                 onChange={handleSearchChange}
-                placeholder="Search products: e.g. immersion geyser, switch, toys, water, helmet..."
-                className="w-full pl-10 pr-4 py-2.5 text-xs sm:text-sm bg-white border border-neutral-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-600 focus:border-emerald-600 font-medium text-neutral-900"
+                placeholder="Search colloquial terms: geyser, khilona, paani ki botal, switch, helmet, sariya..."
+                className="w-full pl-10 pr-4 py-2.5 text-xs sm:text-sm bg-white border border-neutral-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-600 focus:border-emerald-600 font-medium text-neutral-900 shadow-inner"
               />
             </div>
             <button
@@ -153,7 +187,7 @@ export default function Hero({ onOpenStandard, onAskQuestion, onExploreStandards
           {/* 1-Click Popular Products Chips */}
           <div className="pt-2 flex flex-wrap items-center gap-1.5">
             <span className="text-[11px] font-semibold text-neutral-500 mr-1">
-              Quick Suggestions:
+              Colloquial Quick Chips:
             </span>
             {quickChips.map((chip, idx) => (
               <button

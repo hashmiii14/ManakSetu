@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { 
   ShieldCheck, CheckCircle2, AlertTriangle, HelpCircle, FileText, 
-  FlaskConical, Tag, ArrowRight, ExternalLink, Download, Check, RefreshCw, Loader2, Sparkles
+  FlaskConical, Tag, ArrowRight, ExternalLink, Download, Check, RefreshCw, 
+  Loader2, Sparkles, Layers, Globe, Award, Zap
 } from 'lucide-react';
 import { checkCompliance } from '../services/api';
+import { SCHEMES_INFO } from '../data/bisStandards';
 
 const POPULAR_CHECKLIST_PRODUCTS = [
   "Electric Immersion Water Heater (IS 368)",
@@ -13,7 +15,9 @@ const POPULAR_CHECKLIST_PRODUCTS = [
   "Safety of Toys (IS 9873 Part 1)",
   "Domestic Pressure Cooker (IS 2347)",
   "Ordinary Portland Cement 53 Grade (IS 12269)",
-  "Electrical Switches for Fixed Installations (IS 3854)"
+  "High Strength Deformed Steel Bars (IS 1786)",
+  "Electric Dry & Steam Iron (IS 302-2-3)",
+  "Information Technology Equipment (IS 13252)"
 ];
 
 export default function ComplianceChecker({ initialProduct = '', onOpenStandard, onAskBot }) {
@@ -22,6 +26,7 @@ export default function ComplianceChecker({ initialProduct = '', onOpenStandard,
   const [complianceData, setComplianceData] = useState(null);
   const [completedItems, setCompletedItems] = useState({});
   const [copiedSummary, setCopiedSummary] = useState(false);
+  const [activeSchemeTab, setActiveSchemeTab] = useState('SCHEME_1');
 
   useEffect(() => {
     if (initialProduct) {
@@ -114,31 +119,128 @@ export default function ComplianceChecker({ initialProduct = '', onOpenStandard,
     setTimeout(() => setCopiedSummary(false), 2500);
   };
 
+  const selectedSchemeDetails = SCHEMES_INFO.find(s => s.code === activeSchemeTab) || SCHEMES_INFO[0];
+
   return (
     <section id="compliance" className="py-14 md:py-20 bg-neutral-50/60 border-b border-neutral-200 text-left">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 space-y-10">
         
         {/* Section Header */}
-        <div className="text-center max-w-2xl mx-auto mb-8 space-y-2">
+        <div className="text-center max-w-3xl mx-auto space-y-2">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-semibold">
             <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
-            <span>Statutory Compliance Roadmap</span>
+            <span>BIS Scheme & License Navigator • Module 2</span>
           </div>
           <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-neutral-900 tracking-tight">
-            Interactive Product Compliance Check
+            Conformity Schemes & Licensing Navigator
           </h2>
-          <p className="text-xs sm:text-sm text-neutral-600">
-            Generate an end-to-end 7-stage statutory roadmap: standard identification, conformity scheme, in-house laboratory equipment, documents, testing, and license filing.
+          <p className="text-xs sm:text-sm text-neutral-600 leading-relaxed">
+            Navigate the 4 statutory BIS certification pathways: Scheme-I (ISI Mark), Scheme-II (CRS), Scheme-IV (Hallmarking), and FMCS (Foreign Manufacturers). Generate interactive 7-stage compliance roadmaps for any product.
           </p>
         </div>
 
-        {/* Product Selection / Input Bar */}
-        <div className="bg-white rounded-2xl border border-neutral-200 p-4 sm:p-5 shadow-xs mb-6">
-          <label className="block text-xs font-bold text-neutral-700 mb-2">
-            Select or enter your product to generate the compliance roadmap:
-          </label>
+        {/* 4 Core Pathways Showcase Grid */}
+        <div className="bg-white rounded-2xl border border-neutral-200 p-6 shadow-xs space-y-5">
+          <div className="flex items-center justify-between pb-3 border-b border-neutral-200">
+            <div>
+              <span className="text-[10px] font-bold text-emerald-800 uppercase tracking-widest block">
+                Statutory Certification Frameworks
+              </span>
+              <h3 className="text-base sm:text-lg font-bold text-neutral-900">
+                The 4 Pillars of BIS Conformity Assessment
+              </h3>
+            </div>
+            <span className="text-xs text-neutral-500 hidden sm:inline">
+              Click any scheme to inspect workflow & concessions
+            </span>
+          </div>
 
-          <div className="flex flex-col sm:flex-row gap-2.5 mb-3">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+            {SCHEMES_INFO.map((scheme) => (
+              <button
+                key={scheme.code}
+                onClick={() => setActiveSchemeTab(scheme.code)}
+                className={`p-3.5 rounded-xl border text-left transition-all flex flex-col justify-between ${
+                  activeSchemeTab === scheme.code
+                    ? 'bg-emerald-50 border-emerald-500 ring-2 ring-emerald-500/20 shadow-xs'
+                    : 'bg-neutral-50 hover:bg-neutral-100 border-neutral-200'
+                }`}
+              >
+                <div>
+                  <div className="flex items-center justify-between gap-1 mb-1.5">
+                    <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-white border border-neutral-300 text-neutral-800">
+                      {scheme.badge}
+                    </span>
+                    {activeSchemeTab === scheme.code && (
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                    )}
+                  </div>
+                  <h4 className="text-xs sm:text-sm font-bold text-neutral-900 line-clamp-1">
+                    {scheme.name.split(' (')[0]}
+                  </h4>
+                  <p className="text-[11px] text-neutral-600 mt-1 line-clamp-2">
+                    {scheme.target}
+                  </p>
+                </div>
+                <div className="mt-3 pt-2 border-t border-neutral-200/60 text-[10px] font-semibold text-emerald-800">
+                  {scheme.concessions}
+                </div>
+              </button>
+            ))}
+          </div>
+
+          {/* Active Scheme Expanded Drawer */}
+          {selectedSchemeDetails && (
+            <div className="p-4 sm:p-5 bg-neutral-50 rounded-xl border border-neutral-200 space-y-3 animate-in fade-in">
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <div className="flex items-center gap-2">
+                  <span className="px-2.5 py-1 rounded-md bg-emerald-600 text-white font-mono font-bold text-xs">
+                    {selectedSchemeDetails.badge}
+                  </span>
+                  <h4 className="text-sm font-bold text-neutral-900">
+                    {selectedSchemeDetails.name}
+                  </h4>
+                </div>
+                <span className="text-xs font-semibold text-emerald-800 bg-emerald-100 px-2.5 py-0.5 rounded">
+                  {selectedSchemeDetails.concessions}
+                </span>
+              </div>
+
+              <p className="text-xs text-neutral-700 leading-relaxed">
+                {selectedSchemeDetails.description}
+              </p>
+
+              <div className="space-y-1.5 pt-1">
+                <span className="text-[11px] font-bold text-neutral-500 uppercase tracking-wider block">
+                  Mandatory Statutory Progression:
+                </span>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                  {selectedSchemeDetails.steps.map((st, i) => (
+                    <div key={i} className="p-2 bg-white rounded-lg border border-neutral-200 text-neutral-800">
+                      {st}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Product Selection / Input Bar */}
+        <div className="bg-white rounded-2xl border border-neutral-200 p-5 sm:p-6 shadow-xs space-y-4">
+          <div>
+            <span className="text-[10px] font-bold text-emerald-800 uppercase tracking-widest block mb-0.5">
+              Automated 7-Stage Roadmap Generator
+            </span>
+            <h3 className="text-base sm:text-lg font-bold text-neutral-900">
+              Generate Custom Compliance Roadmap & Document Checklist
+            </h3>
+            <p className="text-xs text-neutral-600 mt-0.5">
+              Select or type any industrial product to map required testing parameters, laboratory equipment, and documentation.
+            </p>
+          </div>
+
+          <div className="flex flex-col sm:flex-row gap-2.5">
             <input
               type="text"
               value={productQuery}
@@ -160,14 +262,14 @@ export default function ComplianceChecker({ initialProduct = '', onOpenStandard,
               ) : (
                 <>
                   <ShieldCheck className="w-4 h-4" />
-                  <span>Generate Checklist</span>
+                  <span>Generate Roadmap</span>
                 </>
               )}
             </button>
           </div>
 
           {/* Quick preset chips */}
-          <div className="flex flex-wrap gap-1.5">
+          <div className="flex flex-wrap gap-1.5 pt-1">
             {POPULAR_CHECKLIST_PRODUCTS.map((prod, idx) => (
               <button
                 key={idx}
@@ -259,52 +361,46 @@ export default function ComplianceChecker({ initialProduct = '', onOpenStandard,
                   return (
                     <div
                       key={idx}
-                      className={`p-4 sm:p-5 rounded-2xl border transition-all ${
+                      className={`p-4 rounded-xl border transition-all ${
                         isChecked 
-                          ? 'bg-emerald-50/40 border-emerald-300' 
-                          : 'bg-neutral-50/60 border-neutral-200 hover:border-neutral-300'
+                          ? 'bg-emerald-50/50 border-emerald-300' 
+                          : 'bg-neutral-50/70 border-neutral-200 hover:border-neutral-300'
                       }`}
                     >
-                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2">
-                        <div className="flex items-center gap-2.5">
-                          {/* Checkbox */}
-                          <button
-                            onClick={() => toggleItemCheck(itemKey)}
-                            className={`w-5 h-5 rounded-md border flex items-center justify-center transition-colors shrink-0 ${
-                              isChecked 
-                                ? 'bg-emerald-600 border-emerald-600 text-white' 
-                                : 'bg-white border-neutral-300 hover:border-emerald-500'
-                            }`}
-                            title="Mark step verified"
-                          >
-                            {isChecked && <Check className="w-3.5 h-3.5" />}
-                          </button>
-
-                          <span className="text-[11px] font-mono font-bold text-neutral-500">
-                            {phase.phase}
-                          </span>
-                          <h4 className={`text-xs sm:text-sm font-bold ${isChecked ? 'text-emerald-950 line-through opacity-80' : 'text-neutral-900'}`}>
-                            {phase.title}
-                          </h4>
+                      <div className="flex items-start justify-between gap-3">
+                        <div className="flex items-start gap-3">
+                          <input
+                            type="checkbox"
+                            checked={isChecked}
+                            onChange={() => toggleItemCheck(itemKey)}
+                            className="mt-1 w-4 h-4 text-emerald-600 rounded border-neutral-300 focus:ring-emerald-500 cursor-pointer"
+                          />
+                          <div>
+                            <div className="flex items-center gap-2">
+                              <span className="font-mono text-xs font-bold text-neutral-500">
+                                {phase.phase}
+                              </span>
+                              <h5 className={`text-sm font-bold ${isChecked ? 'text-emerald-950 line-through' : 'text-neutral-900'}`}>
+                                {phase.title}
+                              </h5>
+                            </div>
+                            <p className="text-xs text-neutral-600 mt-1">
+                              {phase.description}
+                            </p>
+                          </div>
                         </div>
 
-                        <div>
-                          {getStatusBadge(phase.status)}
-                        </div>
+                        {getStatusBadge(phase.status)}
                       </div>
 
-                      <p className="text-xs text-neutral-600 pl-7.5 leading-relaxed mb-3">
-                        {phase.description}
-                      </p>
-
-                      {/* Detail points */}
+                      {/* Details checklist items */}
                       {phase.details && phase.details.length > 0 && (
-                        <div className="pl-7.5 space-y-1.5">
+                        <div className="mt-3 pl-7 pt-2 border-t border-neutral-200/60 space-y-1">
                           {phase.details.map((detail, dIdx) => (
-                            <div key={dIdx} className="flex items-start gap-2 text-xs text-neutral-700 bg-white p-2 rounded-lg border border-neutral-200/80">
-                              <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 mt-1.5 shrink-0"></span>
-                              <span className="leading-relaxed">{detail}</span>
-                            </div>
+                            <p key={dIdx} className="text-xs text-neutral-700 flex items-start gap-1.5">
+                              <span className="text-emerald-600 font-bold">•</span>
+                              <span>{detail}</span>
+                            </p>
                           ))}
                         </div>
                       )}
@@ -314,30 +410,18 @@ export default function ComplianceChecker({ initialProduct = '', onOpenStandard,
               </div>
             </div>
 
-            {/* Bottom Actions & Statutory Disclaimer */}
-            <div className="pt-4 border-t border-neutral-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs">
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={() => onAskBot && onAskBot(`What are the step by step BIS certification requirements for ${complianceData.product_name}?`)}
-                  className="px-3.5 py-2 rounded-xl bg-neutral-100 hover:bg-neutral-200 text-neutral-800 font-semibold inline-flex items-center gap-1.5 transition-colors"
-                >
-                  <Sparkles className="w-3.5 h-3.5 text-emerald-600" />
-                  <span>Ask ManakBot Follow-up</span>
-                </button>
-              </div>
-
-              <div className="text-[11px] text-neutral-500 italic flex items-center gap-2">
-                <span>Verify requirements on official portal:</span>
-                <a
-                  href="https://www.manakonline.in"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="text-emerald-700 hover:text-emerald-800 font-semibold inline-flex items-center gap-0.5 hover:underline"
-                >
-                  <span>manakonline.in</span>
-                  <ExternalLink className="w-3 h-3" />
-                </a>
-              </div>
+            {/* Footnote */}
+            <div className="pt-2 border-t border-neutral-100 text-[11px] text-neutral-500 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
+              <span>Guidance derived from Bureau of Indian Standards (Conformity Assessment) Regulations.</span>
+              <a
+                href="https://www.manakonline.in"
+                target="_blank"
+                rel="noreferrer"
+                className="text-emerald-700 hover:underline font-semibold inline-flex items-center gap-1"
+              >
+                <span>File official e-application on Manakonline</span>
+                <ExternalLink className="w-3 h-3" />
+              </a>
             </div>
 
           </div>

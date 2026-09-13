@@ -1,40 +1,42 @@
 import React, { useState } from 'react';
 import { 
   Search, Sparkles, CheckCircle2, AlertTriangle, ShieldCheck, 
-  ArrowRight, BookOpen, HelpCircle, ExternalLink, Loader2, Layers, Compass 
+  ArrowRight, BookOpen, HelpCircle, ExternalLink, Loader2, Layers, 
+  Compass, Globe, Users, Factory, FileText, Check, Award
 } from 'lucide-react';
 import { discoverProductStandards } from '../services/api';
+import { BIS_STANDARDS } from '../data/bisStandards';
 
-const SAMPLE_PRODUCTS = [
-  { name: "Electric Kettle", category: "Electrical Appliance", description: "1.5 litre household electric kettle for boiling water", use: "Domestic home appliance" },
-  { name: "Domestic Immersion Heater", category: "Electrical Appliance", description: "Portable electric water heating element 1500W", use: "Bathroom water heating" },
-  { name: "Motorcycle Helmet", category: "Personal Protective Equipment", description: "Full face protective rider helmet", use: "Two-wheeled vehicle safety" },
-  { name: "Packaged Drinking Water", category: "Food & Water", description: "Bottled and jarred processed potable water", use: "Direct human consumption" },
-  { name: "Baby Doll Toys", category: "Consumer Products", description: "Plastic and plush mechanical dolls for infants under 14", use: "Child recreation" },
-  { name: "Ordinary Portland Cement (OPC 53)", category: "Construction Materials", description: "High strength structural hydraulic cement", use: "Concrete reinforcement" }
+const COLLOQUIAL_DEMO_CHIPS = [
+  { label: "geyser (ग़ीज़र)", query: "geyser", category: "Electrical Appliance" },
+  { label: "khilona (खिलौना)", query: "khilona", category: "Consumer Products" },
+  { label: "chulha / rod", query: "chulha water heater", category: "Electrical Appliance" },
+  { label: "paani ki botal (पानी बोतल)", query: "paani ki botal", category: "Food & Water" },
+  { label: "switch / plug", query: "switch", category: "Mechanical & Hardware" },
+  { label: "helmet (हेल्मेट)", query: "helmet", category: "Personal Protective Equipment" },
+  { label: "cement (सीमेंट)", query: "cement", category: "Construction Materials" },
+  { label: "sariya / loha (सरिया)", query: "sariya", category: "Construction Materials" },
+  { label: "press / istri (इस्त्री)", query: "press", category: "Electrical Appliance" }
 ];
 
-export default function ProductDiscovery({ onOpenStandard, onCheckCompliance, onAskBot }) {
+export default function ProductDiscovery({ onOpenStandard, onCheckCompliance, onAskBot, onOpenVerifier }) {
   const [productName, setProductName] = useState('');
   const [category, setCategory] = useState('Electrical Appliance');
   const [description, setDescription] = useState('');
   const [intendedUse, setIntendedUse] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [result, setResult] = useState(null);
+  const [outputMode, setOutputMode] = useState('manufacturer'); // 'manufacturer' | 'citizen'
 
-  const handleRunDiscovery = async (customProduct = null) => {
-    const targetName = customProduct ? customProduct.name : productName;
-    const targetCat = customProduct ? customProduct.category : category;
-    const targetDesc = customProduct ? customProduct.description : description;
-    const targetUse = customProduct ? customProduct.use : intendedUse;
+  const handleRunDiscovery = async (customChip = null) => {
+    const targetName = customChip ? customChip.query : productName;
+    const targetCat = customChip ? customChip.category : category;
 
     if (!targetName.trim()) return;
 
-    if (customProduct) {
-      setProductName(customProduct.name);
-      setCategory(customProduct.category);
-      setDescription(customProduct.description);
-      setIntendedUse(customProduct.use);
+    if (customChip) {
+      setProductName(customChip.query);
+      setCategory(customChip.category);
     }
 
     setIsLoading(true);
@@ -42,10 +44,33 @@ export default function ProductDiscovery({ onOpenStandard, onCheckCompliance, on
       const data = await discoverProductStandards({
         productName: targetName,
         category: targetCat,
-        description: targetDesc,
-        intendedUse: targetUse
+        description: description,
+        intendedUse: intendedUse
       });
-      setResult(data);
+
+      // Find local standard match for rich metadata (global harmonization & citizen card)
+      let enrichedPrimary = data?.primary_standard;
+      if (enrichedPrimary) {
+        const localMatch = BIS_STANDARDS.find(s => 
+          s.isCode.toLowerCase().replace(/[^a-z0-9]/g, '') === (enrichedPrimary.is_number || '').toLowerCase().replace(/[^a-z0-9]/g, '') ||
+          s.title.toLowerCase().includes(targetName.toLowerCase()) ||
+          (s.colloquialTerms && s.colloquialTerms.some(t => targetName.toLowerCase().includes(t.toLowerCase())))
+        );
+        if (localMatch) {
+          enrichedPrimary = {
+            ...enrichedPrimary,
+            globalHarmonization: localMatch.globalHarmonization,
+            citizenCard: localMatch.citizenCard,
+            gazetteNotification: localMatch.gazetteNotification,
+            qcoDate: localMatch.qcoDate
+          };
+        }
+      }
+
+      setResult({
+        ...data,
+        primary_standard: enrichedPrimary
+      });
     } catch (err) {
       console.error("[ProductDiscovery] Error:", err);
     } finally {
@@ -58,32 +83,37 @@ export default function ProductDiscovery({ onOpenStandard, onCheckCompliance, on
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
         
         {/* Section Header */}
-        <div className="text-center max-w-2xl mx-auto mb-10 space-y-2">
+        <div className="text-center max-w-3xl mx-auto mb-10 space-y-2">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-semibold">
             <Compass className="w-3.5 h-3.5 text-emerald-600" />
-            <span>Product → Standard Discovery Workflow</span>
+            <span>StandardFinder AI • Module 1</span>
           </div>
           <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-neutral-900 tracking-tight">
-            Find Applicable Indian Standards
+            Colloquial Vernacular Standards Discovery
           </h2>
           <p className="text-xs sm:text-sm text-neutral-600 leading-relaxed">
-            Enter your product details below. ManakSetu analyzes the technical scope across 572+ Indian Standards, identifies mandatory QCOs, and maps statutory certification schemes.
+            Type product queries in plain Hindi, Hinglish, or everyday colloquial language. StandardFinder AI maps colloquial terms to exact Indian Standards, mandatory QCO gazette orders, and global export equivalences.
           </p>
         </div>
 
-        {/* 1-Click Example Chips */}
+        {/* 1-Click Vernacular Demo Chips */}
         <div className="mb-6 space-y-2">
-          <span className="text-[11px] font-bold text-neutral-400 uppercase tracking-wider block">
-            Click to test common industrial & consumer products:
-          </span>
+          <div className="flex items-center justify-between">
+            <span className="text-[11px] font-bold text-neutral-400 uppercase tracking-wider block">
+              Test Colloquial & Vernacular Prompts (Judges 1-Click Demo):
+            </span>
+            <span className="text-[11px] text-emerald-700 font-semibold hidden sm:inline">
+              ⚡ Hindi & Hinglish colloquial mapping
+            </span>
+          </div>
           <div className="flex flex-wrap gap-2">
-            {SAMPLE_PRODUCTS.map((prod, idx) => (
+            {COLLOQUIAL_DEMO_CHIPS.map((chip, idx) => (
               <button
                 key={idx}
-                onClick={() => handleRunDiscovery(prod)}
-                className="px-3 py-1.5 rounded-lg border border-neutral-200 hover:border-emerald-500 bg-neutral-50 hover:bg-emerald-50/50 text-xs font-semibold text-neutral-700 hover:text-emerald-900 transition-colors shadow-2xs"
+                onClick={() => handleRunDiscovery(chip)}
+                className="px-3 py-1.5 rounded-lg border border-neutral-200 hover:border-emerald-500 bg-neutral-50 hover:bg-emerald-50/50 text-xs font-semibold text-neutral-800 hover:text-emerald-950 transition-colors shadow-2xs"
               >
-                {prod.name}
+                {chip.label}
               </button>
             ))}
           </div>
@@ -96,13 +126,13 @@ export default function ProductDiscovery({ onOpenStandard, onCheckCompliance, on
             {/* Product Name */}
             <div>
               <label className="block text-xs font-bold text-neutral-700 mb-1.5">
-                Product Name <span className="text-red-500">*</span>
+                Product Name or Vernacular Term <span className="text-red-500">*</span>
               </label>
               <input
                 type="text"
                 value={productName}
                 onChange={(e) => setProductName(e.target.value)}
-                placeholder="e.g. Electric Kettle, Baby Doll, OPC Cement"
+                placeholder="e.g. geyser, paani ki botal, khilona, sariya, switch"
                 className="w-full px-3.5 py-2.5 bg-white border border-neutral-300 rounded-xl text-xs sm:text-sm font-medium text-neutral-900 focus:outline-none focus:ring-2 focus:ring-emerald-600 focus:border-emerald-600"
                 onKeyDown={(e) => e.key === 'Enter' && handleRunDiscovery()}
               />
@@ -131,13 +161,13 @@ export default function ProductDiscovery({ onOpenStandard, onCheckCompliance, on
             {/* Description */}
             <div>
               <label className="block text-xs font-bold text-neutral-700 mb-1.5">
-                Technical Description (Optional)
+                Technical Scope / Specs (Optional)
               </label>
               <input
                 type="text"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-                placeholder="e.g. 1.5 litre cordless household electric kettle with automatic boil-dry cut-off"
+                placeholder="e.g. 15 Litre storage boiler, 20L water container, rebar fe 500d"
                 className="w-full px-3.5 py-2.5 bg-white border border-neutral-300 rounded-xl text-xs sm:text-sm font-medium text-neutral-900 focus:outline-none focus:ring-2 focus:ring-emerald-600 focus:border-emerald-600"
               />
             </div>
@@ -145,22 +175,21 @@ export default function ProductDiscovery({ onOpenStandard, onCheckCompliance, on
             {/* Intended Use */}
             <div>
               <label className="block text-xs font-bold text-neutral-700 mb-1.5">
-                Intended Use & Market (Optional)
+                Intended Use & Target Market (Optional)
               </label>
               <input
                 type="text"
                 value={intendedUse}
                 onChange={(e) => setIntendedUse(e.target.value)}
-                placeholder="e.g. Domestic home use in India, commercial kitchen, or industrial"
+                placeholder="e.g. Domestic Indian market, export to Middle East / EU"
                 className="w-full px-3.5 py-2.5 bg-white border border-neutral-300 rounded-xl text-xs sm:text-sm font-medium text-neutral-900 focus:outline-none focus:ring-2 focus:ring-emerald-600 focus:border-emerald-600"
               />
             </div>
-
           </div>
 
           <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-2">
             <span className="text-[11px] text-neutral-500 italic">
-              Powered by hybrid retrieval engine (BM25 + vectorized cosine similarity).
+              Powered by hybrid retrieval engine (BM25 lexical + all-MiniLM-L6-v2 semantic embeddings).
             </span>
             <button
               onClick={() => handleRunDiscovery()}
@@ -170,12 +199,12 @@ export default function ProductDiscovery({ onOpenStandard, onCheckCompliance, on
               {isLoading ? (
                 <>
                   <Loader2 className="w-4 h-4 animate-spin" />
-                  <span>Analyzing Specifications...</span>
+                  <span>Mapping Standards...</span>
                 </>
               ) : (
                 <>
                   <Search className="w-4 h-4" />
-                  <span>Discover Applicable Standards</span>
+                  <span>Discover Standards & QCOs</span>
                 </>
               )}
             </button>
@@ -186,49 +215,74 @@ export default function ProductDiscovery({ onOpenStandard, onCheckCompliance, on
         {result && (
           <div className="bg-white rounded-2xl border-2 border-emerald-500/80 shadow-md p-6 sm:p-8 space-y-6 animate-in fade-in">
             
-            {/* Header: Product & Scheme Badge */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-neutral-200">
+            {/* Header: Product & Dual Output View Toggle */}
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-neutral-200">
               <div>
                 <span className="text-[10px] font-bold text-emerald-800 uppercase tracking-widest block mb-0.5">
-                  Discovery Assessment
+                  StandardFinder AI Result
                 </span>
                 <h3 className="text-xl sm:text-2xl font-bold text-neutral-900">
                   {result.product_name}
                 </h3>
               </div>
 
-              <div className="flex flex-wrap items-center gap-2">
-                <span className={`px-3 py-1 rounded-lg text-xs font-bold border flex items-center gap-1.5 ${
-                  result.mandatory_qco 
-                    ? 'bg-amber-50 text-amber-900 border-amber-300' 
-                    : 'bg-neutral-50 text-neutral-800 border-neutral-200'
-                }`}>
-                  <AlertTriangle className="w-3.5 h-3.5 text-amber-600" />
-                  <span>{result.conformance_scheme}</span>
-                </span>
+              {/* Dual Output Toggle */}
+              <div className="flex items-center gap-2 bg-neutral-100 p-1 rounded-xl border border-neutral-200">
+                <button
+                  onClick={() => setOutputMode('manufacturer')}
+                  className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
+                    outputMode === 'manufacturer'
+                      ? 'bg-white text-neutral-900 shadow-xs'
+                      : 'text-neutral-600 hover:text-neutral-900'
+                  }`}
+                >
+                  <Factory className="w-3.5 h-3.5 text-emerald-600" />
+                  <span>Manufacturer Roadmap</span>
+                </button>
+
+                <button
+                  onClick={() => setOutputMode('citizen')}
+                  className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
+                    outputMode === 'citizen'
+                      ? 'bg-white text-neutral-900 shadow-xs'
+                      : 'text-neutral-600 hover:text-neutral-900'
+                  }`}
+                >
+                  <Users className="w-3.5 h-3.5 text-emerald-600" />
+                  <span>Citizen Verification Card</span>
+                </button>
               </div>
             </div>
 
             {/* 1. Primary Standard Card */}
             {result.primary_standard && (
-              <div className="p-5 rounded-2xl bg-neutral-50 border border-neutral-200 space-y-3">
+              <div className="p-5 sm:p-6 rounded-2xl bg-neutral-50 border border-neutral-200 space-y-4">
+                
+                {/* Standard Code, Match %, and QCO Tag */}
                 <div className="flex flex-wrap items-center justify-between gap-2">
                   <div className="flex items-center gap-2">
-                    <span className="px-2.5 py-1 rounded-md bg-emerald-600 text-white font-mono font-bold text-xs">
+                    <span className="px-3 py-1 rounded-lg bg-emerald-600 text-white font-mono font-bold text-xs shadow-2xs">
                       {result.primary_standard.is_number}
                     </span>
                     <span className="text-xs font-semibold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
                       Match: {Math.round(result.primary_standard.relevance_score * 100)}%
                     </span>
                   </div>
-                  {result.primary_standard.mandatory_qco && (
-                    <span className="text-[11px] font-bold text-amber-800 bg-amber-50 px-2 py-0.5 rounded border border-amber-200">
-                      Mandatory QCO
+
+                  <div className="flex items-center gap-2">
+                    {result.primary_standard.mandatory_qco && (
+                      <span className="text-[11px] font-bold text-amber-800 bg-amber-50 px-2.5 py-1 rounded-lg border border-amber-200 flex items-center gap-1">
+                        <AlertTriangle className="w-3.5 h-3.5 text-amber-600" />
+                        <span>Mandatory QCO Order</span>
+                      </span>
+                    )}
+                    <span className="text-[11px] font-semibold text-neutral-700 bg-white px-2 py-0.5 rounded border border-neutral-200">
+                      {result.conformance_scheme}
                     </span>
-                  )}
+                  </div>
                 </div>
 
-                <h4 className="text-base sm:text-lg font-bold text-neutral-900">
+                <h4 className="text-lg sm:text-xl font-bold text-neutral-900">
                   {result.primary_standard.title}
                 </h4>
 
@@ -236,16 +290,114 @@ export default function ProductDiscovery({ onOpenStandard, onCheckCompliance, on
                   {result.primary_standard.description || result.primary_standard.scope}
                 </p>
 
-                {/* Why it applies */}
-                <div className="p-3 bg-white rounded-xl border border-neutral-200 text-xs text-neutral-800 space-y-1">
-                  <span className="font-bold text-neutral-900 block flex items-center gap-1.5">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
-                    Why This Standard Applies:
-                  </span>
-                  <p className="text-neutral-700 leading-relaxed">
-                    {result.why_it_applies}
-                  </p>
-                </div>
+                {/* DUAL VIEW 1: MANUFACTURER ROADMAP */}
+                {outputMode === 'manufacturer' && (
+                  <div className="space-y-4 pt-1 animate-in fade-in">
+                    {/* Why it applies */}
+                    <div className="p-3.5 bg-white rounded-xl border border-neutral-200 text-xs text-neutral-800 space-y-1">
+                      <span className="font-bold text-neutral-900 block flex items-center gap-1.5">
+                        <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                        Statutory Applicability Rationale:
+                      </span>
+                      <p className="text-neutral-700 leading-relaxed">
+                        {result.why_it_applies}
+                      </p>
+                    </div>
+
+                    {/* Gazette Notification Details */}
+                    {result.primary_standard.gazetteNotification && (
+                      <div className="p-3 bg-amber-50/70 rounded-xl border border-amber-200 text-xs text-amber-950 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                        <div className="flex items-center gap-2">
+                          <FileText className="w-4 h-4 text-amber-700 shrink-0" />
+                          <span>Gazette Notification: <strong>{result.primary_standard.gazetteNotification.gazetteRef}</strong> ({result.primary_standard.gazetteNotification.ministry})</span>
+                        </div>
+                        <span className="text-[11px] font-mono text-amber-900 bg-white px-2 py-0.5 rounded border border-amber-200 shrink-0">
+                          Date: {result.primary_standard.gazetteNotification.date}
+                        </span>
+                      </div>
+                    )}
+
+                    {/* Global Standards Harmonization Pill */}
+                    {result.primary_standard.globalHarmonization && (
+                      <div className="p-4 bg-emerald-50/60 rounded-xl border border-emerald-200 text-xs space-y-2">
+                        <div className="flex flex-wrap items-center justify-between gap-2">
+                          <span className="font-bold text-emerald-950 flex items-center gap-1.5">
+                            <Globe className="w-4 h-4 text-emerald-700" />
+                            Global Standards Harmonization (Export Alignment):
+                          </span>
+                          <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-700 text-white shadow-2xs">
+                            {result.primary_standard.globalHarmonization.exportEquivalence}
+                          </span>
+                        </div>
+
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px] text-neutral-700">
+                          <div>
+                            <span className="font-semibold text-neutral-900">International Equivalent: </span>
+                            <span className="font-mono">{result.primary_standard.globalHarmonization.standard}</span>
+                          </div>
+                          <div>
+                            <span className="font-semibold text-neutral-900">Standard Body: </span>
+                            <span>{result.primary_standard.globalHarmonization.org}</span>
+                          </div>
+                        </div>
+
+                        <p className="text-[11px] text-emerald-900">
+                          {result.primary_standard.globalHarmonization.note}
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {/* DUAL VIEW 2: CITIZEN VERIFICATION CARD */}
+                {outputMode === 'citizen' && (
+                  <div className="p-4 bg-amber-50/80 rounded-xl border border-amber-300 space-y-3 animate-in fade-in">
+                    <div className="flex items-center gap-2">
+                      <ShieldCheck className="w-5 h-5 text-amber-700" />
+                      <h5 className="font-bold text-sm text-amber-950">
+                        {result.primary_standard.citizenCard?.headline || "Citizen Safety & Quality Mark Guide"}
+                      </h5>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                      <div className="bg-white p-3 rounded-lg border border-amber-200">
+                        <span className="text-[10px] text-neutral-400 font-bold uppercase block">Mandatory Mark to Look For:</span>
+                        <p className="font-bold text-neutral-900 mt-0.5">
+                          {result.primary_standard.citizenCard?.mandatoryMark || "ISI Logo with 7-digit CML Number"}
+                        </p>
+                      </div>
+                      <div className="bg-white p-3 rounded-lg border border-amber-200">
+                        <span className="text-[10px] text-red-500 font-bold uppercase block">Safety Hazard if Uncertified:</span>
+                        <p className="font-medium text-red-950 mt-0.5">
+                          {result.primary_standard.citizenCard?.safetyRisk || "Substandard items pose fire, electrical shock, or material breakdown risks."}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="text-xs text-neutral-800 bg-white p-3 rounded-lg border border-amber-200 space-y-1">
+                      <span className="font-bold text-neutral-900 block">How to Inspect:</span>
+                      <p className="text-neutral-700 leading-relaxed">
+                        {result.primary_standard.citizenCard?.labelInstruction || "Look for the permanent stamped or embossed ISI logo on the rating plate or packaging."}
+                      </p>
+                    </div>
+
+                    <div className="pt-1 flex items-center justify-between text-xs">
+                      <span className="text-amber-950 font-medium">
+                        Have a product in hand?
+                      </span>
+                      <button
+                        onClick={() => {
+                          const el = document.getElementById('consumer-check');
+                          if (el) el.scrollIntoView({ behavior: 'smooth' });
+                        }}
+                        className="px-3.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-bold inline-flex items-center gap-1.5 shadow-2xs"
+                      >
+                        <ShieldCheck className="w-3.5 h-3.5" />
+                        <span>Verify Mark on TrueMark Verifier →</span>
+                      </button>
+                    </div>
+                  </div>
+                )}
 
                 {/* Primary Action Buttons */}
                 <div className="pt-2 flex flex-wrap gap-2.5">
@@ -262,11 +414,11 @@ export default function ProductDiscovery({ onOpenStandard, onCheckCompliance, on
                     className="px-4 py-2 rounded-xl bg-white border border-neutral-300 hover:border-emerald-500 text-neutral-800 hover:text-emerald-900 text-xs font-bold inline-flex items-center gap-1.5 shadow-2xs transition-colors"
                   >
                     <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
-                    <span>Open Compliance Checklist</span>
+                    <span>Open Scheme Roadmap</span>
                   </button>
 
                   <button
-                    onClick={() => onAskBot && onAskBot(`Explain the compliance requirements and testing rules for ${result.primary_standard.is_number} (${result.product_name})`)}
+                    onClick={() => onAskBot && onAskBot(`Explain the compliance requirements, testing rules, and international equivalents for ${result.primary_standard.is_number} (${result.product_name})`)}
                     className="px-4 py-2 rounded-xl bg-neutral-100 hover:bg-neutral-200 text-neutral-700 text-xs font-semibold inline-flex items-center gap-1.5 transition-colors"
                   >
                     <Sparkles className="w-3.5 h-3.5 text-emerald-600" />
@@ -308,22 +460,7 @@ export default function ProductDiscovery({ onOpenStandard, onCheckCompliance, on
               </div>
             )}
 
-            {/* 3. Questions / Missing Details to Confirm */}
-            {result.missing_details_to_confirm && result.missing_details_to_confirm.length > 0 && (
-              <div className="p-4 bg-amber-50/70 border border-amber-200 rounded-xl text-xs text-amber-900 space-y-1.5">
-                <span className="font-bold flex items-center gap-1.5 text-amber-950">
-                  <HelpCircle className="w-4 h-4 text-amber-700" />
-                  Parameters to Verify for Accurate Scope Determination:
-                </span>
-                <ul className="list-disc pl-5 space-y-1 text-amber-900">
-                  {result.missing_details_to_confirm.map((item, idx) => (
-                    <li key={idx}>{item}</li>
-                  ))}
-                </ul>
-              </div>
-            )}
-
-            {/* 4. Verification Note */}
+            {/* Verification Note */}
             <div className="pt-2 border-t border-neutral-100 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 text-[11px] text-neutral-500">
               <span className="italic">
                 {result.disclaimer || "AI-assisted guidance based on Indian Standards dataset. Always verify statutory requirements on the official BIS portal (manakonline.in)."}
