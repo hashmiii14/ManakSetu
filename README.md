@@ -1,4 +1,4 @@
-# ManakSetu (मानकसेतु)
+# ManakSetu 
 ### Intelligent Gateway to Indian Standards & BIS Conformity Assessment
 **Smart India Hackathon 2026 — Problem Statement 26107**  
 *Championed by Ministry of Consumer Affairs, Food & Public Distribution | Bureau of Indian Standards (BIS)*
