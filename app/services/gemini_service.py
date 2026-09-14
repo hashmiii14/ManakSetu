@@ -1,7 +1,7 @@
 """
 ManakBot AI Service — Core SIH26107 Intelligent Assistant
 Grounded Retrieval-Augmented Generation (RAG) using Google Gemini 1.5 Flash
-with deterministic BIS dataset fallback and structured 7-section evidence responses.
+with deterministic BIS dataset fallback, verifiable sources, and structured 7-section evidence responses.
 """
 
 from __future__ import annotations
@@ -12,14 +12,15 @@ from .bis_retriever import get_retriever
 from ..config import GEMINI_API_KEY, GEMINI_MODEL
 
 BOT_DISCLAIMER = (
-    "ManakSetu is an AI-assisted compliance and discovery platform. "
-    "Please verify statutory decisions and official Quality Control Orders on the official BIS portal (manakonline.in)."
+    "ManakSetu is an educational and prototype assistant developed for SIH26107. "
+    "This guidance is derived from retrieved prototype dataset information. "
+    "Please verify official Quality Control Orders and statutory decisions on manakonline.in."
 )
 
 HINDI_TRIGGER_WORDS = {
     "kaise", "kare", "karna", "milega", "hoga", "chahiye", "kya", "kyun",
     "bante", "hain", "meri", "mera", "huid", "sariya", "paani", "bijli",
-    "dokan", "factory", "namaste", "shukriya"
+    "dokan", "factory", "namaste", "shukriya", "banao", "bataye", "batayein"
 }
 
 OUT_OF_DOMAIN_PATTERNS = [
@@ -74,26 +75,26 @@ class ManakBotService:
         if is_ood or not retrieved_items or retrieved_items[0].get("relevance_score", 0.0) < 0.20:
             refusal_en = (
                 "### Answer\n"
-                "I could not find sufficient authoritative BIS information for this specific query in the current Indian Standards registry.\n\n"
+                "I could not find sufficient authoritative information in the current ManakSetu knowledge base for this query.\n\n"
                 "### Recommended Actions\n"
-                "- Refine your query by specifying exact product types (e.g., 'Storage Water Heater', 'LED Lighting', 'Stainless Steel Bottle', 'Ordinary Portland Cement').\n"
-                "- Search by Indian Standard code directly (e.g., 'IS 2082', 'IS 302', 'IS 1489', 'IS 4151').\n"
-                "- Consult the official Bureau of Indian Standards database at [manakonline.in](https://www.manakonline.in)."
+                "- **Search Standards**: Search by specific product name or IS code on the [Standards Directory](/standards).\n"
+                "- **Refine Query**: Specify exact product types (e.g. 'Domestic Pressure Cooker', 'Storage Water Heater', 'LED Lighting', 'Stainless Steel Bottle', 'Ordinary Portland Cement').\n"
+                "- **Open Official BIS Resources**: Consult the official Bureau of Indian Standards portal at [manakonline.in](https://www.manakonline.in)."
             )
             refusal_hi = (
                 "### उत्तर (Answer)\n"
-                "इस प्रश्न के लिए वर्तमान भारतीय मानक (BIS) डेटाबेस में पर्याप्त प्रमाणिक जानकारी उपलब्ध नहीं हो सकी।\n\n"
+                "वर्तमान मानकसेतु ज्ञानकोष (knowledge base) में इस प्रश्न के लिए पर्याप्त प्रमाणिक जानकारी उपलब्ध नहीं हो सकी।\n\n"
                 "### सुझाव (Recommended Actions)\n"
-                "- कृपया अपने उत्पाद का सटीक नाम दर्ज करें (जैसे 'वाटर हीटर', 'सीमेंट', 'हेलमेट', 'एलईडी स्विच')।\n"
-                "- सीधे मानक संख्या (जैसे 'IS 2082', 'IS 1489') से खोजें।\n"
-                "- आधिकारिक बीआईएस पोर्टल [manakonline.in](https://www.manakonline.in) पर विवरण देखें।"
+                "- **मानक खोजें (Search Standards)**: [मानक निर्देशिका](/standards) पर उत्पाद का सटीक नाम या IS कोड दर्ज करें।\n"
+                "- **सटीक प्रश्न पूछें (Refine Query)**: उत्पाद का स्पष्ट नाम दें (जैसे 'प्रेशर कुकर', 'वाटर हीटर', 'सीमेंट', 'इलेक्ट्रिकल स्विच')।\n"
+                "- **आधिकारिक बीआईएस संसाधन (Open Official BIS Resources)**: आधिकारिक पोर्टल [manakonline.in](https://www.manakonline.in) पर विवरण देखें।"
             )
             detected_lang = "hi" if re.search(r"[\u0900-\u097F]", clean_query) else ("hinglish" if is_hindi_or_hinglish(clean_query) else "en")
             return {
                 "answer": refusal_hi if detected_lang in ["hi", "hinglish"] else refusal_en,
                 "referenced_standards": [],
                 "sources": [],
-                "source": "BIS Safe Refusal Gate",
+                "source": "ManakSetu Safe Refusal Gate",
                 "confidence": "Uncertain",
                 "disclaimer": BOT_DISCLAIMER,
                 "detected_language": detected_lang,
@@ -102,7 +103,7 @@ class ManakBotService:
                 "citations": []
             }
 
-        # Structure references & source citations
+        # Structure references & source citations (Section 6: Sources & Evidence)
         referenced = []
         sources = []
         citations = []
@@ -115,18 +116,23 @@ class ManakBotService:
             src_obj = {
                 "source_title": f"{item['is_number']} — {item['title']}",
                 "standard_number": item["is_number"],
+                "title": item["title"],
                 "section": item.get("category", "General Technical Division"),
-                "clause": "Scope & Mandatory Benchmarks (Clause 1-4)",
-                "source_type": "Statutory Indian Standard Compendium",
-                "url": f"/standards/{item['is_number']}",
+                "clause": None,  # Do not fabricate clauses when not explicitly in chunk
+                "page": None,    # Do not fabricate page numbers when not explicitly in chunk
+                "source_type": "BIS Reference Document",
+                "url": f"/standards?q={item['is_number']}",
                 "relevance_score": round(item.get("relevance_score", 0.0), 2)
             }
             sources.append(src_obj)
             citations.append({
-                "citation_text": src_obj["source_title"],
-                "source_id": src_obj["standard_number"],
-                "title": src_obj["source_title"],
+                "source_title": src_obj["source_title"],
+                "standard_number": src_obj["standard_number"],
+                "title": src_obj["title"],
+                "section": src_obj["section"],
                 "clause": src_obj["clause"],
+                "page": src_obj["page"],
+                "source_type": src_obj["source_type"],
                 "url": src_obj["url"],
                 "relevance_score": src_obj["relevance_score"]
             })
@@ -149,7 +155,7 @@ class ManakBotService:
         # 3. Deterministic grounded response directly from BIS knowledge engine
         if not answer:
             answer = self._generate_grounded_fallback(clean_query, retrieved_items, is_hi)
-            source_name = "BIS Standards Knowledge Engine (Deterministic Grounding)"
+            source_name = "ManakSetu Grounded Knowledge Engine"
             confidence_level = "Grounded in Retrieved BIS Specifications"
 
         # Extract structured sections from Markdown
@@ -178,7 +184,7 @@ class ManakBotService:
             f"Standard: {item['is_number']}\n"
             f"Title: {item['title']}\n"
             f"Technical Division: {item['category']}\n"
-            f"Scope / Benchmarks: {item.get('scope') or item.get('description', '')}\n"
+            f"Scope / Requirements: {item.get('scope') or item.get('description', '')}\n"
             f"Mandatory Quality Control Order (QCO): {'Yes (Compulsory Certification under Section 16 BIS Act)' if item['mandatory_qco'] else 'Voluntary Scheme-I Conformity'}"
             for item in context_items
         ])
@@ -186,30 +192,32 @@ class ManakBotService:
         lang_instruction = (
             "The user asked in Hindi or Hinglish. Provide your complete response in professional, accessible Hindi / Hinglish while keeping official technical terms (like IS codes, CM/L, QCO, NABL) clear and recognizable."
             if is_hindi else
-            "Respond in clear, professional, authoritative English appropriate for an Indian government public service platform."
+            "Respond in clear, professional, accessible English appropriate for a public service intelligent assistant."
         )
 
         system_instruction = (
-            "You are ManaKBot, the official and authoritative AI assistant for Indian Standards and the Bureau of Indian Standards (BIS).\n"
+            "You are ManakBot, the intelligent assistant for Indian Standards and BIS services, developed as an educational prototype for Smart India Hackathon 2026 (SIH26107).\n"
             f"{lang_instruction}\n"
-            "Your answers must be grounded STRICTLY in the provided BIS standards context.\n"
-            "NEVER fabricate Indian Standard numbers, certification requirements, or test procedures.\n"
+            "Your answers must be grounded strictly in the provided BIS standards context. Do not claim to be an official Government portal.\n"
+            "NEVER fabricate Indian Standard numbers, standard titles, certification requirements, testing benchmarks, laboratory names, or citations.\n"
+            "If the context does not contain sufficient authoritative evidence, state clearly:\n"
+            "'I could not find sufficient authoritative information in the current ManakSetu knowledge base for this query.'\n"
             "Do NOT use emojis anywhere in your response.\n"
-            "Format your response using the following 7 standardized sections:\n\n"
+            "Format your response using the following structured sections:\n\n"
             "### 1. Direct Answer\n"
-            "(Concise, authoritative summary directly addressing the query)\n\n"
+            "(Concise, clear answer directly addressing the query)\n\n"
             "### 2. Relevant Standard(s)\n"
             "(Standard number, full official title, and technical division)\n\n"
-            "### 3. Applicability\n"
-            "(Which products/sub-types are covered, whether under a Mandatory Quality Control Order QCO, or voluntary Scheme-I)\n\n"
-            "### 4. Certification & Compliance Information\n"
-            "(Applicable Scheme: Scheme-I ISI Mark, Scheme-II CRS, or Scheme-IV; required testing parameters such as endurance, safety, chemical assay)\n\n"
-            "### 5. Required Steps\n"
-            "(Actionable roadmap: factory testing setup STI, sample testing at NABL/BIS lab, filing on www.manakonline.in)\n\n"
+            "### 3. Why this standard may apply\n"
+            "(Technical rationale explaining how the product or material connects to this standard)\n\n"
+            "### 4. Certification & Compliance Guidance\n"
+            "(Applicable Scheme: Scheme-I ISI Mark, Scheme-II CRS, or Scheme-IV; required testing parameters; note that processes may vary by scheme)\n\n"
+            "### 5. Required Next Steps\n"
+            "(Actionable roadmap: factory testing setup STI, sample testing at recognized lab, online filing on www.manakonline.in)\n\n"
             "### 6. Important Notes\n"
-            "(Statutory penalties under Section 29 BIS Act 2016 for non-compliance; MSME 50% concession entitlement where applicable)\n\n"
+            "(Provisions under Section 29 of the BIS Act 2016 for mandatory QCO items; MSME concession information where applicable)\n\n"
             "### 7. Sources & Evidence\n"
-            "(Explicitly cite standard number, technical scope, and official verification portal at www.manakonline.in)"
+            "(Explicitly cite standard number, source document title, and official verification portal at www.manakonline.in)"
         )
 
         prompt = f"User Query: {query}\n\nRetrieved BIS Standards Context:\n{context_str}"
@@ -240,35 +248,36 @@ class ManakBotService:
                 f"- **{it['is_number']}**: {it['title']} ({it['category']})"
                 for it in context_items[1:]
             ])
-            related_standards_str = f"\n\n**Harmonized / Related Standards:**\n{related_standards_str}"
+            related_standards_str = f"\n\n**Related Standards in Dataset:**\n{related_standards_str}"
 
         if is_hindi:
             return (
                 f"### 1. प्रत्यक्ष उत्तर (Direct Answer)\n"
-                f"आपके प्रश्न के अनुसार प्रमुख लागू मानक **{top['is_number']}** ({top['title']}) है।\n\n"
+                f"आपके प्रश्न के अनुसार प्रमुख प्रासंगिक मानक **{top['is_number']}** ({top['title']}) है।\n\n"
                 f"### 2. संबंधित मानक (Relevant Standards)\n"
                 f"- **मानक संख्या:** {top['is_number']}\n"
                 f"- **शीर्षक:** {top['title']}\n"
                 f"- **तकनीकी प्रभाग:** {top['category']}\n\n"
-                f"### 3. प्रयोज्यता (Applicability)\n"
-                f"- **वैधानिक स्थिति:** {qco_status}।\n"
-                f"- {top['scope'] or top['description']}\n\n"
-                f"### 4. प्रमाणन एवं अनुपालन जानकारी (Certification Info)\n"
-                f"इस उत्पाद के लिए **बीआईएस स्कीम-I (ISI Mark)** के अंतर्गत विनिर्माण लाइसेंस (CM/L) अनिवार्य है। "
-                f"निर्माता को बीआईएस द्वारा निर्धारित 'Scheme of Testing and Inspection' (STI) के अनुसार इन-हाउस लैब स्थापित करना आवश्यक है।\n\n"
-                f"### 5. आवश्यक चरण (Required Steps)\n"
-                f"1. **मानक अध्ययन:** {top['is_number']} की तकनीकी विशिष्टताओं की समीक्षा करें।\n"
-                f"2. **परीक्षण सेटअप:** आवश्यक परीक्षण उपकरण स्थापित करें एवं NABL लैब से पूर्व-परीक्षण कराएं।\n"
-                f"3. **पोर्टल आवेदन:** [manakonline.in](https://www.manakonline.in) पर Form-I आवेदन जमा करें।\n"
-                f"4. **निरीक्षण:** बीआईएस तकनीकी अधिकारी द्वारा फैक्ट्री का भौतिक निरीक्षण।\n"
-                f"5. **लाइसेंस प्राप्ति:** CM/L संख्या एवं ISI मार्क का अधिकार पत्र प्राप्त करें।\n\n"
+                f"### 3. यह मानक क्यों लागू हो सकता है (Why this standard may apply)\n"
+                f"- **स्थिति:** {qco_status}।\n"
+                f"- **क्षेत्र एवं दायरा:** {top['scope'] or top['description']}\n\n"
+                f"### 4. प्रमाणन एवं अनुपालन मार्गदर्शन (Certification Guidance)\n"
+                f"यह उत्पाद **बीआईएस स्कीम-I (ISI Mark)** के अंतर्गत विनिर्माण लाइसेंस (CM/L) के लिए विचारणीय है। "
+                f"प्रक्रिया लागू योजना के अनुसार भिन्न हो सकती है। निर्माता को बीआईएस परीक्षण एवं निरीक्षण योजना (STI) के अनुसार इन-हाउस परीक्षण व्यवस्था रखनी होती है।\n\n"
+                f"### 5. आवश्यक अगले कदम (Required Next Steps)\n"
+                f"1. **मानक समीक्षा:** {top['is_number']} की तकनीकी आवश्यकताओं की समीक्षा करें।\n"
+                f"2. **इन-हाउस परीक्षण सेटअप:** आवश्यक परीक्षण उपकरण स्थापित करें एवं मान्यता प्राप्त लैब से पूर्व-परीक्षण कराएं।\n"
+                f"3. **ऑनलाइन आवेदन:** [manakonline.in](https://www.manakonline.in) पर ई-बीआईएस पोर्टल के माध्यम से आवेदन करें।\n"
+                f"4. **फैक्ट्री ऑडिट:** बीआईएस तकनीकी अधिकारी द्वारा निरीक्षण एवं नमूना परीक्षण।\n"
+                f"5. **लाइसेंस प्राप्ति:** CM/L संख्या एवं ISI मार्क उपयोग का अधिकार प्राप्त करें।\n\n"
                 f"### 6. महत्वपूर्ण सूचनाएं (Important Notes)\n"
-                f"- **कानूनी अनिवार्यता:** अनिवार्य QCO के तहत बिना ISI मार्क माल बेचना बीआईएस अधिनियम 2016 की धारा 29 के तहत दंडनीय अपराध है।\n"
-                f"- **MSME छूट:** सूक्ष्म एवं लघु उद्यमों (MSME) को आवेदन शुल्क एवं मार्किंग फीस में 50% की वैधानिक रियायत प्राप्त है।\n"
+                f"- **कानूनी प्रावधान:** अनिवार्य QCO के तहत बिना ISI मार्क माल बेचना बीआईएस अधिनियम 2016 की धारा 29 के तहत प्रतिबंधित है।\n"
+                f"- **MSME छूट:** सूक्ष्म एवं लघु उद्यमों को आवेदन शुल्क एवं मार्किंग फीस में 50% तक की रियायत का प्रावधान है।\n"
                 f"{related_standards_str}\n\n"
                 f"### 7. स्रोत एवं साक्ष्य (Sources & Evidence)\n"
-                f"- **आधिकारिक स्रोत:** भारतीय मानक ब्यूरो (BIS) आधिकारिक राजपत्र एवं मानक निर्देशिका।\n"
-                f"- **पुष्टि लिंक:** [manakonline.in](https://www.manakonline.in) एवं [/standards/{top['is_number']}](/standards/{top['is_number']})"
+                f"- **दस्तावेज़:** {top['is_number']} — {top['title']}\n"
+                f"- **स्रोत प्रकार:** BIS Reference Catalogue\n"
+                f"- **पुष्टि लिंक:** [manakonline.in](https://www.manakonline.in) एवं [/standards?q={top['is_number']}](/standards?q={top['is_number']})"
             )
 
         return (
@@ -278,26 +287,27 @@ class ManakBotService:
             f"- **Standard Code:** {top['is_number']}\n"
             f"- **Official Title:** {top['title']}\n"
             f"- **Technical Division:** {top['category']}\n\n"
-            f"### 3. Applicability\n"
-            f"- **Statutory Status:** {qco_status}.\n"
-            f"- **Coverage:** {top['scope'] or top['description']}\n\n"
-            f"### 4. Certification & Compliance Information\n"
-            f"Certification operates under **BIS Conformity Assessment Scheme-I (Product Certification / ISI Mark)**. "
-            f"Manufacturers must maintain an active in-house quality control laboratory adhering to the standard's specific Scheme of Testing and Inspection (STI).\n\n"
-            f"### 5. Required Steps\n"
-            f"1. **Procure Standard:** Obtain official specification {top['is_number']} from the BIS Standards Portal.\n"
-            f"2. **In-House Testing Setup:** Equip factory testing facility with calibrated equipment for routine tests.\n"
-            f"3. **Pre-Certification Sample Testing:** Test representative samples at a recognized NABL-accredited test house.\n"
-            f"4. **Digital Application:** File Form-I along with plant layout, equipment list, and test reports at [manakonline.in](https://www.manakonline.in).\n"
-            f"5. **Factory Assessment:** Satisfy physical audit by BIS technical inspecting officer.\n"
-            f"6. **Grant of License:** Receive 7-digit CM/L identifier to affix the Standard ISI pyramid mark.\n\n"
+            f"### 3. Why this standard may apply\n"
+            f"- **Applicability Status:** {qco_status}.\n"
+            f"- **Technical Coverage:** {top['scope'] or top['description']}\n\n"
+            f"### 4. Certification & Compliance Guidance\n"
+            f"Conformity assessment typically operates under **BIS Scheme-I (Product Certification / ISI Mark)**. "
+            f"Process may vary by applicable BIS scheme. Manufacturers must maintain an in-house quality control setup adhering to the standard's specific Scheme of Testing and Inspection (STI).\n\n"
+            f"### 5. Required Next Steps\n"
+            f"1. **Review Specification:** Procure and review official specification {top['is_number']} on the BIS portal.\n"
+            f"2. **In-House Testing Setup:** Equip factory laboratory with calibrated testing apparatus for routine checks.\n"
+            f"3. **Pre-Certification Sample Testing:** Have product samples tested at an accredited laboratory.\n"
+            f"4. **Online Application:** File Form-I along with plant layout, machinery list, and test reports at [manakonline.in](https://www.manakonline.in).\n"
+            f"5. **Factory Assessment & Sampling:** Complete physical audit by BIS technical inspecting officers.\n"
+            f"6. **Grant of License:** Receive 7-digit CM/L identifier to affix the Standard ISI mark.\n\n"
             f"### 6. Important Notes\n"
-            f"- **Legal Liability:** Manufacturing, stocking, or distributing goods notified under a mandatory QCO without the ISI mark constitutes a cognizable offense punishable under Section 29 of the BIS Act, 2016.\n"
-            f"- **MSME Fee Relief:** Micro and Small enterprises qualify for a statutory 50% concession on application and minimum annual marking fees.\n"
+            f"- **Statutory Provisions:** For products under a mandatory Quality Control Order, manufacturing or distribution without certification is prohibited under Section 29 of the BIS Act, 2016.\n"
+            f"- **MSME Concessions:** Micro and Small enterprises qualify for indicative 50% relief on application and minimum marking fees.\n"
             f"{related_standards_str}\n\n"
             f"### 7. Sources & Evidence\n"
-            f"- **Authoritative Source:** Bureau of Indian Standards Official Compendium.\n"
-            f"- **Verification Portal:** [e-BIS ManakOnline](https://www.manakonline.in) | Internal Spec: [{top['is_number']}](/standards/{top['is_number']})"
+            f"- **Document / Source:** {top['is_number']} — {top['title']}\n"
+            f"- **Source Type:** BIS Reference Document (Prototype Dataset)\n"
+            f"- **Official Portal:** [e-BIS ManakOnline](https://www.manakonline.in) | Catalogue Reference: [{top['is_number']}](/standards?q={top['is_number']})"
         )
 
 

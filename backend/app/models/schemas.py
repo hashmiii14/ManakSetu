@@ -51,11 +51,11 @@ class RecommendationRequest(BaseModel):
 class SourceCitation(BaseModel):
     source_title: str
     standard_number: str
-    section: str
-    clause: str
-    source_type: str
-    url: str
-    relevance_score: float
+    section: Optional[str] = None
+    clause: Optional[str] = None
+    source_type: Optional[str] = "BIS Standard"
+    url: Optional[str] = ""
+    relevance_score: Optional[float] = 0.0
 
 
 class ReferencedStandard(BaseModel):

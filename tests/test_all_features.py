@@ -38,12 +38,18 @@ def test_html_pages():
         ("/hallmarking?huid=INVALID", 200),
         ("/calculator", 200),
         ("/calculator?standard=IS+1489&tier=small", 200),
+        ("/fee-calculator", 200),
         ("/verify", 200),
         ("/verify?huid=AK79B2", 200),
         ("/verify?cml=6200145", 200),
         ("/chatbot", 200),
         ("/chatbot?prompt=cement+testing", 200),
+        ("/manakbot", 200),
         ("/report", 200),
+        ("/grievance", 200),
+        ("/recommend", 200),
+        ("/recommend?q=pressure+cooker", 200),
+        ("/labs", 200),
         ("/about", 200),
         ("/services", 200),
         ("/faq", 200),
@@ -167,9 +173,55 @@ def test_rest_api_endpoints():
     assert d["is_refusal"] is True
     print(f"  [PASS] POST /api/chatbot (Out-of-domain) -> Safe refusal triggered: {d['answer'][:60]}...")
 
+def test_dataset_and_retrieval():
+    print("\n--- 3. Testing Prototype Dataset Integrity & Retrieval Precision ---")
+    import json
+    with open(PROJECT_ROOT / "data" / "processed_data.json", "r", encoding="utf-8") as f:
+        data = json.load(f)
+    assert len(data) == 572, f"Expected exactly 572 standards, got {len(data)}"
+    print(f"  [PASS] Dataset count verified: exactly 572 indexed standards")
+
+    # Test key retrieval queries
+    test_cases = [
+        ("pressure cooker", "IS 2347"),
+        ("switches", "IS 3854"),
+        ("stainless steel water bottle", "IS 17526"),
+        ("gold hallmark", "IS 1417"),
+        ("portland pozzolana cement", "IS 1489"),
+    ]
+    for query, expected_code in test_cases:
+        r = client.post("/api/standards/search", json={"query": query, "top_k": 3})
+        assert r.status_code == 200
+        res = r.json()
+        codes = [item["is_number"].upper() for item in res["results"]]
+        assert any(expected_code in c for c in codes), f"Query '{query}' failed to retrieve {expected_code}. Got: {codes}"
+        print(f"  [PASS] Retrieval for '{query}' successfully matched {expected_code}")
+
+def test_prototype_honesty_and_branding():
+    print("\n--- 4. Testing Honesty Disclaimers and SIH Prototype Identity ---")
+    r = client.get("/")
+    assert r.status_code == 200
+    html = r.text
+    assert "SIH26107" in html
+    assert "not an official BIS or Government of India portal" in html
+    assert "572" in html
+    assert "21,000+" in html
+    print("  [PASS] Homepage correctly presents SIH26107 Prototype identity & 572 vs 21,000+ distinction")
+
+    # Verify Safe Refusal exact message
+    r = client.post("/api/chatbot", json={"message": "What is the capital of Australia and how to bake chocolate cake?"})
+    assert r.status_code == 200
+    d = r.json()
+    assert d["is_refusal"] is True
+    assert "I could not find sufficient authoritative information in the current ManakSetu knowledge base for this query." in d["answer"]
+    print("  [PASS] Chatbot returns exact authoritative safe-refusal string when query is out-of-domain")
+
 if __name__ == "__main__":
     test_html_pages()
     test_rest_api_endpoints()
+    test_dataset_and_retrieval()
+    test_prototype_honesty_and_branding()
     print("\n=======================================================")
-    print("  ALL 38 AUTOMATED SYSTEM VERIFICATIONS PASSED 100%!   ")
+    print("  ALL 48 AUTOMATED SYSTEM VERIFICATIONS PASSED 100%!   ")
     print("=======================================================")
+

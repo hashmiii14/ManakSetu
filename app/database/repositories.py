@@ -48,6 +48,9 @@ class StandardsRepository:
                 return v
         return None
 
+    def get_by_code(self, code: str) -> Optional[Dict[str, Any]]:
+        return self.get_by_is_number(code)
+
     def list_categories(self) -> List[str]:
         categories = set()
         for std in self._standards:

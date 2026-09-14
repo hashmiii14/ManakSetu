@@ -36,8 +36,8 @@ async def home_page(request: Request):
             "active_tab": "home",
             "standards_count": standards_count,
             "qco_count": 760,
-            "labs_count": 1200,
-            "clubs_count": 10000,
+            "labs_count": 12,
+            "total_standards_scope": "21,000+",
         }
     )
 
@@ -59,7 +59,6 @@ async def standards_page(
     if query_str:
         raw_results = retriever.retrieve(query_str, top_k=50)
     else:
-        # Default listing
         if category and category.upper() != "ALL":
             raw_docs = repo.filter_by_category(category)
         else:
@@ -98,83 +97,124 @@ async def standards_page(
     if qco_only:
         raw_results = [r for r in raw_results if r.get("mandatory_qco")]
 
-    # Pagination: 15 items per page
-    items_per_page = 15
-    total_items = len(raw_results)
-    total_pages = max(1, (total_items + items_per_page - 1) // items_per_page)
-    page = min(page, total_pages)
-    start_idx = (page - 1) * items_per_page
-    end_idx = start_idx + items_per_page
-    paged_results = raw_results[start_idx:end_idx]
+    # Pagination: 12 standards per page
+    PAGE_SIZE = 12
+    total_count = len(raw_results)
+    total_pages = max((total_count + PAGE_SIZE - 1) // PAGE_SIZE, 1)
+    current_page = min(page, total_pages)
+    start_idx = (current_page - 1) * PAGE_SIZE
+    paginated_results = raw_results[start_idx: start_idx + PAGE_SIZE]
 
     return templates.TemplateResponse(
         request=request,
         name="standards.html",
         context={
             "active_tab": "standards",
+            "standards": paginated_results,
+            "total_results": total_count,
+            "categories": categories,
             "query": query_str,
             "selected_category": category or "All",
             "qco_only": qco_only,
-            "categories": categories,
-            "results": paged_results,
-            "total_results": total_items,
-            "current_page": page,
+            "current_page": current_page,
             "total_pages": total_pages,
+            "has_prev": current_page > 1,
+            "has_next": current_page < total_pages,
+            "prev_page": current_page - 1,
+            "next_page": current_page + 1,
         }
     )
 
 
-@router.get("/standards/{is_code:path}", response_class=HTMLResponse)
-async def standard_detail_page(request: Request, is_code: str):
-    repo = get_standards_repository()
-    doc = repo.get_by_is_number(is_code)
-    if not doc:
-        # Try search query if exact number failed
-        retriever = get_retriever()
-        results = retriever.retrieve(is_code, top_k=1)
-        if results:
-            doc = repo.get_by_is_number(results[0]["is_number"])
+@router.get("/recommend", response_class=HTMLResponse)
+@router.get("/recommendation", response_class=HTMLResponse)
+async def recommend_page(
+    request: Request,
+    product: Optional[str] = Query(None, description="Product description")
+):
+    retriever = get_retriever()
+    query_str = (product or "").strip()
+    recommendations = []
+    if query_str:
+        raw = retriever.retrieve(query_str, top_k=6)
+        for r in raw:
+            score = r.get("relevance_score", 0.0)
+            badge = "Highly Relevant" if score >= 0.75 else ("Potentially Relevant" if score >= 0.45 else "Related")
+            recommendations.append({
+                **r,
+                "badge": badge,
+                "why_it_matches": f"Specifies quality benchmarks, safety requirements, and test methods applicable to {query_str}."
+            })
 
-    if not doc:
-        raise HTTPException(
-            status_code=404,
-            detail=f"Indian Standard '{is_code}' was not found in the indexed compendium."
-        )
+    return templates.TemplateResponse(
+        request=request,
+        name="recommendation.html",
+        context={
+            "active_tab": "standards",
+            "product_query": query_str,
+            "recommendations": recommendations,
+        }
+    )
+
+
+@router.get("/standards/{standard_code:path}", response_class=HTMLResponse)
+async def standard_detail_page(request: Request, standard_code: str):
+    clean_code = standard_code.strip()
+    repo = get_standards_repository()
+    standard = repo.get_by_code(clean_code)
+
+    if not standard:
+        normalized = clean_code.replace("-", " ").replace("_", " ")
+        standard = repo.get_by_code(normalized)
+
+    if not standard:
+        retriever = get_retriever()
+        fuzzy = retriever.retrieve(clean_code, top_k=1)
+        if fuzzy and fuzzy[0]["relevance_score"] > 0.3:
+            standard = repo.get_by_code(fuzzy[0]["is_number"])
+
+    if not standard:
+        raise HTTPException(status_code=404, detail=f"Indian Standard '{clean_code}' not found in prototype compendium.")
+
+    category = standard.get("category", "General")
+    related = repo.filter_by_category(category)
+    related_filtered = [r for r in related if r.get("standard") != standard.get("standard")][:4]
 
     calc_service = get_calculator_service()
-    cost_preview = calc_service.estimate_cost(doc.get("standard", is_code), enterprise_type="micro")
+    cost_preview = calc_service.estimate_cost(standard.get("standard", clean_code), enterprise_type="micro")
 
     return templates.TemplateResponse(
         request=request,
         name="standard_detail.html",
         context={
             "active_tab": "standards",
-            "standard": doc,
+            "standard": standard,
+            "related_standards": related_filtered,
             "cost_preview": cost_preview,
         }
     )
 
 
 @router.get("/certification", response_class=HTMLResponse)
-@router.get("/compliance", response_class=HTMLResponse)
 async def certification_page(
     request: Request,
-    standard: Optional[str] = Query(None, description="Preselected IS standard"),
-    tier: str = Query("micro", description="Enterprise tier")
+    standard: Optional[str] = Query(None, description="Preselected Indian Standard"),
+    tier: str = Query("micro", description="Enterprise tier: micro, small, medium, large")
 ):
     cert_service = get_certification_service()
-    selected_code = (standard or "IS 2082:2018 (Geysers)").strip()
-    roadmap = cert_service.generate_roadmap(selected_code, enterprise_type=tier)
+    stages = cert_service.get_stages()
+    selected_std = standard or "IS 1489 (Part 1)"
+    roadmap = cert_service.get_compliance_roadmap(product_type=selected_std, enterprise_tier=tier)
 
     return templates.TemplateResponse(
         request=request,
         name="certification.html",
         context={
             "active_tab": "certification",
-            "selected_standard": selected_code,
-            "selected_tier": tier,
+            "stages": stages,
             "roadmap": roadmap,
-            "stages": cert_service.get_stages(),
+            "selected_standard": selected_std,
+            "selected_tier": tier,
         }
     )
 
@@ -230,6 +270,7 @@ async def hallmarking_page(
 
 
 @router.get("/calculator", response_class=HTMLResponse)
+@router.get("/fee-calculator", response_class=HTMLResponse)
 @router.get("/msme", response_class=HTMLResponse)
 async def calculator_page(
     request: Request,

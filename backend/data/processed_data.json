@@ -26407,51 +26407,52 @@
     "source": "BIS Catalogue / SP 21:2005 Compendium of Indian Standards"
   },
   {
-    "standard": "IS 4649: 1968",
-    "title": "ADAPTORS FOR FLEXIBLE STEEL CONDUITS",
-    "text": "SUMMARY OF IS 4649 : 1968 ADAPTORS FOR FLEXIBLE STEEL CONDUITS 1. Scope – Requirements for adaptors of clamp and solid types for flexible steel conduits intended for the protection of cables in electrical installations. Adaptors are used for connecting flexible metallic conduits to a rigid conduits or its fitting. Flexible steel conduits shall not be used as earth continuity conductor. 2. Requirements 2.1 Material – Malleable iron. 2.2 Shall be protected against corrosion, both inside and outside, excluding machined surfaces and screw threads. Examples a) Medium protection – Stoved enamel; Airdrying paint; and Electrolytic deposits. b) Heavy protection – Hot-dip galvanized coating; Sherardiring 2.3 Shall be fitted with external earthing lug with hole to accommodate not less than 4 mm2 earthing wire. The lug shall be tapped and fitted with a headed clamping screw. Alternately, a headed earthing screw and washer shall be fitted to the solid portion. 2.5 Dimensions (in mm) Nominal internal dia 6.5 1 0 1 6 2 5 4 0 6 3 100 of flexible conduit External dia in normal 9 1 3 2 0 3 1 4 6 7 0 108 position, Max Turns per metre in 315 235 200 160 100 100 100 normal position Min Depth of engagement 10 15 15 25 30 35 45 between conduit and adaptor, Min Note – Tolerances on internal dia shall be +0.5and 0.0 and +1.0 and – 0.0 for nominal dia range 6.5 to 25 and 40 to 100 respectively. 3. Tests 3.1 Type Tests a) Visual examination, b) Dimension check, and c) Test for protective-coating (for medium and heavy protection) 3.2 Acceptation Tests a) Visual examination, and b) Dimension check Note – For test details, refer to 10 of the standard. 2.4 Workmanship – Shall be free from burrs or sharp edges and edges of turns of fins shall be well-formed. For detailed information, refer to IS 4649 : 1968 Specification for adaptors for flexible steel conduits 26.21 SP 21 : 2005",
-    "category": "Building & Construction Materials",
-    "description": "Indian Standard specification covering quality, physical, chemical, and testing parameters for adaptors for flexible steel conduits.",
-    "scope": "– Requirements for adaptors of clamp and solid types for flexible steel conduits intended for the protection of cables in electrical installations. Adaptors are used for connecting flexible metallic conduits to a rigid conduits or its fitting. Flexible steel conduits shall not be used as earth conti",
+    "standard": "IS 17526: 2021",
+    "title": "COMMERCIAL AND DOMESTIC STAINLESS STEEL VACUUM FLASKS AND INSULATED CONTAINERS — SPECIFICATION",
+    "text": "SUMMARY OF IS 17526 : 2021 STAINLESS STEEL VACUUM FLASKS AND INSULATED CONTAINERS — SPECIFICATION. 1. Scope — This standard specifies performance, design, and food-grade material requirements for portable stainless steel vacuum flasks, insulated water bottles, travel mugs, and food jars. 2. Material Requirements — Inner body in contact with food or potable water must be manufactured from food-grade austenitic stainless steel conforming to Grade 304 (IS 6911). 3. Performance Tests — Thermal insulation retention test (minimum water temperature >= 65 deg C after 6 hours from initial 95 deg C fill), impact drop test from 1.2 m height without vacuum rupture, leak-tightness test under inverted pressure, and heavy metal leaching compliance (lead, cadmium, chromium). 4. Quality Control Order — Insulated Flasks, Bottles and Containers (Quality Control) Order notified under Section 16 of the BIS Act.",
+    "category": "Consumer Goods & Kitchenware",
+    "description": "Prescribes material safety, thermal retention efficiency, drop impact resistance, and food-contact compliance for portable stainless steel vacuum bottles and insulated flasks.",
+    "scope": "Stainless steel vacuum insulated water bottles, food jars, and flasks intended for domestic and commercial beverage storage.",
     "mandatory_qco": true,
-    "qco_notification": "Quality Control Order (Statutory Compliance)",
+    "qco_notification": "Insulated Flasks, Bottles and Containers (Quality Control) Order, 2023",
     "key_tests": [
-      "Compressive / Tensile Mechanical Strength Testing",
-      "Dimensional Tolerances & Material Uniformity",
-      "Chemical Purity & Deleterious Substances Assay",
-      "Durability, Soundness & Environmental Conditioning"
+      "Thermal Retention Efficiency Test (>= 65 C after 6 hours)",
+      "Impact Resistance / 1.2m Drop Test",
+      "Food Contact Heavy Metal Leaching (Pb, Cd, Cr assay)",
+      "Cap Seal Leak-Tightness Hydrostatic Test"
     ],
     "labs_available": [
-      {
-        "name": "National Test House (NTH)",
-        "city": "Kolkata / Ghaziabad",
-        "state": "India"
-      },
       {
         "name": "BIS Central Laboratory",
         "city": "Sahibabad",
         "state": "Uttar Pradesh"
       },
       {
-        "name": "NABL Accredited Regional Materials Laboratory",
-        "city": "National Network",
-        "state": "India"
+        "name": "Shriram Institute for Industrial Research (SIIR)",
+        "city": "Delhi",
+        "state": "Delhi"
+      },
+      {
+        "name": "National Test House (NTH)",
+        "city": "Mumbai",
+        "state": "Maharashtra"
       }
     ],
     "fee_structure": {
       "application_fee": 1000,
       "annual_license_fee": 1000,
       "audit_fee_per_man_day": 7000,
-      "base_marking_fee": 68000,
+      "base_marking_fee": 42000,
       "micro_concession_percent": 50,
       "small_concession_percent": 20
     },
     "documentation_required": [
-      "Manufacturing machinery and plant layout documentation",
-      "In-house calibrated testing equipment list",
-      "Raw material quality conformity certificates"
+      "Raw material mill test certificate for food-grade 304 stainless steel",
+      "In-house test facility for thermal retention, drop test, and leak test",
+      "Factory machinery list for deep drawing, vacuum brazing, and leak testing",
+      "Pollution control board consent and factory registration"
     ],
-    "source": "BIS Catalogue / SP 21:2005 Compendium of Indian Standards"
+    "source": "BIS Catalogue / Mechanical & Consumer Goods Division"
   },
   {
     "standard": "IS 6538: 1971",
@@ -26689,51 +26690,47 @@
     "source": "BIS Catalogue / SP 21:2005 Compendium of Indian Standards"
   },
   {
-    "standard": "IS 9537 (Part 4): 1983",
-    "title": "CONDUITS FOR ELECTRICAL INSTALLATIONS PART 4 – PLIABLE SELF RECOVERING CONDUITS OF INSULATING MATERIALS",
-    "text": "SUMMARY OF IS 9537 (PART 4) : 1983 CONDUITS FOR ELECTRICAL INSTALLATIONS PART 4 – PLIABLE SELF RECOVERING CONDUITS OF INSULATING MATERIALS 1. Scope – Requirements and methods of tests for pliable self-recovering plain and corrugated conduits of insulating materials. 3. Classification – According to mechanical properties: a) Conduits for very light mechanical stresses, b) Conduits for light mechanical stresses, and c) Conduits for medium mechanical stresses. 4. Dimensions – See Table 1. 2. General Requirements – Provision s of IS 9537 (Part 1):1980 shall apply. Nominal size of Conduit TABLE 1 DIMENSIONS OF THE CONDUITS Outside Diameter Tolerance on Inside Diameter, of the Conduit Outside Diameter Min (1) (2) mm mm 16 20 16 20 25 32 40 25 32 40 50 63 50 63 (3) Preferred Length when Delivered as Coil (4) (5) mm mm mm - 0.3 - 0.3 10.7 14.1 50 and 100 - 0.4 - 0.4 - 0.4 18.3 24.3 31.2 50 - 0.5 - 0.6 39.6 52.6 25 5. Tests a) Bending Test – After the test, the samples shall show no cracks visible to normal or corrected vision without magnification. b) Compression Test – After the test, the samples shall show no cracks visible to normal or corrected vision without magnification: c) Impact test – As given in IS 9537 ( Part 1) : 1980 d) Collapse Test – It shall be possible to pass the appropriate gauge, through theconduit fixed to support under its own weight and without any initial speed. e) Resistance to Heat. f) Resistance to Burning. g) Electrical Characteristics. h) External Influences. Note – For details requirements refer to the standard For detailed information, refer to IS 9537 (Part 4) : 1983 Specification for conduits for electrical installations :Part 4 Pliable self- recovering conduits of insulating materials. 26.31 SP 21 : 2005",
-    "category": "Building & Construction Materials",
-    "description": "Indian Standard specification covering quality, physical, chemical, and testing parameters for conduits for electrical installations part 4 – pliable self recovering conduits of insulating materials.",
-    "scope": "– Requirements and methods of tests for pliable self-recovering plain and corrugated conduits of insulating materials. 3. Classification – According to mechanical properties: a) Conduits for very light mechanical stresses, b) Conduits for light mechanical stresses, and c) Conduits for medium mechani",
-    "mandatory_qco": false,
-    "qco_notification": null,
+    "standard": "IS 1417: 2016",
+    "title": "GOLD AND GOLD ALLOYS, JEWELLERY/ARTEFACTS — FINENESS AND MARKING — SPECIFICATION",
+    "text": "SUMMARY OF IS 1417 : 2016 GOLD AND GOLD ALLOYS, JEWELLERY/ARTEFACTS — FINENESS AND MARKING (Fifth Revision). 1. Scope — This Indian Standard specifies grades of fineness of gold and gold alloys used in jewellery, bullion, and artefacts, and methods of sampling and marking. 2. Grades of Gold Fineness — Permitted hallmarking grades are 24K (999 fineness), 23K (958 fineness), 22K (916 fineness), 20K (833 fineness), 18K (750 fineness), and 14K (585 fineness). 3. Mandatory Hallmarks — Every hallmarked gold jewellery piece must bear three distinct marks: (i) The BIS Standard Mark (triangle logo), (ii) Purity Grade and Fineness (e.g. 22K916), and (iii) 6-character alphanumeric Hallmarking Unique Identification (HUID) laser-engraved code. 4. Assaying & Sampling — Fire assay cupellation method is the referee test method. 5. Quality Control Order — Compulsory Hallmarking of Gold Jewellery and Artefacts Order notified by the Ministry of Consumer Affairs under Section 16 of the BIS Act, 2016.",
+    "category": "Precious Metals & Hallmarking",
+    "description": "Prescribes legal fineness grades, assaying benchmarks, and mandatory 3-mark identification rules for hallmarked gold jewellery and bullion articles.",
+    "scope": "Gold alloys, jewellery, bullion, and artefacts manufactured or traded in India subject to compulsory hallmarking orders.",
+    "mandatory_qco": true,
+    "qco_notification": "Hallmarking of Gold Jewellery and Gold Artefacts Order, 2020",
     "key_tests": [
-      "Compressive / Tensile Mechanical Strength Testing",
-      "Dimensional Tolerances & Material Uniformity",
-      "Chemical Purity & Deleterious Substances Assay",
-      "Durability, Soundness & Environmental Conditioning"
+      "Fire Assay Cupellation (Referee Assay Test)",
+      "X-Ray Fluorescence (XRF) Screening",
+      "6-Character HUID Laser Marking Legibility Audit",
+      "Touchstone Comparative Purity Evaluation"
     ],
     "labs_available": [
       {
-        "name": "National Test House (NTH)",
-        "city": "Kolkata / Ghaziabad",
-        "state": "India"
+        "name": "BIS Recognized Assaying and Hallmarking Centres (AHC Network)",
+        "city": "Pan-India",
+        "state": "All States"
       },
       {
-        "name": "BIS Central Laboratory",
-        "city": "Sahibabad",
-        "state": "Uttar Pradesh"
-      },
-      {
-        "name": "NABL Accredited Regional Materials Laboratory",
-        "city": "National Network",
-        "state": "India"
+        "name": "India Government Mint Laboratory",
+        "city": "Mumbai",
+        "state": "Maharashtra"
       }
     ],
     "fee_structure": {
       "application_fee": 1000,
       "annual_license_fee": 1000,
       "audit_fee_per_man_day": 7000,
-      "base_marking_fee": 68000,
+      "base_marking_fee": 45,
       "micro_concession_percent": 50,
       "small_concession_percent": 20
     },
     "documentation_required": [
-      "Manufacturing machinery and plant layout documentation",
-      "In-house calibrated testing equipment list",
-      "Raw material quality conformity certificates"
+      "BIS Jeweller Registration Certificate",
+      "Valid GSTIN and premise ownership/lease proof",
+      "AHC Assaying and Outsource Hallmarking Agreement",
+      "Standard weight and electronic micro-balance calibration logs"
     ],
-    "source": "BIS Catalogue / SP 21:2005 Compendium of Indian Standards"
+    "source": "BIS Catalogue / Hallmarking Department"
   },
   {
     "standard": "IS 9537 (Part 5): 2000",

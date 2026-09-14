@@ -49,7 +49,7 @@
     {% if standard.qco_notification %}
       <div style="background-color:var(--saffron-50); border:1px solid var(--saffron-100); border-radius:var(--radius-xs); padding:0.6rem 0.85rem; font-size:0.78rem; color:var(--saffron-900); display:flex; align-items:center; gap:0.5rem;">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg>
-        <span><strong>Statutory Order:</strong> {{ standard.qco_notification }} • Compliance is mandatory prior to retail distribution.</span>
+        <span><strong>Quality Control Order:</strong> {{ standard.qco_notification }} • Compliance is mandatory prior to retail distribution.</span>
       </div>
     {% endif %}
   </div>
@@ -63,7 +63,7 @@
       <!-- Scope Card -->
       <div class="gov-card" style="margin-bottom:0;">
         <div class="gov-card-header">
-          <h2>Statutory Scope &amp; Technical Coverage</h2>
+          <h2>Scope &amp; Technical Coverage</h2>
         </div>
         <div style="font-size:0.85rem; color:var(--slate-700); line-height:1.6;">
           <p>{{ standard.scope or standard.description or "Comprehensive technical parameters, raw material classifications, and finished product conformance specifications under the Bureau of Indian Standards Act." }}</p>
@@ -73,7 +73,7 @@
       <!-- Laboratory Testing Benchmarks -->
       <div class="gov-card" style="margin-bottom:0;">
         <div class="gov-card-header">
-          <h2>Statutory Testing Benchmarks &amp; Quality Parameters</h2>
+          <h2>Indicative Testing Parameters (BIS Reference)</h2>
         </div>
         
         {% if standard.key_tests %}
@@ -83,7 +83,7 @@
                 <tr>
                   <th style="width:40px;">#</th>
                   <th>Mandatory Laboratory Test Parameter</th>
-                  <th>Statutory Acceptance Criteria</th>
+                  <th>Acceptance Criteria</th>
                 </tr>
               </thead>
               <tbody>
@@ -144,7 +144,7 @@
       <!-- 7-Stage Conformity Assessment Roadmap -->
       <div class="gov-card" style="margin-bottom:0;">
         <div class="gov-card-header">
-          <h2>7-Stage BIS Conformity Assessment Roadmap</h2>
+          <h2>Conformity Assessment Workflow</h2>
         </div>
         
         <div style="display:flex; flex-direction:column; gap:1rem; font-size:0.82rem;">

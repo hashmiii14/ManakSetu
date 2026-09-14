@@ -77,10 +77,19 @@ QUERY_EXPANSIONS: Dict[str, str] = {
     "pressure cooker": "domestic pressure cookers aluminium stainless steel burst safety valve is 2347",
     "cooker": "domestic pressure cookers safety valve hydrostatic test is 2347",
 
-    # Water & beverages
+    # Water, bottles & flasks
     "packaged water": "packaged drinking water microbiological chemical heavy metals is 14543",
     "drinking water": "packaged drinking water bottle jar microbiological is 14543",
-    "water bottle": "packaged drinking water sealed container is 14543",
+    "water bottle": "stainless steel vacuum flasks insulated water bottles is 17526 packaged drinking water is 14543",
+    "stainless steel water bottle": "stainless steel vacuum flasks insulated water bottles is 17526",
+    "bottle": "stainless steel vacuum flasks insulated water bottles is 17526 packaged drinking water is 14543",
+    "flask": "stainless steel vacuum flasks insulated water bottles is 17526",
+
+    # Hallmarking & Precious Metals
+    "gold hallmark": "gold and gold alloys jewellery artefacts hallmarking huid fineness is 1417",
+    "hallmark": "gold and gold alloys jewellery artefacts hallmarking huid fineness is 1417",
+    "huid": "gold and gold alloys jewellery artefacts hallmarking huid fineness is 1417",
+    "gold": "gold and gold alloys jewellery artefacts hallmarking huid fineness is 1417",
 
     # Construction & Building materials (Cement Demo)
     "cement": "portland cement opc 33 43 53 grade pozzolana slag is 269 is 455 is 1489 is 12269",
@@ -97,6 +106,12 @@ QUERY_EXPANSIONS: Dict[str, str] = {
     "pipe": "precast concrete pipes pvc plastic tube asbestos cement",
     "brick": "burnt clay building bricks masonry units",
     "building material": "cement concrete aggregate brick steel tiles timber",
+
+    # Certification procedures & documents
+    "documents": "factory layout machinery list test equipment calibration scheme of testing and inspection is 302 is 269",
+    "document": "factory layout machinery list test equipment calibration scheme of testing and inspection is 302 is 269",
+    "laboratory": "testing laboratories nabl bis accredited test facilities is 302 is 2082",
+    "testing laboratory": "testing laboratories nabl bis accredited test facilities is 302 is 2082",
 }
 
 DOMAIN_TERMS = {
@@ -109,7 +124,7 @@ DOMAIN_TERMS = {
 }
 
 MATERIAL_CATEGORIES = {
-    "metal": {"steel", "iron", "copper", "aluminum", "aluminium", "brass", "bronze", "zinc", "tin", "lead", "alloy"},
+    "metal": {"steel", "iron", "copper", "aluminum", "aluminium", "brass", "bronze", "zinc", "tin", "lead", "alloy", "gold", "silver"},
     "plastic": {"polymer", "plastic", "pvc", "polyethylene", "polypropylene", "nylon", "acrylic", "resin"},
     "ceramic": {"ceramic", "porcelain", "clay", "refractory", "earthenware", "stoneware", "tile", "brick"},
     "cement": {"cement", "concrete", "mortar", "grout", "clinker", "pozzolana", "fly ash", "slag"},

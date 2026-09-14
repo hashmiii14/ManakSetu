@@ -15,9 +15,9 @@
   <!-- Page Header -->
   <div class="section-title-strip">
     <div>
-      <h1 class="section-title">ManakBot — AI-Assisted Standards Consultation Engine</h1>
+      <h1 class="section-title">ManakBot — Intelligent Standards Assistant</h1>
       <p class="section-subtitle">
-        Intelligent queries grounded strictly in the Bureau of Indian Standards dataset and active Quality Control Orders
+        Intelligent queries grounded strictly in retrieved Indian Standards and Quality Control Orders from the prototype knowledge base
       </p>
     </div>
     <span class="badge badge-gov" style="font-size:0.75rem; padding:0.3rem 0.65rem;">Grounded RAG • Zero Hallucination Guard</span>
@@ -31,30 +31,36 @@
       <div style="display:flex; align-items:center; gap:0.6rem;">
         <div style="width:10px; height:10px; border-radius:50%; background-color:#4ade80;"></div>
         <div>
-          <strong style="font-size:0.95rem;">ManaKBot AI Consultation Desk</strong>
-          <div style="font-size:0.68rem; color:var(--slate-300);">Grounded on 572 Indian Standards &amp; Section 29 Compliance Rules</div>
+          <strong style="font-size:0.95rem;">ManakBot AI Consultation Desk</strong>
+          <div style="font-size:0.68rem; color:var(--slate-300);">Grounded on 572 Indian Standards in Prototype Knowledge Base</div>
         </div>
       </div>
-      <span class="badge" style="background:rgba(255,255,255,0.15); color:#fff; border:none; font-size:0.68rem;">SIH 2026 Engine</span>
+      <span class="badge" style="background:rgba(255,255,255,0.15); color:#fff; border:none; font-size:0.68rem;">SIH26107 Prototype</span>
     </div>
 
-    <!-- Suggested Quick Prompts -->
+    <!-- Suggested Quick Prompts (Per Prompt Section 3 & 36) -->
     <div class="chat-quick-prompts" style="flex-wrap:wrap; gap:0.4rem;">
       <span style="font-weight:700; color:var(--slate-500); align-self:center;">Demonstration Queries:</span>
-      <button class="quick-prompt-btn" data-chat-prompt="Which BIS standard may apply to stainless steel water bottles?">
-        Stainless Steel Bottles
+      <button class="quick-prompt-btn" data-chat-prompt="What BIS standard applies to pressure cookers?">
+        Pressure Cookers
       </button>
-      <button class="quick-prompt-btn" data-chat-prompt="How do I get BIS certification for an electrical product?">
-        Electrical Certification
+      <button class="quick-prompt-btn" data-chat-prompt="I manufacture electrical switches. What certification do I need?">
+        Electrical Switches
       </button>
-      <button class="quick-prompt-btn" data-chat-prompt="How do I verify gold jewellery hallmarking?">
-        Gold Hallmarking &amp; HUID
+      <button class="quick-prompt-btn" data-chat-prompt="How do I verify a gold hallmark?">
+        Gold Hallmark &amp; HUID
       </button>
-      <button class="quick-prompt-btn" data-chat-prompt="Find testing laboratories for electrical products in Delhi.">
-        Electrical Labs in Delhi
+      <button class="quick-prompt-btn" data-chat-prompt="Which standard applies to packaged drinking water?">
+        Packaged Drinking Water
+      </button>
+      <button class="quick-prompt-btn" data-chat-prompt="What documents are required for BIS certification?">
+        Documents Required
+      </button>
+      <button class="quick-prompt-btn" data-chat-prompt="Find a testing laboratory for my product.">
+        Testing Laboratories
       </button>
       <button class="quick-prompt-btn" data-chat-prompt="Meri factory me electrical switches bante hain, BIS certification kaise milega?">
-        हिन्दी/Hinglish: Switches Certification
+        हिन्दी/Hinglish: Switches
       </button>
     </div>
 
@@ -63,21 +69,22 @@
       
       <!-- Welcome Message from Bot -->
       <div class="chat-bubble chat-bubble-bot">
-        <h3 style="margin-top:0;">Welcome to ManaKBot Statutory Consultation Desk</h3>
+        <h3 style="margin-top:0;">Welcome to ManakBot Intelligent Standards Assistant</h3>
         <p>
-          I am your AI assistant for Indian Standards, Bureau of Indian Standards (BIS) conformity assessment, and statutory quality orders.
+          I am your intelligent assistant for Indian Standards, conformity assessment pathways, and BIS services, developed as an educational prototype for Smart India Hackathon 2026.
         </p>
         <p>
           You can ask me about:
         </p>
         <ul>
-          <li>Mandatory testing benchmarks for products (e.g. compressive strength for cement, dielectric tests for water heaters)</li>
-          <li>Quality Control Orders (QCO) and statutory deadlines under the BIS Act, 2016</li>
-          <li>In-house factory testing apparatus setup and Scheme of Testing &amp; Inspection (STI)</li>
-          <li>Statutory tariff fee concessions for Micro and Small manufacturing units (up to 50% relief)</li>
+          <li>Which Indian Standard applies to a specific product or material</li>
+          <li>Quality Control Orders (QCO) and mandatory certification scopes</li>
+          <li>In-house factory testing apparatus requirements and testing benchmarks</li>
+          <li>Indicative fee concessions for Micro and Small manufacturing units (up to 50% relief)</li>
+          <li>Testing laboratories, gold hallmarking (HUID), and licensee verification</li>
         </ul>
         <div style="font-size:0.7rem; color:var(--slate-500); margin-top:0.75rem; border-top:1px solid var(--slate-200); padding-top:0.4rem;">
-          <strong>Notice:</strong> Informational prototype guidance grounded in official BIS datasets. Please confirm statutory filings at manakonline.in.
+          <strong>SIH Prototype Notice:</strong> Grounded in the current 572-standard prototype dataset. For official and legal submissions, consult <a href="https://www.manakonline.in" target="_blank" rel="noopener" style="color:var(--gov-800); text-decoration:underline;">manakonline.in</a>.
         </div>
       </div>
 
@@ -90,7 +97,7 @@
           type="text" 
           id="chatInput" 
           class="form-control" 
-          placeholder="Ask ManaKBot about an Indian Standard, testing criteria, QCO order, or MSME tariff..." 
+          placeholder="Ask ManakBot about an Indian Standard, testing criteria, QCO order, or MSME tariff..." 
           required 
           autocomplete="off"
           value="{{ initial_prompt }}"

@@ -185,6 +185,9 @@ class CertificationService:
             "portal": "https://www.manakonline.in"
         }
 
+    def get_compliance_roadmap(self, product_type: str = "", enterprise_tier: str = "micro") -> Dict[str, Any]:
+        return self.generate_roadmap(product_type, enterprise_tier)
+
 
 _cert_service = None
 
