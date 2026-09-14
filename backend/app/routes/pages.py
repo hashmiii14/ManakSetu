@@ -110,7 +110,7 @@ async def standards_page(
         name="standards.html",
         context={
             "active_tab": "standards",
-            "standards": paginated_results,
+            "results": paginated_results,
             "total_results": total_count,
             "categories": categories,
             "query": query_str,
