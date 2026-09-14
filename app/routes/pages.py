@@ -12,6 +12,9 @@ from ..services.bis_retriever import get_retriever
 from ..database.repositories import get_standards_repository
 from ..services.calculator_service import get_calculator_service
 from ..services.verifier_service import get_verification_service
+from ..services.lab_service import get_lab_service
+from ..services.hallmarking_service import get_hallmarking_service
+from ..services.certification_service import get_certification_service
 from ..utils.helpers import format_inr, truncate_text
 
 router = APIRouter(tags=["Pages"])
@@ -76,6 +79,16 @@ async def standards_page(
             for d in raw_docs
         ]
 
+    # Assign relevance badges
+    for r in raw_results:
+        score = r.get("relevance_score", 0.0)
+        if score >= 0.75:
+            r["badge"] = "Highly Relevant"
+        elif score >= 0.45:
+            r["badge"] = "Potentially Relevant"
+        else:
+            r["badge"] = "Related"
+
     # Filter by category if searching
     if category and category.upper() != "ALL":
         cat_lower = category.lower()
@@ -85,7 +98,7 @@ async def standards_page(
     if qco_only:
         raw_results = [r for r in raw_results if r.get("mandatory_qco")]
 
-    # Simple pagination: 15 items per page
+    # Pagination: 15 items per page
     items_per_page = 15
     total_items = len(raw_results)
     total_pages = max(1, (total_items + items_per_page - 1) // items_per_page)
@@ -128,7 +141,6 @@ async def standard_detail_page(request: Request, is_code: str):
             detail=f"Indian Standard '{is_code}' was not found in the indexed compendium."
         )
 
-    # Calculate fee relief preview for micro enterprises
     calc_service = get_calculator_service()
     cost_preview = calc_service.estimate_cost(doc.get("standard", is_code), enterprise_type="micro")
 
@@ -139,6 +151,80 @@ async def standard_detail_page(request: Request, is_code: str):
             "active_tab": "standards",
             "standard": doc,
             "cost_preview": cost_preview,
+        }
+    )
+
+
+@router.get("/certification", response_class=HTMLResponse)
+@router.get("/compliance", response_class=HTMLResponse)
+async def certification_page(
+    request: Request,
+    standard: Optional[str] = Query(None, description="Preselected IS standard"),
+    tier: str = Query("micro", description="Enterprise tier")
+):
+    cert_service = get_certification_service()
+    selected_code = (standard or "IS 2082:2018 (Geysers)").strip()
+    roadmap = cert_service.generate_roadmap(selected_code, enterprise_type=tier)
+
+    return templates.TemplateResponse(
+        request=request,
+        name="certification.html",
+        context={
+            "active_tab": "certification",
+            "selected_standard": selected_code,
+            "selected_tier": tier,
+            "roadmap": roadmap,
+            "stages": cert_service.get_stages(),
+        }
+    )
+
+
+@router.get("/laboratories", response_class=HTMLResponse)
+@router.get("/labs", response_class=HTMLResponse)
+async def laboratories_page(
+    request: Request,
+    q: Optional[str] = Query(None),
+    state: Optional[str] = Query(None),
+    standard: Optional[str] = Query(None)
+):
+    lab_service = get_lab_service()
+    labs = lab_service.search(q=q, state=state, standard=standard)
+    states = lab_service.get_states()
+
+    return templates.TemplateResponse(
+        request=request,
+        name="laboratories.html",
+        context={
+            "active_tab": "laboratories",
+            "query": q or "",
+            "selected_state": state or "ALL",
+            "selected_standard": standard or "",
+            "states": states,
+            "labs": labs,
+            "total_labs": len(labs),
+        }
+    )
+
+
+@router.get("/hallmarking", response_class=HTMLResponse)
+async def hallmarking_page(
+    request: Request,
+    huid: Optional[str] = Query(None)
+):
+    hallmarking_service = get_hallmarking_service()
+    info = hallmarking_service.get_info()
+    verification_result = None
+    if huid:
+        verification_result = hallmarking_service.verify_huid(huid)
+
+    return templates.TemplateResponse(
+        request=request,
+        name="hallmarking.html",
+        context={
+            "active_tab": "hallmarking",
+            "huid_query": huid or "",
+            "info": info,
+            "result": verification_result,
         }
     )
 

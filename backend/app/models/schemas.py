@@ -11,6 +11,7 @@ class StandardItem(BaseModel):
     relevance_score: float
     mandatory_qco: bool
     source: str
+    relevance_badge: Optional[str] = "Highly Relevant"
 
 
 class StandardDetail(BaseModel):
@@ -40,6 +41,23 @@ class SearchResponse(BaseModel):
     results: List[StandardItem]
 
 
+class RecommendationRequest(BaseModel):
+    product_description: Optional[str] = Field(None, description="Product description, industry, or use-case")
+    query: Optional[str] = Field(None, description="Alias for product_description")
+    category: Optional[str] = Field("ALL", description="Technical category or division")
+    top_k: int = Field(5, ge=1, le=20, description="Number of recommendations")
+
+
+class SourceCitation(BaseModel):
+    source_title: str
+    standard_number: str
+    section: str
+    clause: str
+    source_type: str
+    url: str
+    relevance_score: float
+
+
 class ReferencedStandard(BaseModel):
     is_number: str
     title: str
@@ -54,9 +72,14 @@ class ChatbotRequest(BaseModel):
 class ChatbotResponse(BaseModel):
     answer: str
     referenced_standards: List[ReferencedStandard] = []
+    sources: List[SourceCitation] = []
     source: str
     confidence: str
     disclaimer: str
+    detected_language: Optional[str] = "en"
+    is_refusal: Optional[bool] = False
+    structured_sections: Optional[Dict[str, str]] = {}
+    citations: Optional[List[Dict[str, Any]]] = []
 
 
 class VerificationRequest(BaseModel):
@@ -118,7 +141,7 @@ class ComplianceCheckRequest(BaseModel):
 class CompliancePhase(BaseModel):
     phase: str
     title: str
-    status: str  # "identified", "review_required", "verify", "not_provided"
+    status: str
     description: str
     details: List[str] = []
 
@@ -135,3 +158,54 @@ class ComplianceCheckResponse(BaseModel):
     missing_details_to_confirm: List[str] = []
     official_verification_guidance: str
     disclaimer: str
+
+
+class LabItem(BaseModel):
+    id: str
+    name: str
+    city: str
+    state: str
+    lat: float
+    lng: float
+    accreditation: str
+    accreditation_number: Optional[str] = None
+    testing_area: str
+    scopes: List[str] = []
+    applicable_standards: List[str] = []
+    turnaround_time: str
+    contact: str
+    address: str
+    distance_km: Optional[int] = None
+
+
+class LabSearchResponse(BaseModel):
+    total: int
+    states: List[str]
+    laboratories: List[LabItem]
+
+
+class CertificationNavigationRequest(BaseModel):
+    standard_code: str = Field(..., description="Indian Standard code (e.g. IS 2082)")
+    enterprise_type: Optional[str] = Field("micro", description="'micro', 'small', or 'medium_large'")
+
+
+class CertificationStage(BaseModel):
+    step: int
+    title: str
+    category: str
+    estimated_time: str
+    description: str
+    requirements: List[str] = []
+    documents: List[str] = []
+    official_portal: str
+    statutory_note: str
+
+
+class CertificationNavigationResponse(BaseModel):
+    standard_code: str
+    enterprise_type: str
+    concession_eligible: bool
+    concession_details: str
+    total_stages: int
+    stages: List[CertificationStage]
+    portal: str

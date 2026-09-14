@@ -1,7 +1,49 @@
 /**
- * ManakSetu Portal — Minimal Browser JavaScript (< 200 lines)
- * Provides essential DOM interactivity: Mobile menu, Chat AJAX, Verifier tabs, Live Calculator
+ * ManakSetu Portal — Minimal Browser JavaScript
+ * Provides essential DOM interactivity: Mobile menu, Chat AJAX, Verifier tabs, Live Calculator, Accessibility, Audience switcher
  */
+
+// ── Global Accessibility & Portal Functions ────────────────────────────────
+window.setAppFontSize = function (size) {
+  document.body.classList.remove('font-size-sm', 'font-size-md', 'font-size-lg');
+  if (size === 'sm') document.body.classList.add('font-size-sm');
+  else if (size === 'lg') document.body.classList.add('font-size-lg');
+  else document.body.classList.add('font-size-md');
+  try { localStorage.setItem('manaksetu_font_size', size); } catch (e) {}
+};
+
+try {
+  const savedSize = localStorage.getItem('manaksetu_font_size');
+  if (savedSize) window.setAppFontSize(savedSize);
+} catch (e) {}
+
+window.toggleLanguage = function () {
+  const btn = document.getElementById('langToggleBtn');
+  const isHindi = document.body.classList.toggle('lang-hindi');
+  if (btn) {
+    btn.textContent = isHindi ? 'हिन्दी / English' : 'English / हिन्दी';
+  }
+  try { localStorage.setItem('manaksetu_lang', isHindi ? 'hi' : 'en'); } catch (e) {}
+};
+
+window.switchAudience = function (audience) {
+  const tabs = document.querySelectorAll('.audience-tab');
+  const panes = document.querySelectorAll('.audience-pane');
+  tabs.forEach(function (t) {
+    if (t.getAttribute('data-audience') === audience) {
+      t.classList.add('active');
+    } else {
+      t.classList.remove('active');
+    }
+  });
+  panes.forEach(function (p) {
+    if (p.getAttribute('data-pane') === audience) {
+      p.classList.add('active');
+    } else {
+      p.classList.remove('active');
+    }
+  });
+};
 
 document.addEventListener('DOMContentLoaded', function () {
   // ── 1. Mobile Menu Drawer Toggle ──────────────────────────────────────────
@@ -75,9 +117,8 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function formatBotMarkdown(text) {
-      // Basic markdown parser for headings, lists, bold, and paragraphs
-      let html = text
-        .replace(/### (.*?)\n/g, '<h3>$1</h3>')
+      let html = (text || '')
+        .replace(/### (.*?)\n/g, '<h4 style="font-size:0.9rem; font-weight:800; color:var(--gov-900); margin:0.6rem 0 0.25rem;">$1</h4>')
         .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
         .replace(/\n\n/g, '<br><br>');
       return html;
@@ -90,14 +131,56 @@ document.addEventListener('DOMContentLoaded', function () {
       const bubble = document.createElement('div');
       bubble.className = 'chat-bubble chat-bubble-bot';
 
-      let inner = formatBotMarkdown(data.answer);
+      let inner = '';
+
+      // Language detection pill
+      if (data.detected_language && (data.detected_language === 'hi' || data.detected_language === 'hinglish')) {
+        inner += `<div style="margin-bottom:0.5rem;"><span class="badge badge-navy" style="font-size:0.68rem;">Language: ${data.detected_language.toUpperCase()} Query Detected</span></div>`;
+      }
+
+      // Safe refusal banner
+      if (data.is_refusal) {
+        inner += `<div style="background:#fef3c7; border:1px solid #f59e0b; border-radius:4px; padding:0.6rem 0.8rem; margin-bottom:0.75rem; font-size:0.78rem; color:#92400e; font-weight:600;">
+          Safe Refusal Notice: This consultation query is outside the statutory scope of Indian Standards and BIS Conformity Assessment schemes.
+        </div>`;
+      }
+
+      // Main answer text
+      inner += formatBotMarkdown(data.answer);
+
+      // Structured 7-section breakdown
+      if (data.structured_sections && Object.keys(data.structured_sections).length > 0) {
+        inner += '<div style="margin-top:1rem; border-top:1px solid var(--slate-200); padding-top:0.75rem;">';
+        inner += '<div style="font-size:0.75rem; font-weight:800; color:var(--gov-900); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:0.5rem;">Statutory Roadmap &amp; Benchmarks</div>';
+        inner += '<div style="display:grid; grid-template-columns:1fr; gap:0.4rem;">';
+        for (const [secTitle, secContent] of Object.entries(data.structured_sections)) {
+          inner += `<details style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:3px; padding:0.35rem 0.6rem; font-size:0.78rem;">
+            <summary style="font-weight:700; color:var(--gov-800); cursor:pointer;">${secTitle}</summary>
+            <div style="margin-top:0.35rem; color:var(--slate-700); line-height:1.4;">${formatBotMarkdown(secContent)}</div>
+          </details>`;
+        }
+        inner += '</div></div>';
+      }
+
+      // Statutory Citations / Evidence Box
+      if (data.citations && data.citations.length > 0) {
+        inner += '<div style="margin-top:0.75rem; background:#f1f5f9; border:1px solid #cbd5e1; border-radius:4px; padding:0.5rem 0.75rem;">';
+        inner += '<div style="font-size:0.72rem; font-weight:800; color:var(--gov-900); text-transform:uppercase; margin-bottom:0.25rem;">Statutory Evidence &amp; Citations:</div>';
+        inner += '<ul style="margin:0; padding-left:1.1rem; font-size:0.72rem; color:var(--slate-700);">';
+        data.citations.forEach(function (c) {
+          const title = c.title || c.citation_text || 'BIS Document';
+          const link = c.source_id ? `<a href="/api/sources/${encodeURIComponent(c.source_id)}" target="_blank" style="color:var(--gov-800); font-weight:600; text-decoration:underline;">[Source ${c.source_id}]</a>` : '';
+          inner += `<li>${title} ${link}</li>`;
+        });
+        inner += '</ul></div>';
+      }
 
       // Append referenced standards pills
       if (data.referenced_standards && data.referenced_standards.length > 0) {
-        inner += '<div class="chat-references">';
+        inner += '<div class="chat-references" style="margin-top:0.75rem;">';
         inner += '<span style="font-size:0.75rem; font-weight:700; color:var(--slate-600); margin-right:0.25rem;">Referenced Standards:</span>';
         data.referenced_standards.forEach(function (std) {
-          inner += `<a href="/standards/${encodeURIComponent(std.is_number)}" class="badge badge-gov" style="text-decoration:none;">${std.is_number}</a>`;
+          inner += `<a href="/standards/${encodeURIComponent(std.is_number)}" class="badge badge-gov" style="text-decoration:none;">${std.is_number}</a> `;
         });
         inner += '</div>';
       }

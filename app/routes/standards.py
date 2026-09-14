@@ -1,15 +1,65 @@
 from fastapi import APIRouter, Query, HTTPException
 from typing import List, Optional
-from ..models.schemas import StandardDetail
+from ..models.schemas import StandardDetail, StandardItem, SearchRequest, SearchResponse, RecommendationRequest
 from ..database.repositories import get_standards_repository
+from ..services.bis_retriever import get_retriever
 
 router = APIRouter(prefix="/api/standards", tags=["Standards API"])
+
+
+def _assign_badge(score: float) -> str:
+    if score >= 0.75:
+        return "Highly Relevant"
+    elif score >= 0.45:
+        return "Potentially Relevant"
+    return "Related"
 
 
 @router.get("/categories", response_model=List[str])
 def get_categories():
     repo = get_standards_repository()
     return repo.list_categories()
+
+
+@router.post("/search", response_model=SearchResponse)
+def search_standards(req: SearchRequest):
+    try:
+        retriever = get_retriever()
+        results = retriever.retrieve(req.query, top_k=req.top_k)
+        items = []
+        for r in results:
+            badge = _assign_badge(r.get("relevance_score", 0.0))
+            items.append(StandardItem(**r, relevance_badge=badge))
+        return SearchResponse(
+            query=req.query,
+            total=len(items),
+            results=items
+        )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Standards search error: {str(e)}")
+
+
+@router.post("/recommend", response_model=SearchResponse)
+def recommend_standards(req: RecommendationRequest):
+    try:
+        retriever = get_retriever()
+        desc = (req.product_description or req.query or "").strip()
+        if not desc:
+            raise HTTPException(status_code=400, detail="Either product_description or query must be provided.")
+        results = retriever.retrieve(desc, top_k=req.top_k)
+        items = []
+        for r in results:
+            if req.category and req.category != "ALL" and r.get("category") != req.category:
+                continue
+            badge = _assign_badge(r.get("relevance_score", 0.0))
+            items.append(StandardItem(**r, relevance_badge=badge))
+        return SearchResponse(
+            query=desc,
+            total=len(items),
+            results=items
+        )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Standards recommendation error: {str(e)}")
 
 
 @router.get("", response_model=List[StandardDetail])

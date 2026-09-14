@@ -15,6 +15,10 @@ from .routes import (
     verifier_router,
     reports_router,
     compliance_router,
+    labs_router,
+    hallmarking_router,
+    certification_router,
+    sources_router,
 )
 
 
@@ -72,6 +76,10 @@ app.include_router(calculator_router)
 app.include_router(verifier_router)
 app.include_router(reports_router)
 app.include_router(compliance_router)
+app.include_router(labs_router)
+app.include_router(hallmarking_router)
+app.include_router(certification_router)
+app.include_router(sources_router)
 
 
 @app.get("/api/health", tags=["Health"])

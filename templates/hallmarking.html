@@ -1,0 +1,454 @@
+{% extends "base.html" %}
+
+{% block title %}Gold & Silver Hallmarking & HUID Verification — Official BIS Portal | ManakSetu{% endblock %}
+
+{% block content %}
+<!-- Breadcrumb -->
+<div class="breadcrumb-bar">
+  <div class="container">
+    <div class="breadcrumb-inner">
+      <a href="/">Home</a>
+      <span>/</span>
+      <span class="current">Hallmarking &amp; HUID Verification</span>
+    </div>
+  </div>
+</div>
+
+<div class="container py-8">
+  <!-- Page Header -->
+  <div class="section-header-wrap mb-6">
+    <div class="flex items-center gap-2 mb-2 flex-wrap">
+      <span class="badge badge-gold">Hallmarking Scheme</span>
+      <span class="badge badge-navy">BIS Act, 2016</span>
+      <span class="badge badge-green">Mandatory in 343+ Districts</span>
+    </div>
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+      <div>
+        <h1 class="page-title text-2xl md:text-3xl font-bold text-slate-900">
+          Gold &amp; Silver Hallmarking &amp; HUID Verification
+        </h1>
+        <p class="page-subtitle text-slate-600 mt-1 max-w-3xl">
+          Statutory verification portal for 6-digit Hallmark Unique Identification (HUID) laser codes, 
+          authentic purity standards, and statutory consumer compensation rights under the Bureau of Indian Standards.
+        </p>
+      </div>
+      <div class="flex gap-2">
+        <a href="#huidVerifier" class="btn btn-navy text-xs">
+          Verify HUID Code
+        </a>
+        <a href="#consumerRights" class="btn btn-secondary text-xs">
+          Consumer Rights &amp; ₹45 Fee
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Top Informational Banner: Three Mandatory Marks Summary -->
+  <div class="card mb-8 bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200 p-6 rounded-sm">
+    <div class="flex flex-col lg:flex-row items-center justify-between gap-6">
+      <div class="lg:max-w-md">
+        <span class="text-xs font-bold uppercase tracking-wider text-amber-900 block mb-1">Authenticity Checklist</span>
+        <h2 class="text-lg font-bold text-slate-900 mb-2">Every genuine hallmarked gold article bears 3 statutory marks</h2>
+        <p class="text-xs text-slate-700 leading-relaxed">
+          As mandated by the Department of Consumer Affairs and the Bureau of Indian Standards, 
+          jewellers are statutorily prohibited from selling unhallmarked gold jewellery in notified districts. 
+          Always inspect these 3 distinct laser marks before purchase.
+        </p>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full lg:w-auto flex-1">
+        <!-- Mark 1 -->
+        <div class="bg-white p-4 rounded border border-amber-200 shadow-2xs text-center flex flex-col items-center">
+          <div class="w-12 h-12 rounded-full bg-amber-100 border border-amber-300 flex items-center justify-center mb-2">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#B45309" stroke-width="2">
+              <polygon points="12 2 2 22 22 22 12 2"></polygon>
+            </svg>
+          </div>
+          <span class="text-2xs font-bold text-amber-800 uppercase tracking-wide">Mark 1</span>
+          <span class="text-xs font-bold text-slate-900 mt-0.5">BIS Standard Mark</span>
+          <span class="text-2xs text-slate-500 mt-1">Official triangular logo of the Bureau</span>
+        </div>
+
+        <!-- Mark 2 -->
+        <div class="bg-white p-4 rounded border border-amber-200 shadow-2xs text-center flex flex-col items-center">
+          <div class="w-12 h-12 rounded-full bg-amber-100 border border-amber-300 flex items-center justify-center mb-2">
+            <span class="text-xs font-black text-amber-900">22K916</span>
+          </div>
+          <span class="text-2xs font-bold text-amber-800 uppercase tracking-wide">Mark 2</span>
+          <span class="text-xs font-bold text-slate-900 mt-0.5">Purity &amp; Fineness</span>
+          <span class="text-2xs text-slate-500 mt-1">e.g., 22K916, 18K750, 14K585</span>
+        </div>
+
+        <!-- Mark 3 -->
+        <div class="bg-white p-4 rounded border border-amber-200 shadow-2xs text-center flex flex-col items-center">
+          <div class="w-12 h-12 rounded-full bg-amber-100 border border-amber-300 flex items-center justify-center mb-2">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#B45309" stroke-width="2">
+              <rect x="3" y="4" width="18" height="16" rx="2"></rect>
+              <line x1="7" y1="8" x2="17" y2="8"></line>
+              <line x1="7" y1="12" x2="17" y2="12"></line>
+              <line x1="7" y1="16" x2="13" y2="16"></line>
+            </svg>
+          </div>
+          <span class="text-2xs font-bold text-amber-800 uppercase tracking-wide">Mark 3</span>
+          <span class="text-xs font-bold text-slate-900 mt-0.5">6-Digit HUID Code</span>
+          <span class="text-2xs text-slate-500 mt-1">Unique alphanumeric laser code (e.g. AK79B2)</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Interactive HUID Verification Section -->
+  <div id="huidVerifier" class="card mb-8 p-6 border border-slate-300 bg-white rounded-sm shadow-xs">
+    <div class="max-w-2xl mb-4">
+      <span class="text-2xs font-bold text-gov-800 uppercase tracking-wider">Central Repository Verification</span>
+      <h2 class="text-lg md:text-xl font-bold text-slate-900">Verify 6-Digit HUID (Hallmark Unique Identification)</h2>
+      <p class="text-xs text-slate-600 mt-1">
+        Enter the 6-character laser-etched alphanumeric code stamped on your jewellery item 
+        to trace assaying centre registration, jeweller credentials, and purity declaration.
+      </p>
+    </div>
+
+    <!-- HUID Form -->
+    <form method="GET" action="/hallmarking" id="huidForm" class="mb-4">
+      <div class="flex flex-col sm:flex-row gap-2 max-w-xl">
+        <div class="relative flex-1">
+          <input 
+            type="text" 
+            id="huidInput" 
+            name="huid" 
+            value="{{ huid_query }}"
+            placeholder="e.g. AK79B2, BL34X9, MH55P1" 
+            maxlength="6"
+            autocomplete="off"
+            class="w-full px-4 py-2.5 bg-slate-50 border border-slate-300 rounded-sm font-mono text-sm tracking-widest uppercase font-bold text-slate-900 placeholder:normal-case placeholder:font-normal placeholder:tracking-normal focus:bg-white focus:outline-none focus:border-gov-800"
+          />
+        </div>
+        <button type="submit" class="btn btn-navy px-6 py-2.5 text-xs font-bold shrink-0 flex items-center justify-center gap-1.5">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <span>Verify HUID</span>
+        </button>
+      </div>
+    </form>
+
+    <!-- Preloaded Demo HUID Chips -->
+    <div class="flex items-center gap-2 flex-wrap mb-4">
+      <span class="text-2xs text-slate-500 font-medium">Try verified sample HUIDs:</span>
+      <button type="button" onclick="setHuid('AK79B2')" class="text-2xs px-2.5 py-1 bg-slate-100 hover:bg-amber-100 hover:text-amber-900 text-slate-700 font-mono font-bold rounded border border-slate-200 transition cursor-pointer">
+        AK79B2 (22K Bangle - Delhi)
+      </button>
+      <button type="button" onclick="setHuid('BL34X9')" class="text-2xs px-2.5 py-1 bg-slate-100 hover:bg-amber-100 hover:text-amber-900 text-slate-700 font-mono font-bold rounded border border-slate-200 transition cursor-pointer">
+        BL34X9 (18K Pendant - Chennai)
+      </button>
+      <button type="button" onclick="setHuid('MH55P1')" class="text-2xs px-2.5 py-1 bg-slate-100 hover:bg-amber-100 hover:text-amber-900 text-slate-700 font-mono font-bold rounded border border-slate-200 transition cursor-pointer">
+        MH55P1 (24K Bullion - Pune)
+      </button>
+    </div>
+
+    <!-- Verification Result Card -->
+    {% if result %}
+      {% if result.is_valid %}
+      <div class="mt-6 border-2 border-emerald-500 bg-emerald-50/40 rounded-sm p-6">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-emerald-200 pb-4 mb-4">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-emerald-600 text-white flex items-center justify-center shrink-0">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+            </div>
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="font-mono font-bold text-lg text-emerald-950 tracking-wider">{{ result.huid }}</span>
+                <span class="badge badge-green text-2xs">OPERATIVE &amp; AUTHENTIC</span>
+              </div>
+              <p class="text-xs text-emerald-800 font-medium">
+                {{ result.message }}
+              </p>
+            </div>
+          </div>
+          <div class="text-right">
+            <span class="text-2xs text-slate-500 uppercase tracking-wider block">Verification Authority</span>
+            <span class="text-xs font-bold text-slate-800">BIS National Hallmarking Registry</span>
+          </div>
+        </div>
+
+        <!-- Details Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-xs">
+          <div class="p-3 bg-white rounded border border-emerald-100">
+            <span class="text-2xs text-slate-500 uppercase tracking-wider block mb-0.5">Article Description</span>
+            <span class="font-bold text-slate-900 block">{{ result.details.article_type }}</span>
+            <span class="text-slate-500 text-2xs">Weight: {{ result.details.gross_weight }}</span>
+          </div>
+
+          <div class="p-3 bg-white rounded border border-emerald-100">
+            <span class="text-2xs text-slate-500 uppercase tracking-wider block mb-0.5">Purity &amp; Fineness</span>
+            <span class="font-bold text-emerald-800 block text-sm">{{ result.details.purity }}</span>
+            <span class="text-slate-500 text-2xs">Statutory Standard Compliance</span>
+          </div>
+
+          <div class="p-3 bg-white rounded border border-emerald-100">
+            <span class="text-2xs text-slate-500 uppercase tracking-wider block mb-0.5">Hallmarking Date</span>
+            <span class="font-bold text-slate-900 block">{{ result.details.hallmarking_date }}</span>
+            <span class="text-slate-500 text-2xs">Status: {{ result.details.status }}</span>
+          </div>
+
+          <div class="p-3 bg-white rounded border border-emerald-100">
+            <span class="text-2xs text-slate-500 uppercase tracking-wider block mb-0.5">Certified Jeweller</span>
+            <span class="font-bold text-slate-900 block">{{ result.details.jeweller }}</span>
+            <span class="text-slate-500 font-mono text-2xs">Reg: {{ result.details.jeweller_reg_no }}</span>
+          </div>
+
+          <div class="p-3 bg-white rounded border border-emerald-100 md:col-span-2">
+            <span class="text-2xs text-slate-500 uppercase tracking-wider block mb-0.5">Assaying &amp; Hallmarking Centre (AHC)</span>
+            <span class="font-bold text-slate-900 block">{{ result.details.ahc_name }}</span>
+            <span class="text-slate-500 font-mono text-2xs">AHC Identifier: {{ result.details.ahc_code }}</span>
+          </div>
+        </div>
+
+        <div class="mt-4 pt-4 border-t border-emerald-200 flex flex-col sm:flex-row justify-between items-center gap-3">
+          <p class="text-2xs text-emerald-900">
+            {{ result.details.regulatory_notes }}
+          </p>
+          <div class="flex gap-2 shrink-0">
+            <button type="button" onclick="window.print()" class="btn btn-secondary text-2xs py-1.5 px-3">
+              Print Record
+            </button>
+            <a href="/report?huid={{ result.huid }}" class="btn btn-red text-2xs py-1.5 px-3">
+              Report Discrepancy
+            </a>
+          </div>
+        </div>
+      </div>
+      {% else %}
+      <!-- Invalid or Error State -->
+      <div class="mt-6 border-2 border-red-300 bg-red-50 rounded-sm p-6">
+        <div class="flex items-start gap-3">
+          <div class="w-10 h-10 rounded-full bg-red-600 text-white flex items-center justify-center shrink-0 mt-0.5">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="font-mono font-bold text-lg text-red-950">{{ result.huid or "MISSING" }}</span>
+              <span class="badge badge-red text-2xs">VERIFICATION FAILED</span>
+            </div>
+            <p class="text-xs text-red-800 font-medium mt-1">
+              {{ result.message }}
+            </p>
+            <div class="mt-3 text-2xs text-red-700 bg-white/70 p-3 rounded border border-red-200 leading-relaxed">
+              <strong>Statutory Advisory:</strong> If you purchased this article as hallmarked gold jewellery in any notified mandatory district, 
+              the absence of an authentic HUID may constitute an offence under Section 29 of the Bureau of Indian Standards Act, 2016. 
+              You are legally entitled to test this jewellery at any BIS recognized AHC for a fee of ₹45 and claim 2x refund if sub-standard.
+            </div>
+            <div class="mt-4 flex gap-3">
+              <a href="/report?huid={{ result.huid }}&reason=Invalid+or+unrecognized+HUID+code" class="btn btn-red text-xs py-1.5 px-4">
+                Lodge Consumer Grievance
+              </a>
+              <a href="/laboratories?q=assaying" class="btn btn-secondary text-xs py-1.5 px-4">
+                Locate Assaying Centre for ₹45 Test
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endif %}
+    {% endif %}
+  </div>
+
+  <!-- Purity Standards Grid: Gold & Silver -->
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+    <!-- Gold Purity Specifications -->
+    <div class="card p-6 border border-slate-300 bg-white rounded-sm shadow-xs">
+      <div class="flex items-center justify-between mb-4">
+        <div>
+          <span class="text-2xs font-bold uppercase text-amber-700 tracking-wider">IS 1417 Standards</span>
+          <h2 class="text-base font-bold text-slate-900">Gold Purity Grades &amp; Fineness</h2>
+        </div>
+        <span class="badge badge-gold">6 Permitted Karatages</span>
+      </div>
+      <p class="text-xs text-slate-600 mb-4">
+        Official gold fineness levels permitted for hallmarking under Indian Standard <strong>IS 1417</strong>:
+      </p>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-xs border-collapse">
+          <thead>
+            <tr class="bg-slate-50 border-b border-slate-300 text-slate-700">
+              <th class="py-2.5 px-3 font-bold">Karat</th>
+              <th class="py-2.5 px-3 font-bold">Fineness</th>
+              <th class="py-2.5 px-3 font-bold">Purity %</th>
+              <th class="py-2.5 px-3 font-bold">Description &amp; Use</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-200">
+            {% for g in info.gold_purity_grades %}
+            <tr class="hover:bg-slate-50/70">
+              <td class="py-2 px-3 font-bold text-slate-900">{{ g.karat }}</td>
+              <td class="py-2 px-3 font-mono font-bold text-amber-800">{{ g.fineness }}</td>
+              <td class="py-2 px-3 font-medium text-slate-700">{{ g.purity_percent }}</td>
+              <td class="py-2 px-3 text-slate-600">
+                <span class="font-medium text-slate-800 block">{{ g.color_desc }}</span>
+                <span class="text-2xs text-slate-500">{{ g.common_uses }}</span>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Silver Purity Specifications -->
+    <div class="card p-6 border border-slate-300 bg-white rounded-sm shadow-xs">
+      <div class="flex items-center justify-between mb-4">
+        <div>
+          <span class="text-2xs font-bold uppercase text-slate-500 tracking-wider">IS 2112 Standards</span>
+          <h2 class="text-base font-bold text-slate-900">Silver Purity Grades &amp; Fineness</h2>
+        </div>
+        <span class="badge badge-navy">4 Recognized Grades</span>
+      </div>
+      <p class="text-xs text-slate-600 mb-4">
+        Silver articles and utensils hallmarked in accordance with Indian Standard <strong>IS 2112</strong>:
+      </p>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-xs border-collapse">
+          <thead>
+            <tr class="bg-slate-50 border-b border-slate-300 text-slate-700">
+              <th class="py-2.5 px-3 font-bold">Fineness</th>
+              <th class="py-2.5 px-3 font-bold">Grade Specification</th>
+              <th class="py-2.5 px-3 font-bold">Typical Applications</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-200">
+            {% for s in info.silver_purity_grades %}
+            <tr class="hover:bg-slate-50/70">
+              <td class="py-2.5 px-3 font-mono font-bold text-slate-900">{{ s.fineness }}</td>
+              <td class="py-2.5 px-3 font-bold text-gov-800">{{ s.grade }}</td>
+              <td class="py-2.5 px-3 text-slate-600">{{ s.common_uses }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Assaying Test Fee Highlight -->
+      <div class="mt-6 p-4 bg-slate-50 border border-slate-200 rounded text-xs">
+        <div class="flex items-center gap-2 mb-1">
+          <span class="badge badge-green text-2xs">Consumer Rights</span>
+          <span class="font-bold text-slate-900">Statutory ₹45 Testing Fee</span>
+        </div>
+        <p class="text-slate-600 leading-relaxed text-2xs">
+          Under the Bureau of Indian Standards (Hallmarking) Regulations, any consumer can walk into an accredited 
+          Assaying and Hallmarking Centre (AHC) to verify the purity of their jewellery for a statutory fee of 
+          <strong>₹45 per article</strong> (plus GST). AHCs are legally required to provide an authentic test certificate.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Consumer Protection & Statutory Rights Section -->
+  <div id="consumerRights" class="card p-6 border border-slate-300 bg-white rounded-sm shadow-xs mb-8">
+    <div class="mb-4">
+      <span class="text-2xs font-bold uppercase text-gov-800 tracking-wider">Legal Framework</span>
+      <h2 class="text-base md:text-lg font-bold text-slate-900">
+        Statutory Consumer Protection under BIS Act, 2016
+      </h2>
+      <p class="text-xs text-slate-600 mt-1">
+        Know your rights when purchasing gold or silver ornaments in India.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div class="p-4 bg-slate-50 rounded border border-slate-200">
+        <div class="w-8 h-8 rounded bg-gov-800 text-white flex items-center justify-center font-bold text-xs mb-2">
+          1
+        </div>
+        <h3 class="text-xs font-bold text-slate-900 mb-1">2x Shortage Compensation</h3>
+        <p class="text-2xs text-slate-600 leading-relaxed">
+          If testing at a recognized AHC reveals lower purity than marked on the jewellery, 
+          the jeweller is legally obligated to compensate you <strong>two times the shortage</strong> calculated 
+          on the invoice date gold weight and reimburse the ₹45 testing fee.
+        </p>
+      </div>
+
+      <div class="p-4 bg-slate-50 rounded border border-slate-200">
+        <div class="w-8 h-8 rounded bg-gov-800 text-white flex items-center justify-center font-bold text-xs mb-2">
+          2
+        </div>
+        <h3 class="text-xs font-bold text-slate-900 mb-1">Mandatory Invoice Breakdown</h3>
+        <p class="text-2xs text-slate-600 leading-relaxed">
+          The sales bill must explicitly specify: (1) Gross weight, (2) Net weight, (3) Purity karatage/fineness, 
+          (4) Hallmark Unique Identification (HUID) 6-digit code, and (5) ₹45 statutory hallmarking charge.
+        </p>
+      </div>
+
+      <div class="p-4 bg-slate-50 rounded border border-slate-200">
+        <div class="w-8 h-8 rounded bg-gov-800 text-white flex items-center justify-center font-bold text-xs mb-2">
+          3
+        </div>
+        <h3 class="text-xs font-bold text-slate-900 mb-1">Penal Provisions</h3>
+        <p class="text-2xs text-slate-600 leading-relaxed">
+          Selling unhallmarked jewellery in notified districts or counterfeiting the BIS mark is punishable 
+          under Section 29 with imprisonment up to 1 year or a fine not less than ₹1,00,000 up to five times 
+          the value of goods.
+        </p>
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="mt-6 pt-4 border-t border-slate-200 flex flex-wrap items-center justify-between gap-4">
+      <div class="flex items-center gap-2">
+        <span class="text-xs text-slate-700 font-medium">Have an issue with hallmarked jewellery?</span>
+      </div>
+      <div class="flex gap-3">
+        <a href="/report?reason=Hallmarked+jewellery+purity+shortage" class="btn btn-red text-xs">
+          File BIS Consumer Complaint
+        </a>
+        <a href="/manakbot?prompt=What+are+my+legal+rights+if+gold+hallmark+is+fake%3F" class="btn btn-secondary text-xs">
+          Ask ManakBot about Hallmarking Law
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Related Standards Navigation Cards -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+    <a href="/standards?q=IS+1417" class="card p-4 border border-slate-300 hover:border-gov-800 hover:shadow-xs transition bg-white rounded-sm block">
+      <span class="badge badge-navy text-2xs mb-1.5">IS 1417</span>
+      <h3 class="text-xs font-bold text-slate-900">Gold &amp; Gold Alloys</h3>
+      <p class="text-2xs text-slate-500 mt-1">Fineness, marking, and alloying standards for articles.</p>
+    </a>
+
+    <a href="/standards?q=IS+2112" class="card p-4 border border-slate-300 hover:border-gov-800 hover:shadow-xs transition bg-white rounded-sm block">
+      <span class="badge badge-navy text-2xs mb-1.5">IS 2112</span>
+      <h3 class="text-xs font-bold text-slate-900">Silver &amp; Silver Alloys</h3>
+      <p class="text-2xs text-slate-500 mt-1">Fineness specifications and hallmarking rules for silver.</p>
+    </a>
+
+    <a href="/laboratories?q=assaying" class="card p-4 border border-slate-300 hover:border-gov-800 hover:shadow-xs transition bg-white rounded-sm block">
+      <span class="badge badge-green text-2xs mb-1.5">Directory</span>
+      <h3 class="text-xs font-bold text-slate-900">Find Assaying Centres</h3>
+      <p class="text-2xs text-slate-500 mt-1">Locate authorized AHCs across states for consumer purity tests.</p>
+    </a>
+
+    <a href="/calculator?standard=Gold+Hallmarking" class="card p-4 border border-slate-300 hover:border-gov-800 hover:shadow-xs transition bg-white rounded-sm block">
+      <span class="badge badge-gold text-2xs mb-1.5">Tariff Estimator</span>
+      <h3 class="text-xs font-bold text-slate-900">Jeweller License Fees</h3>
+      <p class="text-2xs text-slate-500 mt-1">Estimate BIS registration fees for hallmarked retail outlets.</p>
+    </a>
+  </div>
+</div>
+
+<script>
+function setHuid(code) {
+  var input = document.getElementById('huidInput');
+  if (input) {
+    input.value = code;
+    document.getElementById('huidForm').submit();
+  }
+}
+</script>
+{% endblock %}

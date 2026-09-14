@@ -1,0 +1,227 @@
+[
+  {
+    "id": "LAB-01",
+    "name": "BIS Central Laboratory (CL)",
+    "city": "Sahibabad",
+    "state": "Uttar Pradesh",
+    "lat": 28.6712,
+    "lng": 77.3621,
+    "accreditation": "NABL / Statutory Apex Laboratory of Bureau of Indian Standards",
+    "accreditation_number": "NABL TC-5001",
+    "testing_area": "Electrical, Civil, Chemical, Food & Microbiological, Consumer Goods",
+    "scopes": [
+      "Stationary Storage Water Heaters (Geysers)",
+      "Electric Irons & Immersion Heaters",
+      "Packaged Drinking Water & Mineral Water",
+      "Portland Cement (OPC, PPC, Slag)",
+      "Safety of Toys (Mechanical & Chemical)",
+      "Plugs and Socket-Outlets"
+    ],
+    "applicable_standards": [
+      "IS 2082:2018",
+      "IS 302 (Part 2/Sec 3):2007",
+      "IS 368:2014",
+      "IS 14543:2016",
+      "IS 269:2015",
+      "IS 1489 (Part 1):1991",
+      "IS 9873 (Part 1):2019",
+      "IS 1293:2019"
+    ],
+    "turnaround_time": "7 - 12 working days",
+    "contact": "cl@bis.gov.in | +91-120-2770030",
+    "address": "Plot No. 20/9, Site IV, Sahibabad Industrial Area, Ghaziabad, Uttar Pradesh 201010"
+  },
+  {
+    "id": "LAB-02",
+    "name": "Electrical Research and Development Association (ERDA)",
+    "city": "Vadodara",
+    "state": "Gujarat",
+    "lat": 22.3489,
+    "lng": 73.1812,
+    "accreditation": "NABL Accredited (TC-5389) / BIS Recognized Laboratory",
+    "accreditation_number": "NABL TC-5389",
+    "testing_area": "Electrical & Electronics, High Voltage Equipment, Energy Meters",
+    "scopes": [
+      "Electric Storage Geysers & Immersion Rods",
+      "Domestic Switches & Plugs",
+      "Power & Distribution Transformers",
+      "High Voltage Switchgear",
+      "Electric Motors & Pumps"
+    ],
+    "applicable_standards": [
+      "IS 2082:2018",
+      "IS 368:2014",
+      "IS 3854:1997",
+      "IS 1293:2019",
+      "IS 1180 (Part 1):2014"
+    ],
+    "turnaround_time": "10 - 15 working days",
+    "contact": "erda@erda.org | +91-265-2642942",
+    "address": "ERDA Road, GIDC, Makarpura, Vadodara, Gujarat 390010"
+  },
+  {
+    "id": "LAB-03",
+    "name": "Central Power Research Institute (CPRI)",
+    "city": "Bengaluru",
+    "state": "Karnataka",
+    "lat": 13.0158,
+    "lng": 77.5815,
+    "accreditation": "NABL Accredited / Autonomous Society, Ministry of Power, Govt. of India",
+    "accreditation_number": "NABL TC-5100",
+    "testing_area": "High Voltage Power Equipment, Cables, Appliances",
+    "scopes": [
+      "Domestic Electrical Appliances",
+      "PVC Insulated Cables & Conductors",
+      "Power Transformers & Circuit Breakers",
+      "Short Circuit & Dielectric Testing"
+    ],
+    "applicable_standards": [
+      "IS 302:2008",
+      "IS 2082:2018",
+      "IS 694:2010",
+      "IS 1554:1988",
+      "IS 1293:2019"
+    ],
+    "turnaround_time": "12 - 18 working days",
+    "contact": "cpri@cpri.in | +91-80-22072222",
+    "address": "Prof. Sir C.V. Raman Road, Sadashivanagar, Bengaluru, Karnataka 560080"
+  },
+  {
+    "id": "LAB-04",
+    "name": "National Test House (NTH - Eastern Region)",
+    "city": "Kolkata",
+    "state": "West Bengal",
+    "lat": 22.5312,
+    "lng": 88.3298,
+    "accreditation": "NABL Accredited / Ministry of Consumer Affairs, Govt. of India",
+    "accreditation_number": "NABL TC-5045",
+    "testing_area": "Mechanical, Civil Engineering, Metallurgy, Chemical, Rubber & Plastics",
+    "scopes": [
+      "Ordinary Portland Cement & Pozzolana Cement",
+      "TMT Reinforcement Steel Rebars & Structural Steel",
+      "Pressure Cookers (Safety & Hydrostatic Test)",
+      "Protective Helmets for Two-Wheeled Motor Vehicles",
+      "Fire Extinguishers & Building Bricks"
+    ],
+    "applicable_standards": [
+      "IS 269:2015",
+      "IS 1489 (Part 1):1991",
+      "IS 12269:2013",
+      "IS 1786:2008",
+      "IS 2347:2017",
+      "IS 4151:2020"
+    ],
+    "turnaround_time": "8 - 14 working days",
+    "contact": "nth-er@nic.in | +91-33-24791223",
+    "address": "11/1 Judges Court Road, Alipore, Kolkata, West Bengal 700027"
+  },
+  {
+    "id": "LAB-05",
+    "name": "Shriram Institute for Industrial Research (SIIR)",
+    "city": "New Delhi",
+    "state": "Delhi",
+    "lat": 28.7183,
+    "lng": 77.2064,
+    "accreditation": "NABL Accredited (TC-5120) / BIS Recognized Apex Facility",
+    "accreditation_number": "NABL TC-5120",
+    "testing_area": "Food, Pharmaceuticals, Water, Polymers, Toys, Toxicology",
+    "scopes": [
+      "Packaged Drinking Water & Mineral Water Quality",
+      "Toys Mechanical, Physical & Flammability Testing",
+      "Heavy Metals in Consumer Products",
+      "Stainless Steel Utensils & Food Contact Materials",
+      "Microbiological & Chemical Assays"
+    ],
+    "applicable_standards": [
+      "IS 14543:2016",
+      "IS 13428:2005",
+      "IS 9873 (Part 1):2019",
+      "IS 9873 (Part 2):2017",
+      "IS 9873 (Part 3):2020",
+      "IS 17526:2021"
+    ],
+    "turnaround_time": "5 - 10 working days",
+    "contact": "customercare@shriraminstitute.org | +91-11-27667267",
+    "address": "19, University Road, Block A, Timarpur, New Delhi, Delhi 110007"
+  },
+  {
+    "id": "LAB-06",
+    "name": "Automotive Research Association of India (ARAI)",
+    "city": "Pune",
+    "state": "Maharashtra",
+    "lat": 18.5284,
+    "lng": 73.8155,
+    "accreditation": "NABL Accredited / Prime Automotive Testing Agency under MoHI, Govt. of India",
+    "accreditation_number": "NABL TC-5290",
+    "testing_area": "Automotive Components, Safety Gear, Helmets, EV Batteries",
+    "scopes": [
+      "Protective Helmets for Two-Wheeler Riders (Impact & Retention)",
+      "Safety Glazing for Motor Vehicles",
+      "Automotive Tyres & Tubes",
+      "Electric Vehicle Traction Battery Systems"
+    ],
+    "applicable_standards": [
+      "IS 4151:2020",
+      "IS 2553 (Part 2):2019",
+      "IS 15633:2005",
+      "IS 16893 (Part 2):2018"
+    ],
+    "turnaround_time": "10 - 15 working days",
+    "contact": "director@araiindia.com | +91-20-30231111",
+    "address": "Survey No. 102, Vetal Hill, Off Paud Road, Kothrud, Pune, Maharashtra 411038"
+  },
+  {
+    "id": "LAB-07",
+    "name": "Central Institute of Petrochemicals Engineering & Technology (CIPET)",
+    "city": "Chennai",
+    "state": "Tamil Nadu",
+    "lat": 13.0118,
+    "lng": 80.2015,
+    "accreditation": "NABL Accredited / Dept. of Chemicals & Petrochemicals, Govt. of India",
+    "accreditation_number": "NABL TC-5310",
+    "testing_area": "Plastics, PVC Pipes, Polymeric Packaging, Biodegradable Plastics",
+    "scopes": [
+      "Unplasticized PVC Pipes for Potable Water Supplies",
+      "High Density Polyethylene (HDPE) Pipes",
+      "Polyethylene Water Storage Tanks",
+      "Biodegradable Plastics & Environmental Testing"
+    ],
+    "applicable_standards": [
+      "IS 4985:2021",
+      "IS 4984:2016",
+      "IS 12701:1996",
+      "IS 17899:2022"
+    ],
+    "turnaround_time": "7 - 12 working days",
+    "contact": "chennai@cipet.gov.in | +91-44-22254701",
+    "address": "CIPET Head Office, TVK Industrial Estate, Guindy, Chennai, Tamil Nadu 600032"
+  },
+  {
+    "id": "LAB-08",
+    "name": "National Test House (NTH - Northern Region)",
+    "city": "Ghaziabad",
+    "state": "Uttar Pradesh",
+    "lat": 28.6942,
+    "lng": 77.4429,
+    "accreditation": "NABL Accredited / Dept. of Consumer Affairs, Govt. of India",
+    "accreditation_number": "NABL TC-5047",
+    "testing_area": "Civil, Mechanical, Chemical, Electrical Appliances, Safety Equipment",
+    "scopes": [
+      "Ordinary Portland Cement & Composite Cement",
+      "TMT Reinforcing Steel & Structural Sections",
+      "LPG Cylinders & Domestic Pressure Cookers",
+      "Switches, Sockets, and Insulated Wires"
+    ],
+    "applicable_standards": [
+      "IS 269:2015",
+      "IS 1489 (Part 1):1991",
+      "IS 1786:2008",
+      "IS 2347:2017",
+      "IS 3854:1997",
+      "IS 694:2010"
+    ],
+    "turnaround_time": "7 - 12 working days",
+    "contact": "nthnr-ca@nic.in | +91-120-2789914",
+    "address": "Kamla Nehru Nagar, Hapur Road, Ghaziabad, Uttar Pradesh 201002"
+  }
+]

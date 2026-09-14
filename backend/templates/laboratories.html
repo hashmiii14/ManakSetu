@@ -1,0 +1,287 @@
+{% extends "base.html" %}
+
+{% block title %}Testing Laboratories Directory — BIS Recognized & NABL Accredited | ManakSetu{% endblock %}
+
+{% block content %}
+<!-- Breadcrumb -->
+<div class="breadcrumb-bar">
+  <div class="container">
+    <div class="breadcrumb-inner">
+      <a href="/">Home</a>
+      <span>/</span>
+      <span class="current">Testing Laboratories</span>
+    </div>
+  </div>
+</div>
+
+<div class="container py-8">
+  <!-- Page Header -->
+  <div class="section-header-wrap mb-6">
+    <div class="flex items-center gap-2 mb-2">
+      <span class="badge badge-navy">National Testing Infrastructure</span>
+      <span class="badge badge-green">NABL Accredited &amp; BIS Recognized</span>
+    </div>
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+      <div>
+        <h1 class="page-title text-2xl md:text-3xl font-bold text-slate-900">
+          Accredited Testing Laboratories
+        </h1>
+        <p class="page-subtitle text-slate-600 mt-1 max-w-3xl">
+          Locate statutory BIS Apex Laboratories, NABL-accredited test houses, and government research institutions 
+          for pre-certification sample testing and mandatory quality verification.
+        </p>
+      </div>
+      <!-- Geolocation Button -->
+      <button type="button" onclick="locateNearbyLabs()" id="locateBtn" class="btn btn-navy text-xs flex items-center gap-1.5 shrink-0">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="3 11 22 2 13 21 11 13 3 11"></polygon></svg>
+        <span id="locateBtnText">Locate Nearby Laboratories</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Search & Filter Controls -->
+  <div class="bg-white border border-slate-300 rounded-sm p-4 mb-8 shadow-xs">
+    <form method="GET" action="/laboratories" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      
+      <!-- 1. State / UT Filter -->
+      <div>
+        <label for="stateSelect" class="block text-xs font-bold text-slate-700 mb-1">
+          Filter by State / UT:
+        </label>
+        <select id="stateSelect" name="state" class="w-full px-3 py-2 bg-white border border-slate-300 rounded-sm text-xs font-medium text-slate-900 focus:outline-none focus:border-gov-800">
+          {% for st in states %}
+          <option value="{{ st }}" {% if selected_state == st %}selected{% endif %}>
+            {{ "All States & Union Territories" if st == "ALL" else st }}
+          </option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <!-- 2. Applicable Standard Filter -->
+      <div>
+        <label for="standardInput" class="block text-xs font-bold text-slate-700 mb-1">
+          Filter by Indian Standard:
+        </label>
+        <input 
+          type="text" 
+          id="standardInput"
+          name="standard" 
+          value="{{ selected_standard }}" 
+          placeholder="e.g. IS 2082, IS 269, IS 4151" 
+          class="w-full px-3 py-2 bg-white border border-slate-300 rounded-sm text-xs font-medium text-slate-900 focus:outline-none focus:border-gov-800"
+        >
+      </div>
+
+      <!-- 3. Keyword Search & Submit -->
+      <div>
+        <label for="keywordInput" class="block text-xs font-bold text-slate-700 mb-1">
+          Search Lab or Testing Scope:
+        </label>
+        <div class="flex items-center gap-2">
+          <input 
+            type="text" 
+            id="keywordInput"
+            name="q" 
+            value="{{ query }}" 
+            placeholder="e.g. Geyser, High Voltage, ARAI, Water" 
+            class="w-full px-3 py-2 bg-white border border-slate-300 rounded-sm text-xs font-medium text-slate-900 focus:outline-none focus:border-gov-800"
+          >
+          <button type="submit" class="btn btn-navy text-xs shrink-0">Filter</button>
+          {% if query or selected_state != 'ALL' or selected_standard %}
+          <a href="/laboratories" class="btn btn-outline text-xs shrink-0" title="Reset Filters">Clear</a>
+          {% endif %}
+        </div>
+      </div>
+
+    </form>
+
+    <div class="flex items-center justify-between mt-3 pt-3 border-t border-slate-200 text-xs text-slate-500">
+      <span>Showing <strong>{{ total_labs }}</strong> accredited laboratories across India</span>
+      <span id="locStatusText" class="text-gov-800 font-semibold hidden"></span>
+    </div>
+  </div>
+
+  <!-- Laboratories Cards Grid -->
+  {% if labs %}
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="labsGrid">
+    {% for lab in labs %}
+    <div class="lab-card bg-white border border-slate-300 hover:border-gov-800 rounded-sm p-5 shadow-xs flex flex-col justify-between transition-all" data-lat="{{ lab.lat }}" data-lng="{{ lab.lng }}">
+      
+      <!-- Top Content -->
+      <div>
+        <div class="flex items-start justify-between gap-3 mb-2">
+          <div>
+            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-sm text-[10px] font-mono font-bold bg-slate-100 text-slate-700 border border-slate-300">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#0A3871" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+              {{ lab.accreditation_number or "NABL / BIS Statutory" }}
+            </span>
+            <h3 class="text-base font-bold text-gov-900 mt-1.5 leading-snug">{{ lab.name }}</h3>
+            <p class="text-xs text-slate-500 flex items-center gap-1 mt-0.5">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+              <span>{{ lab.city }}, {{ lab.state }}</span>
+            </p>
+          </div>
+
+          <span class="distance-badge shrink-0 px-2 py-0.5 rounded-sm bg-blue-50 text-blue-900 font-mono font-bold text-xs border border-blue-200 hidden flex items-center gap-1">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="3 11 22 2 13 21 11 13 3 11"></polygon></svg>
+            <span class="dist-val">0</span> km
+          </span>
+        </div>
+
+        <!-- Testing Scopes -->
+        <div class="mt-3 mb-3">
+          <span class="text-[10px] font-bold text-slate-500 uppercase tracking-wider block mb-1">
+            Accredited Testing Capabilities:
+          </span>
+          <div class="flex flex-wrap gap-1.5">
+            {% for sc in lab.scopes %}
+            <span class="px-2 py-0.5 rounded-sm text-[11px] font-medium bg-slate-100 text-slate-700 border border-slate-200">
+              {{ sc }}
+            </span>
+            {% endfor %}
+          </div>
+        </div>
+
+        <!-- Applicable Standards -->
+        <div class="text-xs text-slate-700 flex items-start gap-1.5 mb-2">
+          <strong class="text-slate-900 shrink-0">Indian Standards:</strong>
+          <span class="font-mono text-[11px] text-slate-600 line-clamp-1">
+            {{ lab.applicable_standards | join(", ") }}
+          </span>
+        </div>
+
+        <!-- Turnaround Time -->
+        <div class="flex items-center gap-1.5 text-xs text-amber-900 bg-amber-50 px-2.5 py-1 rounded-sm border border-amber-200 mt-2 mb-3">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+          <span>Est. Sample Turnaround: <strong>{{ lab.turnaround_time }}</strong></span>
+        </div>
+      </div>
+
+      <!-- Footer Contact & Actions -->
+      <div class="pt-3 border-t border-slate-200 mt-2">
+        <p class="text-xs text-slate-600 mb-2 truncate">
+          <strong>Address:</strong> {{ lab.address }}
+        </p>
+        <p class="text-xs text-slate-600 mb-3 truncate">
+          <strong>Contact:</strong> {{ lab.contact }}
+        </p>
+        <div class="flex items-center justify-between gap-2 pt-1">
+          <button 
+            type="button" 
+            onclick="copyLabDetails('{{ lab.name }}', '{{ lab.address }}', '{{ lab.contact }}')"
+            class="btn btn-sm btn-outline text-xs inline-flex items-center gap-1"
+          >
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+            Copy Info
+          </button>
+          <a 
+            href="https://www.google.com/maps/search/?api=1&query={{ lab.name | urlencode }}+{{ lab.city | urlencode }}" 
+            target="_blank" 
+            rel="noopener" 
+            class="btn btn-sm btn-secondary text-xs inline-flex items-center gap-1"
+          >
+            <span>Get Directions</span>
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+          </a>
+        </div>
+      </div>
+
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="empty-state-box p-8 bg-white border border-slate-300 rounded-sm text-center">
+    <h3 class="text-base font-bold text-slate-800 mb-1">No Accredited Laboratories Found</h3>
+    <p class="text-xs text-slate-500 mb-4">No testing facility matched the active filters. Try searching for a broader product term or select All States.</p>
+    <a href="/laboratories" class="btn btn-sm btn-navy text-xs inline-block">Reset All Filters</a>
+  </div>
+  {% endif %}
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function copyLabDetails(name, address, contact) {
+  const text = `${name}\nAddress: ${address}\nContact: ${contact}`;
+  navigator.clipboard.writeText(text).then(() => {
+    alert('Laboratory contact details copied to clipboard.');
+  });
+}
+
+function haversineDistance(lat1, lon1, lat2, lon2) {
+  const R = 6371;
+  const dLat = (lat2 - lat1) * Math.PI / 180;
+  const dLon = (lon2 - lon1) * Math.PI / 180;
+  const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+            Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+            Math.sin(dLon/2) * Math.sin(dLon/2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+  return Math.round(R * c);
+}
+
+function locateNearbyLabs() {
+  const btn = document.getElementById('locateBtn');
+  const btnText = document.getElementById('locateBtnText');
+  const status = document.getElementById('locStatusText');
+
+  btnText.innerText = 'Detecting GPS Coordinates...';
+  
+  if (!navigator.geolocation) {
+    applyFallbackLocation(28.6139, 77.2090, 'New Delhi Center (Demo)');
+    return;
+  }
+
+  navigator.geolocation.getCurrentPosition(
+    (pos) => {
+      calculateAndSortDistances(pos.coords.latitude, pos.coords.longitude, 'Device Location');
+    },
+    () => {
+      // Graceful fallback to New Delhi for demonstration
+      applyFallbackLocation(28.6139, 77.2090, 'New Delhi Center (Demo)');
+    },
+    { timeout: 6000 }
+  );
+}
+
+function applyFallbackLocation(lat, lng, label) {
+  calculateAndSortDistances(lat, lng, label);
+}
+
+function calculateAndSortDistances(userLat, userLng, label) {
+  const btnText = document.getElementById('locateBtnText');
+  const status = document.getElementById('locStatusText');
+  btnText.innerText = 'Sorted by Proximity ✓';
+
+  status.innerText = 'Sorted by distance from: ' + label;
+  status.classList.remove('hidden');
+
+  const cards = Array.from(document.querySelectorAll('.lab-card'));
+  cards.forEach(card => {
+    const lat = parseFloat(card.dataset.lat);
+    const lng = parseFloat(card.dataset.lng);
+    if (!isNaN(lat) && !isNaN(lng)) {
+      const dist = haversineDistance(userLat, userLng, lat, lng);
+      card.dataset.distance = dist;
+      const badge = card.querySelector('.distance-badge');
+      const val = card.querySelector('.dist-val');
+      if (badge && val) {
+        val.innerText = dist;
+        badge.classList.remove('hidden');
+      }
+    }
+  });
+
+  // Sort DOM nodes by distance
+  const grid = document.getElementById('labsGrid');
+  if (grid) {
+    cards.sort((a, b) => {
+      const distA = parseFloat(a.dataset.distance) || 999999;
+      const distB = parseFloat(b.dataset.distance) || 999999;
+      return distA - distB;
+    });
+    cards.forEach(card => grid.appendChild(card));
+  }
+}
+</script>
+{% endblock %}

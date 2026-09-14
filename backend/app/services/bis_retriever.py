@@ -37,7 +37,11 @@ STOPWORDS = {
     "a", "an", "and", "are", "as", "at", "be", "both", "by", "for",
     "from", "i", "in", "is", "it", "of", "or", "our", "the", "their",
     "to", "used", "using", "we", "what", "which", "with", "show", "me",
-    "give", "find", "check", "need", "standard", "code", "specification"
+    "give", "find", "check", "need", "standard", "code", "specification",
+    "how", "why", "when", "where", "who", "whom", "whose", "can", "could",
+    "should", "would", "do", "does", "did", "tell", "about", "many", "much",
+    "please", "my", "your", "his", "her", "they", "them", "this", "that",
+    "these", "those", "get", "got", "make", "made", "know", "see", "any", "some"
 }
 
 QUERY_EXPANSIONS: Dict[str, str] = {

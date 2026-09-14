@@ -16,7 +16,7 @@
           </div>
 
           <h1 class="hero-title">
-            Find the Right Indian Standard for Your Product
+            Find the Right Indian Standard. Understand BIS Requirements.
           </h1>
 
           <p class="hero-desc">
@@ -42,13 +42,13 @@
           <!-- Popular Search Chips -->
           <div class="search-chips">
             <span class="search-chips-label">Popular Standards:</span>
-            <a href="/standards?q=cement" class="search-chip">Cement (IS 1489 / 12269)</a>
-            <a href="/standards?q=geyser" class="search-chip">Water Heaters (IS 2082)</a>
-            <a href="/standards?q=helmet" class="search-chip">Helmets (IS 4151)</a>
-            <a href="/standards?q=toy" class="search-chip">Safety of Toys (IS 9873)</a>
-            <a href="/standards?q=switch" class="search-chip">Electrical Switches (IS 3854)</a>
+            <a href="/standards?q=IS+302" class="search-chip">IS 302 (Electrical Safety)</a>
+            <a href="/standards?q=IS+2082" class="search-chip">IS 2082 (Geysers)</a>
+            <a href="/standards?q=IS+4151" class="search-chip">IS 4151 (Helmets)</a>
             <a href="/standards?q=water" class="search-chip">Packaged Water (IS 14543)</a>
-            <a href="/standards?q=steel" class="search-chip">Steel Rebars (IS 1786)</a>
+            <a href="/standards?q=toy" class="search-chip">Toys (IS 9873)</a>
+            <a href="/standards?q=cement" class="search-chip">Cement (IS 1489)</a>
+            <a href="/hallmarking" class="search-chip">Gold Hallmarking (IS 1417)</a>
           </div>
         </div>
 
@@ -81,10 +81,10 @@
 
             <!-- Quick Action Gateways -->
             <div class="matrix-gateways">
-              <a href="/verify" class="matrix-btn">
+              <a href="/hallmarking" class="matrix-btn">
                 <div>
-                  <div style="font-size:0.75rem; color:var(--gov-900);">Verify HUID &amp; ISI</div>
-                  <div style="font-size:0.68rem; color:var(--slate-500); font-weight:normal;">Hallmark &amp; License Check</div>
+                  <div style="font-size:0.75rem; color:var(--gov-900);">Verify HUID Code</div>
+                  <div style="font-size:0.68rem; color:var(--slate-500); font-weight:normal;">Gold Hallmark Purity</div>
                 </div>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--emerald-700)" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
               </a>
@@ -105,6 +105,311 @@
           </div>
         </div>
 
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. AUDIENCE MODE SELECTOR & 6 CORE SERVICE TILES -->
+  <section style="padding: 2.5rem 0 1rem; background-color: var(--slate-50); border-bottom: 1px solid var(--slate-200);">
+    <div class="container">
+      
+      <!-- STAKEHOLDER PERSPECTIVE SELECTOR -->
+      <div class="card p-6 bg-white border border-slate-300 rounded-sm shadow-xs mb-8">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-slate-200">
+          <div>
+            <span class="text-2xs font-bold text-gov-800 uppercase tracking-wider block mb-0.5">Stakeholder Navigation Engine</span>
+            <h2 class="text-base md:text-lg font-bold text-slate-900">Customized Guidance &amp; Workflows: "I am a..."</h2>
+          </div>
+          <div class="inline-flex p-1 bg-slate-100 rounded border border-slate-300 gap-1" role="tablist">
+            <button type="button" class="audience-tab active" data-audience="industry" onclick="switchAudience('industry')">
+              Industry / MSME
+            </button>
+            <button type="button" class="audience-tab" data-audience="consumer" onclick="switchAudience('consumer')">
+              Consumer
+            </button>
+            <button type="button" class="audience-tab" data-audience="researcher" onclick="switchAudience('researcher')">
+              Researcher / Student
+            </button>
+          </div>
+        </div>
+
+        <!-- Pane 1: Industry / MSME -->
+        <div class="audience-pane active pt-5" data-pane="industry">
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div>
+              <div class="flex items-center gap-2 mb-2">
+                <span class="badge badge-navy text-2xs">Conformity Roadmap</span>
+                <span class="text-xs font-bold text-slate-900">10-Stage BIS Licensing</span>
+              </div>
+              <p class="text-xs text-slate-600 leading-relaxed mb-3">
+                Step-by-step statutory pathway from preliminary standard evaluation and factory QC apparatus setup to audit clearance, pilot sampling, and ISI mark grant under Scheme-I.
+              </p>
+              <a href="/certification" class="text-xs font-bold text-gov-800 hover:underline flex items-center gap-1">
+                <span>View 10-Stage Certification Navigator</span> &rarr;
+              </a>
+            </div>
+
+            <div>
+              <div class="flex items-center gap-2 mb-2">
+                <span class="badge badge-green text-2xs">Financial Relief</span>
+                <span class="text-xs font-bold text-slate-900">MSME 50% Marking Subsidy</span>
+              </div>
+              <p class="text-xs text-slate-600 leading-relaxed mb-3">
+                Government concessions under Gazette guidelines: 50% discount on minimum marking fees for Micro enterprises and women industrialists; 20% relief for Small enterprises.
+              </p>
+              <a href="/calculator" class="text-xs font-bold text-gov-800 hover:underline flex items-center gap-1">
+                <span>Calculate Exact MSME Fee Savings</span> &rarr;
+              </a>
+            </div>
+
+            <div>
+              <div class="flex items-center gap-2 mb-2">
+                <span class="badge badge-gold text-2xs">Testing Infrastructure</span>
+                <span class="text-xs font-bold text-slate-900">1,200+ Recognized Labs</span>
+              </div>
+              <p class="text-xs text-slate-600 leading-relaxed mb-3">
+                Pre-certification third-party batch testing at BIS Central Lab Sahibabad, ERDA, CPRI, NTH, and regional NABL accredited test houses with sample turnaround times.
+              </p>
+              <a href="/laboratories" class="text-xs font-bold text-gov-800 hover:underline flex items-center gap-1">
+                <span>Locate State-wise Accredited Labs</span> &rarr;
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pane 2: Consumer -->
+        <div class="audience-pane pt-5" data-pane="consumer">
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div>
+              <div class="flex items-center gap-2 mb-2">
+                <span class="badge badge-gold text-2xs">Gold &amp; Silver</span>
+                <span class="text-xs font-bold text-slate-900">6-Digit HUID Laser Code</span>
+              </div>
+              <p class="text-xs text-slate-600 leading-relaxed mb-3">
+                Instantly check laser hallmark identifiers on gold and silver articles to verify retailer registration, assaying centre credentials, and true karat fineness (24K/22K/18K/14K).
+              </p>
+              <a href="/hallmarking" class="text-xs font-bold text-gov-800 hover:underline flex items-center gap-1">
+                <span>Verify Hallmarking (HUID)</span> &rarr;
+              </a>
+            </div>
+
+            <div>
+              <div class="flex items-center gap-2 mb-2">
+                <span class="badge badge-green text-2xs">Statutory Protection</span>
+                <span class="text-xs font-bold text-slate-900">₹45 Purity Testing Right</span>
+              </div>
+              <p class="text-xs text-slate-600 leading-relaxed mb-3">
+                Every Indian consumer is entitled to have hallmarked jewellery tested at any recognized AHC for ₹45. If found substandard, claim 2x shortage compensation under BIS Act 2016.
+              </p>
+              <a href="/hallmarking#consumerRights" class="text-xs font-bold text-gov-800 hover:underline flex items-center gap-1">
+                <span>Read Consumer Rights &amp; Penalties</span> &rarr;
+              </a>
+            </div>
+
+            <div>
+              <div class="flex items-center gap-2 mb-2">
+                <span class="badge badge-navy text-2xs">Product Safety</span>
+                <span class="text-xs font-bold text-slate-900">ISI Mark License Verification</span>
+              </div>
+              <p class="text-xs text-slate-600 leading-relaxed mb-3">
+                Verify 7-digit CM/L license numbers printed below the ISI logo on cement bags, bottled water, toys, and electrical geysers to confirm operative factory validity.
+              </p>
+              <a href="/verify" class="text-xs font-bold text-gov-800 hover:underline flex items-center gap-1">
+                <span>Verify ISI Mark &amp; CM/L License</span> &rarr;
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pane 3: Researcher / Student -->
+        <div class="audience-pane pt-5" data-pane="researcher">
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div>
+              <div class="flex items-center gap-2 mb-2">
+                <span class="badge badge-navy text-2xs">Standards Formulation</span>
+                <span class="text-xs font-bold text-slate-900">15 Technical Division Councils</span>
+              </div>
+              <p class="text-xs text-slate-600 leading-relaxed mb-3">
+                Access technical divisions across Civil Engineering, Electronics &amp; IT, Chemicals, Food &amp; Agriculture, Mechanical, and Medical Devices shaping national benchmarks.
+              </p>
+              <a href="/standards" class="text-xs font-bold text-gov-800 hover:underline flex items-center gap-1">
+                <span>Explore Technical Divisions</span> &rarr;
+              </a>
+            </div>
+
+            <div>
+              <div class="flex items-center gap-2 mb-2">
+                <span class="badge badge-gold text-2xs">Public Consultation</span>
+                <span class="text-xs font-bold text-slate-900">Draft Standards in Circulation</span>
+              </div>
+              <p class="text-xs text-slate-600 leading-relaxed mb-3">
+                Participate in national standard setting by reviewing draft standards under wide circulation and submitting technical public comments prior to final gazetting.
+              </p>
+              <a href="/services" class="text-xs font-bold text-gov-800 hover:underline flex items-center gap-1">
+                <span>Browse Standards Services</span> &rarr;
+              </a>
+            </div>
+
+            <div>
+              <div class="flex items-center gap-2 mb-2">
+                <span class="badge badge-green text-2xs">AI Consultation</span>
+                <span class="text-xs font-bold text-slate-900">ManakBot Grounded RAG</span>
+              </div>
+              <p class="text-xs text-slate-600 leading-relaxed mb-3">
+                Query complex Indian Standards specifications, chemical tolerance limits, and mechanical benchmarks using our vector-grounded conversational assistant.
+              </p>
+              <a href="/chatbot" class="text-xs font-bold text-gov-800 hover:underline flex items-center gap-1">
+                <span>Launch ManakBot AI Consultation</span> &rarr;
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6 PRIMARY SERVICE DASHBOARD CARDS -->
+      <div class="mb-4">
+        <div class="section-title-strip">
+          <div>
+            <h2 class="section-title">Core BIS Digital Services</h2>
+            <p class="section-subtitle">Direct gateways to statutory compliance, testing infrastructure, tariff relief, and authenticity verification</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mb-8">
+          
+          <!-- Service 1: Standards Search -->
+          <div class="service-dash-card">
+            <div>
+              <div class="flex items-center justify-between mb-3">
+                <div class="w-10 h-10 rounded bg-navy-50 text-gov-800 flex items-center justify-center border border-slate-200">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                </div>
+                <span class="badge badge-gov text-2xs">21,000+ Standards</span>
+              </div>
+              <h3 class="text-sm font-bold text-slate-900 mb-1">Standards Catalog &amp; QCO Finder</h3>
+              <p class="text-xs text-slate-600 leading-relaxed">
+                Search the full compendium of Indian Standards, active mandatory Quality Control Orders (QCOs), and product specifications.
+              </p>
+            </div>
+            <div class="mt-4 pt-3 border-t border-slate-200">
+              <a href="/standards" class="text-xs font-bold text-gov-800 hover:underline flex items-center justify-between">
+                <span>Browse Standards Repository</span>
+                <span>&rarr;</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- Service 2: Certification Navigator -->
+          <div class="service-dash-card">
+            <div>
+              <div class="flex items-center justify-between mb-3">
+                <div class="w-10 h-10 rounded bg-emerald-50 text-emerald-800 flex items-center justify-center border border-emerald-200">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                </div>
+                <span class="badge badge-green text-2xs">10-Stage Stepper</span>
+              </div>
+              <h3 class="text-sm font-bold text-slate-900 mb-1">Certification Navigator</h3>
+              <p class="text-xs text-slate-600 leading-relaxed">
+                Interactive statutory roadmap from Scheme-I application, factory QC inspection, and lab testing to ISI license grant.
+              </p>
+            </div>
+            <div class="mt-4 pt-3 border-t border-slate-200">
+              <a href="/certification" class="text-xs font-bold text-gov-800 hover:underline flex items-center justify-between">
+                <span>Start Certification Roadmap</span>
+                <span>&rarr;</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- Service 3: Hallmarking & HUID Verification -->
+          <div class="service-dash-card">
+            <div>
+              <div class="flex items-center justify-between mb-3">
+                <div class="w-10 h-10 rounded bg-amber-50 text-amber-800 flex items-center justify-center border border-amber-200">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg>
+                </div>
+                <span class="badge badge-gold text-2xs">6-Digit Laser HUID</span>
+              </div>
+              <h3 class="text-sm font-bold text-slate-900 mb-1">Hallmarking &amp; HUID Verification</h3>
+              <p class="text-xs text-slate-600 leading-relaxed">
+                Verify 6-character laser HUID codes on gold jewellery, inspect purity benchmarks (24K to 14K), and understand ₹45 testing rights.
+              </p>
+            </div>
+            <div class="mt-4 pt-3 border-t border-slate-200">
+              <a href="/hallmarking" class="text-xs font-bold text-gov-800 hover:underline flex items-center justify-between">
+                <span>Verify Hallmark &amp; Purity</span>
+                <span>&rarr;</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- Service 4: Testing Laboratories -->
+          <div class="service-dash-card">
+            <div>
+              <div class="flex items-center justify-between mb-3">
+                <div class="w-10 h-10 rounded bg-sky-50 text-sky-800 flex items-center justify-center border border-sky-200">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 2v7.31M14 9.3V1.99M8.5 2h7M14 9.3a6.5 6.5 0 1 1-4 0"/></svg>
+                </div>
+                <span class="badge badge-navy text-2xs">NABL &amp; BIS Apex</span>
+              </div>
+              <h3 class="text-sm font-bold text-slate-900 mb-1">Testing Laboratory Finder</h3>
+              <p class="text-xs text-slate-600 leading-relaxed">
+                Locate national apex and recognized commercial testing laboratories with state filters, sample testing scopes, and proximity sorting.
+              </p>
+            </div>
+            <div class="mt-4 pt-3 border-t border-slate-200">
+              <a href="/laboratories" class="text-xs font-bold text-gov-800 hover:underline flex items-center justify-between">
+                <span>Find Testing Facilities</span>
+                <span>&rarr;</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- Service 5: MSME Fee Calculator -->
+          <div class="service-dash-card">
+            <div>
+              <div class="flex items-center justify-between mb-3">
+                <div class="w-10 h-10 rounded bg-emerald-50 text-emerald-800 flex items-center justify-center border border-emerald-200">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="16" height="20" x="4" y="2" rx="2"/><line x1="8" x2="16" y1="6" y2="6"/><line x1="16" x2="16" y1="14" y2="18"/></svg>
+                </div>
+                <span class="badge badge-green text-2xs">Up to 50% Concession</span>
+              </div>
+              <h3 class="text-sm font-bold text-slate-900 mb-1">MSME Fee &amp; Tariff Calculator</h3>
+              <p class="text-xs text-slate-600 leading-relaxed">
+                Estimate official BIS certification costs, application charges, and statutory 50% marking fee relief for Micro and Women-led units.
+              </p>
+            </div>
+            <div class="mt-4 pt-3 border-t border-slate-200">
+              <a href="/calculator" class="text-xs font-bold text-gov-800 hover:underline flex items-center justify-between">
+                <span>Calculate Certification Costs</span>
+                <span>&rarr;</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- Service 6: Ask ManakBot -->
+          <div class="service-dash-card">
+            <div>
+              <div class="flex items-center justify-between mb-3">
+                <div class="w-10 h-10 rounded bg-purple-50 text-purple-800 flex items-center justify-center border border-purple-200">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                </div>
+                <span class="badge badge-gov text-2xs">AI-Powered RAG</span>
+              </div>
+              <h3 class="text-sm font-bold text-slate-900 mb-1">Ask ManakBot AI Assistant</h3>
+              <p class="text-xs text-slate-600 leading-relaxed">
+                Grounded conversational assistant providing structured 7-section answers, official citations, Hindi/Hinglish recognition, and zero-hallucination guard.
+              </p>
+            </div>
+            <div class="mt-4 pt-3 border-t border-slate-200">
+              <a href="/chatbot" class="text-xs font-bold text-gov-800 hover:underline flex items-center justify-between">
+                <span>Consult ManakBot AI</span>
+                <span>&rarr;</span>
+              </a>
+            </div>
+          </div>
+
+        </div>
       </div>
     </div>
   </section>

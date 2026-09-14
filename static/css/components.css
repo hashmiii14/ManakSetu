@@ -782,3 +782,94 @@ textarea.form-control {
   color: var(--gov-900);
   font-weight: 700;
 }
+
+/* ── Stakeholder Audience Mode Switcher ──────────────────────────────────── */
+.audience-tab {
+  padding: 0.45rem 1rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  border-radius: var(--radius-xs);
+  color: var(--slate-600);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.audience-tab:hover {
+  color: var(--gov-900);
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.audience-tab.active {
+  background: var(--gov-900);
+  color: var(--white);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+}
+
+.audience-pane {
+  display: none;
+}
+
+.audience-pane.active {
+  display: block;
+}
+
+/* ── Primary Portal Service Dashboard Cards ──────────────────────────────── */
+.service-dash-card {
+  background: var(--white);
+  border: 1px solid var(--slate-300);
+  border-radius: var(--radius-sm);
+  padding: 1.35rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+.service-dash-card:hover {
+  border-color: var(--gov-700);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(11, 37, 69, 0.09);
+}
+
+.service-dash-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--gov-800);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.service-dash-card:hover::before {
+  opacity: 1;
+}
+
+/* ── Accessibility Font Sizing ───────────────────────────────────────────── */
+body.font-size-sm {
+  font-size: 13px !important;
+}
+
+body.font-size-sm h1 { font-size: 1.8rem !important; }
+body.font-size-sm h2 { font-size: 1.4rem !important; }
+body.font-size-sm h3 { font-size: 1.1rem !important; }
+
+body.font-size-md {
+  font-size: 15px !important;
+}
+
+body.font-size-lg {
+  font-size: 17px !important;
+}
+
+body.font-size-lg h1 { font-size: 2.4rem !important; }
+body.font-size-lg h2 { font-size: 1.7rem !important; }
+body.font-size-lg h3 { font-size: 1.35rem !important; }
+

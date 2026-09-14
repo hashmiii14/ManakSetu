@@ -1,0 +1,121 @@
+{
+  "gold_purity_grades": [
+    {
+      "karat": "24K",
+      "fineness": "999",
+      "purity_percent": "99.9%",
+      "color_desc": "Pure Gold / Bullion / Coins",
+      "common_uses": "Investment bars, coins, sovereign medallions"
+    },
+    {
+      "karat": "23K",
+      "fineness": "958",
+      "purity_percent": "95.8%",
+      "color_desc": "High Purity Traditional Jewellery",
+      "common_uses": "Kundankari, temple jewellery, traditional ornaments"
+    },
+    {
+      "karat": "22K",
+      "fineness": "916",
+      "purity_percent": "91.6%",
+      "color_desc": "Standard Fine Gold Jewellery",
+      "common_uses": "Chains, bangles, necklaces, bridal jewellery"
+    },
+    {
+      "karat": "18K",
+      "fineness": "750",
+      "purity_percent": "75.0%",
+      "color_desc": "Studded & Diamond Jewellery",
+      "common_uses": "Diamond rings, gemstone necklaces, watches"
+    },
+    {
+      "karat": "14K",
+      "fineness": "585",
+      "purity_percent": "58.5%",
+      "color_desc": "Modern Lightweight Everyday Jewellery",
+      "common_uses": "Earrings, pendants, office wear, lightweight rings"
+    },
+    {
+      "karat": "9K",
+      "fineness": "375",
+      "purity_percent": "37.5%",
+      "color_desc": "Budget Lightweight Articles",
+      "common_uses": "Low-cost fashion ornaments"
+    }
+  ],
+  "silver_purity_grades": [
+    { "fineness": "999", "grade": "Fine Silver", "common_uses": "Utensils, bullion bars, idols" },
+    { "fineness": "925", "grade": "Sterling Silver", "common_uses": "Silver jewellery, cutlery, gift articles" },
+    { "fineness": "900", "grade": "Coin Silver", "common_uses": "Commemorative coins" },
+    { "fineness": "800", "grade": "Jewellery Silver", "common_uses": "Anklets (payal), heavy utensils" }
+  ],
+  "three_mandatory_marks": [
+    {
+      "step": 1,
+      "name": "BIS Triangular Standard Mark",
+      "symbol": "BIS Logo",
+      "description": "Authentic triangular BIS logo representing government certification."
+    },
+    {
+      "step": 2,
+      "name": "Purity & Fineness Mark",
+      "symbol": "22K916 / 18K750 / 14K585",
+      "description": "Clear stamping of gold karatage and parts-per-thousand fineness."
+    },
+    {
+      "step": 3,
+      "name": "6-Digit Alphanumeric HUID",
+      "symbol": "e.g. AK79B2",
+      "description": "Hallmark Unique Identification (HUID) laser-etched on every individual piece."
+    }
+  ],
+  "sample_huids": {
+    "AK79B2": {
+      "is_valid": true,
+      "huid": "AK79B2",
+      "jeweller": "Tanishq (Titan Company Ltd), Connaught Place, New Delhi",
+      "jeweller_reg_no": "BIS/AHC/DL-10492",
+      "ahc_name": "Delhi Gem & Jewellery Assaying Centre, Karol Bagh",
+      "ahc_code": "AHC-DL-014",
+      "article_type": "22K Gold Bangle (Pair)",
+      "purity": "22K (916 Fineness)",
+      "gross_weight": "28.450 g",
+      "hallmarking_date": "2026-03-11",
+      "status": "OPERATIVE_VALID",
+      "regulatory_notes": "Complies fully with Section 14 of the Bureau of Indian Standards Act, 2016."
+    },
+    "BL34X9": {
+      "is_valid": true,
+      "huid": "BL34X9",
+      "jeweller": "Kalyan Jewellers India Ltd, T. Nagar, Chennai",
+      "jeweller_reg_no": "BIS/AHC/TN-22819",
+      "ahc_name": "Madras Assay Office & Hallmarking Hub",
+      "ahc_code": "AHC-TN-003",
+      "article_type": "18K Diamond Studded Pendant",
+      "purity": "18K (750 Fineness)",
+      "gross_weight": "6.120 g",
+      "hallmarking_date": "2026-05-19",
+      "status": "OPERATIVE_VALID",
+      "regulatory_notes": "Statutory verification confirmed via BIS Central Hallmarking Repository."
+    },
+    "MH55P1": {
+      "is_valid": true,
+      "huid": "MH55P1",
+      "jeweller": "P. N. Gadgil Jewellers, Laxmi Road, Pune",
+      "jeweller_reg_no": "BIS/AHC/MH-88401",
+      "ahc_name": "Maharashtra Apex Assaying & Hallmarking Centre",
+      "ahc_code": "AHC-MH-021",
+      "article_type": "24K Gold Sovereign Coin",
+      "purity": "24K (999 Fineness)",
+      "gross_weight": "10.000 g",
+      "hallmarking_date": "2026-08-02",
+      "status": "OPERATIVE_VALID",
+      "regulatory_notes": "Statutory compliance verified."
+    }
+  },
+  "consumer_rights": [
+    "Every customer is entitled to test hallmarked gold jewellery at any BIS-recognized Assaying and Hallmarking Centre (AHC) upon paying a statutory consumer testing fee of ₹45 per article.",
+    "If the jewellery is found to be of lesser purity than stamped, the jeweller is statutorily liable under BIS Hallmarking Regulations 2018 to refund the customer twice the shortage amount and reimburse testing charges.",
+    "Mandatory hallmarking is in effect across 343+ designated districts in India under the Quality Control Orders issued by the Department of Consumer Affairs."
+  ]
+}
