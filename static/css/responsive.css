@@ -1,8 +1,22 @@
 /* ==========================================================================
-   ManakSetu Portal — Responsive CSS
-   Breakpoints: 1024px, 768px, 480px, 375px
-   Strictly Zero Horizontal Scroll
+   ManakSetu Portal — Comprehensive Responsive CSS
+   Optimized for: Desktop (>=1025px), Tablet (641px - 1024px), Mobile (<=640px), Small Mobile (<=480px)
+   Zero Horizontal Scroll Guarantee
    ========================================================================== */
+
+/* Universal Box-Sizing & Layout Protection */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html, body {
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+img, svg, video, canvas, audio, iframe, embed, object {
+  max-width: 100%;
+}
 
 /* ── Laptop & Small Desktop (<= 1024px) ─────────────────────────────────── */
 @media (max-width: 1024px) {
@@ -12,7 +26,22 @@
   }
 
   .matrix-card {
-    max-width: 600px;
+    max-width: 100%;
+  }
+
+  .quick-services-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+  }
+
+  .process-steps-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+
+  .trusted-portals-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
   }
 
   .featured-body-grid {
@@ -31,7 +60,7 @@
   }
 }
 
-/* ── Tablet (<= 768px) ──────────────────────────────────────────────────── */
+/* ── Tablet & Small Laptop (<= 768px) ───────────────────────────────────── */
 @media (max-width: 768px) {
   .top-official-strip .gov-creds span.desktop-only {
     display: none;
@@ -47,32 +76,66 @@
     justify-content: center;
   }
 
+  .header-right-actions.desktop-only {
+    display: none;
+  }
+
   .hero-banner {
-    padding: 2rem 0;
+    padding: 2rem 0 1.75rem;
   }
 
   .hero-title {
     font-size: 1.65rem;
   }
 
-  .search-form {
+  .hero-search-form {
     flex-direction: column;
-    background: transparent;
-    border: none;
-    box-shadow: none;
-    gap: 0.5rem;
+    padding: 6px;
+    gap: 6px;
   }
 
-  .search-input {
-    background-color: var(--white);
-    border-radius: var(--radius-xs);
-    border: 1px solid var(--slate-300);
-    box-shadow: var(--shadow-sm);
+  .hero-search-input {
+    padding: 0.75rem 0.75rem 0.75rem 2.2rem;
+    font-size: 0.9rem;
   }
 
-  .search-btn {
-    padding: 0.75rem 1rem;
+  .hero-search-btn-group {
+    display: flex;
+    width: 100%;
+    gap: 6px;
+  }
+
+  .hero-btn-primary, .hero-btn-secondary {
+    flex: 1;
     justify-content: center;
+    padding: 0.75rem 0.5rem;
+    font-size: 0.82rem;
+  }
+
+  .quick-services-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .audience-header-bar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .audience-tabs-group {
+    width: 100%;
+    display: flex;
+    overflow-x: auto;
+  }
+
+  .audience-tab {
+    flex: 1;
+    text-align: center;
+    padding: 0.45rem 0.4rem;
+  }
+
+  .audience-grid {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
   }
 
   .featured-body-grid {
@@ -87,6 +150,23 @@
   .featured-col:last-child {
     grid-column: auto;
     border-bottom: none;
+  }
+
+  .ai-banner-card {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 1.5rem;
+  }
+
+  .ai-banner-actions {
+    width: 100%;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .ai-banner-actions .btn {
+    width: 100%;
+    justify-content: center;
   }
 
   .chat-window {
@@ -108,7 +188,39 @@
   }
 }
 
-/* ── Mobile (<= 480px) ──────────────────────────────────────────────────── */
+/* ── Mobile (<= 640px) ──────────────────────────────────────────────────── */
+@media (max-width: 640px) {
+  .quick-services-grid {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+
+  .process-steps-grid {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+
+  .rec-input-group {
+    flex-direction: column;
+  }
+
+  .rec-submit-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .rec-cards-grid {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+
+  .trusted-portals-grid {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+}
+
+/* ── Small Mobile (<= 480px) ────────────────────────────────────────────── */
 @media (max-width: 480px) {
   html {
     font-size: 14px;
@@ -123,25 +235,59 @@
     font-size: 1.1rem;
   }
 
+  .brand-title-sub {
+    display: none;
+  }
+
   .emblem-wrapper {
     width: 36px;
     height: 36px;
   }
 
+  .hero-title {
+    font-size: 1.45rem;
+    line-height: 1.25;
+  }
+
+  .hero-search-btn-group {
+    flex-direction: column;
+  }
+
+  .hero-btn-primary, .hero-btn-secondary {
+    width: 100%;
+    min-height: 42px;
+  }
+
   .matrix-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
   }
 
   .matrix-gateways {
     grid-template-columns: 1fr;
   }
 
-  .services-grid {
-    grid-template-columns: 1fr;
+  .audience-tabs-group {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    padding: 2px;
   }
 
-  .btn {
-    padding: 0.5rem 0.85rem;
+  .audience-tab {
+    font-size: 0.7rem;
+    padding: 0.45rem 0.2rem;
+    white-space: normal;
+    line-height: 1.15;
+  }
+
+  .rec-tool-card, .audience-wrapper, .ai-banner-card {
+    padding: 1.15rem 0.9rem;
+  }
+
+  .featured-header {
+    flex-direction: column;
+    align-items: flex-start;
   }
 
   .chat-window {
