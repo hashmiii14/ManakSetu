@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#082C59"/>
+      <stop offset="100%" stop-color="#0A3871"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bg)"/>
+
+  <!-- Top Tricolor Accent Bar -->
+  <rect x="0" y="0" width="1200" height="10" fill="#FF9933"/>
+  <rect x="0" y="10" width="1200" height="4" fill="#FFFFFF"/>
+  <rect x="0" y="14" width="1200" height="10" fill="#138808"/>
+
+  <!-- Subtle grid pattern -->
+  <g opacity="0.08" stroke="#FFFFFF" stroke-width="1">
+    <line x1="0" y1="100" x2="1200" y2="100"/>
+    <line x1="0" y1="200" x2="1200" y2="200"/>
+    <line x1="0" y1="300" x2="1200" y2="300"/>
+    <line x1="0" y1="400" x2="1200" y2="400"/>
+    <line x1="0" y1="500" x2="1200" y2="500"/>
+    <line x1="200" y1="0" x2="200" y2="630"/>
+    <line x1="400" y1="0" x2="400" y2="630"/>
+    <line x1="600" y1="0" x2="600" y2="630"/>
+    <line x1="800" y1="0" x2="800" y2="630"/>
+    <line x1="1000" y1="0" x2="1000" y2="630"/>
+  </g>
+
+  <!-- Left Architectural Emblem -->
+  <g transform="translate(100, 160) scale(4.5)">
+    <rect width="40" height="40" rx="4" fill="#0E4482" stroke="#2563EB" stroke-width="0.5"/>
+    <rect x="4" y="32" width="32" height="3" rx="0.5" fill="#FFFFFF"/>
+    <rect x="7" y="15" width="6" height="15" fill="#FFFFFF"/>
+    <rect x="5.5" y="13" width="9" height="2" fill="#FFFFFF"/>
+    <rect x="27" y="15" width="6" height="15" fill="#FFFFFF"/>
+    <rect x="25.5" y="13" width="9" height="2" fill="#FFFFFF"/>
+    <path d="M13 19C15 16 25 16 27 19V15H13V19Z" fill="#F59E0B"/>
+    <rect x="4" y="8" width="32" height="3" rx="0.5" fill="#FFFFFF"/>
+    <polygon points="20,4 23.5,8 16.5,8" fill="#F59E0B"/>
+    <rect x="18.5" y="10" width="3" height="12" fill="#F59E0B"/>
+  </g>
+
+  <!-- Main Titles -->
+  <g transform="translate(340, 190)">
+    <!-- Badge -->
+    <rect x="0" y="0" width="480" height="34" rx="4" fill="#1E3A8A" stroke="#3B82F6" stroke-width="1"/>
+    <text x="16" y="22" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="bold" fill="#F59E0B" letter-spacing="1">
+      SMART INDIA HACKATHON 2026 | PS ID: 26107
+    </text>
+
+    <!-- Main Title -->
+    <text x="0" y="90" font-family="Arial, Helvetica, sans-serif" font-size="64" font-weight="900" fill="#FFFFFF" letter-spacing="2">
+      MANAKSETU
+    </text>
+    <text x="440" y="90" font-family="Arial, Helvetica, sans-serif" font-size="42" font-weight="bold" fill="#F59E0B">
+      मानक सेतु
+    </text>
+
+    <!-- Subtitle -->
+    <text x="0" y="140" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="bold" fill="#93C5FD">
+      AI-Powered BIS Standards Recommendation &amp; Certification Portal
+    </text>
+
+    <!-- Feature Pillars -->
+    <g transform="translate(0, 185)" font-family="Arial, Helvetica, sans-serif" font-size="15" fill="#E2E8F0">
+      <text x="0" y="0">• Instant IS Standards &amp; Mandatory QCO Search</text>
+      <text x="0" y="32">• 50% MSME Statutory Concessions Calculator</text>
+      <text x="400" y="0">• Dual-Tier Gold HUID &amp; ISI License Verifier</text>
+      <text x="400" y="32">• ManakBot Grounded Legal &amp; Technical AI Desk</text>
+    </g>
+  </g>
+
+  <!-- Bottom Institutional Bar -->
+  <rect x="0" y="550" width="1200" height="80" fill="#061E3D"/>
+  <line x1="0" y1="550" x2="1200" y2="550" stroke="#1E3A8A" stroke-width="1"/>
+  
+  <text x="100" y="598" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="bold" fill="#FFFFFF">
+    Team Code Snippet | Jamia Hamdard, New Delhi
+  </text>
+  <text x="820" y="598" font-family="Arial, Helvetica, sans-serif" font-size="14" font-weight="bold" fill="#F59E0B">
+    https://manaksetu.vercel.app/
+  </text>
+</svg>

@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+
+{% block title %}ManakBot AI — Grounded Indian Standards Consultation | ManakSetu{% endblock %}
+
+{% block content %}
+<div class="container" style="padding-top: 1.5rem; padding-bottom: 3rem;">
+  
+  <!-- Breadcrumbs -->
+  <div class="breadcrumbs">
+    <a href="/">Home</a>
+    <span class="divider">/</span>
+    <span class="current">ManakBot AI Assistant</span>
+  </div>
+
+  <!-- Page Header -->
+  <div class="section-title-strip">
+    <div>
+      <h1 class="section-title">ManakBot — AI-Assisted Standards Consultation Engine</h1>
+      <p class="section-subtitle">
+        Intelligent queries grounded strictly in the Bureau of Indian Standards dataset and active Quality Control Orders
+      </p>
+    </div>
+    <span class="badge badge-gov" style="font-size:0.75rem; padding:0.3rem 0.65rem;">Grounded RAG • Zero Hallucination Guard</span>
+  </div>
+
+  <!-- Chat Window -->
+  <div class="chat-window">
+    
+    <!-- Chat Header -->
+    <div class="chat-header">
+      <div style="display:flex; align-items:center; gap:0.6rem;">
+        <div style="width:10px; height:10px; border-radius:50%; background-color:#4ade80;"></div>
+        <div>
+          <strong style="font-size:0.95rem;">ManaKBot AI Consultation Desk</strong>
+          <div style="font-size:0.68rem; color:var(--slate-300);">Grounded on 572 Indian Standards &amp; Section 29 Compliance Rules</div>
+        </div>
+      </div>
+      <span class="badge" style="background:rgba(255,255,255,0.15); color:#fff; border:none; font-size:0.68rem;">SIH 2026 Engine</span>
+    </div>
+
+    <!-- Suggested Quick Prompts -->
+    <div class="chat-quick-prompts">
+      <span style="font-weight:700; color:var(--slate-500); align-self:center;">Suggested:</span>
+      <button class="quick-prompt-btn" data-chat-prompt="What are the mandatory testing requirements and BIS certification procedure for Portland Pozzolana Cement (IS 1489)?">
+        Cement Testing (IS 1489)
+      </button>
+      <button class="quick-prompt-btn" data-chat-prompt="Is ISI certification mandatory for household geysers and water heaters under IS 2082?">
+        Geysers QCO (IS 2082)
+      </button>
+      <button class="quick-prompt-btn" data-chat-prompt="What are the safety requirements and testing protocols for two-wheeler motorcycle helmets under IS 4151?">
+        Helmets (IS 4151)
+      </button>
+      <button class="quick-prompt-btn" data-chat-prompt="How much statutory marking fee concession does a micro enterprise receive for BIS product certification?">
+        MSME 50% Relief
+      </button>
+      <button class="quick-prompt-btn" data-chat-prompt="What are the chemical and microbiological limits for packaged drinking water under IS 14543?">
+        Packaged Water (IS 14543)
+      </button>
+    </div>
+
+    <!-- Messages Thread -->
+    <div class="chat-messages" id="chatMessages">
+      
+      <!-- Welcome Message from Bot -->
+      <div class="chat-bubble chat-bubble-bot">
+        <h3 style="margin-top:0;">Welcome to ManaKBot Statutory Consultation Desk</h3>
+        <p>
+          I am your AI assistant for Indian Standards, Bureau of Indian Standards (BIS) conformity assessment, and statutory quality orders.
+        </p>
+        <p>
+          You can ask me about:
+        </p>
+        <ul>
+          <li>Mandatory testing benchmarks for products (e.g. compressive strength for cement, dielectric tests for water heaters)</li>
+          <li>Quality Control Orders (QCO) and statutory deadlines under the BIS Act, 2016</li>
+          <li>In-house factory testing apparatus setup and Scheme of Testing &amp; Inspection (STI)</li>
+          <li>Statutory tariff fee concessions for Micro and Small manufacturing units (up to 50% relief)</li>
+        </ul>
+        <div style="font-size:0.7rem; color:var(--slate-500); margin-top:0.75rem; border-top:1px solid var(--slate-200); padding-top:0.4rem;">
+          <strong>Notice:</strong> Informational prototype guidance grounded in official BIS datasets. Please confirm statutory filings at manakonline.in.
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Chat Footer Input -->
+    <div class="chat-footer">
+      <form id="chatForm" class="chat-form" data-initial-prompt="{{ initial_prompt }}">
+        <input 
+          type="text" 
+          id="chatInput" 
+          class="form-control" 
+          placeholder="Ask ManaKBot about an Indian Standard, testing criteria, QCO order, or MSME tariff..." 
+          required 
+          autocomplete="off"
+          value="{{ initial_prompt }}"
+        >
+        <button type="submit" class="btn btn-primary" style="padding:0 1.5rem; white-space:nowrap;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          <span>Send Inquiry</span>
+        </button>
+      </form>
+    </div>
+
+  </div>
+
+</div>
+{% endblock %}

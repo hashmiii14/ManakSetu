@@ -1,0 +1,230 @@
+{% extends "base.html" %}
+
+{% block title %}Statutory Grievance & Violation Reporting — ManakSetu{% endblock %}
+
+{% block content %}
+<div class="container" style="padding-top: 1.5rem; padding-bottom: 3rem;">
+  
+  <!-- Breadcrumbs -->
+  <div class="breadcrumbs">
+    <a href="/">Home</a>
+    <span class="divider">/</span>
+    <span class="current">Grievance &amp; Violation Reporting</span>
+  </div>
+
+  <!-- Page Header Strip -->
+  <div class="section-title-strip">
+    <div>
+      <h1 class="section-title">Statutory Grievance &amp; Counterfeit Violation Portal</h1>
+      <p class="section-subtitle">
+        File confidential reports concerning counterfeit ISI markings, fraudulent gold hallmarking, or substandard goods
+      </p>
+    </div>
+    <span class="badge badge-qco" style="font-size:0.75rem; padding:0.3rem 0.65rem;">Section 29 BIS Act Enforcement</span>
+  </div>
+
+  <div style="display:grid; grid-template-columns: 7fr 5fr; gap:1.5rem; align-items:flex-start;">
+    
+    <!-- Left Column: Report Form -->
+    <div class="gov-card" style="margin-bottom:0;">
+      <div class="gov-card-header">
+        <h2>File Statutory Quality Grievance</h2>
+        <p style="font-size:0.75rem; color:var(--slate-500); margin-top:0.2rem;">All submissions are assigned a verifiable tracking docket number</p>
+      </div>
+
+      <!-- Success Confirmation Box (Hidden initially) -->
+      <div id="reportSuccessBox" style="display:none; background-color:var(--emerald-50); border:2px solid var(--emerald-600); border-radius:var(--radius-sm); padding:1.5rem; margin-bottom:1.5rem;">
+        <div style="display:flex; align-items:center; gap:0.6rem; margin-bottom:0.6rem;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--emerald-800)" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          <strong style="color:var(--emerald-900); font-size:1.05rem;">Grievance Registered Successfully</strong>
+        </div>
+        <p style="font-size:0.85rem; color:var(--slate-700); line-height:1.5; margin-bottom:0.75rem;">
+          Your report has been logged in the statutory evaluation queue. Please retain your tracking docket number for reference:
+        </p>
+        <div style="background:#fff; border:1px dashed var(--emerald-600); padding:0.65rem 1rem; border-radius:var(--radius-xs); font-family:var(--font-mono); font-size:1.15rem; font-weight:800; color:var(--gov-900); margin-bottom:1rem;" id="docketIdDisplay">
+          REP-20260914-XXXXXX
+        </div>
+        <button type="button" class="btn btn-secondary btn-sm" onclick="window.location.reload();">
+          Submit Another Report
+        </button>
+      </div>
+
+      <!-- Actual Form -->
+      <form id="grievanceForm">
+        
+        <!-- Suspect Identifier -->
+        <div class="form-group">
+          <label class="form-label" for="reportIdentifier">
+            <span>Suspect Product Brand, CM/L License Number, or HUID Code</span>
+            <span class="required-mark">*</span>
+          </label>
+          <input 
+            type="text" 
+            id="reportIdentifier" 
+            name="identifier" 
+            value="{{ prefilled_identifier }}" 
+            class="form-control" 
+            placeholder="e.g. Counterfeit Cement Bag, CM/L-9900000, or Gold Chain HUID XX9999..." 
+            required
+          >
+          <div class="form-hint">Enter the brand name, serial code, or standard mark details found on the packaging.</div>
+        </div>
+
+        <!-- Category -->
+        <div class="form-group">
+          <label class="form-label" for="reportCategory">
+            <span>Violation Category</span>
+            <span class="required-mark">*</span>
+          </label>
+          <select id="reportCategory" name="category" class="form-control" required>
+            <option value="Misuse of Standard ISI Mark" {% if 'Misuse' in prefilled_reason %}selected{% endif %}>Misuse of Standard ISI Mark (Unlicensed Manufacturing)</option>
+            <option value="Substandard Product Quality" {% if 'Substandard' in prefilled_reason %}selected{% endif %}>Substandard Product Quality / Laboratory Failure</option>
+            <option value="Fake Gold Hallmarking (HUID Fraud)" {% if 'Hallmarking' in prefilled_reason %}selected{% endif %}>Fake Gold Hallmarking (HUID Laser Inscription Fraud)</option>
+            <option value="Violation of Mandatory Quality Control Order (QCO)">Violation of Mandatory Quality Control Order (QCO)</option>
+            <option value="Suspicious Counterfeit Identifier" {% if 'Suspicious' in prefilled_reason %}selected{% endif %}>Suspicious / Counterfeit Identifier</option>
+          </select>
+        </div>
+
+        <!-- Description -->
+        <div class="form-group">
+          <label class="form-label" for="reportDescription">
+            <span>Detailed Violation Observation</span>
+            <span class="required-mark">*</span>
+          </label>
+          <textarea 
+            id="reportDescription" 
+            name="description" 
+            class="form-control" 
+            placeholder="Describe the physical condition, missing BIS hallmarks, packaging defects (e.g. wrong lettering on cement bag), or safety failures..." 
+            required
+          >{{ prefilled_reason }}</textarea>
+        </div>
+
+        <!-- Location -->
+        <div class="form-group">
+          <label class="form-label" for="reportLocation">
+            <span>Market Location / Retailer Address</span>
+          </label>
+          <input 
+            type="text" 
+            id="reportLocation" 
+            name="location" 
+            class="form-control" 
+            placeholder="e.g. M/s ABC Traders, Main Market, Lucknow, Uttar Pradesh - 226001"
+          >
+          <div class="form-hint">Provides jurisdictional context for regional BIS enforcement branch offices.</div>
+        </div>
+
+        <!-- Complainant Contact -->
+        <div class="form-group">
+          <label class="form-label" for="reportContact">
+            <span>Complainant Mobile / Email (Optional)</span>
+          </label>
+          <input 
+            type="text" 
+            id="reportContact" 
+            name="contact" 
+            class="form-control" 
+            placeholder="e.g. consumer@example.com or +91 98765 43210"
+          >
+          <div class="form-hint">Used strictly for automated docket status notifications. Reports can be filed anonymously.</div>
+        </div>
+
+        <button type="submit" id="submitReportBtn" class="btn btn-primary btn-block">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          <span>Submit Grievance Docket</span>
+        </button>
+
+      </form>
+    </div>
+
+    <!-- Right Column: Statutory Legal Framework & Helpline -->
+    <div style="display:flex; flex-direction:column; gap:1.5rem;">
+      
+      <!-- Section 29 Notice Card -->
+      <div class="gov-card" style="margin-bottom:0; border-left:4px solid var(--red-700);">
+        <div class="gov-card-header" style="border-bottom-color:var(--slate-200);">
+          <div style="display:flex; align-items:center; gap:0.4rem;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--red-700)" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg>
+            <h3 style="font-size:1rem; color:var(--red-800);">Statutory Penalties (BIS Act, 2016)</h3>
+          </div>
+        </div>
+        <p style="font-size:0.8rem; color:var(--slate-700); line-height:1.5; margin-bottom:0.75rem;">
+          Under <strong>Section 29 of the Bureau of Indian Standards Act, 2016</strong>, any person who manufactures, 
+          distributes, sells, or imports goods bearing a counterfeit standard mark or violates a mandatory Quality Control Order (QCO) 
+          is liable to:
+        </p>
+        <ul style="list-style:disc; margin-left:1.25rem; font-size:0.78rem; color:var(--slate-700); line-height:1.5;">
+          <li>Imprisonment for a term which may extend to <strong>two years</strong>.</li>
+          <li>Fine of not less than <strong>two lakh rupees</strong> (which may extend up to ten times the value of manufactured goods).</li>
+          <li>Confiscation and destruction of substandard commercial consignments.</li>
+        </ul>
+      </div>
+
+      <!-- National Consumer Helpline Integration -->
+      <div class="gov-card" style="margin-bottom:0; background-color:var(--slate-50);">
+        <div class="gov-card-header">
+          <h3 style="font-size:1rem;">National Consumer Helpline</h3>
+        </div>
+        <p style="font-size:0.8rem; color:var(--slate-600); line-height:1.5; margin-bottom:0.85rem;">
+          For urgent consumer product disputes or uncooperative traders, you can also connect directly with the Ministry's National Consumer Helpline.
+        </p>
+        <div style="display:flex; flex-direction:column; gap:0.5rem; font-size:0.8rem;">
+          <div style="display:flex; justify-content:space-between; align-items:center; background:#fff; padding:0.6rem 0.85rem; border:1px solid var(--slate-200); border-radius:var(--radius-xs);">
+            <span>Toll-Free Helpline:</span>
+            <a href="tel:1915" style="font-family:var(--font-mono); font-weight:800; color:var(--gov-900);">1915</a>
+          </div>
+          <div style="display:flex; justify-content:space-between; align-items:center; background:#fff; padding:0.6rem 0.85rem; border:1px solid var(--slate-200); border-radius:var(--radius-xs);">
+            <span>SMS Redressal:</span>
+            <span style="font-family:var(--font-mono); font-weight:800; color:var(--gov-900);">8800001915</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  document.getElementById('grievanceForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const btn = document.getElementById('submitReportBtn');
+    btn.disabled = true;
+    btn.innerHTML = 'Submitting Docket...';
+
+    const payload = {
+      identifier: document.getElementById('reportIdentifier').value.trim(),
+      category: document.getElementById('reportCategory').value,
+      description: document.getElementById('reportDescription').value.trim(),
+      location: document.getElementById('reportLocation').value.trim(),
+      contact: document.getElementById('reportContact').value.trim()
+    };
+
+    try {
+      const res = await fetch('/api/report', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json();
+      if (res.ok) {
+        document.getElementById('grievanceForm').style.display = 'none';
+        document.getElementById('docketIdDisplay').textContent = data.id;
+        document.getElementById('reportSuccessBox').style.display = 'block';
+      } else {
+        alert('Failed to submit report: ' + (data.detail || 'Internal server error'));
+        btn.disabled = false;
+        btn.innerHTML = 'Submit Grievance Docket';
+      }
+    } catch(err) {
+      alert('Error submitting report. Please check your connection.');
+      btn.disabled = false;
+      btn.innerHTML = 'Submit Grievance Docket';
+    }
+  });
+</script>
+{% endblock %}

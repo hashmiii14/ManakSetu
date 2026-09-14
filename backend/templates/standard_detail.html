@@ -1,0 +1,268 @@
+{% extends "base.html" %}
+
+{% block title %}{{ standard.standard }} — {{ standard.title }} | ManakSetu{% endblock %}
+
+{% block content %}
+<div class="container" style="padding-top: 1.5rem; padding-bottom: 3rem;">
+  
+  <!-- Breadcrumbs -->
+  <div class="breadcrumbs">
+    <a href="/">Home</a>
+    <span class="divider">/</span>
+    <a href="/standards">Standards Directory</a>
+    <span class="divider">/</span>
+    <span class="current">{{ standard.standard }}</span>
+  </div>
+
+  <!-- Standard Header Card -->
+  <div class="gov-card" style="border-left: 5px solid var(--gov-800); margin-bottom: 1.5rem;">
+    <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:1rem; margin-bottom:0.75rem;">
+      <div>
+        <div style="display:flex; align-items:center; gap:0.5rem; flex-wrap:wrap; margin-bottom:0.35rem;">
+          <span style="font-family:var(--font-mono); font-size:1.35rem; font-weight:800; color:var(--gov-900);">
+            {{ standard.standard }}
+          </span>
+          <span class="badge badge-gov">{{ standard.category }}</span>
+          {% if standard.mandatory_qco %}
+            <span class="badge badge-qco">Quality Control Order Mandatory</span>
+          {% else %}
+            <span class="badge badge-voluntary">Voluntary Certification (Scheme-I)</span>
+          {% endif %}
+        </div>
+        <h1 style="font-size:1.4rem; font-weight:800; color:var(--gov-900); line-height:1.25;">
+          {{ standard.title }}
+        </h1>
+      </div>
+
+      <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+        <a href="/calculator?standard={{ standard.standard }}" class="btn btn-amber btn-sm">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect width="16" height="20" x="4" y="2" rx="2"/><line x1="8" x2="16" y1="6" y2="6"/><line x1="16" x2="16" y1="14" y2="18"/></svg>
+          <span>Calculate MSME Relief</span>
+        </a>
+        <a href="/chatbot?prompt={{ ('What are the mandatory testing requirements and BIS certification procedure for ' ~ standard.standard ~ '?') | urlencode }}" class="btn btn-primary btn-sm">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          <span>Consult ManakBot</span>
+        </a>
+      </div>
+    </div>
+
+    {% if standard.qco_notification %}
+      <div style="background-color:var(--saffron-50); border:1px solid var(--saffron-100); border-radius:var(--radius-xs); padding:0.6rem 0.85rem; font-size:0.78rem; color:var(--saffron-900); display:flex; align-items:center; gap:0.5rem;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg>
+        <span><strong>Statutory Order:</strong> {{ standard.qco_notification }} • Compliance is mandatory prior to retail distribution.</span>
+      </div>
+    {% endif %}
+  </div>
+
+  <!-- Main Content 2-Column Grid -->
+  <div style="display:grid; grid-template-columns: 8fr 4fr; gap:1.5rem; align-items:flex-start;">
+    
+    <!-- Left Column: Specs, Tests, Laboratories, Roadmap -->
+    <div style="display:flex; flex-direction:column; gap:1.5rem;">
+      
+      <!-- Scope Card -->
+      <div class="gov-card" style="margin-bottom:0;">
+        <div class="gov-card-header">
+          <h2>Statutory Scope &amp; Technical Coverage</h2>
+        </div>
+        <div style="font-size:0.85rem; color:var(--slate-700); line-height:1.6;">
+          <p>{{ standard.scope or standard.description or "Comprehensive technical parameters, raw material classifications, and finished product conformance specifications under the Bureau of Indian Standards Act." }}</p>
+        </div>
+      </div>
+
+      <!-- Laboratory Testing Benchmarks -->
+      <div class="gov-card" style="margin-bottom:0;">
+        <div class="gov-card-header">
+          <h2>Statutory Testing Benchmarks &amp; Quality Parameters</h2>
+        </div>
+        
+        {% if standard.key_tests %}
+          <div class="gov-table-container">
+            <table class="gov-table">
+              <thead>
+                <tr>
+                  <th style="width:40px;">#</th>
+                  <th>Mandatory Laboratory Test Parameter</th>
+                  <th>Statutory Acceptance Criteria</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for test in standard.key_tests %}
+                  <tr>
+                    <td style="font-family:var(--font-mono); font-weight:700; color:var(--slate-500);">{{ loop.index }}</td>
+                    <td style="font-weight:700; color:var(--gov-900);">{{ test }}</td>
+                    <td style="font-size:0.78rem; color:var(--slate-600);">Must meet prescribed thresholds under Scheme of Testing &amp; Inspection (STI)</td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        {% else %}
+          <ul style="list-style:disc; margin-left:1.5rem; font-size:0.85rem; color:var(--slate-700); line-height:1.6;">
+            <li>Routine factory surveillance sample testing</li>
+            <li>Mechanical tensile &amp; compressive strength verification</li>
+            <li>Chemical composition and purity evaluation</li>
+            <li>Accelerated durability and environmental moisture tests</li>
+          </ul>
+        {% endif %}
+      </div>
+
+      <!-- Recognized Testing Laboratories -->
+      <div class="gov-card" style="margin-bottom:0;">
+        <div class="gov-card-header">
+          <h2>Apex Recognized Testing Laboratories</h2>
+        </div>
+        
+        {% if standard.labs_available %}
+          <div class="gov-table-container">
+            <table class="gov-table">
+              <thead>
+                <tr>
+                  <th>Facility Name</th>
+                  <th>Location / Jurisdiction</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for lab in standard.labs_available %}
+                  <tr>
+                    <td style="font-weight:700; color:var(--gov-900);">{{ lab.name }}</td>
+                    <td style="font-size:0.78rem; color:var(--slate-600);">{{ lab.city or lab.state or "National Testing Network" }}</td>
+                    <td><span class="badge badge-success">BIS Recognized</span></td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        {% else %}
+          <p style="font-size:0.85rem; color:var(--slate-700); line-height:1.5;">
+            Tests can be conducted at the BIS Central Laboratory (Sahibabad, UP) and regional testing houses at Kolkata, Mumbai, Chennai, and Chandigarh.
+          </p>
+        {% endif %}
+      </div>
+
+      <!-- 7-Stage Conformity Assessment Roadmap -->
+      <div class="gov-card" style="margin-bottom:0;">
+        <div class="gov-card-header">
+          <h2>7-Stage BIS Conformity Assessment Roadmap</h2>
+        </div>
+        
+        <div style="display:flex; flex-direction:column; gap:1rem; font-size:0.82rem;">
+          <div style="display:flex; gap:0.75rem;">
+            <div style="width:28px; height:28px; border-radius:50%; background:var(--gov-800); color:#fff; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:0.75rem; flex-shrink:0;">1</div>
+            <div>
+              <strong style="color:var(--gov-900); display:block;">Standard &amp; QCO Identification</strong>
+              <span style="color:var(--slate-600);">Confirm applicability of {{ standard.standard }} and verify whether central Gazette notification enforces mandatory ISI marking.</span>
+            </div>
+          </div>
+
+          <div style="display:flex; gap:0.75rem;">
+            <div style="width:28px; height:28px; border-radius:50%; background:var(--gov-800); color:#fff; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:0.75rem; flex-shrink:0;">2</div>
+            <div>
+              <strong style="color:var(--gov-900); display:block;">In-House Laboratory Infrastructure Setup</strong>
+              <span style="color:var(--slate-600);">Establish calibrated factory testing apparatus in accordance with the Scheme of Inspection and Testing (SIT).</span>
+            </div>
+          </div>
+
+          <div style="display:flex; gap:0.75rem;">
+            <div style="width:28px; height:28px; border-radius:50%; background:var(--gov-800); color:#fff; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:0.75rem; flex-shrink:0;">3</div>
+            <div>
+              <strong style="color:var(--gov-900); display:block;">Application Dossier on e-BIS ManakOnline</strong>
+              <span style="color:var(--slate-600);">Submit Form-I on www.manakonline.in along with factory layout, manufacturing machinery list, and test personnel qualifications.</span>
+            </div>
+          </div>
+
+          <div style="display:flex; gap:0.75rem;">
+            <div style="width:28px; height:28px; border-radius:50%; background:var(--gov-800); color:#fff; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:0.75rem; flex-shrink:0;">4</div>
+            <div>
+              <strong style="color:var(--gov-900); display:block;">Factory Audit &amp; Sample Drawing</strong>
+              <span style="color:var(--slate-600);">BIS investigating officers conduct a 2-day on-site production audit and draw counter-samples for independent testing in recognized NABL labs.</span>
+            </div>
+          </div>
+
+          <div style="display:flex; gap:0.75rem;">
+            <div style="width:28px; height:28px; border-radius:50%; background:var(--gov-800); color:#fff; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:0.75rem; flex-shrink:0;">5</div>
+            <div>
+              <strong style="color:var(--gov-900); display:block;">Grant of 7-Digit CM/L License</strong>
+              <span style="color:var(--slate-600);">Following satisfactory test reports and payment of statutory marking fees (with 50% MSME concession), BIS authorizes the ISI Mark.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Right Sidebar: Fee Concession Breakdown & Action Box -->
+    <div style="display:flex; flex-direction:column; gap:1.5rem;">
+      
+      <!-- MSME Fee Relief Breakdown Box -->
+      <div class="gov-card" style="margin-bottom:0; background-color:var(--slate-50); border:1px solid var(--slate-300);">
+        <div class="gov-card-header" style="border-bottom-color:var(--slate-300);">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <h3 style="font-size:1rem;">MSME Fee Structure</h3>
+            <span class="badge badge-success">50% Relief</span>
+          </div>
+          <p style="font-size:0.72rem; color:var(--slate-500); margin-top:0.15rem;">Statutory tariff estimate for Micro enterprises</p>
+        </div>
+
+        <div style="font-size:0.8rem; display:flex; flex-direction:column; gap:0.5rem; margin-bottom:1rem;">
+          <div style="display:flex; justify-content:space-between;">
+            <span style="color:var(--slate-600);">Application Fee:</span>
+            <span style="font-family:var(--font-mono); font-weight:700;">{{ cost_preview.application_fee | format_inr }}</span>
+          </div>
+          <div style="display:flex; justify-content:space-between;">
+            <span style="color:var(--slate-600);">Audit Fee (2 man-days):</span>
+            <span style="font-family:var(--font-mono); font-weight:700;">{{ cost_preview.inspection_fee | format_inr }}</span>
+          </div>
+          <div style="display:flex; justify-content:space-between;">
+            <span style="color:var(--slate-600);">Standard Base Marking Fee:</span>
+            <span style="font-family:var(--font-mono); color:var(--slate-500); text-decoration:line-through;">{{ cost_preview.base_marking_fee | format_inr }}</span>
+          </div>
+          <div style="display:flex; justify-content:space-between; background-color:var(--emerald-50); padding:0.4rem 0.6rem; border-radius:var(--radius-xs); border:1px solid #a7f3d0; color:var(--emerald-900);">
+            <strong style="font-size:0.75rem;">Micro Unit Savings (50%):</strong>
+            <strong style="font-family:var(--font-mono);">-{{ cost_preview.total_savings | format_inr }}</strong>
+          </div>
+          <div style="display:flex; justify-content:space-between; border-top:2px solid var(--slate-200); padding-top:0.6rem; font-size:0.95rem;">
+            <strong style="color:var(--gov-900);">Estimated Net Payable:</strong>
+            <strong style="font-family:var(--font-mono); color:var(--gov-900);">{{ cost_preview.total_estimated_cost | format_inr }}</strong>
+          </div>
+        </div>
+
+        <a href="/calculator?standard={{ standard.standard }}" class="btn btn-primary btn-block btn-sm">
+          Interactive Tariff Calculator &rarr;
+        </a>
+      </div>
+
+      <!-- Quick Portals Card -->
+      <div class="gov-card" style="margin-bottom:0;">
+        <div class="gov-card-header">
+          <h3 style="font-size:1rem;">Regulatory Resources</h3>
+        </div>
+        <ul style="list-style:none; font-size:0.8rem; display:flex; flex-direction:column; gap:0.6rem;">
+          <li>
+            <a href="https://www.manakonline.in" target="_blank" rel="noopener" style="display:flex; align-items:center; justify-content:space-between; font-weight:700;">
+              <span>e-BIS ManakOnline Portal</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg>
+            </a>
+          </li>
+          <li>
+            <a href="/verify" style="display:flex; align-items:center; justify-content:space-between; font-weight:700;">
+              <span>Verify Licensee in TrueMark</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
+            </a>
+          </li>
+          <li>
+            <a href="/report?cml={{ standard.standard }}" style="display:flex; align-items:center; justify-content:space-between; font-weight:700; color:var(--red-700);">
+              <span>Report Non-Compliance</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
+            </a>
+          </li>
+        </ul>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+{% endblock %}

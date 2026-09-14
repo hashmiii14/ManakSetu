@@ -1,0 +1,188 @@
+{% extends "base.html" %}
+
+{% block title %}TrueMark Verifier — BIS License & HUID Hallmarking Check | ManakSetu{% endblock %}
+
+{% block content %}
+<div class="container" style="padding-top: 1.5rem; padding-bottom: 3rem;">
+  
+  <!-- Breadcrumbs -->
+  <div class="breadcrumbs">
+    <a href="/">Home</a>
+    <span class="divider">/</span>
+    <span class="current">TrueMark Verifier</span>
+  </div>
+
+  <!-- Page Header -->
+  <div class="section-title-strip">
+    <div>
+      <h1 class="section-title">TrueMark Citizen &amp; Enterprise Verification Gateway</h1>
+      <p class="section-subtitle">
+        Verify ISI 7-digit manufacturer licenses (CM/L) and gold jewelry 6-character Hallmarking Unique Identifiers (HUID)
+      </p>
+    </div>
+    <span class="badge badge-gov" style="font-size:0.75rem; padding:0.3rem 0.65rem;">Section 14 &amp; 15 BIS Act Mandate</span>
+  </div>
+
+  <!-- Verifier Card -->
+  <div class="gov-card">
+    
+    <!-- Dual Subtabs -->
+    <div class="verifier-tabs">
+      <div class="verifier-tab {% if subtab == 'cml' %}active{% endif %}" id="tabCml">
+        1. ISI Certification License (CM/L 7-Digit Check)
+      </div>
+      <div class="verifier-tab {% if subtab == 'huid' %}active{% endif %}" id="tabHuid">
+        2. Gold Hallmarking (6-Character HUID Check)
+      </div>
+    </div>
+
+    <!-- Panel 1: ISI CM/L Verification Form -->
+    <div id="panelCml" style="display:{% if subtab == 'cml' %}block{% else %}none{% endif %};">
+      <form action="/verify" method="GET">
+        <input type="hidden" name="subtab" value="cml">
+        <div class="form-group">
+          <label class="form-label" for="inputCml">
+            <span>Enter 7-Digit BIS License (CM/L) Number</span>
+            <span class="required-mark">*</span>
+          </label>
+          <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+            <input 
+              type="text" 
+              id="inputCml" 
+              name="cml" 
+              value="{{ cml_query }}" 
+              class="form-control" 
+              placeholder="e.g. 6200145 (UltraTech), 8400192 (Havells), 7100341 (Anchor)..." 
+              required
+              style="flex:1; min-width:240px; font-family:var(--font-mono); font-weight:700;"
+            >
+            <button type="submit" class="btn btn-primary">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+              <span>Verify License</span>
+            </button>
+          </div>
+          <div class="form-hint">Found stamped below the standard ISI mark on consumer products and cement bags.</div>
+        </div>
+
+        <!-- Presets for Evaluator Demo -->
+        <div style="margin-top:0.85rem; padding-top:0.75rem; border-top:1px solid var(--slate-200);">
+          <span style="font-size:0.72rem; font-weight:700; color:var(--slate-600); display:block; margin-bottom:0.4rem;">Sample License Numbers for Evaluation:</span>
+          <div style="display:flex; flex-wrap:wrap; gap:0.4rem;">
+            <a href="/verify?cml=6200145&subtab=cml" class="quick-prompt-btn">UltraTech Cement (CM/L-6200145)</a>
+            <a href="/verify?cml=8400192&subtab=cml" class="quick-prompt-btn">Havells Water Heaters (CM/L-8400192)</a>
+            <a href="/verify?cml=7100341&subtab=cml" class="quick-prompt-btn">Anchor Switches (CM/L-7100341)</a>
+            <a href="/verify?cml=4300921&subtab=cml" class="quick-prompt-btn">Finolex Cables (CM/L-4300921)</a>
+            <a href="/verify?cml=9100412&subtab=cml" class="quick-prompt-btn">SAIL Steel Rebars (CM/L-9100412)</a>
+            <a href="/verify?cml=9900000&subtab=cml" class="quick-prompt-btn" style="color:var(--red-800); border-color:#fca5a5;">Suspended License Test (CM/L-9900000)</a>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <!-- Panel 2: Gold HUID Verification Form -->
+    <div id="panelHuid" style="display:{% if subtab == 'huid' %}block{% else %}none{% endif %};">
+      <form action="/verify" method="GET">
+        <input type="hidden" name="subtab" value="huid">
+        <div class="form-group">
+          <label class="form-label" for="inputHuid">
+            <span>Enter 6-Character Alphanumeric HUID Laser Code</span>
+            <span class="required-mark">*</span>
+          </label>
+          <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+            <input 
+              type="text" 
+              id="inputHuid" 
+              name="huid" 
+              value="{{ huid_query }}" 
+              class="form-control" 
+              placeholder="e.g. AK79B2, MH41C9, KA88X1..." 
+              required
+              maxlength="6"
+              style="flex:1; min-width:240px; font-family:var(--font-mono); font-weight:700; text-transform:uppercase;"
+            >
+            <button type="submit" class="btn btn-primary">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+              <span>Verify Hallmark</span>
+            </button>
+          </div>
+          <div class="form-hint">Laser-inscribed alphanumeric string engraved on gold jewellery alongside BIS logo and purity mark.</div>
+        </div>
+
+        <!-- Presets for Evaluator Demo -->
+        <div style="margin-top:0.85rem; padding-top:0.75rem; border-top:1px solid var(--slate-200);">
+          <span style="font-size:0.72rem; font-weight:700; color:var(--slate-600); display:block; margin-bottom:0.4rem;">Sample HUID Codes for Evaluation:</span>
+          <div style="display:flex; flex-wrap:wrap; gap:0.4rem;">
+            <a href="/verify?huid=AK79B2&subtab=huid" class="quick-prompt-btn">Tanishq 22K (AK79B2)</a>
+            <a href="/verify?huid=MH41C9&subtab=huid" class="quick-prompt-btn">Kalyan Jewellers 18K (MH41C9)</a>
+            <a href="/verify?huid=KA88X1&subtab=huid" class="quick-prompt-btn">Malabar Gold 24K (KA88X1)</a>
+            <a href="/verify?huid=XX9999&subtab=huid" class="quick-prompt-btn" style="color:var(--red-800); border-color:#fca5a5;">Counterfeit Inscription Test (XX9999)</a>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <!-- Verification Result Box -->
+    {% if result %}
+      <div class="verification-result-box {% if result.is_valid %}valid{% else %}fraud{% endif %}">
+        
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:0.5rem; margin-bottom:1rem; border-bottom:1px solid var(--slate-200); padding-bottom:0.75rem;">
+          <div>
+            <div style="font-size:0.75rem; font-weight:700; color:var(--slate-500); text-transform:uppercase;">
+              {{ result.type }} Verification Record
+            </div>
+            <div style="font-size:1.25rem; font-weight:800; font-family:var(--font-mono); color:var(--gov-900);">
+              {{ result.identifier }}
+            </div>
+          </div>
+
+          <div>
+            {% if result.is_valid %}
+              <span class="badge badge-success" style="font-size:0.82rem; padding:0.35rem 0.75rem;">
+                VERIFIED OPERATIVE / AUTHENTIC
+              </span>
+            {% else %}
+              <span class="badge badge-qco" style="font-size:0.82rem; padding:0.35rem 0.75rem;">
+                {{ result.status }}
+              </span>
+            {% endif %}
+          </div>
+        </div>
+
+        {% if result.details %}
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.85rem; font-size:0.82rem; margin-bottom:1rem;">
+            {% for key, val in result.details.items() %}
+              {% if key not in ['is_fraud', 'nch_escalation_recommended'] %}
+                <div style="background:var(--white); padding:0.6rem 0.75rem; border-radius:var(--radius-xs); border:1px solid var(--slate-200);">
+                  <span style="font-size:0.7rem; color:var(--slate-500); text-transform:uppercase; font-weight:700; display:block;">
+                    {{ key | replace('_', ' ') }}
+                  </span>
+                  <span style="font-weight:700; color:var(--slate-900);">{{ val }}</span>
+                </div>
+              {% endif %}
+            {% endfor %}
+          </div>
+        {% endif %}
+
+        {% if not result.is_valid %}
+          <div style="background-color:var(--red-50); border:1px solid #fca5a5; padding:0.85rem; border-radius:var(--radius-xs); margin-bottom:1rem; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.5rem;">
+            <div>
+              <strong style="color:var(--red-800); font-size:0.82rem; display:block;">Statutory Fraud Warning:</strong>
+              <span style="font-size:0.75rem; color:var(--slate-700);">This identifier could not be validated against the active statutory registry. Selling non-certified goods bearing fake marks is a punishable offence.</span>
+            </div>
+            <a href="/report?cml={{ result.identifier }}&reason=Suspicious+Counterfeit+Identifier" class="btn btn-amber btn-sm">
+              File NCH Violation Report &rarr;
+            </a>
+          </div>
+        {% endif %}
+
+        <div style="font-size:0.7rem; color:var(--slate-500); line-height:1.4;">
+          <strong>Notice:</strong> {{ result.disclaimer }}
+        </div>
+
+      </div>
+    {% endif %}
+
+  </div>
+
+</div>
+{% endblock %}
