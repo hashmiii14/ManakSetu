@@ -307,6 +307,28 @@ img, svg {
   font-size: 0.9rem;
 }
 
+.mobile-nav-link {
+  display: block;
+  padding: 0.6rem 0.75rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--slate-700);
+  border-radius: var(--radius-sm);
+  transition: all 0.15s ease;
+  text-decoration: none;
+}
+
+.mobile-nav-link:hover {
+  color: var(--gov-900);
+  background-color: var(--slate-100);
+}
+
+.mobile-nav-link.active {
+  color: var(--gov-900);
+  background-color: var(--gov-100);
+  font-weight: 700;
+}
+
 /* Institutional Footer */
 .main-footer {
   background-color: var(--gov-950);
