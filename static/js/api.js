@@ -335,10 +335,18 @@
       }
 
       var qLower = cleanQ.toLowerCase();
+      var qNorm = cleanQ.replace(/([a-zA-Z]+)[-_/:]*(\d+)/g, '$1 $2').toLowerCase();
+      var cleanCompact = cleanQ.toLowerCase().replace(/[^a-z0-9]/g, '');
+
       var matches = LOCAL_STANDARDS.filter(function (std) {
+        var num = std.is_number.toLowerCase();
+        var numCompact = num.replace(/[^a-z0-9]/g, '');
         return (
-          std.is_number.toLowerCase().includes(qLower) ||
+          num.includes(qLower) ||
+          num.includes(qNorm) ||
+          (cleanCompact.length >= 3 && numCompact.includes(cleanCompact)) ||
           std.title.toLowerCase().includes(qLower) ||
+          std.title.toLowerCase().includes(qNorm) ||
           std.description.toLowerCase().includes(qLower) ||
           std.scope.toLowerCase().includes(qLower) ||
           std.category.toLowerCase().includes(qLower)

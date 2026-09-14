@@ -27,19 +27,23 @@
 
   <!-- Search & Filter Controls -->
   <div class="gov-card" style="padding:1.25rem; margin-bottom:1.5rem; background:var(--white);">
-    <form action="/standards" method="GET" style="display:flex; flex-direction:column; gap:1rem;">
+    <form action="/standards" method="GET" id="standardsSearchForm" onsubmit="handleStandardsSearchSubmit(event)" style="display:flex; flex-direction:column; gap:1rem; position:relative;">
       
       <!-- Search Input Bar with Dual Actions: Search Standards & Ask ManakBot -->
-      <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
-        <input 
-          type="text" 
-          name="q" 
-          id="standardsSearchInput"
-          value="{{ query }}" 
-          class="form-control" 
-          placeholder="Search product name, IS number, or technical keywords (e.g. cement, IS 2082, switches)..."
-          style="flex:1; min-width:260px;"
-        >
+      <div style="display:flex; gap:0.5rem; flex-wrap:wrap; position:relative;">
+        <div style="flex:1; min-width:260px; position:relative; display:flex; align-items:center;">
+          <input 
+            type="text" 
+            name="q" 
+            id="standardsSearchInput"
+            value="{{ query }}" 
+            class="form-control" 
+            placeholder="Search product name, IS number, or technical keywords (e.g. cement, IS 2082, switches)..."
+            style="width:100%; padding-right:2.4rem;"
+            autocomplete="off"
+          >
+          <button type="button" id="standardsClearBtn" class="search-clear-btn" onclick="clearStandardsSearch()" style="position:absolute; right:8px; display:{% if query %}block{% else %}none{% endif %};" title="Clear search">&times;</button>
+        </div>
         <button type="submit" class="btn btn-primary">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
           <span>Search Standards</span>
@@ -51,6 +55,9 @@
         {% if query or selected_category != 'All' or qco_only %}
           <a href="/standards" class="btn btn-secondary">Clear Filters</a>
         {% endif %}
+
+        <!-- Live Auto-suggest Dropdown for Standards page -->
+        <div id="standardsLiveSuggestions" class="search-autocomplete-dropdown"></div>
       </div>
 
       <!-- Technical Division & QCO Filters -->

@@ -112,6 +112,20 @@ QUERY_EXPANSIONS: Dict[str, str] = {
     "document": "factory layout machinery list test equipment calibration scheme of testing and inspection is 302 is 269",
     "laboratory": "testing laboratories nabl bis accredited test facilities is 302 is 2082",
     "testing laboratory": "testing laboratories nabl bis accredited test facilities is 302 is 2082",
+
+    # Footwear and leather
+    "footwear": "safety footwear leather shoes rubber canvas boots is 7197 is 6315",
+    "shoe": "safety footwear shoes leather is 7197 is 6315",
+    "shoes": "safety footwear shoes leather is 7197 is 6315",
+    "boot": "safety footwear boots rubber canvas leather is 7197",
+    "boots": "safety footwear boots rubber canvas leather is 7197",
+
+    # Metals, cables and wire
+    "wire": "cables and conductors electrical wire copper aluminium flexible is 694 is 9968 is 7098",
+    "wires": "cables and conductors electrical wire copper aluminium flexible is 694 is 9968 is 7098",
+    "cable": "cables and conductors elastomer insulated cross linked polyethylene is 9968 is 7098 is 694",
+    "cables": "cables and conductors elastomer insulated cross linked polyethylene is 9968 is 7098 is 694",
+    "iron": "grey iron ductile malleable casting structural steel is 210 is 1868 is 6418",
 }
 
 DOMAIN_TERMS = {
@@ -213,14 +227,18 @@ class BisRetriever:
         if not clean_q or not self.documents:
             return []
 
+        # Normalize IS code variants: 'is1489', 'is-1489', 'is:1489', 'is_1489' -> 'is 1489'
+        norm_q = re.sub(r"(?i)\b([a-z]+)[-_/:]*(\d+)\b", r"\1 \2", clean_q)
+
         # 1. Expand query using domain dictionary
-        expanded_q = clean_q
+        expanded_q = norm_q
         for key, exp in QUERY_EXPANSIONS.items():
-            if key in clean_q:
+            if key in clean_q or key in norm_q:
                 expanded_q += " " + exp
 
         q_tokens = _tokenize(expanded_q)
-        explicit_numbers = set(INT_RE.findall(clean_q))
+        # Extract explicit standard numbers from original query or normalized query
+        explicit_numbers = set(re.findall(r"\d{2,6}", clean_q)) | set(re.findall(r"\d{2,6}", norm_q))
 
         # 2. Score documents
         scored_docs = []

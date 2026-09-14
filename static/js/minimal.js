@@ -245,6 +245,143 @@ document.addEventListener('keydown', function (e) {
   }
 });
 
+// ── Universal Auto-Suggest & Search Bar Engine ──────────────────────────────
+window.renderSearchSuggestions = function (results, q, container, inputElem) {
+  if (!container) return;
+  var qTrim = (q || '').trim();
+  if (qTrim.length < 2) {
+    container.style.display = 'none';
+    container.innerHTML = '';
+    return;
+  }
+
+  var html = '<div class="search-dropdown-header">';
+  html += '<span>Matching BIS Standards</span>';
+  html += '<span style="font-weight:normal; opacity:0.8;">Prototype Catalog</span>';
+  html += '</div>';
+
+  // 1. Smart Intent: Check for 6-character HUID
+  if (/^[A-Z0-9]{6}$/i.test(qTrim) && !qTrim.toLowerCase().startsWith('is')) {
+    var huidUpper = qTrim.toUpperCase();
+    html += '<a href="/verify?huid=' + encodeURIComponent(huidUpper) + '&subtab=huid" class="search-suggestion-item" style="background:#fffbeb; border-left:3px solid #d97706;">' +
+      '<div>' +
+        '<div style="font-size:0.68rem; font-weight:800; color:#b45309; text-transform:uppercase;">Gold Hallmark Inscription Detected</div>' +
+        '<div class="search-suggestion-code">Verify HUID: ' + huidUpper + '</div>' +
+        '<div class="search-suggestion-title">Check jeweller registration, karat purity (22K/18K), and assaying centre</div>' +
+      '</div>' +
+      '<span class="badge badge-gold">Verify Purity &rarr;</span>' +
+    '</a>';
+  }
+
+  // 2. Smart Intent: Check for 7-digit CM/L license
+  if (/^\d{7}$/.test(qTrim)) {
+    html += '<a href="/verify?cml=' + encodeURIComponent(qTrim) + '&subtab=cml" class="search-suggestion-item" style="background:#ecfdf5; border-left:3px solid #059669;">' +
+      '<div>' +
+        '<div style="font-size:0.68rem; font-weight:800; color:#065f46; text-transform:uppercase;">ISI Factory License Detected</div>' +
+        '<div class="search-suggestion-code">Verify CM/L-' + qTrim + '</div>' +
+        '<div class="search-suggestion-title">Check manufacturer credibility, brand, scope, and active validity</div>' +
+      '</div>' +
+      '<span class="badge badge-green">Verify License &rarr;</span>' +
+    '</a>';
+  }
+
+  // 3. Standards suggestions
+  if (results && results.length > 0) {
+    results.slice(0, 5).forEach(function (std) {
+      var isNum = std.is_number || '';
+      var title = std.title || '';
+      var qco = std.mandatory_qco ? '<span class="badge badge-qco" style="font-size:0.65rem; padding:1px 5px;">Mandatory QCO</span>' : '';
+      var targetUrl = '/standards?q=' + encodeURIComponent(isNum.split(':')[0].trim());
+      html += '<a href="' + targetUrl + '" class="search-suggestion-item">' +
+        '<div style="flex:1; min-width:0; padding-right:0.75rem;">' +
+          '<div style="display:flex; align-items:center; gap:0.4rem; flex-wrap:wrap;">' +
+            '<span class="search-suggestion-code">' + isNum + '</span>' +
+            (std.category ? '<span class="badge badge-gov" style="font-size:0.65rem; padding:1px 5px;">' + std.category.split('/')[0].trim() + '</span>' : '') +
+            qco +
+          '</div>' +
+          '<div class="search-suggestion-title">' + (title.length > 70 ? title.substring(0, 70) + '...' : title) + '</div>' +
+        '</div>' +
+        '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--slate-400); flex-shrink:0;"><path d="m9 18 6-6-6-6"/></svg>' +
+      '</a>';
+    });
+  } else if (!/^[A-Z0-9]{6}$/i.test(qTrim) && !/^\d{7}$/.test(qTrim)) {
+    html += '<div style="padding:0.85rem 1rem; font-size:0.8rem; color:var(--slate-500); text-align:center;">No direct matching standard in current prototype dataset. Press Enter to search all 572 standards or ask ManakBot.</div>';
+  }
+
+  // Dropdown Footer
+  html += '<div class="search-dropdown-footer">';
+  html += '<a href="/manakbot?prompt=' + encodeURIComponent('What Indian Standards and BIS compliance steps apply to ' + qTrim + '?') + '" style="display:flex; align-items:center; gap:0.35rem; color:#7e22ce;">';
+  html += '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>';
+  html += '<span>Ask ManakBot AI &rarr;</span>';
+  html += '</a>';
+  html += '<a href="/standards?q=' + encodeURIComponent(qTrim) + '" style="color:var(--gov-800);">';
+  html += '<span>View Directory &rarr;</span>';
+  html += '</a>';
+  html += '</div>';
+
+  container.innerHTML = html;
+  container.style.display = 'block';
+};
+
+// Clear handlers
+window.clearHeroSearch = function () {
+  var input = document.getElementById('heroSearchInput');
+  var btn = document.getElementById('heroClearSearchBtn');
+  var dropdown = document.getElementById('heroLiveSuggestions');
+  if (input) { input.value = ''; input.focus(); }
+  if (btn) btn.style.display = 'none';
+  if (dropdown) { dropdown.style.display = 'none'; dropdown.innerHTML = ''; }
+};
+
+window.clearStandardsSearch = function () {
+  var input = document.getElementById('standardsSearchInput');
+  var btn = document.getElementById('standardsClearBtn');
+  var dropdown = document.getElementById('standardsLiveSuggestions');
+  if (input) { input.value = ''; input.focus(); }
+  if (btn) btn.style.display = 'none';
+  if (dropdown) { dropdown.style.display = 'none'; dropdown.innerHTML = ''; }
+};
+
+// Form submit handlers with smart routing
+window.handleHeroSearchSubmit = function (e) {
+  var input = document.getElementById('heroSearchInput');
+  var q = input ? input.value.trim() : '';
+  if (!q) {
+    if (e && e.preventDefault) e.preventDefault();
+    return;
+  }
+  if (/^[A-Z0-9]{6}$/i.test(q) && !q.toLowerCase().startsWith('is')) {
+    if (e && e.preventDefault) e.preventDefault();
+    window.location.href = '/verify?huid=' + encodeURIComponent(q.toUpperCase()) + '&subtab=huid';
+    return;
+  }
+  if (/^\d{7}$/.test(q)) {
+    if (e && e.preventDefault) e.preventDefault();
+    window.location.href = '/verify?cml=' + encodeURIComponent(q) + '&subtab=cml';
+    return;
+  }
+};
+
+window.handleStandardsSearchSubmit = function (e) {
+  var input = document.getElementById('standardsSearchInput');
+  var q = input ? input.value.trim() : '';
+  if (!q) {
+    if (e && e.preventDefault) e.preventDefault();
+    window.location.href = '/standards';
+    return;
+  }
+  if (/^[A-Z0-9]{6}$/i.test(q) && !q.toLowerCase().startsWith('is')) {
+    if (e && e.preventDefault) e.preventDefault();
+    window.location.href = '/verify?huid=' + encodeURIComponent(q.toUpperCase()) + '&subtab=huid';
+    return;
+  }
+  if (/^\d{7}$/.test(q)) {
+    if (e && e.preventDefault) e.preventDefault();
+    window.location.href = '/verify?cml=' + encodeURIComponent(q) + '&subtab=cml';
+    return;
+  }
+};
+
 // Live Auto-Suggest in Modal
 var modalSearchDebounceTimer = null;
 window.triggerModalLiveSearch = function (query) {
@@ -267,47 +404,12 @@ window.triggerModalLiveSearch = function (query) {
       var api = window.ManakSetuApi;
       var data = api ? await api.searchStandards(q, 5) : null;
       var results = (data && data.results) || [];
-
-      if (results.length === 0) {
-        liveResults.innerHTML = '<div style="padding:0.75rem 1.25rem; font-size:0.78rem; color:var(--slate-500);">No standards matching "<strong>' + q + '</strong>" in prototype dataset. Press Enter to view full catalogue or ask ManakBot.</div>';
-        liveResults.style.display = 'block';
-        return;
-      }
-
-      var html = results.slice(0, 5).map(function (std) {
-        var isNum = std.is_number || '';
-        var title = std.title || '';
-        var qco = std.mandatory_qco ? '<span class="badge badge-qco" style="font-size:0.65rem; padding:1px 5px;">QCO</span>' : '';
-        var url = '/standards?q=' + encodeURIComponent(isNum.split(':')[0].trim());
-        return '<a href="' + url + '" class="modal-live-item">' +
-          '<div>' +
-            '<div class="modal-live-code">' + isNum + '</div>' +
-            '<div class="modal-live-title">' + (title.length > 60 ? title.substring(0, 60) + '...' : title) + '</div>' +
-          '</div>' +
-          '<div style="display:flex; align-items:center; gap:0.4rem;">' +
-            qco +
-            '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>' +
-          '</div>' +
-        '</a>';
-      }).join('');
-
-      liveResults.innerHTML = html;
-      liveResults.style.display = 'block';
+      window.renderSearchSuggestions(results, q, liveResults, document.getElementById('modalSearchInput'));
     } catch (err) {
-      console.warn('Live search error', err);
+      console.warn('Live modal search error', err);
     }
-  }, 220);
+  }, 180);
 };
-
-// Wire modal input listener once DOM is ready
-document.addEventListener('DOMContentLoaded', function () {
-  var modalInput = document.getElementById('modalSearchInput');
-  if (modalInput) {
-    modalInput.addEventListener('input', function () {
-      window.triggerModalLiveSearch(this.value);
-    });
-  }
-});
 
 // ── Homepage & Standards Search Dual Action: Ask ManakBot ───────────────────
 window.askManakBotFromHome = function () {
@@ -726,4 +828,79 @@ document.addEventListener('DOMContentLoaded', function () {
     calcTierSelect.addEventListener('change', updateCalculation);
     calcStandardInput.addEventListener('change', updateCalculation);
   }
+
+  // ── 5. Live Search Autocomplete & Clear Button Handlers ───────────────────
+  // Hero Search
+  var heroInput = document.getElementById('heroSearchInput');
+  var heroClearBtn = document.getElementById('heroClearSearchBtn');
+  var heroSuggestions = document.getElementById('heroLiveSuggestions');
+  var heroDebounce = null;
+
+  if (heroInput) {
+    if (heroClearBtn && heroInput.value.trim()) {
+      heroClearBtn.style.display = 'block';
+    }
+    heroInput.addEventListener('input', function () {
+      var val = this.value;
+      if (heroClearBtn) heroClearBtn.style.display = val.trim() ? 'block' : 'none';
+      clearTimeout(heroDebounce);
+      heroDebounce = setTimeout(async function () {
+        var api = window.ManakSetuApi;
+        var data = api ? await api.searchStandards(val, 5) : null;
+        window.renderSearchSuggestions((data && data.results) || [], val, heroSuggestions, heroInput);
+      }, 160);
+    });
+
+    heroInput.addEventListener('focus', function () {
+      if (this.value.trim().length >= 2 && heroSuggestions && heroSuggestions.innerHTML) {
+        heroSuggestions.style.display = 'block';
+      }
+    });
+  }
+
+  // Standards Search
+  var stdInput = document.getElementById('standardsSearchInput');
+  var stdClearBtn = document.getElementById('standardsClearBtn');
+  var stdSuggestions = document.getElementById('standardsLiveSuggestions');
+  var stdDebounce = null;
+
+  if (stdInput) {
+    if (stdClearBtn && stdInput.value.trim()) {
+      stdClearBtn.style.display = 'block';
+    }
+    stdInput.addEventListener('input', function () {
+      var val = this.value;
+      if (stdClearBtn) stdClearBtn.style.display = val.trim() ? 'block' : 'none';
+      clearTimeout(stdDebounce);
+      stdDebounce = setTimeout(async function () {
+        var api = window.ManakSetuApi;
+        var data = api ? await api.searchStandards(val, 5) : null;
+        window.renderSearchSuggestions((data && data.results) || [], val, stdSuggestions, stdInput);
+      }, 160);
+    });
+
+    stdInput.addEventListener('focus', function () {
+      if (this.value.trim().length >= 2 && stdSuggestions && stdSuggestions.innerHTML) {
+        stdSuggestions.style.display = 'block';
+      }
+    });
+  }
+
+  // Modal Search
+  var modalInput = document.getElementById('modalSearchInput');
+  if (modalInput) {
+    modalInput.addEventListener('input', function () {
+      window.triggerModalLiveSearch(this.value);
+    });
+  }
+
+  // Close dropdowns on outside click
+  document.addEventListener('click', function (e) {
+    if (heroSuggestions && !heroSuggestions.contains(e.target) && e.target !== heroInput) {
+      heroSuggestions.style.display = 'none';
+    }
+    if (stdSuggestions && !stdSuggestions.contains(e.target) && e.target !== stdInput) {
+      stdSuggestions.style.display = 'none';
+    }
+  });
 });
