@@ -88,7 +88,7 @@ class ChatbotResponse(BaseModel):
     success: bool = True
     answer: str
     referenced_standards: List[ReferencedStandard] = []
-    sources: List[SourceCitation] = []
+    sources: Optional[List[Any]] = []
     source: str
     confidence: str
     disclaimer: str

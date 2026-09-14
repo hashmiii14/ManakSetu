@@ -24,25 +24,26 @@ var I18N_DICT = {
     nav_home: 'Home',
     nav_standards: 'Standards',
     nav_certification: 'Certification',
-    nav_hallmarking: 'Hallmarking',
-    nav_laboratories: 'Testing Labs',
-    nav_calculator: 'Fee Calculator',
-    nav_manakbot: 'ManakBot AI',
-    nav_help: 'Help & FAQ',
+    nav_manakbot: 'ManakBot',
+    nav_verify: 'Verify',
+    nav_estimator: 'Estimator',
+    nav_labs: 'Labs',
+    nav_about: 'About',
     quick_search: 'Search BIS'
   },
   hi: {
     nav_home: 'मुख्य पृष्ठ',
     nav_standards: 'मानक निर्देशिका',
     nav_certification: 'प्रमाणीकरण',
-    nav_hallmarking: 'हॉलमार्किंग',
-    nav_laboratories: 'प्रयोगशालाएं',
-    nav_calculator: 'शुल्क गणक',
-    nav_manakbot: 'मानकबॉट एआई',
-    nav_help: 'सहायता एवं एफएक्यू',
+    nav_manakbot: 'मानकबॉट',
+    nav_verify: 'सत्यापन',
+    nav_estimator: 'शुल्क गणक',
+    nav_labs: 'प्रयोगशालाएं',
+    nav_about: 'परिचय',
     quick_search: 'मानक खोजें'
   }
 };
+
 
 function applyTranslations(lang) {
   var dict = I18N_DICT[lang] || I18N_DICT.en;
@@ -96,6 +97,56 @@ window.switchAudience = function (audience) {
   });
 };
 
+// ── Chat Interactivity: Copy Response & Clear Chat ──────────────────────────
+window.copyBotAnswer = function (btn) {
+  var bubble = btn.closest('.chat-bubble-bot');
+  if (!bubble) return;
+  var clone = bubble.cloneNode(true);
+  // Remove buttons, pills, disclaimers from copied plain text
+  clone.querySelectorAll('.btn-copy-chat, .chat-references, [style*="border-top"]').forEach(function (el) {
+    el.remove();
+  });
+  var text = clone.innerText.trim();
+  navigator.clipboard.writeText(text).then(function () {
+    var span = btn.querySelector('span');
+    if (span) {
+      var oldText = span.textContent;
+      span.textContent = 'Copied! ✓';
+      btn.style.color = '#059669';
+      btn.style.borderColor = '#10b981';
+      setTimeout(function () {
+        span.textContent = oldText;
+        btn.style.color = '';
+        btn.style.borderColor = '';
+      }, 2000);
+    }
+  }).catch(function () {
+    alert('Response text copied to clipboard.');
+  });
+};
+
+window.clearChatMessages = function () {
+  var chatMessages = document.getElementById('chatMessages');
+  if (!chatMessages) return;
+  chatMessages.innerHTML = `
+    <div class="chat-bubble chat-bubble-bot">
+      <h3 style="margin-top:0;">Welcome to ManakBot Intelligent Standards Assistant</h3>
+      <p>I am your intelligent assistant for Indian Standards, conformity assessment pathways, and BIS services, developed as an educational prototype for Smart India Hackathon 2026.</p>
+      <p>You can ask me about:</p>
+      <ul>
+        <li>Which Indian Standard applies to a specific product or material</li>
+        <li>Quality Control Orders (QCO) and mandatory certification scopes</li>
+        <li>In-house factory testing apparatus requirements and testing benchmarks</li>
+        <li>Indicative fee concessions for Micro and Small manufacturing units (up to 50% relief)</li>
+        <li>Testing laboratories, gold hallmarking (HUID), and licensee verification</li>
+      </ul>
+      <div style="font-size:0.7rem; color:var(--slate-500); margin-top:0.75rem; border-top:1px solid var(--slate-200); padding-top:0.4rem;">
+        <strong>SIH Prototype Notice:</strong> Grounded in the current 572-standard prototype dataset. For official and legal submissions, consult <a href="https://www.manakonline.in" target="_blank" rel="noopener" style="color:var(--gov-800); text-decoration:underline;">manakonline.in</a>.
+      </div>
+    </div>
+  `;
+};
+
 // ── Homepage Dual Action: Ask ManakBot ───────────────────────────────────────
 window.askManakBotFromHome = function () {
   var input = document.getElementById('heroSearchInput');
@@ -106,6 +157,7 @@ window.askManakBotFromHome = function () {
     window.location.href = '/chatbot';
   }
 };
+
 
 // ── Product -> Standard Recommendation Functions ────────────────────────────
 window.setRecommendQuery = function (text) {
@@ -362,6 +414,16 @@ document.addEventListener('DOMContentLoaded', function () {
         });
         inner += '</div>';
       }
+
+      // Action Bar: Copy Response Button
+      inner += `
+        <div style="display:flex; justify-content:flex-end; align-items:center; margin-top:0.6rem; padding-top:0.4rem; border-top:1px dashed var(--slate-200);">
+          <button type="button" class="btn-copy-chat" onclick="copyBotAnswer(this)" style="background:transparent; border:1px solid var(--slate-300); color:var(--slate-600); font-size:0.7rem; padding:3px 8px; border-radius:3px; cursor:pointer; display:inline-flex; align-items:center; gap:4px;">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+            <span>Copy Response</span>
+          </button>
+        </div>
+      `;
 
       // Append official prototype disclaimer
       if (data.disclaimer) {

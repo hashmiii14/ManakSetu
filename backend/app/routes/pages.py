@@ -270,6 +270,7 @@ async def hallmarking_page(
 
 
 @router.get("/calculator", response_class=HTMLResponse)
+@router.get("/estimator", response_class=HTMLResponse)
 @router.get("/fee-calculator", response_class=HTMLResponse)
 @router.get("/msme", response_class=HTMLResponse)
 async def calculator_page(

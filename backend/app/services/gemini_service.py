@@ -49,6 +49,163 @@ def is_out_of_domain(query: str) -> bool:
     return any(p.search(clean) for p in OUT_OF_DOMAIN_PATTERNS)
 
 
+PROCEDURAL_KNOWLEDGE: Dict[str, Dict[str, Any]] = {
+    "what is bis certification": {
+        "title": "Bureau of Indian Standards (BIS) Product Certification (ISI Mark)",
+        "standard_number": "BIS Act, 2016 & Conformity Assessment Regulations, 2018",
+        "category": "Statutory Conformity Assessment Schemes",
+        "answer": (
+            "### 1. Direct Answer\n"
+            "**BIS Certification** is India's national third-party product quality assurance system administered by the Bureau of Indian Standards (BIS) under the **Bureau of Indian Standards Act, 2016**. It permits manufacturers who demonstrate compliant factory quality control and product testing to affix the prestigious **ISI Mark** (Scheme-I) or **CRS Registration** (Scheme-II).\n\n"
+            "### 2. Relevant Statutory Framework\n"
+            "- **Governing Legislation:** Bureau of Indian Standards Act, 2016 (Section 13, 14, 15, and 16)\n"
+            "- **Key Conformity Schemes:** Scheme-I (Product Certification / ISI Mark), Scheme-II (Compulsory Registration Scheme / CRS for IT/electronics), Scheme-IV (Foreign Manufacturers Scheme / FMCS)\n"
+            "- **Statutory Body:** Bureau of Indian Standards, Ministry of Consumer Affairs, Food & Public Distribution\n\n"
+            "### 3. Purpose & Objectives\n"
+            "- **Consumer Protection:** Guarantees health, safety, reliability, and technical performance of products.\n"
+            "- **Statutory Mandate (QCO):** Over 760 products are notified under compulsory Quality Control Orders where manufacturing, importing, or selling without BIS certification is punishable by law.\n"
+            "- **Market Trust:** Establishes commercial credibility and qualifies manufacturers for Government e-Marketplace (GeM) public procurement tenders.\n\n"
+            "### 4. High-Level Certification Process\n"
+            "1. **Identification of Standard:** Identify the applicable Indian Standard (IS Code) for your product.\n"
+            "2. **In-House QC Setup:** Establish factory laboratory equipment adhering to the BIS Scheme of Testing and Inspection (STI).\n"
+            "3. **Online Application:** File Form-V on the [e-BIS ManakOnline portal](https://www.manakonline.in) with factory layout and machinery details.\n"
+            "4. **Factory Audit & Sampling:** BIS inspecting officers physically audit the plant and draw independent samples.\n"
+            "5. **Grant of License:** Upon passing laboratory verification, a 7-digit CM/L (Certificate of Manufacturing License) is issued.\n\n"
+            "### 5. MSME Concessions & Relief\n"
+            "- **Micro Enterprises:** Eligible for a **50% statutory concession** on application and annual minimum marking fees.\n"
+            "- **Small Enterprises:** Eligible for a **20% statutory concession** upon submitting valid Udyam registration.\n\n"
+            "### 6. Sources & Relevant References\n"
+            "- **Statutory Act:** Bureau of Indian Standards Act, 2016\n"
+            "- **Regulations:** BIS (Conformity Assessment) Regulations, 2018\n"
+            "- **Official Portal:** [e-BIS ManakOnline Portal](https://www.manakonline.in)"
+        )
+    },
+    "what documents are required for bis certification": {
+        "title": "Statutory Documentation Checklist for BIS ISI License Application",
+        "standard_number": "BIS Form-V Application Enclosures",
+        "category": "Licensing Documentation",
+        "answer": (
+            "### 1. Direct Answer\n"
+            "Applying for a BIS Product Certification License (CM/L under Scheme-I) requires a comprehensive statutory dossier verifying the applicant's legal entity, manufacturing competency, quality control infrastructure, and technical test records.\n\n"
+            "### 2. Mandatory Document Checklist\n"
+            "#### A. Manufacturing Facility & Legal Documents:\n"
+            "1. **Factory Registration / Certificate of Incorporation:** Proof of establishment (Factory License, DIC / MSME Udyam Registration, or ROC Incorporation).\n"
+            "2. **Factory Layout Plan:** Scaled schematic drawing highlighting manufacturing lines, raw material storage, and in-house laboratory.\n"
+            "3. **Manufacturing Machinery List:** Detailed inventory of installed machinery, production capacity, and make/model.\n\n"
+            "#### B. Quality Control & Testing Infrastructure:\n"
+            "4. **In-House Testing Equipment List:** Testing apparatus corresponding to the Scheme of Testing and Inspection (STI) of the standard.\n"
+            "5. **Calibration Certificates:** Valid calibration certificates for all test gauges and instruments from NABL-accredited facilities.\n"
+            "6. **Quality Personnel Competency:** Appointment letters and educational qualifications of the designated Factory Testing In-Charge.\n\n"
+            "#### C. Product & Process Technical Dossier:\n"
+            "7. **Manufacturing Process Flowchart:** Detailed process stages from raw material receipt to finished packaging.\n"
+            "8. **Raw Material Test Certificates:** Mill test certificates and supplier invoices for primary inputs.\n"
+            "9. **Pre-Certification Independent Test Report:** Third-party sample test report from a BIS-recognized / NABL-accredited laboratory (mandatory under Simplified Procedure).\n"
+            "10. **Consent Letter & Brand Authorization:** Trademark registration certificate or authorization letter from brand owner.\n\n"
+            "### 3. Financial & Concession Documents\n"
+            "- **Udyam Certificate:** Mandatory for Micro (50% fee relief) and Small (20% fee relief) enterprises.\n"
+            "- **Payment Receipt:** Proof of online statutory application fee submission (₹1,000).\n\n"
+            "### 4. Sources & Relevant References\n"
+            "- **BIS Portal:** [e-BIS Online Application Checklist](https://www.manakonline.in)\n"
+            "- **Regulations:** BIS (Conformity Assessment) Regulations, 2018 (Schedule II)"
+        )
+    },
+    "what is an huid": {
+        "title": "Hallmarking Unique Identification (HUID) — Gold Jewellery Traceability",
+        "standard_number": "IS 1417:2016 (Gold & Gold Alloys Hallmarking)",
+        "category": "Consumer Hallmarking & Precious Metals",
+        "answer": (
+            "### 1. Direct Answer\n"
+            "An **HUID (Hallmarking Unique Identification)** is a 6-character alphanumeric laser-inscribed code (e.g., `AK79B2`, `MH41C9`) stamped onto every piece of gold jewellery alongside the BIS Triangle logo and the purity grade mark (such as `22K916` or `18K750`).\n\n"
+            "### 2. Statutory Significance & Composition\n"
+            "- **Unique Identity:** Each piece of jewellery receives a unique serial code at an accredited Assaying & Hallmarking Centre (AHC), establishing tamper-proof traceability.\n"
+            "- **Tripartite Hallmark:** A genuine BIS hallmark consists of three distinct laser stamps:\n"
+            "  1. **BIS Standard Logo:** Triangle emblem of the Bureau of Indian Standards.\n"
+            "  2. **Purity & Fineness Mark:** `24K995`, `22K916`, `18K750`, or `14K585`.\n"
+            "  3. **6-Digit HUID Code:** Laser engraved alphanumeric identifier.\n\n"
+            "### 3. Consumer Verification Rights\n"
+            "- **BIS CARE App:** Consumers can verify their 6-digit HUID code directly on the official BIS CARE Mobile Application or on [ManakSetu TrueMark Verifier](/verify?subtab=huid).\n"
+            "- **Statutory ₹45 Testing Right:** Under Section 24 of the Hallmarking Regulations, any consumer can get their hallmarked jewelry tested at any BIS-recognized Assaying & Hallmarking Centre for a nominal statutory fee of **₹45 per article**.\n"
+            "- **Compensation Rule:** If testing reveals lower gold purity than stamped, the jeweler must refund the difference plus twice the testing fee.\n\n"
+            "### 4. Sources & Relevant References\n"
+            "- **Indian Standard:** IS 1417:2016 — Gold and Gold Alloys, Silver and Silver Alloys\n"
+            "- **Regulatory Notification:** Bureau of Indian Standards (Hallmarking) Regulations, 2018\n"
+            "- **Consumer Verification:** [TrueMark Verifier](/verify) | [BIS Care Portal](https://www.bis.gov.in)"
+        )
+    },
+    "how can i verify an isi mark": {
+        "title": "Verifying ISI Mark and CM/L Manufacturer License Authenticity",
+        "standard_number": "BIS License Verification (CM/L 7-Digit Registry)",
+        "category": "Consumer Protection & Conformity Verification",
+        "answer": (
+            "### 1. Direct Answer\n"
+            "A genuine **ISI Mark** must always be accompanied by two mandatory statutory inscriptions: the **Indian Standard number (IS Code)** directly above the ISI symbol, and a **7-digit Certificate of Manufacturing License (CM/L) number** directly below the symbol (e.g., `CM/L-6200145`).\n\n"
+            "### 2. Step-by-Step Verification Protocol\n"
+            "1. **Inspect Physical Marking:** Ensure the ISI mark contains:\n"
+            "   - The official BIS monogram (stylized ISI letters in standard rectangle).\n"
+            "   - The applicable IS number on top (e.g., `IS 2082` for geysers, `IS 1489` for PPC cement).\n"
+            "   - The 7-digit license code below: `CM/L-XXXXXXX`.\n"
+            "2. **Verify on ManakSetu:** Enter the 7-digit number on [TrueMark Verifier](/verify?subtab=cml) to check active licensee identity, factory location, and scope.\n"
+            "3. **Verify on BIS CARE App / e-BIS:** Search on the official portal at [manakonline.in](https://www.manakonline.in) under *Conformity Assessment -> Search Licensee*.\n\n"
+            "### 3. Warning Signs of Counterfeit Marks\n"
+            "- Missing 7-digit CM/L number below the logo.\n"
+            "- Misspelled or altered logo (e.g. non-standard font or aspect ratio).\n"
+            "- License status marked 'Suspended' or 'Expired' in the central registry.\n\n"
+            "### 4. Consumer Grievance Recourse\n"
+            "- If a fake ISI mark is found, file an immediate statutory complaint with the National Consumer Helpline at **1915** or via the [ManakSetu Grievance Portal](/report).\n\n"
+            "### 5. Sources & Relevant References\n"
+            "- **Statutory Act:** BIS Act, 2016 (Sections 14, 15, and 29)\n"
+            "- **Verification Gateway:** [TrueMark Verifier](/verify) | [e-BIS Search Licensee](https://www.manakonline.in)"
+        )
+    },
+    "what is qco": {
+        "title": "Quality Control Orders (QCO) — Mandatory Statutory Compliance",
+        "standard_number": "Section 16 of BIS Act, 2016",
+        "category": "Statutory Quality Orders",
+        "answer": (
+            "### 1. Direct Answer\n"
+            "A **Quality Control Order (QCO)** is a mandatory statutory directive issued by the Central Government (Ministries like DPIIT, Ministry of Power, Ministry of Steel, etc.) under **Section 16 of the BIS Act, 2016**. Once a QCO is in force, compliance with the specified Indian Standard is **strictly compulsory** for all manufacturers and importers.\n\n"
+            "### 2. Legal Consequences & Penalties\n"
+            "- **Prohibition:** No person shall manufacture, import, store, distribute, or sell any goods covered under a notified QCO without the valid Standard ISI Mark.\n"
+            "- **Penalties under Section 29 of BIS Act 2016:** Violation is a criminal offense punishable by:\n"
+            "  - **Imprisonment:** Up to **2 years**, or\n  - **Monetary Fine:** Minimum **₹2,00,000** extending up to **10 times the value** of non-certified goods produced or sold, or both.\n  - **Confiscation:** Complete seizure of non-compliant inventory by BIS enforcement officers.\n\n"
+            "### 3. Prominent Examples of Mandatory QCOs\n"
+            "- **Cement:** IS 1489 (PPC Cement) & IS 12269 (53 Grade OPC Cement)\n"
+            "- **Electrical Appliances:** IS 2082 (Geysers/Water Heaters), IS 302 (Safety of Domestic Appliances)\n"
+            "- **Safety Gear:** IS 4151 (Two-Wheeler Helmets), IS 2553 (Safety Glass for Vehicles)\n"
+            "- **Childcare & Toys:** IS 9873 (Safety of Toys - Mechanical and Physical Properties)\n"
+            "- **Household Goods:** IS 2347 (Domestic Pressure Cookers)\n\n"
+            "### 4. Sources & Relevant References\n"
+            "- **Statutory Provision:** Section 16 & Section 29, Bureau of Indian Standards Act, 2016\n"
+            "- **QCO Repository:** [ManakSetu QCO Directory](/standards?qco_only=true)\n"
+            "- **Official Gazettes:** Ministry of Consumer Affairs & DPIIT Gazette Notifications"
+        )
+    }
+}
+
+
+def find_procedural_match(query: str) -> Optional[Dict[str, Any]]:
+    clean = re.sub(r"[^a-zA-Z0-9\s]", "", (query or "").lower()).strip()
+    if not clean:
+        return None
+    # Exact or keyword substring match
+    for key, data in PROCEDURAL_KNOWLEDGE.items():
+        clean_key = re.sub(r"[^a-zA-Z0-9\s]", "", key).strip()
+        if clean_key in clean or clean in clean_key:
+            return data
+    # Fallback keyword checks
+    if "what is bis certification" in clean or ("what is bis" in clean and "standard" not in clean):
+        return PROCEDURAL_KNOWLEDGE["what is bis certification"]
+    if "documents" in clean and ("certification" in clean or "bis" in clean or "license" in clean):
+        return PROCEDURAL_KNOWLEDGE["what documents are required for bis certification"]
+    if "huid" in clean and ("what is" in clean or "meaning" in clean or "hallmark" in clean or "verify" in clean):
+        return PROCEDURAL_KNOWLEDGE["what is an huid"]
+    if "verify" in clean and ("isi" in clean or "cml" in clean or "license" in clean):
+        return PROCEDURAL_KNOWLEDGE["how can i verify an isi mark"]
+    if "qco" in clean and ("what is" in clean or "mandatory" in clean or "order" in clean):
+        return PROCEDURAL_KNOWLEDGE["what is qco"]
+    return None
+
+
 class ManakBotService:
     def __init__(self):
         self.retriever = get_retriever()
@@ -65,6 +222,38 @@ class ManakBotService:
                 "source": "System",
                 "confidence": "Low",
                 "disclaimer": BOT_DISCLAIMER
+            }
+
+        # 0. Check procedural / regulatory knowledge base first
+        proc_match = find_procedural_match(clean_query)
+        if proc_match:
+            src_citation = {
+                "source_title": proc_match["title"],
+                "standard_number": proc_match["standard_number"],
+                "section": proc_match["category"],
+                "clause": "Statutory Directive",
+                "source_type": "Official BIS Regulation",
+                "url": "https://www.manakonline.in",
+                "relevance_score": 1.0
+            }
+            return {
+                "answer": proc_match["answer"],
+                "referenced_standards": [{
+                    "is_number": proc_match["standard_number"],
+                    "title": proc_match["title"],
+                    "relevance_note": "Authoritative Procedural Match"
+                }],
+                "sources": [src_citation],
+                "source": "BIS Regulatory Knowledge Base",
+                "confidence": "Authoritative",
+                "disclaimer": BOT_DISCLAIMER,
+                "detected_language": "hi" if is_hindi_or_hinglish(clean_query) else "en",
+                "is_refusal": False,
+                "structured_sections": {
+                    "Scope": proc_match["category"],
+                    "Legal Mandate": proc_match["standard_number"],
+                },
+                "citations": [src_citation]
             }
 
         # 1. Retrieve top relevant standards

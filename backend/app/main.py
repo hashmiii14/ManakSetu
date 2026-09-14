@@ -115,3 +115,60 @@ def health_check():
         "standards_indexed": len(retriever.documents) if retriever else 0,
         "docs": "/api/docs"
     }
+
+
+# Direct alias endpoints for Phase 3 API specification
+from .models.schemas import RecommendationRequest, SearchResponse, VerificationRequest, VerificationResponse, CostEstimateRequest, CostEstimateResponse
+
+@app.post("/api/matcher", response_model=SearchResponse, tags=["Standards API"])
+def api_matcher(req: RecommendationRequest):
+    from .routes.standards import recommend_standards
+    return recommend_standards(req)
+
+
+@app.get("/api/qco", tags=["QCO API"])
+def api_qco():
+    from .routes.standards import get_qco_standards
+    return get_qco_standards()
+
+
+@app.post("/api/hallmark/verify", tags=["Hallmarking API"])
+def api_hallmark_verify(req: VerificationRequest):
+    from .services.hallmarking_service import get_hallmarking_service
+    service = get_hallmarking_service()
+    return service.verify_huid(req.get_identifier())
+
+
+@app.post("/api/isi/verify", response_model=VerificationResponse, tags=["Verification API"])
+def api_isi_verify(req: VerificationRequest):
+    from .routes.verifier import verify_post
+    req.id_type = "cml"
+    return verify_post(req)
+
+
+@app.post("/api/fees/calculate", response_model=CostEstimateResponse, tags=["Calculator API"])
+@app.post("/api/estimate", response_model=CostEstimateResponse, tags=["Calculator API"])
+def api_fees_calculate(req: CostEstimateRequest):
+    from .routes.calculator import calculate_cost_post
+    return calculate_cost_post(req)
+
+
+@app.post("/api/chat", tags=["Chatbot API"])
+async def api_chat(req: dict):
+    from .routes.chatbot import chat_query
+    from .models.schemas import ChatbotRequest
+    query_text = req.get("message") or req.get("query") or ""
+    history = req.get("history") or []
+    cb_req = ChatbotRequest(message=query_text, history=history)
+    return await chat_query(cb_req)
+
+
+@app.post("/api/navigator", tags=["Certification Navigator API"])
+def api_navigator(req: dict):
+    from .routes.certification import navigate_certification
+    from .models.schemas import CertificationNavigationRequest
+    std = req.get("standard_code") or req.get("standard") or "IS 1489"
+    tier = req.get("enterprise_type") or req.get("tier") or "micro"
+    nav_req = CertificationNavigationRequest(standard_code=std, enterprise_type=tier)
+    return navigate_certification(nav_req)
+

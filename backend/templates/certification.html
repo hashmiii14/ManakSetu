@@ -47,6 +47,212 @@
     </div>
   </div>
 
+  <!-- ======================================================== -->
+  <!-- 4-STEP INTERACTIVE SCHEME & LICENSE NAVIGATOR (SIH Feature) -->
+  <!-- ======================================================== -->
+  <div class="gov-card mb-8 p-6 bg-white border border-slate-300 rounded-sm shadow-xs" id="interactiveWizard">
+    <div class="flex flex-col md:flex-row md:items-center justify-between border-b border-slate-200 pb-4 mb-5 gap-2">
+      <div>
+        <div class="flex items-center gap-2 mb-1">
+          <span class="badge badge-navy text-[10px]">Decision Engine</span>
+          <span class="badge badge-green text-[10px]">SIH26107 Guided Pathway</span>
+        </div>
+        <h2 class="text-xl font-bold text-slate-900">Interactive Scheme &amp; License Navigator</h2>
+        <p class="text-xs text-slate-600 mt-0.5">Determine your applicable conformity scheme, mandatory document checklist, testing benchmarks, and MSME fee relief.</p>
+      </div>
+      <div class="text-left md:text-right shrink-0">
+        <span id="wizardStepIndicator" class="badge badge-green font-mono text-xs">Step 1 of 4</span>
+      </div>
+    </div>
+
+    <!-- Wizard Step Progress Bar -->
+    <div class="flex items-center gap-2 mb-6">
+      <div id="bar-step-1" class="h-1.5 flex-1 bg-gov-800 rounded-full transition-all"></div>
+      <div id="bar-step-2" class="h-1.5 flex-1 bg-slate-200 rounded-full transition-all"></div>
+      <div id="bar-step-3" class="h-1.5 flex-1 bg-slate-200 rounded-full transition-all"></div>
+      <div id="bar-step-4" class="h-1.5 flex-1 bg-slate-200 rounded-full transition-all"></div>
+    </div>
+
+    <!-- STEP 1: What are you applying for? -->
+    <div id="wizard-step-1" class="wizard-pane">
+      <h3 class="text-sm font-bold text-slate-900 mb-3">Step 1: What are you applying for?</h3>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-5">
+        <label class="wizard-opt-card flex items-start gap-3 p-3.5 border border-slate-300 rounded-sm cursor-pointer hover:border-gov-800 transition-all bg-slate-50">
+          <input type="radio" name="wizService" value="product_cert" checked class="mt-1">
+          <div>
+            <strong class="text-xs text-gov-900 block">Product Certification (ISI Mark — Scheme I)</strong>
+            <span class="text-[11px] text-slate-600">For domestic Indian manufacturers seeking the ISI Mark license under the BIS Act 2016.</span>
+          </div>
+        </label>
+        <label class="wizard-opt-card flex items-start gap-3 p-3.5 border border-slate-300 rounded-sm cursor-pointer hover:border-gov-800 transition-all bg-slate-50">
+          <input type="radio" name="wizService" value="hallmarking" class="mt-1">
+          <div>
+            <strong class="text-xs text-gov-900 block">Gold / Silver Hallmarking (HUID Registration)</strong>
+            <span class="text-[11px] text-slate-600">For jewelers and Assaying &amp; Hallmarking Centres (AHC) seeking statutory registration.</span>
+          </div>
+        </label>
+        <label class="wizard-opt-card flex items-start gap-3 p-3.5 border border-slate-300 rounded-sm cursor-pointer hover:border-gov-800 transition-all bg-slate-50">
+          <input type="radio" name="wizService" value="crs" class="mt-1">
+          <div>
+            <strong class="text-xs text-gov-900 block">Compulsory Registration Scheme (CRS — Scheme II)</strong>
+            <span class="text-[11px] text-slate-600">For IT electronics, adapters, solar equipment, and telecom goods under MeitY orders.</span>
+          </div>
+        </label>
+        <label class="wizard-opt-card flex items-start gap-3 p-3.5 border border-slate-300 rounded-sm cursor-pointer hover:border-gov-800 transition-all bg-slate-50">
+          <input type="radio" name="wizService" value="fmcs" class="mt-1">
+          <div>
+            <strong class="text-xs text-gov-900 block">Foreign Manufacturers Certification Scheme (FMCS)</strong>
+            <span class="text-[11px] text-slate-600">For foreign factories outside India exporting regulated products into Indian territory.</span>
+          </div>
+        </label>
+      </div>
+      <div class="flex justify-end gap-2 pt-3 border-t border-slate-200">
+        <button type="button" onclick="goToWizardStep(2)" class="btn btn-navy btn-sm text-xs">
+          Next: Select Product &rarr;
+        </button>
+      </div>
+    </div>
+
+    <!-- STEP 2: Product / Category -->
+    <div id="wizard-step-2" class="wizard-pane hidden">
+      <h3 class="text-sm font-bold text-slate-900 mb-3">Step 2: Select your product category</h3>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-5">
+        <label class="wizard-opt-card flex items-start gap-3 p-3.5 border border-slate-300 rounded-sm cursor-pointer hover:border-gov-800 transition-all bg-slate-50">
+          <input type="radio" name="wizCategory" value="geyser" checked class="mt-1">
+          <div>
+            <strong class="text-xs text-gov-900 block">Storage Electric Water Heaters / Geysers (IS 2082)</strong>
+            <span class="text-[11px] text-slate-600">Mandatory QCO in force. Requires electrical safety, insulation, and pressure testing.</span>
+          </div>
+        </label>
+        <label class="wizard-opt-card flex items-start gap-3 p-3.5 border border-slate-300 rounded-sm cursor-pointer hover:border-gov-800 transition-all bg-slate-50">
+          <input type="radio" name="wizCategory" value="cement" class="mt-1">
+          <div>
+            <strong class="text-xs text-gov-900 block">Portland Pozzolana Cement (IS 1489 Part 1) / OPC (IS 12269)</strong>
+            <span class="text-[11px] text-slate-600">Strict mandatory Cement QCO. Compressive strength, fineness, and chemical soundness.</span>
+          </div>
+        </label>
+        <label class="wizard-opt-card flex items-start gap-3 p-3.5 border border-slate-300 rounded-sm cursor-pointer hover:border-gov-800 transition-all bg-slate-50">
+          <input type="radio" name="wizCategory" value="helmet" class="mt-1">
+          <div>
+            <strong class="text-xs text-gov-900 block">Two-Wheeler Protective Helmets (IS 4151)</strong>
+            <span class="text-[11px] text-slate-600">Mandatory Road Transport QCO. Impact absorption, retention chin-strap, and penetration test.</span>
+          </div>
+        </label>
+        <label class="wizard-opt-card flex items-start gap-3 p-3.5 border border-slate-300 rounded-sm cursor-pointer hover:border-gov-800 transition-all bg-slate-50">
+          <input type="radio" name="wizCategory" value="toys" class="mt-1">
+          <div>
+            <strong class="text-xs text-gov-900 block">Safety of Toys &amp; Childcare Goods (IS 9873)</strong>
+            <span class="text-[11px] text-slate-600">DPIIT Mandatory Toy QCO. Mechanical, physical, flammability, and toxic elements safety.</span>
+          </div>
+        </label>
+        <label class="wizard-opt-card flex items-start gap-3 p-3.5 border border-slate-300 rounded-sm cursor-pointer hover:border-gov-800 transition-all bg-slate-50">
+          <input type="radio" name="wizCategory" value="pressure_cooker" class="mt-1">
+          <div>
+            <strong class="text-xs text-gov-900 block">Domestic Pressure Cookers (IS 2347)</strong>
+            <span class="text-[11px] text-slate-600">Compulsory Cookware QCO. Operating pressure, proof pressure, and thermal safety release.</span>
+          </div>
+        </label>
+        <label class="wizard-opt-card flex items-start gap-3 p-3.5 border border-slate-300 rounded-sm cursor-pointer hover:border-gov-800 transition-all bg-slate-50">
+          <input type="radio" name="wizCategory" value="switches" class="mt-1">
+          <div>
+            <strong class="text-xs text-gov-900 block">Electrical Switches for Domestic Use (IS 3854)</strong>
+            <span class="text-[11px] text-slate-600">Mandatory Electrical Accessories QCO. Dielectric strength, endurance, and temperature rise.</span>
+          </div>
+        </label>
+      </div>
+      <div class="flex justify-between items-center pt-3 border-t border-slate-200">
+        <button type="button" onclick="goToWizardStep(1)" class="btn btn-outline btn-sm text-xs">
+          &larr; Back
+        </button>
+        <button type="button" onclick="goToWizardStep(3)" class="btn btn-navy btn-sm text-xs">
+          Next: Applicant Profile &rarr;
+        </button>
+      </div>
+    </div>
+
+    <!-- STEP 3: Business / Applicant Profile -->
+    <div id="wizard-step-3" class="wizard-pane hidden">
+      <h3 class="text-sm font-bold text-slate-900 mb-3">Step 3: What is your enterprise classification?</h3>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-5">
+        <label class="wizard-opt-card flex items-start gap-3 p-3.5 border border-slate-300 rounded-sm cursor-pointer hover:border-gov-800 transition-all bg-slate-50">
+          <input type="radio" name="wizTier" value="micro" checked class="mt-1">
+          <div>
+            <strong class="text-xs text-emerald-900 block flex items-center gap-1.5">
+              Micro Enterprise (Udyam Verified)
+              <span class="badge badge-green text-[10px]">50% Fee Concession</span>
+            </strong>
+            <span class="text-[11px] text-slate-600">Investment &le; ₹1 Crore, Turnover &le; ₹5 Crores. Qualifies for 50% discount on marking fees.</span>
+          </div>
+        </label>
+        <label class="wizard-opt-card flex items-start gap-3 p-3.5 border border-slate-300 rounded-sm cursor-pointer hover:border-gov-800 transition-all bg-slate-50">
+          <input type="radio" name="wizTier" value="small" class="mt-1">
+          <div>
+            <strong class="text-xs text-blue-900 block flex items-center gap-1.5">
+              Small Enterprise (Udyam Verified)
+              <span class="badge badge-navy text-[10px]">20% Fee Concession</span>
+            </strong>
+            <span class="text-[11px] text-slate-600">Investment &le; ₹10 Crores, Turnover &le; ₹50 Crores. Qualifies for 20% discount on marking fees.</span>
+          </div>
+        </label>
+        <label class="wizard-opt-card flex items-start gap-3 p-3.5 border border-slate-300 rounded-sm cursor-pointer hover:border-gov-800 transition-all bg-slate-50">
+          <input type="radio" name="wizTier" value="medium_large" class="mt-1">
+          <div>
+            <strong class="text-xs text-slate-900 block">Medium / Large Scale Enterprise</strong>
+            <span class="text-[11px] text-slate-600">Standard statutory fees under Schedule II of Conformity Assessment Regulations.</span>
+          </div>
+        </label>
+        <label class="wizard-opt-card flex items-start gap-3 p-3.5 border border-slate-300 rounded-sm cursor-pointer hover:border-gov-800 transition-all bg-slate-50">
+          <input type="radio" name="wizTier" value="startup" class="mt-1">
+          <div>
+            <strong class="text-xs text-purple-900 block flex items-center gap-1.5">
+              DPIIT Recognized Startup
+              <span class="badge badge-slate text-[10px]">Fast-Track Scrutiny</span>
+            </strong>
+            <span class="text-[11px] text-slate-600">Priority application processing and fast-track testing at BIS Central Laboratory.</span>
+          </div>
+        </label>
+      </div>
+      <div class="flex justify-between items-center pt-3 border-t border-slate-200">
+        <button type="button" onclick="goToWizardStep(2)" class="btn btn-outline btn-sm text-xs">
+          &larr; Back
+        </button>
+        <button type="button" onclick="generateWizardPathway()" class="btn btn-navy btn-sm text-xs">
+          Generate Tailored Pathway &rarr;
+        </button>
+      </div>
+    </div>
+
+    <!-- STEP 4: Tailored Certification Pathway Summary -->
+    <div id="wizard-step-4" class="wizard-pane hidden">
+      <div id="wizardPathwayResult">
+        <!-- Injected via JavaScript -->
+      </div>
+      <div class="flex justify-between items-center pt-4 mt-4 border-t border-slate-200 flex-wrap gap-2">
+        <button type="button" onclick="goToWizardStep(3)" class="btn btn-outline btn-sm text-xs">
+          &larr; Back
+        </button>
+        <div class="flex items-center gap-2">
+          <button type="button" onclick="resetWizard()" class="btn btn-outline btn-sm text-xs">
+            Start Again
+          </button>
+          <button type="button" onclick="printWizardSummary()" class="btn btn-secondary btn-sm text-xs inline-flex items-center gap-1">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+            Print / Save Summary
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section Header for 10-Stage Detailed Stepper -->
+  <div class="section-title-strip mb-4">
+    <div>
+      <span class="badge badge-gov text-xs">Sequential Compliance Roadmap</span>
+      <h2 class="section-title text-xl font-bold mt-1">10-Stage Statutory Stepper</h2>
+      <p class="section-subtitle">Deep dive into factory preparation, NABL testing, physical audit, and statutory grant</p>
+    </div>
+  </div>
+
   <!-- 10-Stage Horizontal Stepper Tracker -->
   <div class="stepper-container bg-white border border-slate-300 rounded-sm p-4 mb-8 shadow-xs overflow-x-auto">
     <div class="stepper-track flex justify-between min-w-[750px] relative">
@@ -217,6 +423,309 @@
 
 {% block scripts %}
 <script>
+var WIZARD_DATA = {
+  geyser: {
+    title: "Stationary Storage Electric Water Heaters (Geysers)",
+    standard: "IS 2082: 2018",
+    scheme: "Scheme-I (Product Certification / ISI Mark)",
+    qco: "Mandatory Quality Control Order in Force (Section 16, BIS Act 2016)",
+    sti_equipment: [
+      "High Voltage Dielectric Flash Test Bench (1500V / 50Hz)",
+      "Leakage Current Measuring Apparatus (Cold & Hot Operating Conditions)",
+      "Hydrostatic Pressure Test Rig (Capable of sustained proof test up to 1.0 MPa)",
+      "Thermostat & Thermal Cut-Out Calibration Test Chamber",
+      "Earth Continuity & Ground Bond Resistance Tester"
+    ],
+    documents: [
+      "Form-V Statutory Online Application with Scaled Factory Layout",
+      "Plant Machinery List (Deep drawing press, MIG welding, PUF insulation line)",
+      "In-House Quality Control & Testing Apparatus Inventory",
+      "Calibration Certificates for All Pressure Gauges & Electrical Instruments",
+      "Appointment Letter & Educational Credentials of Qualified QC In-Charge",
+      "Raw Material Test Certificates (Heating element, thermostat, outer tank sheet)",
+      "Valid Udyam Registration Certificate (for 50% / 20% MSME Concession)",
+      "Brand Trademark Registration Certificate / Legal Brand Authorization Agreement"
+    ],
+    procedure: "Simplified Procedure (20-30 days) with pre-certified independent test report, or Normal Procedure (60-90 days) with preliminary inspection.",
+    testing_requirement: "Pre-certification sample testing at accredited laboratory (e.g., CPRI, ERDA, or BIS Central Lab) + 100% routine testing of every production batch under STI."
+  },
+  cement: {
+    title: "Portland Pozzolana Cement (Fly Ash Based)",
+    standard: "IS 1489 (Part 1): 2015",
+    scheme: "Scheme-I (Product Certification / ISI Mark)",
+    qco: "Mandatory Cement Quality Control Order (Strict Statutory Enforcement)",
+    sti_equipment: [
+      "Compressive Strength Testing Machine (2000 kN calibrated capacity)",
+      "Blaine's Air Permeability Fineness Apparatus",
+      "Le-Chatelier Moulds & Water Boiling Water Bath for Soundness",
+      "Standard Vicat Apparatus for Consistency & Initial/Final Setting Time",
+      "High-Pressure Autoclave for Magnesia Soundness Verification"
+    ],
+    documents: [
+      "Form-V Online Application with Scaled Plant & Silo Layout",
+      "Machinery Schedule (Ball mill / VRM, separator, fly ash handling, auto-packers)",
+      "In-House Chemical & Physical Testing Laboratory Equipment List",
+      "Valid Calibration Certificates from NABL-Accredited Calibration Laboratory",
+      "Appointment of Competent Chief Chemist / Quality Assurance Head",
+      "Fly Ash (IS 3812 Part 1) and Gypsum Inward Quality Inspection Records",
+      "Valid Udyam Registration Certificate (for MSME Fee Relief)",
+      "Packaging Bag Printing Approval (Red lettering for IS 1489 Part 1 PPC)"
+    ],
+    procedure: "Mandatory factory surveillance with 28-day sample compressive test verification prior to license grant.",
+    testing_requirement: "Independent third-party sample testing at National Test House (NTH) or BIS Sahibabad Lab + Daily in-house lot testing."
+  },
+  helmet: {
+    title: "Protective Helmets for Riders of Two-Wheeled Motor Vehicles",
+    standard: "IS 4151: 2020",
+    scheme: "Scheme-I (Product Certification / ISI Mark)",
+    qco: "Ministry of Road Transport Mandatory Helmet QCO Order",
+    sti_equipment: [
+      "Impact Attenuation Guided Drop Assembly with Tri-axial Accelerometer",
+      "Retention System Dynamic & Static Chin-Strap Elongation Rig",
+      "Penetration Resistance Dropping Cone Apparatus",
+      "Visor Optical & Scratch Resistance Testing Bench",
+      "Conditioning Chambers (Hot 50°C, Cold -10°C, Water Immersion)"
+    ],
+    documents: [
+      "Form-V Application with Shell Moulding & Assembly Shop Layout",
+      "Tooling & Injection Moulding Machinery Technical Specifications",
+      "STI Testing Equipment List with Calibration Validation Records",
+      "QC Testing Personnel Qualifications in Mechanical Testing",
+      "EPS Liner Density and ABS/Polycarbonate Raw Material Mill Test Reports",
+      "Valid Udyam Registration Certificate",
+      "Brand Marking & Size Designation Artwork Approval"
+    ],
+    procedure: "Simplified Procedure with test report from ARAI / ICAT / BIS Apex Laboratory.",
+    testing_requirement: "Lot-wise impact testing on conditioned helmets + complete type testing at recognized automotive research laboratory."
+  },
+  toys: {
+    title: "Safety of Toys & Infant Care Products",
+    standard: "IS 9873 (Part 1): 2019",
+    scheme: "Scheme-I (Product Certification / ISI Mark)",
+    qco: "DPIIT Toys (Quality Control) Order — 100% Mandatory Enforcement",
+    sti_equipment: [
+      "Torque & Tension Test Fixtures for Small Parts Detachment",
+      "Drop & Impact Test Apparatus for Sharp Edges / Points",
+      "Flammability Rate of Flame Spread Burn Chamber",
+      "XRF Analyzer / Heavy Metal Elemental Migration Screening Device"
+    ],
+    documents: [
+      "Form-V Application with Manufacturing & Assembly Layout",
+      "Moulding and Non-Toxic Paint Finishing Process Flowchart",
+      "Toy Safety Testing Bench Inventory with Calibration Logs",
+      "Phthalate & Toxic Heavy Metal Chemical Compliance Certificates",
+      "Valid Udyam Registration Certificate",
+      "Age Grading & Safety Warning Label Design Approvals"
+    ],
+    procedure: "Inspection and sample draw by BIS officers with laboratory testing for mechanical and chemical migration parameters.",
+    testing_requirement: "Physical safety testing on lot samples + laboratory verification for non-toxicity of dyes and plastics."
+  },
+  pressure_cooker: {
+    title: "Domestic Pressure Cookers",
+    standard: "IS 2347: 2017",
+    scheme: "Scheme-I (Product Certification / ISI Mark)",
+    qco: "Mandatory Domestic Pressure Cookers Quality Control Order",
+    sti_equipment: [
+      "Hydrostatic Bursting Pressure Test Rig",
+      "Operating Pressure & Pressure Relief Device (Safety Valve) Test Stand",
+      "Thermal Fusible Plug Safety Release Test Bench",
+      "Handle Thermal & Structural Resistance Rig"
+    ],
+    documents: [
+      "Form-V Application with Metal Spinning & Press Shop Layout",
+      "Drawing & Specification of Safety Valve, Gasket, and Vent Weight",
+      "Pressure Testing Equipment Inventory and Gauge Calibration Logs",
+      "Food Contact Safety Certificate for Aluminium / Stainless Steel Alloys",
+      "Valid Udyam Registration Certificate"
+    ],
+    procedure: "Simplified Route with pre-testing at approved mechanical test house.",
+    testing_requirement: "100% hydrostatic proof testing of each body and lid + safety release testing under steam pressure."
+  },
+  switches: {
+    title: "Switches for Fixed Electrical Installations",
+    standard: "IS 3854: 1997",
+    scheme: "Scheme-I (Product Certification / ISI Mark)",
+    qco: "Mandatory Electrical Accessories Quality Control Order",
+    sti_equipment: [
+      "Endurance Testing Bench (Make-and-Break Machine 40,000 Operations)",
+      "High Voltage Dielectric Strength Tester (2000V AC)",
+      "Temperature Rise Measuring Device with Thermocouples",
+      "Glow-Wire Test Apparatus for Resistance to Heat and Fire (850°C)"
+    ],
+    documents: [
+      "Form-V Application with Injection Moulding & Stamping Shop Layout",
+      "Electrical In-House Testing Apparatus Calibration Records",
+      "Copper Brass Terminal and Flame-Retardant Polycarbonate Test Reports",
+      "Valid Udyam Registration Certificate",
+      "Electrical Wiring Diagram and Rating Marking Submissions"
+    ],
+    procedure: "Verification of endurance test records and random sampling for dielectric test clearance.",
+    testing_requirement: "Sample type testing at ERDA / CPRI + lot testing for contact resistance and high-voltage insulation."
+  }
+};
+
+function goToWizardStep(stepNum) {
+  for (var i = 1; i <= 4; i++) {
+    var pane = document.getElementById('wizard-step-' + i);
+    var bar = document.getElementById('bar-step-' + i);
+    if (pane) {
+      if (i === stepNum) {
+        pane.classList.remove('hidden');
+      } else {
+        pane.classList.add('hidden');
+      }
+    }
+    if (bar) {
+      if (i <= stepNum) {
+        bar.className = 'h-1.5 flex-1 bg-gov-800 rounded-full transition-all';
+      } else {
+        bar.className = 'h-1.5 flex-1 bg-slate-200 rounded-full transition-all';
+      }
+    }
+  }
+  var ind = document.getElementById('wizardStepIndicator');
+  if (ind) {
+    ind.textContent = 'Step ' + stepNum + ' of 4';
+  }
+}
+
+function generateWizardPathway() {
+  var catRadio = document.querySelector('input[name="wizCategory"]:checked');
+  var tierRadio = document.querySelector('input[name="wizTier"]:checked');
+  var srvRadio = document.querySelector('input[name="wizService"]:checked');
+
+  var cat = catRadio ? catRadio.value : 'geyser';
+  var tier = tierRadio ? tierRadio.value : 'micro';
+  var srv = srvRadio ? srvRadio.value : 'product_cert';
+
+  var data = WIZARD_DATA[cat] || WIZARD_DATA.geyser;
+
+  var concessionText = "Standard Statutory Assessment Fee";
+  var concessionPercent = 0;
+  var concessionBadge = '<span class="badge badge-slate text-[10px]">Standard Tariff</span>';
+  if (tier === 'micro') {
+    concessionText = "50% Statutory Concession on Application & Minimum Marking Fees (Under Gazette Notification)";
+    concessionPercent = 50;
+    concessionBadge = '<span class="badge badge-green text-[10px]">50% Micro Concession Eligible</span>';
+  } else if (tier === 'small') {
+    concessionText = "20% Statutory Concession on Application & Minimum Marking Fees (Under Gazette Notification)";
+    concessionPercent = 20;
+    concessionBadge = '<span class="badge badge-navy text-[10px]">20% Small Concession Eligible</span>';
+  } else if (tier === 'startup') {
+    concessionText = "DPIIT Fast-Track Assessment Priority & Dedicated BIS Helpdesk Support";
+    concessionBadge = '<span class="badge badge-purple text-[10px]">Fast-Track Scrutiny</span>';
+  }
+
+  var docsHtml = data.documents.map(function(doc, idx) {
+    return `
+      <label class="flex items-start gap-2 p-2 bg-white border border-slate-200 rounded-sm text-xs text-slate-800 cursor-pointer hover:bg-slate-50">
+        <input type="checkbox" class="mt-0.5" id="wizDoc_${idx}">
+        <span>${doc}</span>
+      </label>
+    `;
+  }).join('');
+
+  var stiHtml = data.sti_equipment.map(function(eq) {
+    return `
+      <li class="flex items-start gap-2 text-xs text-slate-700 bg-white p-2 rounded-sm border border-slate-200">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0A3871" stroke-width="2.5" class="shrink-0 mt-0.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        <span>${eq}</span>
+      </li>
+    `;
+  }).join('');
+
+  var out = `
+    <div class="space-y-4">
+      <!-- Header Banner -->
+      <div class="p-4 bg-gov-900 text-white rounded-sm flex flex-col md:flex-row justify-between items-start md:items-center gap-3">
+        <div>
+          <div class="flex items-center gap-2 mb-1">
+            <span class="badge" style="background:rgba(255,255,255,0.18); color:#fff; border:none; font-size:10px;">${data.scheme}</span>
+            ${concessionBadge}
+          </div>
+          <h3 class="text-base font-bold text-white">${data.title}</h3>
+          <p class="text-xs text-slate-300 mt-0.5 font-mono">Applicable Standard: <strong>${data.standard}</strong></p>
+        </div>
+        <div class="text-left md:text-right shrink-0">
+          <span class="text-[10px] text-slate-400 block uppercase">Statutory Mandate</span>
+          <span class="badge badge-qco text-xs mt-1 block">Mandatory QCO in Force</span>
+        </div>
+      </div>
+
+      <!-- Grid 2-col -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        
+        <!-- Left: Document Checklist -->
+        <div class="p-4 bg-slate-50 border border-slate-200 rounded-sm">
+          <h4 class="text-xs font-bold uppercase tracking-wider text-slate-700 mb-2 flex items-center justify-between">
+            <span>Mandatory Document Dossier Checklist</span>
+            <span class="text-[10px] text-slate-500 font-normal">Check items as prepared</span>
+          </h4>
+          <div class="space-y-1.5 max-h-60 overflow-y-auto pr-1">
+            ${docsHtml}
+          </div>
+        </div>
+
+        <!-- Right: In-House QC Benchmarks & STI Setup -->
+        <div class="p-4 bg-slate-50 border border-slate-200 rounded-sm flex flex-col justify-between">
+          <div>
+            <h4 class="text-xs font-bold uppercase tracking-wider text-slate-700 mb-2">
+              In-House Testing Setup (STI Requirements)
+            </h4>
+            <ul class="space-y-1.5 mb-3">
+              ${stiHtml}
+            </ul>
+          </div>
+          <div class="p-2.5 bg-blue-50 border border-blue-200 rounded-sm text-[11px] text-blue-900">
+            <strong>Laboratory Testing:</strong> ${data.testing_requirement}
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Financial Concession Banner -->
+      <div class="p-3 bg-emerald-50 border border-emerald-200 rounded-sm flex items-center justify-between flex-wrap gap-2 text-xs">
+        <div>
+          <strong class="text-emerald-900">Statutory Entitlement:</strong>
+          <span class="text-emerald-800 ml-1">${concessionText}</span>
+        </div>
+        <a href="/estimator?standard=${encodeURIComponent(data.standard)}&tier=${tier}" class="btn btn-navy btn-sm text-[11px] py-1">
+          Calculate Net Statutory Fee &rarr;
+        </a>
+      </div>
+
+      <!-- Action Gateways -->
+      <div class="flex items-center gap-2 pt-2 flex-wrap">
+        <a href="/standards?q=${encodeURIComponent(data.standard)}" class="btn btn-sm btn-outline text-xs">
+          View Full Standard Specification
+        </a>
+        <a href="/labs?standard=${encodeURIComponent(data.standard)}" class="btn btn-sm btn-secondary text-xs">
+          Locate Testing Labs for this Standard
+        </a>
+        <a href="/manakbot?prompt=${encodeURIComponent('Explain the complete BIS certification roadmap and documents required for ' + data.title + ' (' + data.standard + ')')}" class="btn btn-sm btn-navy text-xs">
+          Consult ManakBot AI on this Pathway
+        </a>
+        <a href="https://www.manakonline.in" target="_blank" rel="noopener" class="btn btn-sm btn-outline text-xs">
+          Official e-BIS Filing ↗
+        </a>
+      </div>
+    </div>
+  `;
+
+  document.getElementById('wizardPathwayResult').innerHTML = out;
+  goToWizardStep(4);
+}
+
+function resetWizard() {
+  goToWizardStep(1);
+  var ind = document.getElementById('wizardStepIndicator');
+  if (ind) ind.textContent = 'Step 1 of 4';
+}
+
+function printWizardSummary() {
+  window.print();
+}
+
 function selectStage(stepNum) {
   // Hide all stage cards
   for (let i = 1; i <= 10; i++) {

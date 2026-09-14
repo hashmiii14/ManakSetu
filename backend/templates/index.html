@@ -16,12 +16,25 @@
           </div>
 
           <h1 class="hero-title">
-            Find the Right Indian Standard. Understand BIS Requirements.
+            MANAK SETU<br>
+            <span style="font-size:1.35rem; font-weight:600; color:#cbd5e1; display:block; margin-top:0.35rem; line-height:1.2;">Your Digital Bridge to BIS Standards &amp; Services</span>
           </h1>
 
           <p class="hero-desc">
-            Search standards, explore BIS services, understand certification pathways, and get evidence-backed assistance through ManakBot.
+            Helping Indian industries, MSMEs, and consumers discover standards, understand certification requirements, verify marks, estimate statutory costs, and locate testing laboratories.
           </p>
+
+          <!-- Primary & Secondary CTAs per Presentation Requirements -->
+          <div style="display:flex; gap:0.75rem; flex-wrap:wrap; margin-bottom:1.25rem;">
+            <a href="/standards" class="btn btn-primary" style="padding:0.6rem 1.25rem; font-size:0.88rem; font-weight:700; display:inline-flex; align-items:center; gap:0.5rem; text-decoration:none;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+              <span>Find a Standard</span>
+            </a>
+            <a href="/verify" class="btn" style="padding:0.6rem 1.25rem; font-size:0.88rem; font-weight:700; display:inline-flex; align-items:center; gap:0.5rem; text-decoration:none; background:rgba(255,255,255,0.12); color:#fff; border:1px solid rgba(255,255,255,0.3);">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              <span>Verify a Product</span>
+            </a>
+          </div>
 
           <!-- Search Form with Dual Actions: Search Standards & Ask ManakBot -->
           <form id="heroSearchForm" action="/standards" method="GET" class="hero-search-form">
@@ -32,7 +45,7 @@
                 name="q" 
                 id="heroSearchInput"
                 class="hero-search-input" 
-                placeholder="Describe your product or BIS-related question..." 
+                placeholder="Describe your product or BIS-related question (e.g., geyser, cement, helmet)..." 
                 required
               >
             </div>
@@ -51,14 +64,13 @@
           <!-- Popular Search Chips -->
           <div class="search-chips">
             <span class="search-chips-label">Popular Standards:</span>
-            <a href="/standards?q=IS+302" class="search-chip">IS 302 (Electrical)</a>
-            <a href="/standards?q=IS+2082" class="search-chip">IS 2082 (Geysers)</a>
-            <a href="/standards?q=IS+4151" class="search-chip">IS 4151 (Helmets)</a>
-            <a href="/standards?q=water" class="search-chip">Water (IS 14543)</a>
-            <a href="/standards?q=pressure+cooker" class="search-chip">Pressure Cookers (IS 2347)</a>
-            <a href="/standards?q=toy" class="search-chip">Baby Toys (IS 9873)</a>
+            <a href="/standards?q=geyser" class="search-chip">Geysers (IS 2082)</a>
             <a href="/standards?q=cement" class="search-chip">Cement (IS 1489)</a>
-            <a href="/hallmarking" class="search-chip">Gold Hallmark (IS 1417)</a>
+            <a href="/standards?q=helmet" class="search-chip">Helmets (IS 4151)</a>
+            <a href="/standards?q=baby+doll" class="search-chip">Baby Toys (IS 9873)</a>
+            <a href="/standards?q=pressure+cooker" class="search-chip">Pressure Cookers (IS 2347)</a>
+            <a href="/standards?q=electrical+cable" class="search-chip">Cables (IS 9968)</a>
+            <a href="/verify?huid=AK79B2&subtab=huid" class="search-chip">Gold Hallmark (HUID)</a>
           </div>
         </div>
 
@@ -91,7 +103,7 @@
 
             <!-- Quick Action Gateways -->
             <div class="matrix-gateways">
-              <a href="/hallmarking" class="matrix-btn">
+              <a href="/verify?subtab=huid" class="matrix-btn">
                 <div>
                   <div style="font-size:0.75rem; color:var(--gov-900);">Verify HUID Code</div>
                   <div style="font-size:0.68rem; color:var(--slate-500); font-weight:normal;">Gold Hallmark Purity</div>
@@ -99,7 +111,7 @@
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--emerald-700)" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
               </a>
 
-              <a href="/calculator" class="matrix-btn">
+              <a href="/estimator" class="matrix-btn">
                 <div>
                   <div style="font-size:0.75rem; color:var(--gov-900);">MSME 50% Concession</div>
                   <div style="font-size:0.68rem; color:var(--slate-500); font-weight:normal;">Indicative Fee Calculator</div>
@@ -119,31 +131,31 @@
     </div>
   </section>
 
-  <!-- 2. QUICK SERVICES (5 PRIMARY SERVICE CARDS) -->
+  <!-- 2. QUICK SERVICES (5 PRIMARY MODULES GRID) -->
   <section style="padding: 2.5rem 0 1.5rem; background-color: var(--slate-50); border-bottom: 1px solid var(--slate-200);">
     <div class="container">
       <div class="section-title-strip">
         <div>
-          <span class="home-section-tag">Direct Service Gateways</span>
-          <h2 class="section-title">Quick Services</h2>
-          <p class="section-subtitle">Essential workflows for manufacturers, conformity assessment applicants, and consumers</p>
+          <span class="home-section-tag">Presentation Core Modules</span>
+          <h2 class="section-title">Core Service Modules</h2>
+          <p class="section-subtitle">Five essential functional pillars for manufacturers, MSME applicants, and consumers</p>
         </div>
       </div>
 
       <div class="quick-services-grid">
         
-        <!-- Service 1: Standards Search -->
+        <!-- Module 1: StandardFinder AI -->
         <div class="service-dash-card">
           <div>
             <div class="service-card-top">
               <div class="service-icon-square blue">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
               </div>
-              <span class="badge badge-gov">572 Indexed</span>
+              <span class="badge badge-gov">Module 1</span>
             </div>
-            <h3 class="service-card-title">Standards Search</h3>
+            <h3 class="service-card-title">StandardFinder AI</h3>
             <p class="service-card-desc">
-              Search 572 curated standards, technical divisions, and mandatory QCOs.
+              Search 572 curated standards, technical divisions, and mandatory QCOs using plain English or product names.
             </p>
           </div>
           <div class="service-card-footer">
@@ -154,91 +166,91 @@
           </div>
         </div>
 
-        <!-- Service 2: Certification Navigator -->
+        <!-- Module 2: BIS Scheme & License Navigator -->
         <div class="service-dash-card">
           <div>
             <div class="service-card-top">
               <div class="service-icon-square green">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
               </div>
-              <span class="badge badge-green">10-Stage Stepper</span>
+              <span class="badge badge-green">Module 2</span>
             </div>
-            <h3 class="service-card-title">Certification Navigator</h3>
+            <h3 class="service-card-title">Scheme &amp; License Navigator</h3>
             <p class="service-card-desc">
-              10-stage sequential journey from factory audit to ISI license grant.
+              Interactive 4-step wizard &amp; 10-stage sequential journey from factory audit to ISI license grant.
             </p>
           </div>
           <div class="service-card-footer">
             <a href="/certification" class="service-card-link">
-              <span>Start Roadmap</span>
+              <span>Explore Navigator</span>
               <span>&rarr;</span>
             </a>
           </div>
         </div>
 
-        <!-- Service 3: Hallmarking Verification -->
+        <!-- Module 3: ManakBot AI -->
+        <div class="service-dash-card">
+          <div>
+            <div class="service-card-top">
+              <div class="service-icon-square purple" style="background:#f3e8ff; color:#7e22ce;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+              </div>
+              <span class="badge badge-navy">Module 3</span>
+            </div>
+            <h3 class="service-card-title">ManakBot AI</h3>
+            <p class="service-card-desc">
+              Grounded intelligent consultation answering procedural, testing, and QCO compliance questions with sources.
+            </p>
+          </div>
+          <div class="service-card-footer">
+            <a href="/manakbot" class="service-card-link">
+              <span>Ask ManakBot</span>
+              <span>&rarr;</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Module 4: TrueMark Verifier -->
         <div class="service-dash-card">
           <div>
             <div class="service-card-top">
               <div class="service-icon-square amber">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
               </div>
-              <span class="badge badge-gold">6-Digit HUID</span>
+              <span class="badge badge-gold">Module 4</span>
             </div>
-            <h3 class="service-card-title">Hallmark Verification</h3>
+            <h3 class="service-card-title">TrueMark Verifier</h3>
             <p class="service-card-desc">
-              Verify 6-digit laser HUID codes and understand statutory ₹45 testing rights.
+              Verify 6-character gold HUID laser marks and 7-digit ISI CM/L manufacturing licenses against registry data.
             </p>
           </div>
           <div class="service-card-footer">
-            <a href="/hallmarking" class="service-card-link">
-              <span>Verify HUID</span>
+            <a href="/verify" class="service-card-link">
+              <span>Verify Product</span>
               <span>&rarr;</span>
             </a>
           </div>
         </div>
 
-        <!-- Service 4: Testing Laboratories -->
+        <!-- Module 5: Smart Cost Estimator & Lab Locator -->
         <div class="service-dash-card">
           <div>
             <div class="service-card-top">
               <div class="service-icon-square sky">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 2v7.31M14 9.3V1.99M8.5 2h7M14 9.3a6.5 6.5 0 1 1-4 0"/></svg>
-              </div>
-              <span class="badge badge-navy">Apex &amp; NABL</span>
-            </div>
-            <h3 class="service-card-title">Testing Laboratories</h3>
-            <p class="service-card-desc">
-              Locate test laboratories with state filters and proximity distance sorting.
-            </p>
-          </div>
-          <div class="service-card-footer">
-            <a href="/laboratories" class="service-card-link">
-              <span>Find Laboratories</span>
-              <span>&rarr;</span>
-            </a>
-          </div>
-        </div>
-
-        <!-- Service 5: MSME Fee Calculator -->
-        <div class="service-dash-card">
-          <div>
-            <div class="service-card-top">
-              <div class="service-icon-square green">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="16" height="20" x="4" y="2" rx="2"/><line x1="8" x2="16" y1="6" y2="6"/><line x1="16" x2="16" y1="14" y2="18"/></svg>
               </div>
-              <span class="badge badge-green">50% Relief</span>
+              <span class="badge badge-green">Module 5</span>
             </div>
-            <h3 class="service-card-title">MSME Fee Calculator</h3>
+            <h3 class="service-card-title">Cost Estimator &amp; Labs</h3>
             <p class="service-card-desc">
-              Estimate indicative certification costs and 50% marking fee relief for Micro units.
+              Calculate indicative 50% MSME fee relief and locate NABL-accredited test laboratories across India.
             </p>
           </div>
           <div class="service-card-footer">
-            <a href="/calculator" class="service-card-link">
-              <span>Calculate Fees</span>
-              <span>&rarr;</span>
-            </a>
+            <div style="display:flex; justify-content:space-between; width:100%;">
+              <a href="/estimator" class="service-card-link"><span>Estimator &rarr;</span></a>
+              <a href="/labs" class="service-card-link"><span>Labs &rarr;</span></a>
+            </div>
           </div>
         </div>
 
@@ -402,145 +414,239 @@
             <h2 class="audience-title">Customized Guidance &amp; Workflows: "I am a..."</h2>
           </div>
           <div class="audience-tabs-group" role="tablist">
-            <button type="button" class="audience-tab active" data-audience="industry" onclick="switchAudience('industry')">
-              Industry / MSME
+            <button type="button" class="audience-tab active" data-audience="msme" onclick="switchAudience('msme')">
+              MSMEs
+            </button>
+            <button type="button" class="audience-tab" data-audience="manufacturer" onclick="switchAudience('manufacturer')">
+              Manufacturers
             </button>
             <button type="button" class="audience-tab" data-audience="consumer" onclick="switchAudience('consumer')">
-              Consumer
+              Consumers
             </button>
-            <button type="button" class="audience-tab" data-audience="researcher" onclick="switchAudience('researcher')">
-              Researcher / Student
+            <button type="button" class="audience-tab" data-audience="labs" onclick="switchAudience('labs')">
+              Testing Labs
+            </button>
+            <button type="button" class="audience-tab" data-audience="ecosystem" onclick="switchAudience('ecosystem')">
+              BIS Ecosystem
             </button>
           </div>
         </div>
 
-        <!-- Pane 1: Industry / MSME -->
-        <div class="audience-pane active" data-pane="industry">
+        <!-- Pane 1: MSMEs -->
+        <div class="audience-pane active" data-pane="msme">
           <div class="audience-grid">
             <div class="audience-item">
               <div class="audience-item-header">
-                <span class="badge badge-navy">Conformity Roadmap</span>
-                <span class="audience-item-title">10-Stage BIS Licensing</span>
+                <span class="badge badge-green">Statutory Subsidy</span>
+                <span class="audience-item-title">MSME 50% Fee Concession</span>
               </div>
               <p class="audience-item-desc">
-                Step-by-step pathway from preliminary standard evaluation and factory QC apparatus setup to audit clearance, pilot sampling, and ISI mark grant under Scheme-I.
+                Micro units qualify for a 50% statutory reduction on application and minimum annual marking fees under Gazette rules upon submitting valid Udyam certificates.
+              </p>
+              <a href="/estimator" class="audience-item-link">
+                <span>Calculate 50% Concessional Savings</span> &rarr;
+              </a>
+            </div>
+
+            <div class="audience-item">
+              <div class="audience-item-header">
+                <span class="badge badge-navy">Fast-Track Filing</span>
+                <span class="audience-item-title">Simplified Certification Route</span>
+              </div>
+              <p class="audience-item-desc">
+                Avail the Simplified Procedure under Scheme-I with pre-certified NABL test reports to reduce license grant processing time from 90 days to under 30 days.
               </p>
               <a href="/certification" class="audience-item-link">
-                <span>View 10-Stage Certification Navigator</span> &rarr;
+                <span>Explore Simplified Roadmap</span> &rarr;
               </a>
             </div>
 
             <div class="audience-item">
               <div class="audience-item-header">
-                <span class="badge badge-green">Financial Relief</span>
-                <span class="audience-item-title">MSME 50% Marking Subsidy</span>
+                <span class="badge badge-gold">AI Assistance</span>
+                <span class="audience-item-title">MSME Subsidies Consultation</span>
               </div>
               <p class="audience-item-desc">
-                Government concessions under Gazette guidelines: 50% discount on minimum marking fees for Micro enterprises and women industrialists; 20% relief for Small enterprises.
+                Consult ManakBot to clarify Udyam eligibility, in-house lab capital expense relief, and state-level subsidy schemes for BIS compliance.
               </p>
-              <a href="/calculator" class="audience-item-link">
-                <span>Calculate Indicative MSME Fee Savings</span> &rarr;
-              </a>
-            </div>
-
-            <div class="audience-item">
-              <div class="audience-item-header">
-                <span class="badge badge-gold">Testing Infrastructure</span>
-                <span class="audience-item-title">Testing Laboratories</span>
-              </div>
-              <p class="audience-item-desc">
-                Pre-certification third-party batch testing at BIS Central Lab Sahibabad, ERDA, CPRI, NTH, and regional NABL accredited test houses with sample turnaround times.
-              </p>
-              <a href="/laboratories" class="audience-item-link">
-                <span>Locate State-wise Accredited Labs</span> &rarr;
+              <a href="/manakbot?prompt=What+statutory+fee+concessions+and+subsidies+are+available+for+MSMEs+applying+for+BIS+ISI+certification%3F" class="audience-item-link">
+                <span>Ask ManakBot on Subsidies</span> &rarr;
               </a>
             </div>
           </div>
         </div>
 
-        <!-- Pane 2: Consumer -->
+        <!-- Pane 2: Manufacturers -->
+        <div class="audience-pane" data-pane="manufacturer">
+          <div class="audience-grid">
+            <div class="audience-item">
+              <div class="audience-item-header">
+                <span class="badge badge-navy">Factory QC</span>
+                <span class="audience-item-title">In-House Laboratory &amp; STI</span>
+              </div>
+              <p class="audience-item-desc">
+                Understand the mandatory Scheme of Testing and Inspection (STI) equipment, sampling schedules, and record maintenance required before factory inspection.
+              </p>
+              <a href="/certification" class="audience-item-link">
+                <span>View STI Testing Checklist</span> &rarr;
+              </a>
+            </div>
+
+            <div class="audience-item">
+              <div class="audience-item-header">
+                <span class="badge badge-qco">Section 16 Mandate</span>
+                <span class="audience-item-title">Compulsory QCO Compliance</span>
+              </div>
+              <p class="audience-item-desc">
+                Review over 760 products notified under mandatory Quality Control Orders where manufacturing without BIS ISI license is a criminal violation under Section 29.
+              </p>
+              <a href="/standards?qco_only=true" class="audience-item-link">
+                <span>Check Mandatory QCO Products</span> &rarr;
+              </a>
+            </div>
+
+            <div class="audience-item">
+              <div class="audience-item-header">
+                <span class="badge badge-green">Lab Sampling</span>
+                <span class="audience-item-title">Pre-Audit Testing Partners</span>
+              </div>
+              <p class="audience-item-desc">
+                Find accredited testing laboratories for initial sample verification across electrical, chemical, mechanical, and civil engineering divisions.
+              </p>
+              <a href="/labs" class="audience-item-link">
+                <span>Locate Accredited Test Facilities</span> &rarr;
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pane 3: Consumers -->
         <div class="audience-pane" data-pane="consumer">
           <div class="audience-grid">
             <div class="audience-item">
               <div class="audience-item-header">
-                <span class="badge badge-gold">Gold &amp; Silver</span>
-                <span class="audience-item-title">6-Digit HUID Laser Code</span>
+                <span class="badge badge-gold">Gold Jewellery</span>
+                <span class="audience-item-title">6-Character HUID Verification</span>
               </div>
               <p class="audience-item-desc">
-                Instantly check laser hallmark identifiers on gold and silver articles to verify retailer registration, assaying centre credentials, and true karat fineness (24K/22K/18K/14K).
+                Check laser hallmark inscriptions on gold jewellery to verify jeweler registration, assaying centre credentials, and true karat purity (24K/22K/18K/14K).
               </p>
-              <a href="/hallmarking" class="audience-item-link">
-                <span>Verify Hallmarking (HUID)</span> &rarr;
-              </a>
-            </div>
-
-            <div class="audience-item">
-              <div class="audience-item-header">
-                <span class="badge badge-green">Consumer Rights</span>
-                <span class="audience-item-title">₹45 Purity Testing Right</span>
-              </div>
-              <p class="audience-item-desc">
-                Every Indian consumer is entitled to have hallmarked jewellery tested at any recognized AHC for ₹45. If found substandard, claim compensation under the BIS Act, 2016.
-              </p>
-              <a href="/hallmarking#consumerRights" class="audience-item-link">
-                <span>Read Consumer Rights &amp; Safeguards</span> &rarr;
+              <a href="/verify?subtab=huid" class="audience-item-link">
+                <span>Verify Gold Hallmark (HUID)</span> &rarr;
               </a>
             </div>
 
             <div class="audience-item">
               <div class="audience-item-header">
                 <span class="badge badge-navy">Product Safety</span>
-                <span class="audience-item-title">ISI Mark License Verification</span>
+                <span class="audience-item-title">ISI Mark &amp; CM/L Check</span>
               </div>
               <p class="audience-item-desc">
-                Verify 7-digit CM/L license numbers printed below the ISI logo on cement bags, bottled water, toys, and electrical geysers to confirm operative factory validity.
+                Verify 7-digit CM/L license numbers printed below the ISI logo on appliances, cement bags, helmets, and baby toys to confirm active factory licenses.
               </p>
-              <a href="/verify" class="audience-item-link">
-                <span>Verify ISI Mark &amp; CM/L License</span> &rarr;
+              <a href="/verify?subtab=cml" class="audience-item-link">
+                <span>Verify ISI CM/L License</span> &rarr;
+              </a>
+            </div>
+
+            <div class="audience-item">
+              <div class="audience-item-header">
+                <span class="badge badge-green">Consumer Protection</span>
+                <span class="audience-item-title">Statutory ₹45 Purity Testing</span>
+              </div>
+              <p class="audience-item-desc">
+                Every Indian citizen has the statutory right to test hallmarked jewellery at any recognized AHC for ₹45 and file complaints via National Consumer Helpline 1915.
+              </p>
+              <a href="/report" class="audience-item-link">
+                <span>File Grievance / Report Violation</span> &rarr;
               </a>
             </div>
           </div>
         </div>
 
-        <!-- Pane 3: Researcher / Student -->
-        <div class="audience-pane" data-pane="researcher">
+        <!-- Pane 4: Labs -->
+        <div class="audience-pane" data-pane="labs">
           <div class="audience-grid">
             <div class="audience-item">
               <div class="audience-item-header">
-                <span class="badge badge-navy">Standards Formulation</span>
-                <span class="audience-item-title">15 Technical Division Councils</span>
+                <span class="badge badge-navy">Testing Network</span>
+                <span class="audience-item-title">BIS Recognized &amp; NABL Apex Labs</span>
               </div>
               <p class="audience-item-desc">
-                Access technical divisions across Civil Engineering, Electronics &amp; IT, Chemicals, Food &amp; Agriculture, Mechanical, and Medical Devices shaping national benchmarks.
+                Explore the national network of recognized testing laboratories including BIS Central Laboratory, ERDA, CPRI, NTH, and regional accredited test facilities.
+              </p>
+              <a href="/labs" class="audience-item-link">
+                <span>Browse Testing Laboratories</span> &rarr;
+              </a>
+            </div>
+
+            <div class="audience-item">
+              <div class="audience-item-header">
+                <span class="badge badge-green">Test Methods</span>
+                <span class="audience-item-title">Standardized Test Protocols</span>
+              </div>
+              <p class="audience-item-desc">
+                Review prescribed testing methods, tolerances, and calibration requirements defined in Indian Standards across electrical, mechanical, and metallurgical scopes.
               </p>
               <a href="/standards" class="audience-item-link">
-                <span>Explore Technical Divisions</span> &rarr;
+                <span>View Standard Test Scopes</span> &rarr;
               </a>
             </div>
 
             <div class="audience-item">
               <div class="audience-item-header">
-                <span class="badge badge-gold">Conformity Architecture</span>
-                <span class="audience-item-title">Harmonized ISO/IEC Standards</span>
+                <span class="badge badge-gold">Turnaround Times</span>
+                <span class="audience-item-title">Sample Processing Timelines</span>
               </div>
               <p class="audience-item-desc">
-                Examine dual-numbered harmonized standards (e.g., IS/ISO 9001, IS/IEC 60335) ensuring interoperability in global supply chains.
+                Access typical laboratory sample testing turnaround durations (5 to 15 working days) for pre-certification and factory surveillance samples.
               </p>
-              <a href="/services" class="audience-item-link">
-                <span>Browse Standards Services</span> &rarr;
+              <a href="/labs" class="audience-item-link">
+                <span>Check Laboratory Turnaround</span> &rarr;
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pane 5: BIS Ecosystem -->
+        <div class="audience-pane" data-pane="ecosystem">
+          <div class="audience-grid">
+            <div class="audience-item">
+              <div class="audience-item-header">
+                <span class="badge badge-navy">Statutory Body</span>
+                <span class="audience-item-title">Bureau of Indian Standards Act, 2016</span>
+              </div>
+              <p class="audience-item-desc">
+                Governing legislative framework establishing the National Standards Body of India, mandatory product certification, hallmarking, and consumer safeguards.
+              </p>
+              <a href="/about" class="audience-item-link">
+                <span>Read Statutory Framework</span> &rarr;
               </a>
             </div>
 
             <div class="audience-item">
               <div class="audience-item-header">
-                <span class="badge badge-green">AI Consultation</span>
-                <span class="audience-item-title">ManakBot Grounded RAG</span>
+                <span class="badge badge-gold">Public Procurement</span>
+                <span class="audience-item-title">GeM Portal Integration</span>
               </div>
               <p class="audience-item-desc">
-                Query complex Indian Standards specifications, chemical tolerance limits, and mechanical benchmarks using our vector-grounded conversational assistant.
+                Government e-Marketplace (GeM) public procurement rules mandating valid BIS certification and standard marks for government vendor onboarding.
               </p>
-              <a href="/chatbot" class="audience-item-link">
-                <span>Launch ManakBot AI Consultation</span> &rarr;
+              <a href="/standards" class="audience-item-link">
+                <span>Explore Procurement Standards</span> &rarr;
+              </a>
+            </div>
+
+            <div class="audience-item">
+              <div class="audience-item-header">
+                <span class="badge badge-green">Hackathon Mandate</span>
+                <span class="audience-item-title">SIH26107 Problem Statement</span>
+              </div>
+              <p class="audience-item-desc">
+                Smart India Hackathon 2026 civic-tech initiative to bridge industry and consumers with authentic digital access to Indian Standards and BIS services.
+              </p>
+              <a href="/about" class="audience-item-link">
+                <span>About ManakSetu Project</span> &rarr;
               </a>
             </div>
           </div>

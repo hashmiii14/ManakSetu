@@ -302,3 +302,27 @@ img, svg, video, canvas, audio, iframe, embed, object {
     width: 100%;
   }
 }
+
+/* ── Specific Responsive Layout Grids ──────────────────────────────────── */
+.calc-layout-grid {
+  display: grid;
+  grid-template-columns: 5fr 7fr;
+  gap: 1.5rem;
+  align-items: flex-start;
+}
+
+.about-layout-grid {
+  display: grid;
+  grid-template-columns: 8fr 4fr;
+  gap: 1.5rem;
+  align-items: flex-start;
+}
+
+@media (max-width: 860px) {
+  .calc-layout-grid,
+  .about-layout-grid {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+}
+

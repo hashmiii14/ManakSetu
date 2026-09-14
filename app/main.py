@@ -147,6 +147,28 @@ def api_isi_verify(req: VerificationRequest):
 
 
 @app.post("/api/fees/calculate", response_model=CostEstimateResponse, tags=["Calculator API"])
+@app.post("/api/estimate", response_model=CostEstimateResponse, tags=["Calculator API"])
 def api_fees_calculate(req: CostEstimateRequest):
     from .routes.calculator import calculate_cost_post
     return calculate_cost_post(req)
+
+
+@app.post("/api/chat", tags=["Chatbot API"])
+async def api_chat(req: dict):
+    from .routes.chatbot import chat_query
+    from .models.schemas import ChatbotRequest
+    query_text = req.get("message") or req.get("query") or ""
+    history = req.get("history") or []
+    cb_req = ChatbotRequest(message=query_text, history=history)
+    return await chat_query(cb_req)
+
+
+@app.post("/api/navigator", tags=["Certification Navigator API"])
+def api_navigator(req: dict):
+    from .routes.certification import navigate_certification
+    from .models.schemas import CertificationNavigationRequest
+    std = req.get("standard_code") or req.get("standard") or "IS 1489"
+    tier = req.get("enterprise_type") or req.get("tier") or "micro"
+    nav_req = CertificationNavigationRequest(standard_code=std, enterprise_type=tier)
+    return navigate_certification(nav_req)
+
