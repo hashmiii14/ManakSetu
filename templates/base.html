@@ -28,7 +28,7 @@
   <meta name="twitter:image" content="/static/images/og-image.png">
 
   <!-- Favicon -->
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23113255' stroke-width='2'><polygon points='12 2 2 7 12 12 22 7 12 2'/><polyline points='2 17 12 22 22 17'/><polyline points='2 12 12 17 22 12'/></svg>">
+  <link rel="icon" type="image/svg+xml" href="/static/images/logo.svg">
 
   <!-- Stylesheets -->
   <link rel="stylesheet" href="/static/css/main.css">
@@ -64,10 +64,19 @@
       
       <!-- Brand & Emblem -->
       <a href="/" class="brand-section" title="ManakSetu Homepage">
-        <div class="emblem-wrapper">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-            <!-- Architectural Ashoka Pillar & Standards Emblem -->
-            <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+        <div class="emblem-wrapper" style="background:transparent; border:none; width:40px; height:40px; padding:0;">
+          <!-- Authentic ManakSetu Architectural Logo: Foundation Pillars (Manak) + Bridge Arch (Setu) -->
+          <svg viewBox="0 0 40 40" width="40" height="40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="ManakSetu Logo">
+            <rect width="40" height="40" rx="6" fill="#0A3871"/>
+            <rect x="4" y="32" width="32" height="3" rx="0.5" fill="#FFFFFF"/>
+            <rect x="7" y="15" width="6" height="15" fill="#FFFFFF"/>
+            <rect x="5.5" y="13" width="9" height="2" fill="#FFFFFF"/>
+            <rect x="27" y="15" width="6" height="15" fill="#FFFFFF"/>
+            <rect x="25.5" y="13" width="9" height="2" fill="#FFFFFF"/>
+            <path d="M13 19C15 16 25 16 27 19V15H13V19Z" fill="#D97706"/>
+            <rect x="4" y="8" width="32" height="3" rx="0.5" fill="#FFFFFF"/>
+            <polygon points="20,4 23.5,8 16.5,8" fill="#D97706"/>
+            <rect x="18.5" y="10" width="3" height="12" fill="#D97706"/>
           </svg>
         </div>
         <div class="brand-titles">
@@ -128,7 +137,21 @@
       <div class="footer-grid">
         <!-- Col 1: About Portal -->
         <div class="footer-col">
-          <h4>About ManakSetu</h4>
+          <div style="display:flex; align-items:center; gap:0.65rem; margin-bottom:0.75rem;">
+            <svg viewBox="0 0 40 40" width="32" height="32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <rect width="40" height="40" rx="4" fill="#0A3871"/>
+              <rect x="4" y="32" width="32" height="3" rx="0.5" fill="#FFFFFF"/>
+              <rect x="7" y="15" width="6" height="15" fill="#FFFFFF"/>
+              <rect x="5.5" y="13" width="9" height="2" fill="#FFFFFF"/>
+              <rect x="27" y="15" width="6" height="15" fill="#FFFFFF"/>
+              <rect x="25.5" y="13" width="9" height="2" fill="#FFFFFF"/>
+              <path d="M13 19C15 16 25 16 27 19V15H13V19Z" fill="#D97706"/>
+              <rect x="4" y="8" width="32" height="3" rx="0.5" fill="#FFFFFF"/>
+              <polygon points="20,4 23.5,8 16.5,8" fill="#D97706"/>
+              <rect x="18.5" y="10" width="3" height="12" fill="#D97706"/>
+            </svg>
+            <h4 style="margin-bottom:0; border-bottom:none; padding-bottom:0;">About ManakSetu</h4>
+          </div>
           <p style="font-size:0.8rem; color:var(--slate-400); line-height:1.5; margin-bottom:1rem;">
             ManakSetu is an educational and civic-tech platform developed for 
             <strong>Smart India Hackathon 2026 (Problem Statement 26107)</strong>. It provides Indian citizens, 
