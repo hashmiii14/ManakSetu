@@ -1,0 +1,158 @@
+/* ==========================================================================
+   ManakSetu Portal — Responsive CSS
+   Breakpoints: 1024px, 768px, 480px, 375px
+   Strictly Zero Horizontal Scroll
+   ========================================================================== */
+
+/* ── Laptop & Small Desktop (<= 1024px) ─────────────────────────────────── */
+@media (max-width: 1024px) {
+  .hero-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .matrix-card {
+    max-width: 600px;
+  }
+
+  .featured-body-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .featured-col:last-child {
+    grid-column: span 2;
+    border-top: 1px solid var(--slate-200);
+    border-right: none;
+  }
+
+  .footer-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+}
+
+/* ── Tablet (<= 768px) ──────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .top-official-strip .gov-creds span.desktop-only {
+    display: none;
+  }
+
+  .main-nav {
+    display: none;
+  }
+
+  .mobile-menu-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .hero-banner {
+    padding: 2rem 0;
+  }
+
+  .hero-title {
+    font-size: 1.65rem;
+  }
+
+  .search-form {
+    flex-direction: column;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    gap: 0.5rem;
+  }
+
+  .search-input {
+    background-color: var(--white);
+    border-radius: var(--radius-xs);
+    border: 1px solid var(--slate-300);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .search-btn {
+    padding: 0.75rem 1rem;
+    justify-content: center;
+  }
+
+  .featured-body-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .featured-col {
+    border-right: none;
+    border-bottom: 1px solid var(--slate-200);
+  }
+
+  .featured-col:last-child {
+    grid-column: auto;
+    border-bottom: none;
+  }
+
+  .chat-window {
+    height: 550px;
+  }
+
+  .chat-bubble {
+    max-width: 92%;
+  }
+
+  .verifier-tabs {
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  .footer-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+}
+
+/* ── Mobile (<= 480px) ──────────────────────────────────────────────────── */
+@media (max-width: 480px) {
+  html {
+    font-size: 14px;
+  }
+
+  .container {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+  }
+
+  .brand-title-main {
+    font-size: 1.1rem;
+  }
+
+  .emblem-wrapper {
+    width: 36px;
+    height: 36px;
+  }
+
+  .matrix-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .matrix-gateways {
+    grid-template-columns: 1fr;
+  }
+
+  .services-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .btn {
+    padding: 0.5rem 0.85rem;
+  }
+
+  .chat-window {
+    height: 500px;
+  }
+
+  .chat-form {
+    flex-direction: column;
+  }
+
+  .chat-form .btn {
+    width: 100%;
+  }
+}

@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}ManakSetu — BIS Digital Standards & Certification Portal{% endblock %}</title>
+  
+  <!-- SEO & Social Share Metadata -->
+  <meta name="description" content="Official Gateway for Indian Standards, BIS Certification, MSME 50% Concession Calculator, and TrueMark Verification. Smart India Hackathon 2026.">
+  <meta name="keywords" content="BIS, Bureau of Indian Standards, Indian Standards, IS 1489, ISI Mark, HUID Verification, MSME Concession, QCO, Quality Control Orders, ManakSetu">
+  <meta name="author" content="Team ManakSetu — Smart India Hackathon 2026">
+  
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://manaksetu.vercel.app/">
+  <meta property="og:title" content="ManakSetu — BIS Digital Standards & Certification Portal">
+  <meta property="og:description" content="Intelligent access to 21,000+ Indian Standards, MSME fee concessions, TrueMark ISI/HUID verification, and grounded AI compliance guidance.">
+  <meta property="og:image" content="/static/images/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:site_name" content="ManakSetu">
+  <meta property="og:locale" content="en_IN">
+  
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="ManakSetu — BIS Digital Standards & Certification Portal">
+  <meta name="twitter:description" content="AI-enabled statutory Indian Standards recommendation and MSME conformity assessment platform.">
+  <meta name="twitter:image" content="/static/images/og-image.png">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23113255' stroke-width='2'><polygon points='12 2 2 7 12 12 22 7 12 2'/><polyline points='2 17 12 22 22 17'/><polyline points='2 12 12 17 22 12'/></svg>">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="/static/css/main.css">
+  <link rel="stylesheet" href="/static/css/components.css">
+  <link rel="stylesheet" href="/static/css/responsive.css">
+  {% block head_extra %}{% endblock %}
+</head>
+<body>
+
+  <!-- National Tricolor Ribbon -->
+  <div class="top-tricolor-bar"></div>
+
+  <!-- Government of India Top Strip -->
+  <div class="top-official-strip">
+    <div class="container">
+      <div class="gov-creds">
+        <span style="font-weight:700; color:#fff;">भारत सरकार</span>
+        <span class="desktop-only">Government of India</span>
+        <span class="divider-dot">•</span>
+        <span class="desktop-only">उपभोक्ता मामले, खाद्य और सार्वजनिक वितरण मंत्रालय</span>
+        <span>Bureau of Indian Standards</span>
+      </div>
+      <div style="display:flex; align-items:center; gap:0.75rem;">
+        <span style="font-size:0.72rem; color:var(--slate-400);">National Consumer Helpline:</span>
+        <a href="tel:1915" class="helpline-badge">NCH: 1915</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Institutional Header -->
+  <header class="main-header">
+    <div class="container header-inner">
+      
+      <!-- Brand & Emblem -->
+      <a href="/" class="brand-section" title="ManakSetu Homepage">
+        <div class="emblem-wrapper">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <!-- Architectural Ashoka Pillar & Standards Emblem -->
+            <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+          </svg>
+        </div>
+        <div class="brand-titles">
+          <span class="brand-title-hindi">मानकसेतु</span>
+          <span class="brand-title-main">MANAKSETU</span>
+          <span class="brand-title-sub">Gateway to Indian Standards &amp; BIS Services</span>
+        </div>
+      </a>
+
+      <!-- Desktop Navigation Links -->
+      <nav class="main-nav" aria-label="Main Navigation">
+        <a href="/" class="nav-link {% if active_tab == 'home' %}active{% endif %}">Home</a>
+        <a href="/standards" class="nav-link {% if active_tab == 'standards' %}active{% endif %}">Standards Search</a>
+        <a href="/services" class="nav-link {% if active_tab == 'services' %}active{% endif %}">BIS Services</a>
+        <a href="/calculator" class="nav-link {% if active_tab == 'calculator' %}active{% endif %}">Fee Calculator</a>
+        <a href="/verify" class="nav-link {% if active_tab == 'verify' %}active{% endif %}">TrueMark Verifier</a>
+        <a href="/chatbot" class="nav-link {% if active_tab == 'chatbot' %}active{% endif %}">ManakBot AI</a>
+        <a href="/report" class="nav-link {% if active_tab == 'report' %}active{% endif %}">Grievance</a>
+        <a href="/about" class="nav-link {% if active_tab == 'about' %}active{% endif %}">About</a>
+      </nav>
+
+      <!-- Mobile Hamburger Button -->
+      <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle navigation menu" aria-expanded="false">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
+
+    </div>
+
+    <!-- Mobile Drawer -->
+    <div class="mobile-menu-drawer" id="mobileMenuDrawer">
+      <div class="mobile-nav-links">
+        <a href="/" class="nav-link {% if active_tab == 'home' %}active{% endif %}">Home</a>
+        <a href="/standards" class="nav-link {% if active_tab == 'standards' %}active{% endif %}">Standards Search</a>
+        <a href="/services" class="nav-link {% if active_tab == 'services' %}active{% endif %}">BIS Services Directory</a>
+        <a href="/calculator" class="nav-link {% if active_tab == 'calculator' %}active{% endif %}">MSME Fee Calculator</a>
+        <a href="/verify" class="nav-link {% if active_tab == 'verify' %}active{% endif %}">TrueMark Verifier (HUID / ISI)</a>
+        <a href="/chatbot" class="nav-link {% if active_tab == 'chatbot' %}active{% endif %}">ManakBot AI Assistant</a>
+        <a href="/report" class="nav-link {% if active_tab == 'report' %}active{% endif %}">Grievance &amp; Violation Report</a>
+        <a href="/about" class="nav-link {% if active_tab == 'about' %}active{% endif %}">About ManakSetu</a>
+        <a href="/faq" class="nav-link {% if active_tab == 'faq' %}active{% endif %}">FAQs</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Page Content -->
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- Institutional Footer -->
+  <footer class="main-footer">
+    <div class="container">
+      
+      <div class="footer-grid">
+        <!-- Col 1: About Portal -->
+        <div class="footer-col">
+          <h4>About ManakSetu</h4>
+          <p style="font-size:0.8rem; color:var(--slate-400); line-height:1.5; margin-bottom:1rem;">
+            ManakSetu is an educational and civic-tech platform developed for 
+            <strong>Smart India Hackathon 2026 (Problem Statement 26107)</strong>. It provides Indian citizens, 
+            MSME manufacturers, and regulatory auditors with intelligent search, grounded AI compliance assistance, 
+            and authentic verification workflows.
+          </p>
+          <div style="font-size:0.75rem; color:var(--slate-400);">
+            <strong>Operating Mandate:</strong> Bureau of Indian Standards Act, 2016
+          </div>
+        </div>
+
+        <!-- Col 2: Statutory Services -->
+        <div class="footer-col">
+          <h4>BIS Services</h4>
+          <ul class="footer-links">
+            <li><a href="/standards">Standards Formulation</a></li>
+            <li><a href="/standards?qco_only=true">Mandatory QCO Orders</a></li>
+            <li><a href="/calculator">MSME 50% Relief Calculator</a></li>
+            <li><a href="/verify?subtab=cml">Product Certification (Scheme-I)</a></li>
+            <li><a href="/verify?subtab=huid">Hallmarking Scheme (Scheme-IV)</a></li>
+            <li><a href="/services">Compulsory Registration (CRS)</a></li>
+          </ul>
+        </div>
+
+        <!-- Col 3: Portal Gateways -->
+        <div class="footer-col">
+          <h4>Portal Gateways</h4>
+          <ul class="footer-links">
+            <li><a href="/chatbot">ManakBot AI Consultation</a></li>
+            <li><a href="/verify">TrueMark Consumer Verifier</a></li>
+            <li><a href="/report">Grievance &amp; Violation Form</a></li>
+            <li><a href="/faq">Frequently Asked Questions</a></li>
+            <li><a href="/about">Hackathon Architecture</a></li>
+            <li><a href="/api/docs" target="_blank" rel="noopener">FastAPI Documentation</a></li>
+          </ul>
+        </div>
+
+        <!-- Col 4: Official BIS Links -->
+        <div class="footer-col">
+          <h4>Official Portals</h4>
+          <ul class="footer-links">
+            <li><a href="https://www.manakonline.in" target="_blank" rel="noopener">e-BIS ManakOnline Portal</a></li>
+            <li><a href="https://www.bis.gov.in" target="_blank" rel="noopener">BIS Official Website</a></li>
+            <li><a href="https://consumerhelpline.gov.in" target="_blank" rel="noopener">National Consumer Helpline (1915)</a></li>
+            <li><a href="https://dpiit.gov.in" target="_blank" rel="noopener">DPIIT — Ministry of Commerce</a></li>
+            <li><a href="https://sih.gov.in" target="_blank" rel="noopener">Smart India Hackathon 2026</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Statutory Prototype Disclaimer Box -->
+      <div class="footer-disclaimer-box">
+        <strong>Statutory Notice &amp; SIH Prototype Disclaimer:</strong>
+        ManakSetu is an educational prototype developed for Smart India Hackathon 2026. 
+        It is not an official portal of the Bureau of Indian Standards (BIS) or the Government of India. 
+        All Indian Standards specifications, gazette notifications, laboratory recognitions, and licensee statuses 
+        must be confirmed with the official BIS portal (<a href="https://www.manakonline.in" target="_blank" rel="noopener" style="color:#93c5fd; text-decoration:underline;">manakonline.in</a>) 
+        before entering into commercial manufacturing, packaging, or statutory conformity filings.
+      </div>
+
+    </div>
+
+    <!-- Bottom Copyright Strip -->
+    <div class="footer-bottom-strip">
+      <div class="container">
+        <span>&copy; 2026 ManakSetu • Smart India Hackathon Prototype • Powered by Python &amp; FastAPI</span>
+        <span>Standards Compendium: 572 Indexed Indian Standards</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Minimal Vanilla JavaScript -->
+  <script src="/static/js/minimal.js"></script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

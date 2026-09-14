@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block title %}Frequently Asked Questions — BIS Certification & QCOs | ManakSetu{% endblock %}
+
+{% block content %}
+<div class="container" style="padding-top: 1.5rem; padding-bottom: 3rem;">
+  
+  <!-- Breadcrumbs -->
+  <div class="breadcrumbs">
+    <a href="/">Home</a>
+    <span class="divider">/</span>
+    <span class="current">Frequently Asked Questions</span>
+  </div>
+
+  <div class="section-title-strip">
+    <div>
+      <h1 class="section-title">Frequently Asked Questions (FAQ)</h1>
+      <p class="section-subtitle">
+        Common inquiries regarding Bureau of Indian Standards certification, mandatory QCOs, MSME fee concessions, and hallmarking
+      </p>
+    </div>
+    <span class="badge badge-gov" style="font-size:0.75rem; padding:0.3rem 0.65rem;">Citizen &amp; Industry Guide</span>
+  </div>
+
+  <div style="display:flex; flex-direction:column; gap:1rem; max-width:900px;">
+    
+    <div class="gov-card" style="margin-bottom:0;">
+      <h3 style="font-size:1rem; font-weight:800; color:var(--gov-900); margin-bottom:0.4rem;">
+        What is the difference between an Indian Standard (IS) and a Quality Control Order (QCO)?
+      </h3>
+      <p style="font-size:0.85rem; color:var(--slate-700); line-height:1.6;">
+        An Indian Standard (IS) is a technical specification published by the Bureau of Indian Standards that prescribes 
+        quality, safety, and performance criteria for a product. By default, adherence is voluntary unless the Central 
+        Government issues a <strong>Quality Control Order (QCO)</strong> under Section 16 of the BIS Act, 2016. 
+        Once a QCO is notified in the Gazette of India, manufacturing, importing, stocking, or selling that item without the 
+        standard ISI Mark becomes a criminal offence punishable under Section 29.
+      </p>
+    </div>
+
+    <div class="gov-card" style="margin-bottom:0;">
+      <h3 style="font-size:1rem; font-weight:800; color:var(--gov-900); margin-bottom:0.4rem;">
+        How does a Micro or Small Enterprise claim the 50% / 20% marking fee concession?
+      </h3>
+      <p style="font-size:0.85rem; color:var(--slate-700); line-height:1.6;">
+        Under the BIS (Conformity Assessment) Regulations, Micro enterprises and women-led startups qualify for a 
+        <strong>50% concession</strong> on the minimum marking fee, and Small enterprises qualify for a <strong>20% concession</strong>. 
+        To claim this relief, the applicant must upload a valid <strong>Udyam Registration Certificate</strong> issued by the 
+        Ministry of Micro, Small and Medium Enterprises during application filing on the e-BIS ManakOnline portal.
+      </p>
+    </div>
+
+    <div class="gov-card" style="margin-bottom:0;">
+      <h3 style="font-size:1rem; font-weight:800; color:var(--gov-900); margin-bottom:0.4rem;">
+        How can a consumer verify whether an ISI mark on cement or an appliance is authentic?
+      </h3>
+      <p style="font-size:0.85rem; color:var(--slate-700); line-height:1.6;">
+        Every genuine ISI marked article must carry a <strong>7-digit license number</strong> stamped directly below the mark 
+        in the format <code>CM/L-XXXXXXX</code>. You can verify this number instantly using the 
+        <a href="/verify" style="color:var(--gov-800); font-weight:700; text-decoration:underline;">TrueMark Verifier</a> on ManakSetu 
+        or via the official BIS CARE mobile application. If the license is suspended, expired, or non-existent, you can file a 
+        grievance docket through our <a href="/report" style="color:var(--gov-800); font-weight:700; text-decoration:underline;">Grievance Portal</a>.
+      </p>
+    </div>
+
+    <div class="gov-card" style="margin-bottom:0;">
+      <h3 style="font-size:1rem; font-weight:800; color:var(--gov-900); margin-bottom:0.4rem;">
+        What are the specific packaging requirements for cement under IS 1489 and IS 12269?
+      </h3>
+      <p style="font-size:0.85rem; color:var(--slate-700); line-height:1.6;">
+        BIS enforces strict packaging color coding to prevent deceptive commercial substitution:
+        <ul style="list-style:disc; margin-left:1.5rem; margin-top:0.35rem;">
+          <li><strong>Portland Pozzolana Cement (IS 1489 Part 1 - PPC):</strong> All bag markings, IS code, and licensee details must be printed in <strong>RED ink</strong>.</li>
+          <li><strong>53 Grade Ordinary Portland Cement (IS 12269 - OPC):</strong> All bag markings must be printed in <strong>BLACK ink</strong>.</li>
+        </ul>
+      </p>
+    </div>
+
+    <div class="gov-card" style="margin-bottom:0;">
+      <h3 style="font-size:1rem; font-weight:800; color:var(--gov-900); margin-bottom:0.4rem;">
+        What is a 6-character HUID code in gold hallmarking?
+      </h3>
+      <p style="font-size:0.85rem; color:var(--slate-700); line-height:1.6;">
+        A Hallmarking Unique Identification (HUID) is a 6-digit alphanumeric code laser-engraved onto every piece of gold jewellery 
+        at a BIS-recognized Assaying and Hallmarking Centre (AHC). The HUID guarantees individual item traceability, jeweler accreditation, 
+        and assayed purity (e.g. 22K / 916 fineness).
+      </p>
+    </div>
+
+  </div>
+
+</div>
+{% endblock %}

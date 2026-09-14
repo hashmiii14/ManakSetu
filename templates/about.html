@@ -1,0 +1,147 @@
+{% extends "base.html" %}
+
+{% block title %}About ManakSetu — Smart India Hackathon 2026 | ManakSetu{% endblock %}
+
+{% block content %}
+<div class="container" style="padding-top: 1.5rem; padding-bottom: 3rem;">
+  
+  <!-- Breadcrumbs -->
+  <div class="breadcrumbs">
+    <a href="/">Home</a>
+    <span class="divider">/</span>
+    <span class="current">About ManakSetu</span>
+  </div>
+
+  <div class="section-title-strip">
+    <div>
+      <h1 class="section-title">About ManakSetu Portal</h1>
+      <p class="section-subtitle">
+        Bridging Indian industry, MSME manufacturers, and consumers with the Bureau of Indian Standards
+      </p>
+    </div>
+    <span class="badge badge-gov" style="font-size:0.75rem; padding:0.3rem 0.65rem;">SIH 2026 • Problem Statement 26107</span>
+  </div>
+
+  <div style="display:grid; grid-template-columns: 8fr 4fr; gap:1.5rem; align-items:flex-start;">
+    
+    <!-- Left Column -->
+    <div style="display:flex; flex-direction:column; gap:1.5rem;">
+      
+      <div class="gov-card" style="margin-bottom:0;">
+        <div class="gov-card-header">
+          <h2>Project Purpose &amp; Hackathon Mandate</h2>
+        </div>
+        <p style="font-size:0.85rem; color:var(--slate-700); line-height:1.6; margin-bottom:1rem;">
+          <strong>ManakSetu ("The Standards Bridge")</strong> is an educational civic-tech platform developed for the 
+          <strong>Smart India Hackathon 2026</strong> under Problem Statement <strong>26107</strong>, championed by the 
+          <strong>Ministry of Consumer Affairs, Food &amp; Public Distribution</strong> and the <strong>Bureau of Indian Standards (BIS)</strong>.
+        </p>
+        <p style="font-size:0.85rem; color:var(--slate-700); line-height:1.6; margin-bottom:1rem;">
+          Navigating over 21,000 Indian Standards, complex Quality Control Orders (QCOs), and multi-tier fee structures 
+          has historically presented a steep compliance barrier for small enterprises. ManakSetu solves this challenge 
+          through an integrated suite of digital services:
+        </p>
+        <ul style="list-style:disc; margin-left:1.5rem; font-size:0.85rem; color:var(--slate-700); line-height:1.6;">
+          <li><strong>Hybrid Standards Retrieval:</strong> Combines lexical BM25 ranking, domain query expansions, and vector embeddings across 572 indexed BIS standards.</li>
+          <li><strong>Grounded ManakBot AI:</strong> RAG engine using Google Gemini 1.5 Flash grounded strictly in the BIS compendium with zero AI hallucination.</li>
+          <li><strong>MSME 50% Concession Calculator:</strong> Transparent tariff computation under Section 13 of the BIS Act, calculating real savings (e.g. ₹92,500 on cement).</li>
+          <li><strong>TrueMark Dual Verifier:</strong> Citizen verification of 7-digit ISI license numbers (CM/L) and 6-character gold jewelry hallmarks (HUID).</li>
+          <li><strong>Statutory Grievance Redressal:</strong> Violation reporting generating unique tracking dockets integrated with National Consumer Helpline standards.</li>
+        </ul>
+      </div>
+
+      <div class="gov-card" style="margin-bottom:0;">
+        <div class="gov-card-header">
+          <h2>Pure Python Full-Stack Architecture</h2>
+        </div>
+        <div class="gov-table-container">
+          <table class="gov-table">
+            <thead>
+              <tr>
+                <th>Component</th>
+                <th>Technology Selected</th>
+                <th>Role in Architecture</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="font-weight:700;">Backend Application Server</td>
+                <td style="font-family:var(--font-mono); color:var(--gov-900);">FastAPI (Python 3.11+)</td>
+                <td>High-performance ASGI server handling page routing, APIs, and business logic</td>
+              </tr>
+              <tr>
+                <td style="font-weight:700;">Server-Side Templating</td>
+                <td style="font-family:var(--font-mono); color:var(--gov-900);">Jinja2 Template Engine</td>
+                <td>Server-rendered HTML5 pages ensuring lightning-fast load times and accessibility</td>
+              </tr>
+              <tr>
+                <td style="font-weight:700;">UI &amp; Styling System</td>
+                <td style="font-family:var(--font-mono); color:var(--gov-900);">Vanilla HTML5 / CSS3</td>
+                <td>Institutional government styling with zero heavy node dependencies or build steps</td>
+              </tr>
+              <tr>
+                <td style="font-weight:700;">Grounded AI Engine</td>
+                <td style="font-family:var(--font-mono); color:var(--gov-900);">Google Gemini 1.5 Flash</td>
+                <td>Retrieval-Augmented Generation for natural language compliance queries</td>
+              </tr>
+              <tr>
+                <td style="font-weight:700;">Standards Retrieval Engine</td>
+                <td style="font-family:var(--font-mono); color:var(--gov-900);">BM25 + Cosine Similarity</td>
+                <td>Indexed compendium of 572 standards with domain expansion dictionaries</td>
+              </tr>
+              <tr>
+                <td style="font-weight:700;">Relational Database</td>
+                <td style="font-family:var(--font-mono); color:var(--gov-900);">PostgreSQL / SQLite</td>
+                <td>Statutory grievance records and verification audit logging</td>
+              </tr>
+              <tr>
+                <td style="font-weight:700;">Cloud Deployment</td>
+                <td style="font-family:var(--font-mono); color:var(--gov-900);">Vercel Python Runtime</td>
+                <td>Serverless Python execution with global edge distribution</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Right Column -->
+    <div style="display:flex; flex-direction:column; gap:1.5rem;">
+      
+      <div class="gov-card" style="margin-bottom:0;">
+        <div class="gov-card-header">
+          <h3>Statutory Foundation</h3>
+        </div>
+        <p style="font-size:0.8rem; color:var(--slate-600); line-height:1.5; margin-bottom:0.75rem;">
+          The Bureau of Indian Standards is the National Standards Body of India established under the 
+          <strong>Bureau of Indian Standards Act, 2016</strong>.
+        </p>
+        <div style="font-size:0.75rem; color:var(--slate-700); line-height:1.5; background:var(--slate-50); padding:0.75rem; border-radius:var(--radius-xs); border:1px solid var(--slate-200);">
+          <strong>Key Statutory Mandates:</strong>
+          <ul style="list-style:disc; margin-left:1.25rem; margin-top:0.35rem;">
+            <li>Harmonious development of standardization activities</li>
+            <li>Conformity assessment and product certification (ISI Mark)</li>
+            <li>Mandatory hallmarking of gold and silver articles</li>
+            <li>Protection of consumer health and public safety</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="gov-card" style="margin-bottom:0; background:var(--saffron-50); border-color:var(--saffron-100);">
+        <div class="gov-card-header" style="border-bottom-color:var(--saffron-100);">
+          <h3 style="color:var(--saffron-900);">Prototype Disclaimer</h3>
+        </div>
+        <p style="font-size:0.75rem; color:var(--saffron-900); line-height:1.5;">
+          This application was built exclusively as an academic and technological submission for the Smart India Hackathon. 
+          It does not replace statutory filings or certification procedures administered through the official 
+          <a href="https://www.manakonline.in" target="_blank" rel="noopener" style="text-decoration:underline; font-weight:700;">manakonline.in</a> portal.
+        </p>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+{% endblock %}

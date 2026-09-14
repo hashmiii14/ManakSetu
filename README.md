@@ -1,238 +1,227 @@
-# ManakSetu
-### AI-Powered BIS Standards Recommendation, Compliance & Consumer Vigilance Portal
-
-**Smart India Hackathon (SIH 2026)** | **Problem Statement ID:** `26107`  
-**Ministry:** Ministry of Consumer Affairs, Food & Public Distribution  
-**Department:** Department of Consumer Affairs (DoCA) & Bureau of Indian Standards (BIS)  
-**Institution:** Jamia Hamdard, New Delhi  
-**Team:** Code Snippet  
-**Live Application:** [https://manaksetu.vercel.app/](https://manaksetu.vercel.app/)  
-**Live Backend API:** [https://backend-nu-nine-48.vercel.app/api](https://backend-nu-nine-48.vercel.app/api)  
-**Official Visual Reference:** [https://www.manakonline.in/MANAK/](https://www.manakonline.in/MANAK/)  
+# ManakSetu (मानकसेतु)
+### Intelligent Gateway to Indian Standards & BIS Conformity Assessment
+**Smart India Hackathon 2026 — Problem Statement 26107**  
+*Championed by Ministry of Consumer Affairs, Food & Public Distribution | Bureau of Indian Standards (BIS)*
 
 ---
 
-## Executive Summary
+## 1. Project Overview
 
-India has published over 21,000+ Indian Standards (IS Codes) through the **Bureau of Indian Standards (BIS)** to ensure product quality, consumer safety, and industrial standardization. However, over **70% of MSMEs, start-ups, and artisans** face significant friction:
-- *Which specific Indian Standard applies to my product?*
-- *Is my product under a Mandatory Quality Control Order (QCO)?*
-- *What tests, documentation, and fees are required for ISI Mark certification?*
-- *How can everyday consumers verify 6-digit Hallmark Unique Identification (HUID) or 7-digit ISI CML numbers?*
+**ManakSetu ("The Standards Bridge")** is an authentic, civic-tech and compliance platform designed to democratize access to the National Standards compendium of India. 
 
-**ManakSetu (मानक सेतु)** bridges this gap. By integrating the **BIS Standards Recommendation Engine (`BIS-Standard-RE`)** with modern civic-tech UI workflows, ManakSetu provides:
-1. **Hybrid Retrieval**: BM25 keyword search + semantic vector similarity + domain-specific material/title boosting + query expansions.
-2. **Standard Details & Compliance Guidance**: Step-by-step roadmap, technical scope, mandatory tests, recognized testing laboratories, and application documentation.
-3. **Dynamic MSME Fee Estimator**: Automated statutory fee breakdowns with 50% Micro / 20% Small enterprise concessions.
-4. **ManakBot Grounded Assistant**: Contextual Q&A grounded strictly in retrieved BIS standards (Gemini-powered with deterministic offline fallback).
-5. **Dual-Tier Consumer Verifier & Grievance Reporting**: Instant verification of HUID gold hallmarks and ISI CML licenses with 1-click violation reporting.
+Operating under the statutory framework of the **Bureau of Indian Standards Act, 2016**, ManakSetu eliminates the compliance and technical barriers faced by Micro, Small, and Medium Enterprises (MSMEs), consumers, and quality auditors by providing:
+- **Intelligent Standards Retrieval:** Instant discovery across 572 indexed Indian Standards (IS) using hybrid lexical BM25 and vector semantic similarity.
+- **Mandatory Quality Control Orders (QCO) Tracking:** Live statutory classification under Section 16 of the BIS Act.
+- **MSME 50% / 20% Tariff Concession Calculator:** Transparent certification fee breakdown delivering up to 50% marking fee relief for micro units (e.g. ₹92,500 statutory savings on Portland Pozzolana Cement).
+- **TrueMark Dual Verification:** Instant authenticity validation for 7-digit ISI license numbers (`CM/L-XXXXXXX`) and 6-character gold jewelry hallmarks (`HUID`).
+- **Grounded ManakBot AI:** Retrieval-Augmented Generation (RAG) powered by Google Gemini 1.5 Flash grounded strictly in official BIS specifications with zero AI hallucinations.
+- **Statutory Grievance Redressal:** Automated violation tracking generating official dockets (`REP-YYYYMMDD-XXXXXX`) integrated with National Consumer Helpline (1915) escalation.
 
 ---
 
-## System Architecture
+## 2. Technology Stack
 
-```mermaid
-graph TD
-    subgraph Frontend ["Frontend (React + Vite + Tailwind CSS)"]
-        UI[User Interface / Civic-Tech Green Theme]
-        Hero[Hero Search Bar with Debounce]
-        Explore[Explore Standards & Category Filters]
-        DetailModal[Standard Detail & Compliance Roadmap Modal]
-        Estimator[Dynamic MSME Fee Calculator Section]
-        BotUI[ManakBot Grounded RAG Chatbot]
-        VerifierUI[HUID & ISI Authenticity Verifier]
-        ReportModal[Counterfeit & Violation Reporting Modal]
-        APIService[Centralized API Client: src/services/api.js]
-    end
+ManakSetu is built as a **pure Python full-stack application** with zero Node.js/React frontend dependencies:
 
-    subgraph Backend ["FastAPI Backend Service (Port 8000)"]
-        Router[FastAPI API Router]
-        Retriever[BISRetriever: Hybrid Search Pipeline]
-        CalcService[FeeCalculator Service]
-        VerifyService[Verifier Service: Dual-Tier Auth Engine]
-        ChatService[Grounded BIS Chatbot Service]
-        ReportRepo[ReportRepository: JSON Persistence]
-    end
+| Layer | Technology | Key Responsibility |
+|---|---|---|
+| **Backend & Application Server** | **Python 3.11+ / FastAPI** | High-performance ASGI web framework providing server-side routing and REST APIs. |
+| **Frontend Presentation** | **Jinja2 Templates** | Lightning-fast server-rendered HTML5 with accessibility and clean government architecture. |
+| **Styling System** | **Vanilla CSS3** | Custom Indian Government design system adhering to BIS visual standards with zero CSS framework bloat. |
+| **Client-Side Interactivity** | **Vanilla JavaScript (<200 lines)** | Minimal browser script for mobile drawer navigation, chat AJAX, and live calculation preview. |
+| **Grounded AI Engine** | **Google Gemini 1.5 Flash** | Structured 5-stage RAG answers grounded strictly in retrieved BIS standards. |
+| **Retrieval Engine** | **Hybrid BM25 + Vector Cosine** | Domain query expansions, title boosting, and precomputed embeddings (`embeddings.npy`). |
+| **Database & Persistence** | **PostgreSQL / SQLite** | Relational storage for grievance reports and verification audit logs with automatic SQLite/JSON fallback. |
+| **Production Hosting** | **Vercel Python Runtime** | Serverless ASGI execution via `api/index.py`. |
 
-    subgraph DataEngine ["BIS Recommendation Engine (BIS-Standard-RE)"]
-        BM25[BM25 Okapi Index]
-        Embeddings[Semantic Vector Cache: embeddings.npy]
-        Expansions[Synonym & Keyword Expansion Maps]
-        Boosting[Domain & Title Material Boosting]
-        DataStore[(Processed Standards: 570+ JSON Store)]
-    end
+---
 
-    UI --> APIService
-    APIService --> Router
-    Router -->|GET /api/search| Retriever
-    Router -->|GET /api/standards/:code| Retriever
-    Router -->|POST /api/calculate| CalcService
-    Router -->|POST /api/verify| VerifyService
-    Router -->|POST /api/chatbot| ChatService
-    Router -->|POST /api/report| ReportRepo
+## 3. Project Architecture
 
-    Retriever --> BM25
-    Retriever --> Embeddings
-    Retriever --> Expansions
-    Retriever --> Boosting
-    Retriever --> DataStore
-    ChatService --> Retriever
+```
+ManakSetu/
+├── app/
+│   ├── main.py                  # FastAPI app instance, CORS, lifespan, static & page mounts
+│   ├── config.py                # Environment configs (GEMINI_API_KEY, DATABASE_URL, paths)
+│   ├── routes/
+│   │   ├── pages.py             # Server-rendered Jinja2 pages (Home, Search, Details, etc.)
+│   │   ├── search.py            # Standards Search API (/api/search)
+│   │   ├── standards.py         # Standards Catalogue API (/api/standards)
+│   │   ├── chatbot.py           # ManakBot AI API (/api/chatbot)
+│   │   ├── calculator.py        # MSME Tariff Calculator API (/api/calculate)
+│   │   ├── verifier.py          # TrueMark Verifier API (/api/verify)
+│   │   ├── reports.py           # Violation Grievance API (/api/report)
+│   │   └── compliance.py        # 7-Stage Compliance Engine (/api/compliance/check)
+│   ├── services/
+│   │   ├── bis_retriever.py     # BM25 + Domain expansion + Cosine similarity retrieval
+│   │   ├── gemini_service.py    # Gemini 1.5 Flash grounded prompt + fallback
+│   │   ├── calculator_service.py# Statutory tariff calculation & MSME concessions
+│   │   ├── verifier_service.py  # HUID & ISI CM/L multi-provider verification registry
+│   │   └── report_service.py    # Report generation & tracking ID dispatch
+│   ├── models/
+│   │   ├── schemas.py           # Pydantic schemas for API requests and responses
+│   │   └── database_models.py   # PostgreSQL schema & data structures
+│   ├── database/
+│   │   ├── connection.py        # PostgreSQL connection pool with safe SQLite fallback
+│   │   └── repositories.py      # Standards and grievance repositories
+│   └── utils/
+│       └── helpers.py           # Formatting utilities, INR currency formatters, tracking ID
+├── templates/
+│   ├── base.html                # Government header, national emblem, top strip, footer
+│   ├── index.html               # Homepage: Hero search, matrix, cement showcase, 12 BIS services
+│   ├── standards.html           # Standards search & catalog with division and QCO filters
+│   ├── standard_detail.html     # Full standard specification, testing benchmarks, recognized labs
+│   ├── calculator.html          # MSME fee concession calculator with live breakdown
+│   ├── verifier.html            # Dual-tab TrueMark HUID / ISI CM/L verifier with result card
+│   ├── chatbot.html             # ManakBot interactive chat interface with prompt chips
+│   ├── report.html              # Violation grievance submission form with tracking ID
+│   ├── about.html               # SIH 2026 Problem Statement 26107 background & architecture
+│   ├── services.html            # 12 statutory BIS scheme services directory
+│   └── faq.html                 # Frequently asked questions on BIS certification & QCOs
+├── static/
+│   ├── css/
+│   │   ├── main.css             # Base typography, CSS variables, government color palette
+│   │   ├── components.css       # Cards, badges, buttons, tables, forms, chat bubbles
+│   │   └── responsive.css       # Full responsive breakpoints (375px to 1920px)
+│   ├── js/
+│   │   └── minimal.js           # Lightweight vanilla JS for mobile menu and AJAX
+│   └── images/
+│       └── og-image.png         # High-resolution social sharing preview card (1200x630)
+├── data/
+│   ├── processed_data.json      # 572 indexed BIS standards compendium
+│   └── embeddings.npy           # Precomputed vector embeddings
+├── api/
+│   └── index.py                 # Vercel entry point: from app.main import app
+├── requirements.txt             # Python dependencies
+├── vercel.json                  # Vercel Serverless routing
+├── .env.example                 # Environment variables template
+└── README.md                    # Project documentation
 ```
 
 ---
 
-## Key Features & Modules
+## 4. Key Statutory Features
 
-| Module | Purpose | Under the Hood |
-| :--- | :--- | :--- |
-| **Hybrid Search Engine** | Finds relevant Indian Standards for products in natural language | Dual-mode BM25 Okapi, synonym expansion (`geyser` $\rightarrow$ `water heater`, `doll` $\rightarrow$ `toys`), domain boosting, and semantic vector similarity. |
-| **Compliance Guidance** | Translates technical standards into actionable steps | Technical scope, critical safety testing benchmarks, recognized test labs, and required technical dossier documents. |
-| **MSME Fee Calculator** | Estimates initial certification costs and ongoing renewal fees | Computes Application, Audit, and Marking fees; applies statutory 50% Micro / 20% Small enterprise discounts under Gazette notifications. |
-| **ManakBot Assistant** | AI assistant for manufacturers and consumers | Grounded RAG with Google Gemini API; falls back to an intelligent deterministic BIS compliance engine when offline. |
-| **Consumer Verifier** | Authenticates gold jewelry HUID & ISI certification marks | Validates 6-character alphanumeric HUIDs and 7-digit CML codes against representative verified registries with fail-safe reporting. |
-| **Violation Reporting** | File counterfeit or misleading ISI mark reports | Generates unique tracking IDs (`REP-XXXXXX`), timestamps, and persists complaint payloads for regulatory investigation. |
+### 4.1. Featured Standard Showcase — Cement Certification
+- **Standards:** IS 1489 (Part 1): 2015 (Portland Pozzolana Cement) & IS 12269: 2013 (53 Grade OPC).
+- **Testing Benchmarks:** 28-day Compressive Strength (&ge; 33 / 53 MPa), Soundness (&le; 10 mm), Initial Setting Time (&ge; 30 min).
+- **Mandatory Packaging Regulations:** RED lettering for IS 1489 PPC; BLACK lettering for IS 12269 OPC.
+- **Apex Testing Laboratories:** National Council for Cement and Building Materials (NCCBM, Ballabgarh & Hyderabad) and National Test House (NTH).
+- **1-Click Actions:** Verify UltraTech Cement (`CM/L-6200145`) or calculate ₹92,500 MSME relief with a single click.
+
+### 4.2. MSME 50% Concession Fee Calculator
+- Computes statutory fee relief under Section 13 of the BIS Act, 2016.
+- **Micro Enterprises:** 50% concession on minimum marking fees.
+- **Small Enterprises:** 20% concession on minimum marking fees.
+- Itemized breakdown of Application Fee (₹1,000), Factory Inspection (2 man-days @ ₹7,000 = ₹14,000), and Net Payable.
+
+### 4.3. TrueMark Dual Verifier (HUID & ISI CM/L)
+- **ISI License Verification:** Validates 7-digit manufacturer licenses against registered BIS licensees (e.g. UltraTech Cement `6200145`, Havells `8400192`, Anchor `7100341`, Finolex `4300921`).
+- **Gold Hallmarking HUID:** Validates 6-character laser inscriptions (e.g. Tanishq `AK79B2`, Kalyan `MH41C9`, Malabar `KA88X1`, Fraud detection `XX9999`).
+- **1-Click Grievance Escalation:** Unverified or suspended identifiers can be reported directly to the National Consumer Helpline (NCH: 1915).
+
+### 4.4. Grounded ManakBot AI (Gemini 1.5 Flash + RAG)
+- Uses top retrieved Indian Standards as grounding context.
+- Returns structured responses adhering to 5 distinct statutory sections:
+  1. *Likely Relevant Standard*
+  2. *What It Means*
+  3. *Why It Matters*
+  4. *What To Do Next*
+  5. *Source & Verification*
+- Automatic deterministic fallback to BIS compendium when API keys are unconfigured.
 
 ---
 
-## Local Development & Setup Guide
+## 5. API Reference
+
+| Endpoint | Method | Description |
+|---|---|---|
+| `/` | `GET` | Server-rendered portal homepage. |
+| `/standards` | `GET` | Standards directory with category and QCO filters. |
+| `/standards/{is_code}` | `GET` | Standard detail page with testing benchmarks and fee preview. |
+| `/calculator` | `GET` | Interactive MSME fee concession calculator. |
+| `/verify` | `GET` | TrueMark citizen and enterprise verifier. |
+| `/chatbot` | `GET` | ManakBot AI consultation desk. |
+| `/report` | `GET` | Grievance and statutory violation reporting form. |
+| `/api/search` | `GET / POST` | Hybrid search query returning matching BIS standards. |
+| `/api/standards` | `GET` | Paginated listing of indexed Indian Standards. |
+| `/api/calculate` | `GET / POST` | Computes itemized MSME fee estimates. |
+| `/api/verify` | `GET / POST` | Verifies HUID hallmark or ISI CM/L license code. |
+| `/api/chatbot` | `POST` | Grounded AI query answering via Gemini 1.5 Flash. |
+| `/api/report` | `POST` | Records statutory violation report and dispatches tracking docket (`REP-YYYYMMDD-XXXXXX`). |
+| `/api/compliance/check`| `POST` | 7-stage conformity roadmap evaluation for manufacturing units. |
+
+---
+
+## 6. Local Development & Setup
 
 ### Prerequisites
-- **Node.js**: v18 or higher (`node -v`)
-- **Python**: 3.10 or 3.11 (`python --version`)
-- **Git**
+- Python 3.11 or higher
+- Git
 
----
+### Installation Steps
 
-### Step 1: Clone the Repository
-```bash
-git clone https://github.com/hashmiii14/ManakSetu.git
-cd ManakSetu
-```
-
----
-
-### Step 2: Backend Setup (FastAPI)
-
-1. Navigate to the backend directory:
+1. **Clone the repository:**
    ```bash
-   cd backend
+   git clone https://github.com/hashmiii14/ManakSetu.git
+   cd ManakSetu
    ```
 
-2. (Optional but recommended) Create and activate a virtual environment:
+2. **Create and activate a virtual environment:**
    ```bash
    python -m venv venv
-   # On Windows:
-   .\venv\Scripts\activate
-   # On macOS/Linux:
+   # On Windows (PowerShell):
+   .\venv\Scripts\Activate.ps1
+   # On Linux / macOS:
    source venv/bin/activate
    ```
 
-3. Install required Python packages:
+3. **Install dependencies:**
    ```bash
    pip install -r requirements.txt
    ```
 
-4. Configure environment variables:
+4. **Configure environment variables:**
    ```bash
    cp .env.example .env
-   # Edit .env and optionally add your GEMINI_API_KEY
+   ```
+   *(Optional: Add `GEMINI_API_KEY` for live Gemini responses. The app includes full deterministic fallback if omitted).*
+
+5. **Start the development server:**
+   ```bash
+   uvicorn app.main:app --reload --port 8000
    ```
 
-5. Run API self-test:
-   ```bash
-   python scripts/test_api.py
-   ```
-
-6. Start the FastAPI backend server:
-   ```bash
-   python -m uvicorn app.main:app --host 127.0.0.1 --port 8000 --reload
-   ```
-   * Interactive Swagger Docs: [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
-   * OpenAPI Specification: [http://127.0.0.1:8000/openapi.json](http://127.0.0.1:8000/openapi.json)
+6. **Open in browser:**
+   Visit [http://localhost:8000](http://localhost:8000) to view the portal, or [http://localhost:8000/api/docs](http://localhost:8000/api/docs) for the interactive OpenAPI documentation.
 
 ---
 
-### Step 3: Frontend Setup (React + Vite)
+## 7. Vercel Deployment
 
-1. Open a new terminal and navigate to the project root:
+ManakSetu deploys natively on Vercel using the official Python Serverless runtime:
+1. `vercel.json` routes all requests to `api/index.py`.
+2. `api/index.py` imports `app` from `app.main`.
+3. Deploy directly with:
    ```bash
-   cd ManakSetu
+   vercel --prod
    ```
-
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
-
-3. Ensure `.env` points to the FastAPI backend:
-   ```env
-   VITE_API_BASE_URL=http://127.0.0.1:8000
-   ```
-
-4. Start the frontend development server:
-   ```bash
-   npm run dev
-   ```
-   * Access the application at: [http://localhost:3000](http://localhost:3000) or [http://localhost:5173](http://localhost:5173)
+   Or link the GitHub repository to your Vercel project with Zero Configuration.
 
 ---
 
-## Key API Endpoints
+## 8. Limitations & Prototype Disclaimer
 
-| Method | Endpoint | Description | Sample Query / Body |
-| :--- | :--- | :--- | :--- |
-| `GET` | `/api/search` | Search standards with query parameters | `?q=immersion+geyser&category=Electrical&limit=5` |
-| `POST` | `/api/search` | Full search payload with filters | `{"query": "toys baby doll", "limit": 5}` |
-| `GET` | `/api/standards/{is_code}` | Detailed standard specification | `/api/standards/IS 368:2014` |
-| `POST` | `/api/calculate` | MSME fee calculation with statutory concessions | `{"enterprise_type": "Micro", "turnover_in_lakhs": 25}` |
-| `POST` | `/api/verify` | Authenticate HUID or ISI CML number | `{"verification_type": "HUID", "code": "AK79B2"}` |
-| `POST` | `/api/chatbot` | Grounded RAG compliance assistant | `{"message": "What are safety requirements for immersion heaters?", "is_code": "IS 368:2014"}` |
-| `POST` | `/api/report` | Submit non-compliance / fake mark report | `{"violation_type": "Fake ISI Mark", "product_name": "Roadside Geyser", ...}` |
+> [!NOTE]
+> **SIH 2026 Educational Prototype Disclaimer**
+> ManakSetu is an educational prototype developed for the **Smart India Hackathon 2026 (Problem Statement 26107)**.
+> - **Not an Official Government Portal:** ManakSetu is not operated by the Bureau of Indian Standards (BIS) or the Government of India.
+> - **Prototype Verification Registry:** Licensee verification and HUID hallmarking results are simulated against representative datasets for evaluation purposes.
+> - **Statutory Confirmation:** All regulatory specifications, active Quality Control Orders, laboratory accreditations, and official license statuses must be verified on the official BIS portal ([manakonline.in](https://www.manakonline.in)).
 
 ---
 
-## SIH Demo & Jury Walkthrough Guide
+## 9. License
 
-Use these test queries during presentations and evaluation demos:
-
-### 1. Product Search & Hybrid Matching
-- **Query:** `immersion geyser`  
-  *Expected Result:* Returns `IS 368:2014` (Electric Immersion Water Heaters) and `IS 2082:2018` (Stationary Storage Water Heaters) with **Mandatory QCO** badge and high match score.
-- **Query:** `baby doll / toys`  
-  *Expected Result:* Returns `IS 9873 (Part 1):2019` (Safety of Toys - Mechanical and Physical Properties) under Mandatory QCO.
-- **Query:** `two-wheeler helmet`  
-  *Expected Result:* Returns `IS 4151:2020` (Protective Helmets for Motorcycle Riders).
-- **Query:** `pressure cooker`  
-  *Expected Result:* Returns `IS 2347:2017` (Domestic Pressure Cookers - Safety Requirements).
-- **Query:** `packaged drinking water`  
-  *Expected Result:* Returns `IS 14543:2016` (Packaged Drinking Water Other Than Natural Mineral Water).
-
-### 2. Standard Details & Roadmap
-- Click **"View Full Standard & Roadmap"** on any standard card.
-- Inspect the **Interactive Compliance Roadmap** (5 stages), **Key Laboratory Tests**, **Recognized Testing Facilities**, and **Application Dossier**.
-
-### 3. Dynamic MSME Fee Estimator
-- Switch enterprise scale between **Large**, **Small (20% Off)**, and **Micro (50% Off)**.
-- Note the dynamic recalculation of statutory marking fees and total initial investment.
-
-### 4. Grounded ManakBot Q&A
-- Ask: *"What are the mandatory tests for electric water heaters?"*
-- ManakBot responds with grounded references to `IS 368:2014` (High-voltage dielectric test, leakage current test, earthing continuity, thermal cut-out cut-off test).
-
-### 5. Consumer Authenticity Verifier
-- **Valid Gold Hallmark (HUID):** Enter `AK79B2` $\rightarrow$ Returns verified 22K Gold Hallmark registered to Tanishq Jewellers, New Delhi (Assayed by MMTC-PAMP AHC).
-- **Valid ISI CML License:** Enter `8400192` $\rightarrow$ Returns verified active license for Havells India Ltd. under `IS 2082:2018`.
-- **Invalid / Counterfeit Code:** Enter `INVALID99` $\rightarrow$ Displays red counterfeit warning with a prominent **"Report This Violation"** button opening the pre-filled grievance report modal.
-
----
-
-## Truthful Disclosures & Technical Limitations
-
-In accordance with responsible engineering practices and hackathon evaluation criteria:
-1. **Dataset Scope:** This prototype is indexed over a curated canonical collection of 570+ Indian Standards (including all consumer safety QCO standards and the SP 21 engineering standards library). It does *not* claim live direct database connection to proprietary internal BIS government databases.
-2. **Fee Estimates:** Fees generated by the Cost Estimator are based on published BIS Gazette notification fee structures. Actual fees may vary depending on factory scale, sample transport, and specific laboratory pricing.
-3. **Verification Sandbox:** The verifier runs against an extensible prototype verification registry with representative verified samples and checksum validation. It demonstrates the exact production architecture needed for integration with the BIS National Hallmark and CML portal APIs.
-
----
-
-**Developed by Team Code Snippet | Jamia Hamdard, New Delhi**
+Developed for academic and educational evaluation under Smart India Hackathon 2026.
+Bureau of Indian Standards Act, 2016 statutory guidelines referenced for educational demonstration.

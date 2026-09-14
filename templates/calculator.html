@@ -1,0 +1,190 @@
+{% extends "base.html" %}
+
+{% block title %}MSME 50% Concession Tariff Calculator — ManakSetu{% endblock %}
+
+{% block content %}
+<div class="container" style="padding-top: 1.5rem; padding-bottom: 3rem;">
+  
+  <!-- Breadcrumbs -->
+  <div class="breadcrumbs">
+    <a href="/">Home</a>
+    <span class="divider">/</span>
+    <span class="current">MSME Fee Calculator</span>
+  </div>
+
+  <!-- Page Header -->
+  <div class="section-title-strip">
+    <div>
+      <h1 class="section-title">Statutory Tariff &amp; MSME 50% Relief Calculator</h1>
+      <p class="section-subtitle">
+        Compute government certification fees, factory inspection charges, and statutory MSME concessions under the BIS Act, 2016
+      </p>
+    </div>
+    <span class="badge badge-success" style="font-size:0.78rem; padding:0.3rem 0.65rem;">50% Micro / 20% Small Concession</span>
+  </div>
+
+  <div style="display:grid; grid-template-columns: 5fr 7fr; gap:1.5rem; align-items:flex-start;">
+    
+    <!-- Left Column: Input Form -->
+    <div class="gov-card" style="margin-bottom:0;">
+      <div class="gov-card-header">
+        <h2>Enterprise &amp; Product Parameters</h2>
+        <p style="font-size:0.75rem; color:var(--slate-500); margin-top:0.2rem;">Select enterprise classification and target product standard</p>
+      </div>
+
+      <form id="calcForm" action="/calculator" method="GET">
+        
+        <!-- Enterprise Classification -->
+        <div class="form-group">
+          <label class="form-label" for="calcTierSelect">
+            <span>Enterprise Classification</span>
+            <span class="required-mark">*</span>
+          </label>
+          <select id="calcTierSelect" name="tier" class="form-control">
+            <option value="micro" {% if selected_tier == 'micro' %}selected{% endif %}>Micro Enterprise (50% Marking Fee Concession)</option>
+            <option value="small" {% if selected_tier == 'small' %}selected{% endif %}>Small Enterprise (20% Marking Fee Concession)</option>
+            <option value="medium_large" {% if selected_tier == 'medium_large' %}selected{% endif %}>Medium / Large Enterprise (Standard Statutory Tariff)</option>
+          </select>
+          <div class="form-hint">Requires valid Udyam Registration Certificate for concessional rate.</div>
+        </div>
+
+        <!-- Target Standard Input -->
+        <div class="form-group">
+          <label class="form-label" for="calcStandardInput">
+            <span>Target Indian Standard (IS Code)</span>
+            <span class="required-mark">*</span>
+          </label>
+          <input 
+            type="text" 
+            id="calcStandardInput" 
+            name="standard" 
+            value="{{ preselected_standard }}" 
+            class="form-control" 
+            placeholder="e.g. IS 1489, IS 2082, IS 4151..." 
+            required
+          >
+          <div class="form-hint">Enter standard number or choose a quick preset below.</div>
+        </div>
+
+        <!-- Quick Presets -->
+        <div style="margin-bottom:1.25rem;">
+          <span style="font-size:0.72rem; font-weight:700; color:var(--slate-600); display:block; margin-bottom:0.35rem;">Popular Statutory Presets:</span>
+          <div style="display:flex; flex-wrap:wrap; gap:0.35rem;">
+            <a href="/calculator?standard=IS%201489%20(PPC%20Cement)&tier={{ selected_tier }}" class="quick-prompt-btn">Cement (IS 1489 PPC)</a>
+            <a href="/calculator?standard=IS%2012269%20(53%20Grade%20OPC)&tier={{ selected_tier }}" class="quick-prompt-btn">OPC Cement (IS 12269)</a>
+            <a href="/calculator?standard=IS%202082%20(Geysers)&tier={{ selected_tier }}" class="quick-prompt-btn">Geysers (IS 2082)</a>
+            <a href="/calculator?standard=IS%204151%20(Helmets)&tier={{ selected_tier }}" class="quick-prompt-btn">Helmets (IS 4151)</a>
+            <a href="/calculator?standard=IS%209873%20(Toys)&tier={{ selected_tier }}" class="quick-prompt-btn">Toys (IS 9873)</a>
+            <a href="/calculator?standard=IS%203854%20(Switches)&tier={{ selected_tier }}" class="quick-prompt-btn">Switches (IS 3854)</a>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block">
+          Recalculate Statutory Fees
+        </button>
+
+      </form>
+    </div>
+
+    <!-- Right Column: Live Calculation Breakdown Cards -->
+    <div style="display:flex; flex-direction:column; gap:1.25rem;">
+      
+      <!-- Summary Highlight Card -->
+      <div class="gov-card" style="margin-bottom:0; background:linear-gradient(135deg, var(--gov-900) 0%, var(--gov-800) 100%); color:#fff; border:none;">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:1rem;">
+          <div>
+            <span class="badge" style="background:rgba(255,255,255,0.15); color:#fff; border:none; margin-bottom:0.35rem;">
+              {{ calculation.enterprise_type | upper }} ENTERPRISE
+            </span>
+            <h2 style="font-size:1.15rem; font-weight:800; color:#fff;">{{ calculation.standard_title or calculation.standard_code }}</h2>
+            <div style="font-size:0.75rem; color:var(--slate-300); font-family:var(--font-mono);">Code: {{ calculation.standard_code }}</div>
+          </div>
+
+          <div style="text-align:right;">
+            <div style="font-size:0.72rem; color:var(--slate-300); text-transform:uppercase;">Concession Applied</div>
+            <div id="valConcession" style="font-size:1.35rem; font-weight:800; color:#4ade80; font-family:var(--font-mono);">
+              {{ calculation.concession_percent }}% Concession
+            </div>
+          </div>
+        </div>
+
+        <div style="background:rgba(255,255,255,0.08); border-radius:var(--radius-xs); padding:1rem; display:flex; justify-content:space-between; align-items:center;">
+          <div>
+            <div style="font-size:0.75rem; color:var(--slate-300);">Estimated Net Statutory Cost:</div>
+            <div id="valTotalEstimated" style="font-size:1.75rem; font-weight:800; font-family:var(--font-mono); color:#fff; line-height:1.1;">
+              {{ calculation.total_estimated_cost | format_inr }}
+            </div>
+          </div>
+
+          {% if calculation.total_savings > 0 %}
+            <div style="text-align:right;">
+              <div style="font-size:0.72rem; color:#86efac; text-transform:uppercase; font-weight:700;">Government Relief Savings:</div>
+              <div id="valTotalSavings" style="font-size:1.4rem; font-weight:800; font-family:var(--font-mono); color:#86efac;">
+                {{ calculation.total_savings | format_inr }}
+              </div>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- Itemized Table Card -->
+      <div class="gov-card" style="margin-bottom:0;">
+        <div class="gov-card-header">
+          <h3>Itemized Statutory Fee Breakdown</h3>
+        </div>
+
+        <div class="gov-table-container">
+          <table class="gov-table">
+            <thead>
+              <tr>
+                <th>Tariff Head</th>
+                <th>Statutory Basis</th>
+                <th style="text-align:right;">Calculated Fee</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="font-weight:700;">Application &amp; Processing Fee</td>
+                <td style="font-size:0.75rem; color:var(--slate-600);">Fixed submission charge per manufacturing facility</td>
+                <td id="valApplication" style="text-align:right; font-family:var(--font-mono); font-weight:700;">
+                  {{ calculation.application_fee | format_inr }}
+                </td>
+              </tr>
+              <tr>
+                <td style="font-weight:700;">Factory Audit / Inspection Fee</td>
+                <td style="font-size:0.75rem; color:var(--slate-600);">2 man-days @ ₹7,000 / day by BIS investigating officers</td>
+                <td id="valAudit" style="text-align:right; font-family:var(--font-mono); font-weight:700;">
+                  {{ calculation.inspection_fee | format_inr }}
+                </td>
+              </tr>
+              <tr>
+                <td style="font-weight:700;">Base Annual Marking Fee</td>
+                <td style="font-size:0.75rem; color:var(--slate-600);">Standard minimum statutory marking fee under Scheme-I</td>
+                <td id="valBaseMarking" style="text-align:right; font-family:var(--font-mono); color:var(--slate-500); text-decoration:line-through;">
+                  {{ calculation.base_marking_fee | format_inr }}
+                </td>
+              </tr>
+              <tr style="background-color:var(--emerald-50);">
+                <td style="font-weight:700; color:var(--emerald-900);">Effective Concessional Marking Fee</td>
+                <td style="font-size:0.75rem; color:var(--emerald-800);">After {{ calculation.concession_percent }}% MSME statutory reduction</td>
+                <td id="valEffectiveMarking" style="text-align:right; font-family:var(--font-mono); font-weight:800; color:var(--emerald-900);">
+                  {{ calculation.effective_marking_fee | format_inr }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Statutory Notice -->
+        <div style="font-size:0.72rem; color:var(--slate-500); line-height:1.4; border-top:1px solid var(--slate-200); padding-top:0.75rem;">
+          <strong>Statutory Disclaimer:</strong> {{ calculation.disclaimer }}
+          Applicable GST (18%) and sample independent laboratory testing fees are billed separately upon laboratory consignment.
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+{% endblock %}

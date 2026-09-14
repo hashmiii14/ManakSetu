@@ -1,6 +1,6 @@
 # Dependencies
-node_modules
-dist
+node_modules/
+dist/
 
 # Environment Variables
 .env
@@ -16,6 +16,10 @@ venv/
 env/
 *.egg-info/
 .pytest_cache/
+
+# Local databases
+*.db
+*.sqlite3
 
 # OS / Editor
 .DS_Store
