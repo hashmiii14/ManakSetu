@@ -1764,3 +1764,369 @@ body.font-size-lg h3 { font-size: 1.35rem !important; }
 .stepper-node:hover .step-num {
   border-color: var(--gov-800) !important;
 }
+
+/* ── Global Search BIS Button & Palette Modal ────────────────────────────── */
+.search-btn-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.38rem 0.75rem;
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: var(--radius-xs);
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.search-btn-link:hover {
+  background: rgba(255, 255, 255, 0.22);
+  border-color: rgba(255, 255, 255, 0.45);
+  color: #ffffff;
+}
+
+.search-kbd-badge {
+  font-size: 10px;
+  font-family: var(--font-mono);
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 3px;
+  padding: 1px 5px;
+  color: #ffffff;
+  opacity: 0.9;
+  margin-left: 3px;
+}
+
+/* Modal Backdrop */
+.search-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.65);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  z-index: 99999;
+  display: none;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 3.5rem 1rem 2rem;
+  overflow-y: auto;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.search-modal-backdrop.open {
+  display: flex;
+  opacity: 1;
+}
+
+/* Modal Dialog Card */
+.search-modal-dialog {
+  background: var(--white);
+  width: 100%;
+  max-width: 680px;
+  border-radius: var(--radius-md);
+  box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.35), 0 0 0 1px rgba(15, 23, 42, 0.08);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  animation: modalScaleIn 0.18s ease-out;
+}
+
+@keyframes modalScaleIn {
+  from {
+    transform: scale(0.96) translateY(-8px);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Header */
+.search-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.9rem 1.25rem;
+  background: var(--slate-50);
+  border-bottom: 1px solid var(--slate-200);
+}
+
+.search-modal-icon-badge {
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  background: var(--gov-800);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.search-modal-close-btn {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: var(--slate-400);
+  cursor: pointer;
+  line-height: 1;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  transition: all 0.15s ease;
+}
+
+.search-modal-close-btn:hover {
+  color: var(--slate-800);
+  background: var(--slate-200);
+}
+
+/* Input Area */
+.modal-search-input-wrap {
+  display: flex;
+  align-items: center;
+  position: relative;
+  border: 2px solid var(--gov-700);
+  border-radius: var(--radius-sm);
+  background: var(--white);
+  padding: 0 0.5rem;
+  box-shadow: 0 0 0 3px rgba(10, 56, 113, 0.12);
+}
+
+.modal-search-input-icon {
+  color: var(--gov-700);
+  margin-left: 0.5rem;
+  flex-shrink: 0;
+}
+
+.modal-search-input {
+  width: 100%;
+  border: none;
+  outline: none;
+  padding: 0.8rem 0.65rem;
+  font-size: 0.95rem;
+  color: var(--slate-900);
+  font-family: inherit;
+}
+
+.modal-search-input::placeholder {
+  color: var(--slate-400);
+}
+
+.modal-search-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.65rem;
+}
+
+/* Chips in Modal */
+.modal-chips-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.modal-chip {
+  background: var(--slate-100);
+  border: 1px solid var(--slate-200);
+  border-radius: 9999px;
+  padding: 0.25rem 0.65rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--slate-700);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.modal-chip:hover {
+  background: var(--gov-50);
+  border-color: var(--gov-700);
+  color: var(--gov-900);
+}
+
+/* Live Results in Modal */
+.modal-live-results {
+  max-height: 260px;
+  overflow-y: auto;
+  border-top: 1px solid var(--slate-200);
+  background: var(--white);
+}
+
+.modal-live-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.65rem 1.25rem;
+  border-bottom: 1px solid var(--slate-100);
+  cursor: pointer;
+  text-decoration: none;
+  transition: background-color 0.15s ease;
+}
+
+.modal-live-item:hover {
+  background-color: var(--gov-50);
+}
+
+.modal-live-code {
+  font-family: var(--font-mono);
+  font-weight: 800;
+  font-size: 0.82rem;
+  color: var(--gov-900);
+}
+
+.modal-live-title {
+  font-size: 0.78rem;
+  color: var(--slate-600);
+  margin-top: 2px;
+  line-height: 1.3;
+}
+
+/* Footer */
+.search-modal-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.65rem 1.25rem;
+  background: var(--slate-50);
+  border-top: 1px solid var(--slate-200);
+  font-size: 0.72rem;
+  color: var(--slate-500);
+}
+
+.search-modal-footer kbd {
+  font-family: var(--font-mono);
+  background: var(--white);
+  border: 1px solid var(--slate-300);
+  border-radius: 3px;
+  padding: 1px 4px;
+  color: var(--slate-700);
+  font-size: 0.68rem;
+}
+
+/* ── Prototype Dataset Explorer (Home Showcase) ─────────────────────────── */
+.dataset-filter-btn {
+  background: var(--white);
+  border: 1px solid var(--slate-300);
+  border-radius: 9999px;
+  padding: 0.35rem 0.85rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--slate-700);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.dataset-filter-btn:hover {
+  border-color: var(--gov-700);
+  color: var(--gov-900);
+  background: var(--gov-50);
+}
+
+.dataset-filter-btn.active {
+  background: var(--gov-800);
+  border-color: var(--gov-800);
+  color: #ffffff;
+  box-shadow: 0 2px 6px rgba(10, 56, 113, 0.25);
+}
+
+.dataset-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.dataset-card {
+  background: var(--white);
+  border: 1px solid var(--slate-200);
+  border-radius: var(--radius-sm);
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.dataset-card:hover {
+  border-color: var(--gov-700);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px -4px rgba(10, 56, 113, 0.12);
+}
+
+.dataset-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.5rem;
+  margin-bottom: 0.65rem;
+}
+
+.dataset-card-code {
+  font-family: var(--font-mono);
+  font-weight: 800;
+  font-size: 0.95rem;
+  color: var(--gov-900);
+}
+
+.dataset-card-title {
+  font-size: 0.92rem;
+  font-weight: 800;
+  color: var(--slate-900);
+  line-height: 1.35;
+  margin-bottom: 0.4rem;
+}
+
+.dataset-card-desc {
+  font-size: 0.78rem;
+  color: var(--slate-600);
+  line-height: 1.45;
+  margin-bottom: 0.75rem;
+}
+
+.dataset-specs-wrap {
+  background: var(--slate-50);
+  border: 1px solid var(--slate-200);
+  border-radius: var(--radius-xs);
+  padding: 0.65rem;
+  margin-bottom: 0.85rem;
+}
+
+.dataset-specs-title {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--slate-500);
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  margin-bottom: 0.35rem;
+}
+
+.dataset-specs-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.dataset-spec-pill {
+  font-size: 0.72rem;
+  background: var(--white);
+  border: 1px solid var(--slate-200);
+  padding: 2px 7px;
+  border-radius: 4px;
+  color: var(--slate-800);
+  font-weight: 600;
+}
+
+.dataset-card-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  border-top: 1px solid var(--slate-100);
+  padding-top: 0.75rem;
+}
+
+

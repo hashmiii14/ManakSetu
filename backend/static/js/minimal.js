@@ -147,6 +147,168 @@ window.clearChatMessages = function () {
   `;
 };
 
+// ── Global Search BIS Palette Modal ─────────────────────────────────────────
+window.openGlobalSearchModal = function () {
+  var modal = document.getElementById('globalSearchModal');
+  if (!modal) return;
+  modal.classList.add('open');
+  document.body.style.overflow = 'hidden';
+  var input = document.getElementById('modalSearchInput');
+  if (input) {
+    setTimeout(function () {
+      input.focus();
+      input.select();
+    }, 50);
+  }
+};
+
+window.closeGlobalSearchModal = function () {
+  var modal = document.getElementById('globalSearchModal');
+  if (!modal) return;
+  modal.classList.remove('open');
+  document.body.style.overflow = '';
+};
+
+window.closeGlobalSearchModalOnBackdrop = function (e) {
+  if (e && e.target && e.target.id === 'globalSearchModal') {
+    window.closeGlobalSearchModal();
+  }
+};
+
+window.setModalSearchValue = function (val) {
+  var input = document.getElementById('modalSearchInput');
+  if (input) {
+    input.value = val;
+    input.focus();
+    if (window.triggerModalLiveSearch) {
+      window.triggerModalLiveSearch(val);
+    }
+  }
+};
+
+window.clearModalSearch = function () {
+  var input = document.getElementById('modalSearchInput');
+  var clearBtn = document.getElementById('modalClearSearchBtn');
+  var liveResults = document.getElementById('modalLiveResults');
+  if (input) input.value = '';
+  if (clearBtn) clearBtn.style.display = 'none';
+  if (liveResults) {
+    liveResults.style.display = 'none';
+    liveResults.innerHTML = '';
+  }
+  if (input) input.focus();
+};
+
+window.submitModalSearch = function (e) {
+  if (e && e.preventDefault) e.preventDefault();
+  var input = document.getElementById('modalSearchInput');
+  var q = input ? input.value.trim() : '';
+  if (q) {
+    // If user enters a 6-character HUID (e.g. AK79B2), route to verify
+    if (/^[A-Z0-9]{6}$/i.test(q) && !q.toLowerCase().startsWith('is')) {
+      window.location.href = '/verify?huid=' + encodeURIComponent(q.toUpperCase()) + '&subtab=huid';
+      return;
+    }
+    // If user enters a 7-digit CML license, route to verify
+    if (/^\d{7}$/.test(q)) {
+      window.location.href = '/verify?cml=' + encodeURIComponent(q) + '&subtab=cml';
+      return;
+    }
+    window.location.href = '/standards?q=' + encodeURIComponent(q);
+  } else {
+    window.location.href = '/standards';
+  }
+};
+
+window.askManakBotFromModal = function () {
+  var input = document.getElementById('modalSearchInput');
+  var q = input ? input.value.trim() : '';
+  if (q) {
+    window.location.href = '/manakbot?prompt=' + encodeURIComponent('What Indian Standards, testing benchmarks, and BIS certification steps apply to ' + q + '?');
+  } else {
+    window.location.href = '/manakbot';
+  }
+};
+
+// Global Hotkeys: Ctrl+K / Cmd+K to toggle search modal, Esc to close
+document.addEventListener('keydown', function (e) {
+  if ((e.ctrlKey || e.metaKey) && (e.key === 'k' || e.key === 'K')) {
+    e.preventDefault();
+    var modal = document.getElementById('globalSearchModal');
+    if (modal && modal.classList.contains('open')) {
+      window.closeGlobalSearchModal();
+    } else {
+      window.openGlobalSearchModal();
+    }
+  } else if (e.key === 'Escape') {
+    window.closeGlobalSearchModal();
+  }
+});
+
+// Live Auto-Suggest in Modal
+var modalSearchDebounceTimer = null;
+window.triggerModalLiveSearch = function (query) {
+  var q = (query || '').trim();
+  var liveResults = document.getElementById('modalLiveResults');
+  var clearBtn = document.getElementById('modalClearSearchBtn');
+  if (clearBtn) clearBtn.style.display = q ? 'block' : 'none';
+
+  if (!liveResults) return;
+
+  if (q.length < 2) {
+    liveResults.style.display = 'none';
+    liveResults.innerHTML = '';
+    return;
+  }
+
+  clearTimeout(modalSearchDebounceTimer);
+  modalSearchDebounceTimer = setTimeout(async function () {
+    try {
+      var api = window.ManakSetuApi;
+      var data = api ? await api.searchStandards(q, 5) : null;
+      var results = (data && data.results) || [];
+
+      if (results.length === 0) {
+        liveResults.innerHTML = '<div style="padding:0.75rem 1.25rem; font-size:0.78rem; color:var(--slate-500);">No standards matching "<strong>' + q + '</strong>" in prototype dataset. Press Enter to view full catalogue or ask ManakBot.</div>';
+        liveResults.style.display = 'block';
+        return;
+      }
+
+      var html = results.slice(0, 5).map(function (std) {
+        var isNum = std.is_number || '';
+        var title = std.title || '';
+        var qco = std.mandatory_qco ? '<span class="badge badge-qco" style="font-size:0.65rem; padding:1px 5px;">QCO</span>' : '';
+        var url = '/standards?q=' + encodeURIComponent(isNum.split(':')[0].trim());
+        return '<a href="' + url + '" class="modal-live-item">' +
+          '<div>' +
+            '<div class="modal-live-code">' + isNum + '</div>' +
+            '<div class="modal-live-title">' + (title.length > 60 ? title.substring(0, 60) + '...' : title) + '</div>' +
+          '</div>' +
+          '<div style="display:flex; align-items:center; gap:0.4rem;">' +
+            qco +
+            '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>' +
+          '</div>' +
+        '</a>';
+      }).join('');
+
+      liveResults.innerHTML = html;
+      liveResults.style.display = 'block';
+    } catch (err) {
+      console.warn('Live search error', err);
+    }
+  }, 220);
+};
+
+// Wire modal input listener once DOM is ready
+document.addEventListener('DOMContentLoaded', function () {
+  var modalInput = document.getElementById('modalSearchInput');
+  if (modalInput) {
+    modalInput.addEventListener('input', function () {
+      window.triggerModalLiveSearch(this.value);
+    });
+  }
+});
+
 // ── Homepage & Standards Search Dual Action: Ask ManakBot ───────────────────
 window.askManakBotFromHome = function () {
   var input = document.getElementById('heroSearchInput');
@@ -167,6 +329,25 @@ window.askManakBotFromStandards = function () {
     window.location.href = '/manakbot';
   }
 };
+
+// ── Prototype Dataset Explorer Filtering ────────────────────────────────────
+window.filterHomeDataset = function (sector) {
+  var buttons = document.querySelectorAll('.dataset-filter-btn');
+  buttons.forEach(function (btn) {
+    btn.classList.toggle('active', btn.getAttribute('data-filter') === sector);
+  });
+
+  var cards = document.querySelectorAll('.dataset-card');
+  cards.forEach(function (card) {
+    var cardSector = card.getAttribute('data-sector') || '';
+    if (sector === 'all' || cardSector === sector) {
+      card.style.display = 'flex';
+    } else {
+      card.style.display = 'none';
+    }
+  });
+};
+
 
 
 // ── Product -> Standard Recommendation Functions ────────────────────────────
