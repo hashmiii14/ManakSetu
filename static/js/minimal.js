@@ -147,14 +147,24 @@ window.clearChatMessages = function () {
   `;
 };
 
-// ── Homepage Dual Action: Ask ManakBot ───────────────────────────────────────
+// ── Homepage & Standards Search Dual Action: Ask ManakBot ───────────────────
 window.askManakBotFromHome = function () {
   var input = document.getElementById('heroSearchInput');
   var q = input ? input.value.trim() : '';
   if (q) {
-    window.location.href = '/chatbot?prompt=' + encodeURIComponent(q);
+    window.location.href = '/manakbot?prompt=' + encodeURIComponent(q);
   } else {
-    window.location.href = '/chatbot';
+    window.location.href = '/manakbot';
+  }
+};
+
+window.askManakBotFromStandards = function () {
+  var input = document.getElementById('standardsSearchInput');
+  var q = input ? input.value.trim() : '';
+  if (q) {
+    window.location.href = '/manakbot?prompt=' + encodeURIComponent('What Indian Standards, testing benchmarks, and BIS certification steps apply to ' + q + '?');
+  } else {
+    window.location.href = '/manakbot';
   }
 };
 

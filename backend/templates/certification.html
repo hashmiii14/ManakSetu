@@ -571,8 +571,10 @@ function goToWizardStep(stepNum) {
     if (pane) {
       if (i === stepNum) {
         pane.classList.remove('hidden');
+        pane.style.display = 'block';
       } else {
         pane.classList.add('hidden');
+        pane.style.display = 'none';
       }
     }
     if (bar) {
@@ -734,8 +736,10 @@ function selectStage(stepNum) {
     if (card) {
       if (i === stepNum) {
         card.classList.remove('hidden');
+        card.style.display = 'block';
       } else {
         card.classList.add('hidden');
+        card.style.display = 'none';
       }
     }
     if (badge) {

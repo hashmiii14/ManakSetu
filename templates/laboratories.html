@@ -95,6 +95,31 @@
 
     </form>
 
+    <!-- Quick Regional & Standard Filter Chips -->
+    <div style="margin-top: 1rem; pt-3; border-top: 1px solid var(--slate-200);">
+      <div style="display:flex; align-items:center; gap:0.5rem; flex-wrap:wrap; margin-bottom:0.6rem;">
+        <span style="font-size:0.72rem; font-weight:700; color:var(--slate-500); text-transform:uppercase; letter-spacing:0.4px;">Major Hubs:</span>
+        <a href="/laboratories" class="search-chip {% if selected_state == 'ALL' and not selected_standard and not query %}active{% endif %}" style="font-size:11px; padding:2px 8px;">All India (12 Labs)</a>
+        <a href="/laboratories?state=Delhi" class="search-chip" style="font-size:11px; padding:2px 8px;">Delhi-NCR</a>
+        <a href="/laboratories?state=Maharashtra" class="search-chip" style="font-size:11px; padding:2px 8px;">Mumbai / Pune</a>
+        <a href="/laboratories?state=Karnataka" class="search-chip" style="font-size:11px; padding:2px 8px;">Bengaluru</a>
+        <a href="/laboratories?state=Tamil+Nadu" class="search-chip" style="font-size:11px; padding:2px 8px;">Chennai</a>
+        <a href="/laboratories?state=West+Bengal" class="search-chip" style="font-size:11px; padding:2px 8px;">Kolkata</a>
+        <a href="/laboratories?state=Telangana" class="search-chip" style="font-size:11px; padding:2px 8px;">Hyderabad</a>
+        <a href="/laboratories?state=Haryana" class="search-chip" style="font-size:11px; padding:2px 8px;">Ballabgarh / Faridabad</a>
+        <a href="/laboratories?state=Gujarat" class="search-chip" style="font-size:11px; padding:2px 8px;">Ahmedabad</a>
+      </div>
+      <div style="display:flex; align-items:center; gap:0.5rem; flex-wrap:wrap;">
+        <span style="font-size:0.72rem; font-weight:700; color:var(--slate-500); text-transform:uppercase; letter-spacing:0.4px;">Product Scopes:</span>
+        <a href="/laboratories?standard=IS+2082" class="search-chip" style="font-size:11px; padding:2px 8px;">Geysers (IS 2082)</a>
+        <a href="/laboratories?standard=IS+1489" class="search-chip" style="font-size:11px; padding:2px 8px;">Cement (IS 1489)</a>
+        <a href="/laboratories?standard=IS+4151" class="search-chip" style="font-size:11px; padding:2px 8px;">Helmets (IS 4151)</a>
+        <a href="/laboratories?standard=IS+3854" class="search-chip" style="font-size:11px; padding:2px 8px;">Switches (IS 3854)</a>
+        <a href="/laboratories?standard=IS+9873" class="search-chip" style="font-size:11px; padding:2px 8px;">Toys (IS 9873)</a>
+        <a href="/laboratories?standard=IS+2347" class="search-chip" style="font-size:11px; padding:2px 8px;">Cookers (IS 2347)</a>
+      </div>
+    </div>
+
     <div class="flex items-center justify-between mt-3 pt-3 border-t border-slate-200 text-xs text-slate-500">
       <span>Showing <strong>{{ total_labs }}</strong> accredited laboratories across India</span>
       <span id="locStatusText" class="text-gov-800 font-semibold hidden"></span>
@@ -165,15 +190,26 @@
         <p class="text-xs text-slate-600 mb-3 truncate">
           <strong>Contact:</strong> {{ lab.contact }}
         </p>
-        <div class="flex items-center justify-between gap-2 pt-1">
-          <button 
-            type="button" 
-            onclick="copyLabDetails('{{ lab.name }}', '{{ lab.address }}', '{{ lab.contact }}')"
-            class="btn btn-sm btn-outline text-xs inline-flex items-center gap-1"
-          >
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-            Copy Info
-          </button>
+        <div class="flex items-center justify-between gap-2 pt-1 flex-wrap">
+          <div class="flex items-center gap-1.5">
+            <button 
+              type="button" 
+              onclick="copyLabDetails('{{ lab.name }}', '{{ lab.address }}', '{{ lab.contact }}', this)"
+              class="btn btn-sm btn-outline text-xs inline-flex items-center gap-1"
+            >
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+              <span>Copy Info</span>
+            </button>
+            <a 
+              href="/manakbot?prompt={{ ('What testing parameters can be tested at ' + lab.name + ' in ' + lab.city + ' for ' + (lab.applicable_standards | join(', ')) + '?') | urlencode }}" 
+              class="btn btn-sm text-xs inline-flex items-center gap-1"
+              style="background:#eff6ff; color:#1d4ed8; border:1px solid #bfdbfe; font-weight:700;"
+              title="Ask AI regarding testing at this laboratory"
+            >
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+              <span>Ask ManakBot</span>
+            </a>
+          </div>
           <a 
             href="https://www.google.com/maps/search/?api=1&query={{ lab.name | urlencode }}+{{ lab.city | urlencode }}" 
             target="_blank" 
@@ -193,7 +229,13 @@
   <div class="empty-state-box p-8 bg-white border border-slate-300 rounded-sm text-center">
     <h3 class="text-base font-bold text-slate-800 mb-1">No Accredited Laboratories Found</h3>
     <p class="text-xs text-slate-500 mb-4">No testing facility matched the active filters. Try searching for a broader product term or select All States.</p>
-    <a href="/laboratories" class="btn btn-sm btn-navy text-xs inline-block">Reset All Filters</a>
+    <div style="display:flex; justify-content:center; gap:0.75rem; flex-wrap:wrap;">
+      <a href="/laboratories" class="btn btn-sm btn-navy text-xs inline-block">Reset All Filters</a>
+      <a href="/manakbot?prompt=Which+testing+laboratories+in+India+are+recognized+by+BIS+for+testing?" class="btn btn-sm btn-sky text-xs inline-flex items-center gap-1">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        <span>Ask ManakBot for Labs</span>
+      </a>
+    </div>
   </div>
   {% endif %}
 
@@ -202,10 +244,16 @@
 
 {% block scripts %}
 <script>
-function copyLabDetails(name, address, contact) {
+function copyLabDetails(name, address, contact, btnElem) {
   const text = `${name}\nAddress: ${address}\nContact: ${contact}`;
   navigator.clipboard.writeText(text).then(() => {
-    alert('Laboratory contact details copied to clipboard.');
+    if (btnElem) {
+      const originalHtml = btnElem.innerHTML;
+      btnElem.innerHTML = '<span style="color:#059669; font-weight:bold;">✓ Copied!</span>';
+      setTimeout(() => {
+        btnElem.innerHTML = originalHtml;
+      }, 2000);
+    }
   });
 }
 
@@ -255,6 +303,7 @@ function calculateAndSortDistances(userLat, userLng, label) {
 
   status.innerText = 'Sorted by distance from: ' + label;
   status.classList.remove('hidden');
+  status.style.display = 'inline-block';
 
   const cards = Array.from(document.querySelectorAll('.lab-card'));
   cards.forEach(card => {
@@ -268,6 +317,7 @@ function calculateAndSortDistances(userLat, userLng, label) {
       if (badge && val) {
         val.innerText = dist;
         badge.classList.remove('hidden');
+        badge.style.display = 'inline-flex';
       }
     }
   });
