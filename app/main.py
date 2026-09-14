@@ -52,10 +52,25 @@ app = FastAPI(
     debug=DEBUG
 )
 
-# Configure CORS for external or mobile client access
+# Configure CORS for external, local dev, and Vercel preview environments
+ALLOWED_ORIGINS = [
+    "https://manaksetu.vercel.app",
+    "http://localhost:3000",
+    "http://localhost:5173",
+    "http://localhost:8000",
+    "http://127.0.0.1:3000",
+    "http://127.0.0.1:5173",
+    "http://127.0.0.1:8000",
+]
+for origin in CORS_ORIGINS:
+    cleaned = origin.strip()
+    if cleaned and cleaned != "*" and cleaned not in ALLOWED_ORIGINS:
+        ALLOWED_ORIGINS.append(cleaned)
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"] if "*" in CORS_ORIGINS else CORS_ORIGINS,
+    allow_origins=ALLOWED_ORIGINS,
+    allow_origin_regex=r"https://.*\.vercel\.app",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -82,13 +97,56 @@ app.include_router(certification_router)
 app.include_router(sources_router)
 
 
+@app.get("/health", tags=["Health"])
+def health():
+    return {
+        "status": "ok",
+        "service": "ManakSetu API"
+    }
+
+
 @app.get("/api/health", tags=["Health"])
 def health_check():
     retriever = get_retriever()
     return {
-        "status": "healthy",
-        "service": "ManaKSetu BIS Standards Engine",
+        "status": "ok",
+        "service": "ManakSetu API",
         "version": "2.0.0",
         "standards_indexed": len(retriever.documents) if retriever else 0,
         "docs": "/api/docs"
     }
+
+
+# Direct alias endpoints for Phase 3 API specification
+from .models.schemas import RecommendationRequest, SearchResponse, VerificationRequest, VerificationResponse, CostEstimateRequest, CostEstimateResponse
+
+@app.post("/api/matcher", response_model=SearchResponse, tags=["Standards API"])
+def api_matcher(req: RecommendationRequest):
+    from .routes.standards import recommend_standards
+    return recommend_standards(req)
+
+
+@app.get("/api/qco", tags=["QCO API"])
+def api_qco():
+    from .routes.standards import get_qco_standards
+    return get_qco_standards()
+
+
+@app.post("/api/hallmark/verify", tags=["Hallmarking API"])
+def api_hallmark_verify(req: VerificationRequest):
+    from .services.hallmarking_service import get_hallmarking_service
+    service = get_hallmarking_service()
+    return service.verify_huid(req.get_identifier())
+
+
+@app.post("/api/isi/verify", response_model=VerificationResponse, tags=["Verification API"])
+def api_isi_verify(req: VerificationRequest):
+    from .routes.verifier import verify_post
+    req.id_type = "cml"
+    return verify_post(req)
+
+
+@app.post("/api/fees/calculate", response_model=CostEstimateResponse, tags=["Calculator API"])
+def api_fees_calculate(req: CostEstimateRequest):
+    from .routes.calculator import calculate_cost_post
+    return calculate_cost_post(req)

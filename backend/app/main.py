@@ -52,10 +52,25 @@ app = FastAPI(
     debug=DEBUG
 )
 
-# Configure CORS for external or mobile client access
+# Configure CORS for external, local dev, and Vercel preview environments
+ALLOWED_ORIGINS = [
+    "https://manaksetu.vercel.app",
+    "http://localhost:3000",
+    "http://localhost:5173",
+    "http://localhost:8000",
+    "http://127.0.0.1:3000",
+    "http://127.0.0.1:5173",
+    "http://127.0.0.1:8000",
+]
+for origin in CORS_ORIGINS:
+    cleaned = origin.strip()
+    if cleaned and cleaned != "*" and cleaned not in ALLOWED_ORIGINS:
+        ALLOWED_ORIGINS.append(cleaned)
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"] if "*" in CORS_ORIGINS else CORS_ORIGINS,
+    allow_origins=ALLOWED_ORIGINS,
+    allow_origin_regex=r"https://.*\.vercel\.app",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -82,12 +97,20 @@ app.include_router(certification_router)
 app.include_router(sources_router)
 
 
+@app.get("/health", tags=["Health"])
+def health():
+    return {
+        "status": "ok",
+        "service": "ManakSetu API"
+    }
+
+
 @app.get("/api/health", tags=["Health"])
 def health_check():
     retriever = get_retriever()
     return {
-        "status": "healthy",
-        "service": "ManaKSetu BIS Standards Engine",
+        "status": "ok",
+        "service": "ManakSetu API",
         "version": "2.0.0",
         "standards_indexed": len(retriever.documents) if retriever else 0,
         "docs": "/api/docs"

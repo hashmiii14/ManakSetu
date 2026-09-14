@@ -9,7 +9,7 @@ router = APIRouter(prefix="/api/calculate", tags=["Calculator API"])
 def calculate_cost_post(req: CostEstimateRequest):
     try:
         service = get_calculator_service()
-        res = service.estimate_cost(req.standard_code, req.enterprise_type)
+        res = service.estimate_cost(req.get_standard_code(), req.get_enterprise_type())
         return CostEstimateResponse(**res)
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Fee calculation error: {str(e)}")

@@ -6,6 +6,7 @@ from ..services.lab_service import get_lab_service
 router = APIRouter(prefix="/api/labs", tags=["Testing Laboratories API"])
 
 
+@router.get("", response_model=LabSearchResponse)
 @router.get("/search", response_model=LabSearchResponse)
 def search_labs(
     q: Optional[str] = Query(None, description="Keyword search (e.g. Geyser, High Voltage, Kolkata)"),

@@ -12,6 +12,16 @@ class StandardItem(BaseModel):
     mandatory_qco: bool
     source: str
     relevance_badge: Optional[str] = "Highly Relevant"
+    standard_id: Optional[str] = None
+    score: Optional[float] = None
+    why_it_matches: Optional[str] = None
+
+    def __init__(self, **data):
+        if "standard_id" not in data and "is_number" in data:
+            data["standard_id"] = data["is_number"]
+        if "score" not in data and "relevance_score" in data:
+            data["score"] = data["relevance_score"]
+        super().__init__(**data)
 
 
 class StandardDetail(BaseModel):
@@ -36,6 +46,7 @@ class SearchRequest(BaseModel):
 
 
 class SearchResponse(BaseModel):
+    success: bool = True
     query: str
     total: int
     results: List[StandardItem]
@@ -65,11 +76,16 @@ class ReferencedStandard(BaseModel):
 
 
 class ChatbotRequest(BaseModel):
-    message: str = Field(..., min_length=1, description="User inquiry regarding BIS standards")
-    history: Optional[List[Dict[str, str]]] = []
+    message: Optional[str] = Field(None, description="User inquiry regarding BIS standards")
+    query: Optional[str] = Field(None, description="Alias for message")
+    history: Optional[List[Dict[str, Any]]] = []
+
+    def get_query(self) -> str:
+        return (self.message or self.query or "").strip()
 
 
 class ChatbotResponse(BaseModel):
+    success: bool = True
     answer: str
     referenced_standards: List[ReferencedStandard] = []
     sources: List[SourceCitation] = []
@@ -83,11 +99,18 @@ class ChatbotResponse(BaseModel):
 
 
 class VerificationRequest(BaseModel):
-    identifier: str = Field(..., min_length=1, description="HUID alphanumeric code or ISI CM/L 7-digit number")
+    identifier: Optional[str] = Field(None, description="HUID alphanumeric code or ISI CM/L 7-digit number")
+    huid: Optional[str] = Field(None, description="Alias for identifier")
+    cml: Optional[str] = Field(None, description="Alias for identifier")
+    license_number: Optional[str] = Field(None, description="Alias for identifier")
     id_type: str = Field("auto", description="'huid', 'cml', or 'auto'")
+
+    def get_identifier(self) -> str:
+        return (self.identifier or self.huid or self.cml or self.license_number or "").strip()
 
 
 class VerificationResponse(BaseModel):
+    success: bool = True
     identifier: str
     type: str
     status: str
@@ -106,6 +129,7 @@ class ReportRequest(BaseModel):
 
 
 class ReportResponse(BaseModel):
+    success: bool = True
     id: str
     status: str
     message: str
@@ -113,11 +137,20 @@ class ReportResponse(BaseModel):
 
 
 class CostEstimateRequest(BaseModel):
-    standard_code: str = Field(..., description="Indian Standard identifier (e.g. IS 1489)")
-    enterprise_type: str = Field("micro", description="'micro', 'small', or 'medium_large'")
+    standard_code: Optional[str] = Field(None, description="Indian Standard identifier (e.g. IS 1489)")
+    standard: Optional[str] = Field(None, description="Alias for standard_code")
+    enterprise_type: Optional[str] = Field("micro", description="'micro', 'small', or 'medium_large'")
+    tier: Optional[str] = Field(None, description="Alias for enterprise_type")
+
+    def get_standard_code(self) -> str:
+        return (self.standard_code or self.standard or "IS 1489").strip()
+
+    def get_enterprise_type(self) -> str:
+        return (self.enterprise_type or self.tier or "micro").strip()
 
 
 class CostEstimateResponse(BaseModel):
+    success: bool = True
     standard_code: str
     standard_title: str
     enterprise_type: str

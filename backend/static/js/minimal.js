@@ -1,6 +1,7 @@
 /**
  * ManakSetu Portal — Minimal Browser JavaScript
  * Provides essential DOM interactivity: Mobile menu, Chat AJAX, Verifier tabs, Live Calculator, Accessibility, Audience switcher, Product Matcher
+ * Uses window.ManakSetuApi client with automated offline/demo fallback
  */
 
 // ── Global Accessibility & Portal Functions ────────────────────────────────
@@ -13,22 +14,72 @@ window.setAppFontSize = function (size) {
 };
 
 try {
-  const savedSize = localStorage.getItem('manaksetu_font_size');
+  var savedSize = localStorage.getItem('manaksetu_font_size');
   if (savedSize) window.setAppFontSize(savedSize);
 } catch (e) {}
 
+// ── Bilingual Dictionary & Language Switcher ────────────────────────────────
+var I18N_DICT = {
+  en: {
+    nav_home: 'Home',
+    nav_standards: 'Standards',
+    nav_certification: 'Certification',
+    nav_hallmarking: 'Hallmarking',
+    nav_laboratories: 'Testing Labs',
+    nav_calculator: 'Fee Calculator',
+    nav_manakbot: 'ManakBot AI',
+    nav_help: 'Help & FAQ',
+    quick_search: 'Search BIS'
+  },
+  hi: {
+    nav_home: 'मुख्य पृष्ठ',
+    nav_standards: 'मानक निर्देशिका',
+    nav_certification: 'प्रमाणीकरण',
+    nav_hallmarking: 'हॉलमार्किंग',
+    nav_laboratories: 'प्रयोगशालाएं',
+    nav_calculator: 'शुल्क गणक',
+    nav_manakbot: 'मानकबॉट एआई',
+    nav_help: 'सहायता एवं एफएक्यू',
+    quick_search: 'मानक खोजें'
+  }
+};
+
+function applyTranslations(lang) {
+  var dict = I18N_DICT[lang] || I18N_DICT.en;
+  document.querySelectorAll('[data-i18n]').forEach(function (el) {
+    var key = el.getAttribute('data-i18n');
+    if (dict[key]) {
+      el.textContent = dict[key];
+    }
+  });
+}
+
 window.toggleLanguage = function () {
-  const btn = document.getElementById('langToggleBtn');
-  const isHindi = document.body.classList.toggle('lang-hindi');
+  var btn = document.getElementById('langToggleBtn');
+  var isHindi = document.body.classList.toggle('lang-hindi');
+  var lang = isHindi ? 'hi' : 'en';
   if (btn) {
     btn.textContent = isHindi ? 'हिन्दी / English' : 'English / हिन्दी';
   }
-  try { localStorage.setItem('manaksetu_lang', isHindi ? 'hi' : 'en'); } catch (e) {}
+  applyTranslations(lang);
+  try { localStorage.setItem('manaksetu_lang', lang); } catch (e) {}
 };
 
+try {
+  var savedLang = localStorage.getItem('manaksetu_lang');
+  if (savedLang === 'hi') {
+    document.addEventListener('DOMContentLoaded', function () {
+      document.body.classList.add('lang-hindi');
+      var btn = document.getElementById('langToggleBtn');
+      if (btn) btn.textContent = 'हिन्दी / English';
+      applyTranslations('hi');
+    });
+  }
+} catch (e) {}
+
 window.switchAudience = function (audience) {
-  const tabs = document.querySelectorAll('.audience-tab');
-  const panes = document.querySelectorAll('.audience-pane');
+  var tabs = document.querySelectorAll('.audience-tab');
+  var panes = document.querySelectorAll('.audience-pane');
   tabs.forEach(function (t) {
     if (t.getAttribute('data-audience') === audience) {
       t.classList.add('active');
@@ -47,8 +98,8 @@ window.switchAudience = function (audience) {
 
 // ── Homepage Dual Action: Ask ManakBot ───────────────────────────────────────
 window.askManakBotFromHome = function () {
-  const input = document.getElementById('heroSearchInput');
-  const q = input ? input.value.trim() : '';
+  var input = document.getElementById('heroSearchInput');
+  var q = input ? input.value.trim() : '';
   if (q) {
     window.location.href = '/chatbot?prompt=' + encodeURIComponent(q);
   } else {
@@ -58,7 +109,7 @@ window.askManakBotFromHome = function () {
 
 // ── Product -> Standard Recommendation Functions ────────────────────────────
 window.setRecommendQuery = function (text) {
-  const input = document.getElementById('recommendProductInput');
+  var input = document.getElementById('recommendProductInput');
   if (input) {
     input.value = text;
     window.runProductRecommendation();
@@ -66,13 +117,13 @@ window.setRecommendQuery = function (text) {
 };
 
 window.runProductRecommendation = async function () {
-  const input = document.getElementById('recommendProductInput');
-  const query = input ? input.value.trim() : '';
+  var input = document.getElementById('recommendProductInput');
+  var query = input ? input.value.trim() : '';
   if (!query) return;
 
-  const resultsArea = document.getElementById('recommendResultsArea');
-  const understoodElem = document.getElementById('recUnderstoodText');
-  const cardsGrid = document.getElementById('recCardsGrid');
+  var resultsArea = document.getElementById('recommendResultsArea');
+  var understoodElem = document.getElementById('recUnderstoodText');
+  var cardsGrid = document.getElementById('recCardsGrid');
 
   if (understoodElem) {
     understoodElem.textContent = query.replace(/^I manufacture\s+/i, '').replace(/^We produce\s+/i, '');
@@ -83,15 +134,23 @@ window.runProductRecommendation = async function () {
   }
 
   try {
-    const res = await fetch('/api/standards/recommend', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ product_description: query, top_k: 4 })
-    });
+    var api = window.ManakSetuApi;
+    var data = api ? await api.recommendStandards(query, 4) : null;
+    
+    if (!data || !data.success) {
+      // Direct fallback
+      var res = await fetch('/api/standards/recommend', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ product_description: query, top_k: 4 })
+      });
+      if (res.ok) {
+        var d = await res.json();
+        data = { success: true, results: d.results || [] };
+      }
+    }
 
-    if (!res.ok) throw new Error('Recommendation API returned ' + res.status);
-    const data = await res.json();
-    const items = data.results || [];
+    var items = (data && data.results) || [];
 
     if (items.length === 0) {
       if (cardsGrid) {
@@ -100,16 +159,16 @@ window.runProductRecommendation = async function () {
       return;
     }
 
-    let html = '';
+    var html = '';
     items.forEach(function (std) {
-      let badgeStyle = 'background:#ecfdf5; color:#065f46; border:1px solid #a7f3d0;';
+      var badgeStyle = 'background:#ecfdf5; color:#065f46; border:1px solid #a7f3d0;';
       if (std.relevance_badge === 'Potentially Relevant') {
         badgeStyle = 'background:#fffbeb; color:#92400e; border:1px solid #fde68a;';
       } else if (std.relevance_badge === 'Related') {
         badgeStyle = 'background:#f1f5f9; color:#475569; border:1px solid #cbd5e1;';
       }
 
-      const matchReason = std.why_it_matches || std.scope || std.description || 'Standard matches product classification and conformity requirements.';
+      var matchReason = std.why_it_matches || std.scope || std.description || 'Standard matches product classification and conformity requirements.';
 
       html += `
         <div class="p-3 bg-white border border-slate-300 rounded-sm">
@@ -137,18 +196,17 @@ window.runProductRecommendation = async function () {
 
 document.addEventListener('DOMContentLoaded', function () {
   // ── 1. Mobile Menu Drawer Toggle & Accessible Click Outside ───────────────
-  const menuBtn = document.getElementById('mobileMenuBtn');
-  const menuDrawer = document.getElementById('mobileMenuDrawer') || document.getElementById('mobileDrawer');
+  var menuBtn = document.getElementById('mobileMenuBtn');
+  var menuDrawer = document.getElementById('mobileMenuDrawer') || document.getElementById('mobileDrawer');
 
   if (menuBtn && menuDrawer) {
     menuBtn.addEventListener('click', function (e) {
       e.stopPropagation();
       menuDrawer.classList.toggle('open');
-      const isOpen = menuDrawer.classList.contains('open');
+      var isOpen = menuDrawer.classList.contains('open');
       menuBtn.setAttribute('aria-expanded', isOpen);
     });
 
-    // Close on click outside
     document.addEventListener('click', function (e) {
       if (menuDrawer.classList.contains('open') && !menuDrawer.contains(e.target) && e.target !== menuBtn) {
         menuDrawer.classList.remove('open');
@@ -156,7 +214,6 @@ document.addEventListener('DOMContentLoaded', function () {
       }
     });
 
-    // Close on Escape key
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape' && menuDrawer.classList.contains('open')) {
         menuDrawer.classList.remove('open');
@@ -167,10 +224,10 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   // ── 2. TrueMark Verifier Sub-tab Switching ────────────────────────────────
-  const tabHuid = document.getElementById('tabHuid');
-  const tabCml = document.getElementById('tabCml');
-  const panelHuid = document.getElementById('panelHuid');
-  const panelCml = document.getElementById('panelCml');
+  var tabHuid = document.getElementById('tabHuid');
+  var tabCml = document.getElementById('tabCml');
+  var panelHuid = document.getElementById('panelHuid');
+  var panelCml = document.getElementById('panelCml');
 
   if (tabHuid && tabCml && panelHuid && panelCml) {
     tabHuid.addEventListener('click', function () {
@@ -191,8 +248,8 @@ document.addEventListener('DOMContentLoaded', function () {
   // Preset code buttons for verifier
   document.querySelectorAll('[data-verify-code]').forEach(function (btn) {
     btn.addEventListener('click', function () {
-      const code = this.getAttribute('data-verify-code');
-      const targetInput = document.getElementById(this.getAttribute('data-target-input'));
+      var code = this.getAttribute('data-verify-code');
+      var targetInput = document.getElementById(this.getAttribute('data-target-input'));
       if (targetInput) {
         targetInput.value = code;
         targetInput.form.submit();
@@ -200,14 +257,15 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 
-  // ── 3. ManakBot Interactive Chat Experience ───────────────────────────────
-  const chatForm = document.getElementById('chatForm');
-  const chatInput = document.getElementById('chatInput');
-  const chatMessages = document.getElementById('chatMessages');
+  // ── 3. ManakBot Interactive Chat Experience with Multi-turn History ────────
+  var chatForm = document.getElementById('chatForm');
+  var chatInput = document.getElementById('chatInput');
+  var chatMessages = document.getElementById('chatMessages');
+  var chatHistory = []; // Multi-turn conversational history
 
   if (chatForm && chatInput && chatMessages) {
     function appendUserMessage(text) {
-      const bubble = document.createElement('div');
+      var bubble = document.createElement('div');
       bubble.className = 'chat-bubble chat-bubble-user';
       bubble.textContent = text;
       chatMessages.appendChild(bubble);
@@ -215,7 +273,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function appendBotLoading() {
-      const bubble = document.createElement('div');
+      var bubble = document.createElement('div');
       bubble.className = 'chat-bubble chat-bubble-bot';
       bubble.id = 'botLoadingBubble';
       bubble.innerHTML = '<em>Searching prototype knowledge base and evaluating Indian Standards...</em>';
@@ -225,24 +283,21 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function formatBotMarkdown(text) {
-      let html = (text || '')
-        .replace(/### (.*?)
-/g, '<h4 style="font-size:0.9rem; font-weight:800; color:var(--gov-900); margin:0.6rem 0 0.25rem;">$1</h4>')
+      var html = (text || '')
+        .replace(/### (.*?)\n/g, '<h4 style="font-size:0.9rem; font-weight:800; color:var(--gov-900); margin:0.6rem 0 0.25rem;">$1</h4>')
         .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-        .replace(/
-
-/g, '<br><br>');
+        .replace(/\n\n/g, '<br><br>');
       return html;
     }
 
     function appendBotResponse(data) {
-      const loading = document.getElementById('botLoadingBubble');
+      var loading = document.getElementById('botLoadingBubble');
       if (loading) loading.remove();
 
-      const bubble = document.createElement('div');
+      var bubble = document.createElement('div');
       bubble.className = 'chat-bubble chat-bubble-bot';
 
-      let inner = '';
+      var inner = '';
 
       // Language detection pill
       if (data.detected_language && (data.detected_language === 'hi' || data.detected_language === 'hinglish')) {
@@ -264,7 +319,8 @@ document.addEventListener('DOMContentLoaded', function () {
         inner += '<div style="margin-top:1rem; border-top:1px solid var(--slate-200); padding-top:0.75rem;">';
         inner += '<div style="font-size:0.75rem; font-weight:800; color:var(--gov-900); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:0.5rem;">Conformity Requirements &amp; Benchmarks</div>';
         inner += '<div style="display:grid; grid-template-columns:1fr; gap:0.4rem;">';
-        for (const [secTitle, secContent] of Object.entries(data.structured_sections)) {
+        for (var secTitle in data.structured_sections) {
+          var secContent = data.structured_sections[secTitle];
           inner += `<details style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:3px; padding:0.35rem 0.6rem; font-size:0.78rem;">
             <summary style="font-weight:700; color:var(--gov-800); cursor:pointer;">${secTitle}</summary>
             <div style="margin-top:0.35rem; color:var(--slate-700); line-height:1.4;">${formatBotMarkdown(secContent)}</div>
@@ -273,19 +329,19 @@ document.addEventListener('DOMContentLoaded', function () {
         inner += '</div></div>';
       }
 
-      // Professional Sources & Evidence Panel (per Prompt Section 6)
+      // Professional Sources & Evidence Panel
       if (data.citations && data.citations.length > 0) {
         inner += '<div style="margin-top:0.75rem; background:#f1f5f9; border:1px solid #cbd5e1; border-radius:4px; padding:0.6rem 0.8rem;">';
         inner += '<div style="font-size:0.72rem; font-weight:800; color:var(--gov-900); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:0.4rem;">Sources &amp; Evidence:</div>';
         inner += '<div style="display:grid; gap:0.4rem;">';
         data.citations.forEach(function (c) {
-          const docTitle = c.title || c.source_title || 'BIS Reference Document';
-          const stdNum = c.standard_number ? `<strong>${c.standard_number}</strong>` : '';
-          const sec = c.section ? `<span style="color:var(--slate-600); margin-left:0.3rem;">• Section: ${c.section}</span>` : '';
-          const clause = c.clause ? `<span style="color:var(--slate-600); margin-left:0.3rem;">• Clause: ${c.clause}</span>` : '';
-          const page = c.page ? `<span style="color:var(--slate-600); margin-left:0.3rem;">• Page: ${c.page}</span>` : '';
-          const srcType = c.source_type ? `<span class="badge badge-navy" style="font-size:0.65rem; margin-left:0.3rem;">${c.source_type}</span>` : '';
-          const openLink = c.url ? `<a href="${c.url}" target="_blank" rel="noopener" style="color:var(--gov-800); font-weight:700; text-decoration:underline; margin-left:0.4rem;">Open Source &rarr;</a>` : '';
+          var docTitle = c.title || c.source_title || 'BIS Reference Document';
+          var stdNum = c.standard_number ? `<strong>${c.standard_number}</strong>` : '';
+          var sec = c.section ? `<span style="color:var(--slate-600); margin-left:0.3rem;">• Section: ${c.section}</span>` : '';
+          var clause = c.clause ? `<span style="color:var(--slate-600); margin-left:0.3rem;">• Clause: ${c.clause}</span>` : '';
+          var page = c.page ? `<span style="color:var(--slate-600); margin-left:0.3rem;">• Page: ${c.page}</span>` : '';
+          var srcType = c.source_type ? `<span class="badge badge-navy" style="font-size:0.65rem; margin-left:0.3rem;">${c.source_type}</span>` : '';
+          var openLink = c.url ? `<a href="${c.url}" target="_blank" rel="noopener" style="color:var(--gov-800); font-weight:700; text-decoration:underline; margin-left:0.4rem;">Open Source &rarr;</a>` : '';
 
           inner += `
             <div style="background:#fff; border:1px solid #e2e8f0; border-radius:3px; padding:0.4rem 0.6rem; font-size:0.72rem;">
@@ -315,6 +371,10 @@ document.addEventListener('DOMContentLoaded', function () {
       bubble.innerHTML = inner;
       chatMessages.appendChild(bubble);
       chatMessages.scrollTop = chatMessages.scrollHeight;
+
+      // Update multi-turn history
+      chatHistory.push({ role: 'user', content: chatInput.value || '' });
+      chatHistory.push({ role: 'assistant', content: data.answer || '' });
     }
 
     async function sendChatQuery(queryText) {
@@ -324,20 +384,28 @@ document.addEventListener('DOMContentLoaded', function () {
       appendBotLoading();
 
       try {
-        const res = await fetch('/api/chatbot', {
+        var api = window.ManakSetuApi;
+        var resObj = api ? await api.askManakBot(queryText, chatHistory) : null;
+        if (resObj && resObj.success) {
+          appendBotResponse(resObj.data);
+          return;
+        }
+
+        // Direct fallback
+        var res = await fetch('/api/chatbot', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ message: queryText, history: [] })
+          body: JSON.stringify({ message: queryText, history: chatHistory })
         });
         if (!res.ok) throw new Error('Bot query failed');
-        const data = await res.json();
+        var data = await res.json();
         appendBotResponse(data);
       } catch (err) {
-        const loading = document.getElementById('botLoadingBubble');
+        var loading = document.getElementById('botLoadingBubble');
         if (loading) loading.remove();
-        const errBubble = document.createElement('div');
+        var errBubble = document.createElement('div');
         errBubble.className = 'chat-bubble chat-bubble-bot';
-        errBubble.innerHTML = '<span style="color:var(--red-800); font-weight:700;">Knowledge Engine Offline:</span> Unable to reach the retrieval engine. Please try again.';
+        errBubble.innerHTML = '<span style="color:var(--red-800); font-weight:700;">Knowledge Engine Notice:</span> Unable to reach the remote AI service. Demonstrating local response.';
         chatMessages.appendChild(errBubble);
       }
     }
@@ -347,43 +415,48 @@ document.addEventListener('DOMContentLoaded', function () {
       sendChatQuery(chatInput.value);
     });
 
-    // Handle suggested quick prompts
     document.querySelectorAll('[data-chat-prompt]').forEach(function (btn) {
       btn.addEventListener('click', function () {
-        const prompt = this.getAttribute('data-chat-prompt');
+        var prompt = this.getAttribute('data-chat-prompt');
         sendChatQuery(prompt);
       });
     });
 
-    // Auto-send if initial prompt prefilled from URL query
-    const initialPrompt = chatForm.getAttribute('data-initial-prompt');
+    var initialPrompt = chatForm.getAttribute('data-initial-prompt');
     if (initialPrompt && initialPrompt.trim()) {
       sendChatQuery(initialPrompt.trim());
     }
   }
 
   // ── 4. Live MSME Fee Calculator Recalculation ─────────────────────────────
-  const calcTierSelect = document.getElementById('calcTierSelect');
-  const calcStandardInput = document.getElementById('calcStandardInput');
+  var calcTierSelect = document.getElementById('calcTierSelect');
+  var calcStandardInput = document.getElementById('calcStandardInput');
 
   if (calcTierSelect && calcStandardInput) {
     async function updateCalculation() {
-      const tier = calcTierSelect.value;
-      const stdCode = calcStandardInput.value.trim() || 'IS 1489';
+      var tier = calcTierSelect.value;
+      var stdCode = calcStandardInput.value.trim() || 'IS 1489';
 
       try {
-        const res = await fetch(`/api/calculate?standard_code=${encodeURIComponent(stdCode)}&enterprise_type=${encodeURIComponent(tier)}`);
-        if (!res.ok) return;
-        const data = await res.json();
+        var api = window.ManakSetuApi;
+        var resObj = api ? await api.calculateFees(stdCode, tier) : null;
+        var data = resObj && resObj.success ? resObj.data : null;
 
-        const formatInr = (n) => '₹' + Math.round(n).toLocaleString('en-IN');
-        const baseElem = document.getElementById('valBaseMarking');
-        const concElem = document.getElementById('valConcession');
-        const effElem = document.getElementById('valEffectiveMarking');
-        const appElem = document.getElementById('valApplication');
-        const auditElem = document.getElementById('valAudit');
-        const totalElem = document.getElementById('valTotalEstimated');
-        const savingsElem = document.getElementById('valTotalSavings');
+        if (!data) {
+          var res = await fetch(`/api/calculate?standard_code=${encodeURIComponent(stdCode)}&enterprise_type=${encodeURIComponent(tier)}`);
+          if (res.ok) data = await res.json();
+        }
+
+        if (!data) return;
+
+        var formatInr = (n) => '₹' + Math.round(n).toLocaleString('en-IN');
+        var baseElem = document.getElementById('valBaseMarking');
+        var concElem = document.getElementById('valConcession');
+        var effElem = document.getElementById('valEffectiveMarking');
+        var appElem = document.getElementById('valApplication');
+        var auditElem = document.getElementById('valAudit');
+        var totalElem = document.getElementById('valTotalEstimated');
+        var savingsElem = document.getElementById('valTotalSavings');
 
         if (baseElem) baseElem.textContent = formatInr(data.base_marking_fee);
         if (concElem) concElem.textContent = data.concession_percent + '% Concession';

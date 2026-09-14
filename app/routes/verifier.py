@@ -10,13 +10,26 @@ router = APIRouter(prefix="/api/verify", tags=["Verification API"])
 def verify_post(req: VerificationRequest):
     try:
         service = get_verification_service()
-        res = service.verify_identifier(req.identifier, req.id_type)
+        ident = req.get_identifier()
+        res = service.verify_identifier(ident, req.id_type)
         # Log action to DB
         repo = get_report_repository()
-        repo.log_verification(req.identifier, req.id_type, res.get("is_valid", False), res.get("status", ""))
+        repo.log_verification(ident, req.id_type, res.get("is_valid", False), res.get("status", ""))
         return VerificationResponse(**res)
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Verification execution error: {str(e)}")
+
+
+@router.post("/huid", response_model=VerificationResponse)
+def verify_huid_endpoint(req: VerificationRequest):
+    req.id_type = "huid"
+    return verify_post(req)
+
+
+@router.post("/cml", response_model=VerificationResponse)
+def verify_cml_endpoint(req: VerificationRequest):
+    req.id_type = "cml"
+    return verify_post(req)
 
 
 @router.get("", response_model=VerificationResponse)

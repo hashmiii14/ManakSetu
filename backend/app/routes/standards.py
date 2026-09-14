@@ -21,6 +21,32 @@ def get_categories():
     return repo.list_categories()
 
 
+@router.get("/search", response_model=SearchResponse)
+def search_standards_get(
+    q: Optional[str] = Query(None, description="Search query or product description"),
+    query: Optional[str] = Query(None, description="Alias for q"),
+    top_k: int = Query(10, ge=1, le=50, description="Max results")
+):
+    target_q = (q or query or "").strip()
+    if not target_q:
+        return SearchResponse(query="", total=0, results=[])
+    try:
+        retriever = get_retriever()
+        results = retriever.retrieve(target_q, top_k=top_k)
+        items = []
+        for r in results:
+            badge = _assign_badge(r.get("relevance_score", 0.0))
+            items.append(StandardItem(**r, relevance_badge=badge))
+        return SearchResponse(
+            success=True,
+            query=target_q,
+            total=len(items),
+            results=items
+        )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Standards search error: {str(e)}")
+
+
 @router.post("/search", response_model=SearchResponse)
 def search_standards(req: SearchRequest):
     try:
@@ -31,6 +57,7 @@ def search_standards(req: SearchRequest):
             badge = _assign_badge(r.get("relevance_score", 0.0))
             items.append(StandardItem(**r, relevance_badge=badge))
         return SearchResponse(
+            success=True,
             query=req.query,
             total=len(items),
             results=items
@@ -54,12 +81,29 @@ def recommend_standards(req: RecommendationRequest):
             badge = _assign_badge(r.get("relevance_score", 0.0))
             items.append(StandardItem(**r, relevance_badge=badge))
         return SearchResponse(
+            success=True,
             query=desc,
             total=len(items),
             results=items
         )
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Standards recommendation error: {str(e)}")
+
+
+@router.get("/qco", tags=["QCO API"])
+def get_qco_standards():
+    try:
+        repo = get_standards_repository()
+        all_standards = repo.get_all()
+        qco_items = [s for s in all_standards if s.get("mandatory_qco")]
+        return {
+            "success": True,
+            "total": len(qco_items),
+            "qco_standards": qco_items,
+            "disclaimer": "Statutory Quality Control Orders issued under Section 16 of the BIS Act, 2016."
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"QCO standards retrieval error: {str(e)}")
 
 
 @router.get("", response_model=List[StandardDetail])

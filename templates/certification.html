@@ -142,6 +142,9 @@
           {% endif %}
 
           <div class="flex items-center gap-2">
+            <button type="button" onclick="selectStage(1)" class="btn btn-sm btn-outline text-xs" title="Restart from Stage 1">
+              Restart
+            </button>
             <a href="{{ st.official_portal }}" target="_blank" rel="noopener" class="btn btn-sm btn-secondary text-xs">
               Open e-BIS Portal ↗
             </a>
@@ -236,6 +239,19 @@ function selectStage(stepNum) {
       }
     }
   }
+  try {
+    sessionStorage.setItem('manaksetu_stage', stepNum);
+  } catch (e) {}
 }
+
+document.addEventListener('DOMContentLoaded', function () {
+  try {
+    const saved = sessionStorage.getItem('manaksetu_stage');
+    if (saved) {
+      const num = parseInt(saved, 10);
+      if (num >= 1 && num <= 10) selectStage(num);
+    }
+  } catch (e) {}
+});
 </script>
 {% endblock %}
